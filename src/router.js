@@ -1,25 +1,54 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
 
 Vue.use(Router)
 
+const pages = {
+  Home: () => import('./views/Home'),
+  DailyRank: () => import('./views/DailyRank'),
+  PopSearch: () => import('./views/PopSearch'),
+  Intro: () => import('./views/Intro'),
+  Links: () => import('./views/Links'),
+  Donate: () => import('./views/Donate'),
+  Comments: () => import('./views/Comments'),
+  NotFound: () => import('./views/NotFound')
+}
+
 export default new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      name: 'Home',
+      component: pages.Home
+    }, {
+      path: '/dailyRank',
+      name: 'DailyRank',
+      component: pages.DailyRank
+    }, {
+      path: '/popSearch',
+      name: 'PopSearch',
+      component: pages.PopSearch
+    }, {
+      path: '/intro',
+      name: 'Intro',
+      component: pages.Intro
+    }, {
+      path: '/links',
+      name: 'Links',
+      component: pages.Links
+    }, {
+      path: '/donate',
+      name: 'Donate',
+      component: pages.Donate
+    }, {
+      path: '/comments',
+      name: 'Comments',
+      component: pages.Comments
+    }, {
+      path: '/404',
+      name: 'NotFound',
+      component: pages.NotFound
     }
   ]
 })
