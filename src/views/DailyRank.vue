@@ -3,7 +3,8 @@
     <vue-waterfall-easy
       :imgsArr="pictureList"
       @scrollReachBottom="getPictures"
-      ref="waterfall">
+      ref="waterfall"
+      @click="goDetail">
       <div class="img-info" slot-scope="props">
         <p class="some-info">{{ props.value.title }}</p>
       </div>
@@ -33,6 +34,10 @@ export default {
   created () {
     this.getPictures()
   },
+  activated () {
+  },
+  deactivated () {
+  },
   methods: {
     getPictures () {
       const data = {
@@ -43,15 +48,16 @@ export default {
       getRank(data).then(res => {
         if (res.status === 200) {
           this.page++
-          if (this.page === 5) {
+          let data = res.data.data.illustrations
+          if (!data || !data.length) {
             this.$refs.waterfall.waterfallOver()
             return
           }
-          let data = res.data.data.illustrations
           data.forEach(item => {
             let src = item.meta_pages[0]
             // 给列表添加一个src属性 方便使用
-            item.src = item.meta_single_page.large_image_url || src.image_urls.large
+            src = src ? src.image_urls.large : ''
+            item.src = item.meta_single_page.large_image_url || src
           })
           this.pictureList = this.pictureList.concat(data)
         } else {
@@ -59,6 +65,14 @@ export default {
         }
       }).catch(err => {
         console.error(err)
+      })
+    },
+    goDetail (event, { index, value }) {
+      event.preventDefault()
+      console.log(this.$refs.waterfall.scrollTop)
+      sessionStorage.setItem('detail', JSON.stringify(value))
+      this.$router.push({
+        path: `/detail`
       })
     }
   }
