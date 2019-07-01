@@ -11,8 +11,7 @@ const pages = {
   Links: () => import('./views/Links'),
   Donate: () => import('./views/Donate'),
   Comments: () => import('./views/Comments'),
-  NotFound: () => import('./views/NotFound'),
-  PictureDetail: () => import('./views/PictureDetail')
+  NotFound: () => import('./views/NotFound')
 }
 
 export default new Router({
@@ -25,10 +24,7 @@ export default new Router({
     }, {
       path: '/dailyRank',
       name: 'DailyRank',
-      component: pages.DailyRank,
-      meta: {
-        keepAlive: true
-      }
+      component: pages.DailyRank
     }, {
       path: '/popSearch',
       name: 'PopSearch',
@@ -53,10 +49,6 @@ export default new Router({
       path: '/404',
       name: 'NotFound',
       component: pages.NotFound
-    }, {
-      path: '/detail',
-      name: 'PictureDetail',
-      component: pages.PictureDetail
     }
   ]
 })

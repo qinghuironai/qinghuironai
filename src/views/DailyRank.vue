@@ -1,12 +1,13 @@
 <template>
   <div class="rank">
     <vue-waterfall-easy
+      class="rank__waterfall"
       :imgsArr="pictureList"
       @scrollReachBottom="getPictures"
       ref="waterfall"
       @click="goDetail">
-      <div class="img-info" slot-scope="props">
-        <p class="some-info">{{ props.value.title }}</p>
+      <div class="rank__waterfall--info" slot-scope="props">
+        <p>{{ props.value.title }}</p>
       </div>
       <div slot="waterfall-over">已经到底了喵～</div>
     </vue-waterfall-easy>
@@ -27,16 +28,12 @@ export default {
       pictureList: [],
       page: 0,
       mode: 'day',
-      date: '2019-06-26',
+      date: this.getTimeDay(),
       imgsArr: []
     }
   },
-  created () {
+  mounted () {
     this.getPictures()
-  },
-  activated () {
-  },
-  deactivated () {
   },
   methods: {
     getPictures () {
@@ -67,13 +64,19 @@ export default {
         console.error(err)
       })
     },
+    // 获取三天前日期 （最早三天前才有排行）
+    getTimeDay () {
+      let time = new Date(Date.now() - (3 * 3600 * 24 * 1000))
+      let y = time.getFullYear()
+      let m = time.getMonth() + 1
+      let d = time.getDate()
+      m = m < 10 ? '0' + m : m
+      d = d < 10 ? '0' + d : d
+      return `${y}-${m}-${d}`
+    },
     goDetail (event, { index, value }) {
       event.preventDefault()
-      console.log(this.$refs.waterfall.scrollTop)
-      sessionStorage.setItem('detail', JSON.stringify(value))
-      this.$router.push({
-        path: `/detail`
-      })
+      // 图片预览
     }
   }
 }
@@ -84,12 +87,14 @@ export default {
   width 100%
   height 100%
   background-color #fff
-.img-info
-  padding 0.4rem
-.some-info
-  text-align center
-  color #666666
-  overflow hidden
-  padding 0rem
-  font-size 0.8rem
+  .rank__waterfall
+    .rank__waterfall--info
+      padding 0.4rem
+      p
+        text-align center
+        white-space nowrap
+        overflow hidden
+        text-overflow ellipsis
+        color #666666
+        font-size 0.8rem
 </style>
