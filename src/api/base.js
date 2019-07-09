@@ -2,16 +2,15 @@ import axios from 'axios'
 import cookie from 'js-cookie'
 
 // 创建axios实例
-const service = axios.create({
+const instance = axios.create({
   baseURL: 'https://api.pixivic.com',
-  timeout: 60000,
+  timeout: 10000,
   validateStatus: function (status) {
     return status >= 200 && status < 600
   }
 })
 
-// request拦截器
-service.interceptors.request.use(
+instance.interceptors.request.use(
   config => {
     if (cookie.get('jwt')) {
       config.headers.Authorization = cookie.get('jwt')
@@ -24,8 +23,7 @@ service.interceptors.request.use(
   }
 )
 
-// response 拦截器
-service.interceptors.response.use(
+instance.interceptors.response.use(
   response => {
     if (response.status === 401) {
       cookie.remove('jwt')
@@ -38,4 +36,4 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+export default instance

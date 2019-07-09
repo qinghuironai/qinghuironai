@@ -1,36 +1,24 @@
 <template>
   <transition name="fade">
     <div class="dialog" v-show="isShow">
+      <div class="dialog__content" v-if="imagesList.length > 0">
+        <img v-for="(item, index) in imagesList" :key="index" v-lazy="item" @click="pixiv"/>
+      </div>
       <div class="dialog__mask" @click="close"></div>
       <div class="dialog__close" @click.stop="close">
         <img src="@/assets/images/close.svg" alt="">
-      </div>
-      <div class="dialog__content">
-        <swiper :options="swiperOption">
-          <swiper-slide v-for="(item, index) in images" :key="index">
-            <img v-lazy="item" alt="" @click="pixiv">
-          </swiper-slide>
-        </swiper>
       </div>
     </div>
   </transition>
 </template>
 
 <script>
-import 'swiper/dist/css/swiper.css'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
   data () {
     return {
-      swiperOption: {
-        loop: true
-      }
+      imagesList: []
     }
-  },
-  components: {
-    swiper,
-    swiperSlide
   },
   props: {
     images: {
@@ -51,24 +39,40 @@ export default {
     pixiv () {
       window.open(this.info.user.profile_image_urls.medium, '_blank')
     }
+  },
+  watch: {
+    isShow: {
+      handler: function (val) {
+        if (val) {
+          this.imagesList = [...this.images]
+        } else {
+          this.imagesList = []
+        }
+      },
+      immediate: true
+    }
   }
 }
 
 </script>
 <style lang='stylus' scoped>
 .fade-enter, .fade-leave-to
-  transform translate3d(0, -100%, 0)
+  opacity 1
 .fade-leave, .fade-enter-to
-  transform translate3d(0, 0, 0)
+  opacity 0
 .fade-enter-active, .fade-leave-active
-  transition  all .2s
+  transition  all .2s ease
 .dialog
-  position relative
+  position fixed
+  width 100%
+  height 100%
   font-size 1rem
+  overflow-y auto
+  z-index 1
   &__mask
+    position fixed
     width 100%
     height 100%
-    position fixed
     left 0
     top 0
     background rgba(51, 163, 220, .3)
@@ -76,7 +80,7 @@ export default {
   &__close
     position fixed
     right 2%
-    top 10%
+    top 2%
     width 1.2rem
     height 1.2rem
     z-index 400
@@ -86,14 +90,16 @@ export default {
     position fixed
     top 0
   &__content
-    position fixed
-    top 10%
-    bottom 0
-    left 2%
-    right 2%
-    z-index 300
-    overflow scroll
+    position absolute
+    display: flex
+    width 100%
+    height auto
+    min-height 100vh
+    flex-direction column
+    justify-content center
+    align-items center
+    overflow-y auto
     img
       width 100%
-      border-radius 0.4rem
+      z-index 300
 </style>

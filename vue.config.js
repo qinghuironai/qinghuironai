@@ -6,7 +6,7 @@ function resolve (dir) {
 
 module.exports = {
   lintOnSave: false,
-
+  publicPath: '/pix/',
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'stylus',

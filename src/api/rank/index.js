@@ -1,7 +1,7 @@
-import fetch from '@/util/fetch'
+import axios from '../base'
 
 function getRank (params) {
-  return fetch({
+  return axios({
     url: `/ranks`,
     method: 'get',
     params
