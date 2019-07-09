@@ -16,6 +16,7 @@ const pages = {
 
 export default new Router({
   mode: 'history',
+  base: 'pix',
   routes: [
     {
       path: '/',
