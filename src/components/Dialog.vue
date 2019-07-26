@@ -1,15 +1,13 @@
 <template>
-  <transition name="fade">
-    <div class="dialog" v-show="isShow">
-      <div class="dialog__content" v-if="imagesList.length > 0">
-        <img v-for="(item, index) in imagesList" :key="index" v-lazy="item" @click="pixiv"/>
-      </div>
-      <div class="dialog__mask" @click="close"></div>
-      <div class="dialog__close" @click.stop="close">
-        <img src="@/assets/images/close.svg" alt="">
-      </div>
+  <div class="dialog" v-show="isShow">
+    <div class="dialog__content animated bounceInUp" v-if="imagesList.length > 0">
+      <img v-for="(item, index) in imagesList" :key="index" v-lazy="item" @click="pixiv"/>
     </div>
-  </transition>
+    <div class="dialog__mask" @click="close"></div>
+    <div class="dialog__close" @click.stop="close">
+      <img src="@/assets/images/close.svg" alt="">
+    </div>
+  </div>
 </template>
 
 <script>
@@ -56,12 +54,6 @@ export default {
 
 </script>
 <style lang='stylus' scoped>
-.fade-enter, .fade-leave-to
-  opacity 1
-.fade-leave, .fade-enter-to
-  opacity 0
-.fade-enter-active, .fade-leave-active
-  transition  all .2s ease
 .dialog
   position fixed
   width 100%
