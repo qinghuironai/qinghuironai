@@ -1,5 +1,8 @@
 <template>
   <div class="rank">
+    <div class="<!-- rank__header">
+
+    </div> -->
     <!-- 日历弹窗 -->
     <div class="rank__content">
       <div v-show="calendarShow" class="rank__calendar-picker">
@@ -208,10 +211,16 @@ export default {
   height 100%
   overflow hidden
   background-color #fff
+  &__header
+    position absolute
+    width: 100%
+    height 3rem
+    background $primary
   &__content
     position absolute
     box-sizing border-box
     padding 0 .5rem
+    padding-top 3.5rem
     width 100%
     height 100%
     overflow auto
@@ -231,7 +240,7 @@ export default {
     padding-top 0.2rem
     &--item
       position relative
-      margin 4px
+      margin 10px 4px
       -moz-page-break-inside avoid
       -webkit-column-break-inside avoid
       break-inside avoid
