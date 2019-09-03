@@ -6,7 +6,7 @@
 
 - [x] 基础架构 20190616 Arius
 - [x] Home 20190616 Arius
-- [ ] DailyRank 20190709 Kim & Arius
+- [x] DailyRank 20190709 Kim & Arius
 - [ ] PopSearch Arius
 - [ ] Intro
 - [ ] Links
