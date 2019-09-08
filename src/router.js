@@ -29,7 +29,8 @@ export default new Router({
     }, {
       path: '/popSearch',
       name: 'PopSearch',
-      component: pages.PopSearch
+      component: pages.PopSearch,
+      props: (route) => ({ ...route.query })
     }, {
       path: '/intro',
       name: 'Intro',

@@ -33,10 +33,6 @@
         </div>
       </div>
     </div>
-    <div class="dialog__mask" @click="close"></div>
-    <div class="dialog__close" @click.stop="close">
-      <img src="@/assets/images/close.svg" alt="">
-    </div>
   </transition>
 </template>
 

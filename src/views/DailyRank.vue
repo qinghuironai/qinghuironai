@@ -1,25 +1,27 @@
 <template>
   <div class="rank">
-    <div class="<!-- rank__header">
-
-    </div> -->
+    <!-- <div class="rank__header"></div> -->
     <!-- 日历弹窗 -->
     <div class="rank__content">
       <div v-show="calendarShow" class="rank__calendar-picker">
-        <div class="rank__calendar-picker--mask" @click.stop="calendarShow = false"></div>
+        <div
+          class="rank__calendar-picker--mask"
+          @click.stop="calendarShow = false"
+        ></div>
         <Calendar
           ref="datePicker"
           class="rank__calendar-picker--date"
           :futureDayHide="futureDayHide"
-          v-on:choseDay="clickDay"/>
+          v-on:choseDay="clickDay"
+        />
       </div>
 
       <div class="rank__calendar">
-        <img src="@/assets/images/calendar.svg" @click="showCalendar" alt="">
+        <img src="@/assets/images/calendar.svg" @click="showCalendar" alt="" />
       </div>
 
       <div class="rank__select">
-        <span>{{mode}}</span>
+        <span>{{ mode }}</span>
         <select name="sources" placeholder="Source Type" v-model="mode">
           <option value="day">Day</option>
           <option value="week">Week</option>
@@ -27,25 +29,52 @@
         </select>
       </div>
 
-      <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight" :swipe-options="{direction: 'horizontal'}">
+      <v-touch
+        v-on:swipeleft="onSwipeLeft"
+        v-on:swiperight="onSwipeRight"
+        :swipe-options="{ direction: 'horizontal' }"
+      >
         <div class="rank__list">
-          <div class="rank__list--item" v-for="(item, index) in pictureList" :key="index">
-            <img @click="preview(item.meta_pages, item)" v-if="item.meta_pages.length" v-lazy="item.meta_pages[0].image_urls.large" alt="">
-            <img @click="preview(item.meta_single_page.original_image_url, item)" v-else v-lazy="item.meta_single_page.large_image_url" alt="">
-            <p class="rank__list--item-title">{{ item.title }}</p>
-            <div v-if="item.page_count > 1" class="rank__list--item-count">
-              <img src="@/assets/images/count.svg" alt="">
-              <span>{{ item.page_count }}</span>
+          <div
+            class="rank__list--wrapper"
+            v-for="(item, index) in pictureList"
+            :key="index"
+          >
+            <div class="rank__list--item">
+              <img
+                @click="preview(item.meta_pages, item)"
+                v-if="item.meta_pages.length"
+                v-lazy="item.meta_pages[0].image_urls.large"
+                alt=""
+              />
+              <img
+                @click="preview(item.meta_single_page.original_image_url, item)"
+                v-else
+                v-lazy="item.meta_single_page.large_image_url"
+                alt=""
+              />
+              <p class="rank__list--item-title">{{ item.title }}</p>
+              <div v-if="item.page_count > 1" class="rank__list--item-count">
+                <img src="@/assets/images/count.svg" alt="" />
+                <span>{{ item.page_count }}</span>
+              </div>
             </div>
           </div>
         </div>
       </v-touch>
-      <div v-infinite-scroll="loadMore" infinite-scroll-disabled="isBottom" infinite-scroll-distance="10" class="rank__more">
-        <div v-if="isBottom" class="rank__more--bottom">(￣ˇ￣)俺也是有底线的</div>
+      <div
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="isBottom"
+        infinite-scroll-distance="10"
+        class="rank__more"
+      >
+        <div v-if="isBottom" class="rank__more--bottom">
+          (￣ˇ￣)俺也是有底线的
+        </div>
       </div>
     </div>
     <!-- 图片弹窗 下次重写 -->
-    <img-dialog :images="images" :info="info" :isShow.sync="isShow"/>
+    <img-dialog :images="images" :info="info" :isShow.sync="isShow" />
   </div>
 </template>
 
@@ -96,35 +125,38 @@ export default {
         mode: this.mode
       }
       this.loading = true
-      return this.$api.rank.getRank(data).then(res => {
-        if (res.status === 200) {
-          this.page++
-          let data = res.data.data.illustrations
-          this.isBottom = false
-          if (!data || !data.length) {
-            this.isBottom = true
+      return this.$api.rank
+        .getRank(data)
+        .then(res => {
+          if (res.status === 200) {
+            this.page++
+            let data = res.data.data.illustrations
+            this.isBottom = false
+            if (!data || !data.length) {
+              this.isBottom = true
+            } else {
+              this.pictureList = this.pictureList.concat(data)
+            }
           } else {
-            this.pictureList = this.pictureList.concat(data)
+            this.$aMsg.error(res.data)
           }
-        } else {
-          this.$aMsg.error(res.data)
-        }
-        this.loading = false
-        if (this.guide) {
-          this.guide = false
-          setTimeout(() => {
-            this.$aMsg({
-              message: '左右滑动可以切换日期喔～',
-              type: 'none',
-              timeout: 3000
-            })
-          }, 1000)
-        }
-      }).catch(err => {
-        this.$aMsg.error(err)
-        this.loading = false
-        this.isBottom = true
-      })
+          this.loading = false
+          if (this.guide) {
+            this.guide = false
+            setTimeout(() => {
+              this.$aMsg({
+                message: '左右滑动可以切换日期喔～',
+                type: 'none',
+                timeout: 3000
+              })
+            }, 1000)
+          }
+        })
+        .catch(err => {
+          this.$aMsg.error(err)
+          this.loading = false
+          this.isBottom = true
+        })
     },
     preview (val, info) {
       this.info = info
@@ -142,8 +174,10 @@ export default {
       this.calendarShow = true
     },
     clickDay (data) {
-      const date = data.split('/')
-        .map(e => e.padStart(2, '0')).join('-')
+      const date = data
+        .split('/')
+        .map(e => e.padStart(2, '0'))
+        .join('-')
       const newDate = moment(date).format('YYYY-MM-DD')
       if (newDate === this.date) return
       this.date = newDate
@@ -161,11 +195,20 @@ export default {
     swipe (page) {
       let newDate
       if (this.mode === 'day') {
-        newDate = moment(this.date).add('days', page).format('YYYY-MM-DD')
+        newDate = moment(this.date)
+          .add('days', page)
+          .format('YYYY-MM-DD')
       } else if (this.mode === 'week') {
-        newDate = moment(this.date).week(moment(this.date).week() + page).startOf('week').add('days', 1).format('YYYY-MM-DD')
+        newDate = moment(this.date)
+          .week(moment(this.date).week() + page)
+          .startOf('week')
+          .add('days', 1)
+          .format('YYYY-MM-DD')
       } else if (this.mode === 'month') {
-        newDate = moment(this.date).month(moment(this.date).month() + page).startOf('month').format('YYYY-MM-DD')
+        newDate = moment(this.date)
+          .month(moment(this.date).month() + page)
+          .startOf('month')
+          .format('YYYY-MM-DD')
       }
       if (moment(newDate).unix() > this.futureDayHide) {
         this.$aMsg.error('新数据尚未注入。。')
@@ -192,9 +235,14 @@ export default {
       this.pictureList = []
       // 这里选择模式后 周的话要本周一 月的话要本月1号
       if (val === 'week') {
-        this.date = moment(this.date).weekday(1).format('YYYY-MM-DD')
+        this.date = moment(this.date)
+          .weekday(1)
+          .format('YYYY-MM-DD')
       } else if (val === 'month') {
-        this.date = moment(this.date).add('month', 0).format('YYYY-MM') + '-01'
+        this.date =
+          moment(this.date)
+            .add('month', 0)
+            .format('YYYY-MM') + '-01'
       }
       this.getPictures()
     },
@@ -220,7 +268,7 @@ export default {
     position absolute
     box-sizing border-box
     padding 0 .5rem
-    padding-top 3.5rem
+    // padding-top 3.5rem
     width 100%
     height 100%
     overflow auto
@@ -238,9 +286,11 @@ export default {
     -webkit-column-gap 0.4rem
     column-gap 0.4rem
     padding-top 0.2rem
+    &--wrapper
+      position relative
+      padding 10px 4px
     &--item
       position relative
-      margin 10px 4px
       -moz-page-break-inside avoid
       -webkit-column-break-inside avoid
       break-inside avoid
@@ -285,7 +335,7 @@ export default {
   &__select
     position: relative
     text-align center
-    margin-bottom 0.5rem
+    margin-bottom 1rem
     select
       position absolute
       display block

@@ -8,6 +8,24 @@ function getRank (params) {
   })
 }
 
+function getSearch (params) {
+  return axios({
+    url: `/illusts`,
+    method: 'get',
+    params
+  })
+}
+
+function getTags (params) {
+  return axios({
+    url: `/relatedTags`,
+    method: 'get',
+    params
+  })
+}
+
 export {
-  getRank
+  getRank,
+  getSearch,
+  getTags
 }
