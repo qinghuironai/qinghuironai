@@ -3,6 +3,7 @@
     class="text-input"
     v-model="value"
     :placeholder="placeholder"
+    @blur="blur"
     @keyup.enter="enter"/>
 </template>
 
@@ -21,6 +22,9 @@ export default {
     }
   },
   methods: {
+    blur () {
+      this.$emit('blur', this.value)
+    },
     enter () {
       this.$emit('enter', this.value)
     }
@@ -40,4 +44,6 @@ export default {
     background: $white
     font-size: 1.4rem
     -webkit-appearance: none
+    border none
+    outline none
 </style>
