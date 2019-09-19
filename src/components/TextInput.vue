@@ -8,9 +8,15 @@
 </template>
 
 <script>
+// import debounce from 'lodash/debounce'
+
 export default {
   name: 'TextInput',
   props: {
+    preset: {
+      default: '',
+      type: String
+    },
     placeholder: {
       default: `(●'◡'●)ﾉ關鍵字の輸入`,
       type: String
@@ -18,11 +24,39 @@ export default {
   },
   data () {
     return {
+      typing: false,
       value: ''
     }
   },
+  watch: {
+    value: {
+      handler (val) {
+        if (val) {
+          this.typing = true
+          this.getKeyword()
+          this.$emit('change', val)
+        }
+      }
+    },
+    preset: {
+      handler (val) {
+        if (val) {
+          this.value = this.preset
+        }
+      },
+      immediate: true
+    }
+  },
   methods: {
+    getKeyword () {
+      if (!this.typing) return
+      this.$api.search
+        .getKeyword(this.value).then(({ data: { data } }) => {
+          console.log(data)
+        })
+    },
     blur () {
+      this.typing = false
       this.$emit('blur', this.value)
     },
     enter () {

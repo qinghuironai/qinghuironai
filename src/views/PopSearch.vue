@@ -3,44 +3,75 @@
     <div class="pop-search__header">
       <TextInput
         class="pop-search__search"
+        :preset="keyword"
         v-on:blur="popSearch"
-        v-on:enter="popSearch" />
-      <div class="pop-search__tag">
+        v-on:enter="popSearch"
+      />
+      <div class="pop-search__tag" v-if="tagsList.length">
         <router-link
           v-for="(item, index) in tagsList"
           :key="index"
-          :to="{ name: 'PopSearch', query: { keyword: item.tag } }"
+          :to="{ name: 'PopSearch', query: { keyword: item.keyword } }"
         >
-          <p>{{ item.tag }}</p>
-          <p v-if="item.tag_translation" class="sub">
-            {{ item.tag_translation }}
+          <p>{{ item.keyword }}</p>
+          <p v-if="item.keywordTranslated" class="sub">
+            {{ item.keywordTranslated }}
           </p>
         </router-link>
       </div>
     </div>
     <div class="pop-search__content">
       <div class="pop-search__list">
-        <div
-          class="pop-search__list--item"
-          v-for="(item, index) in pictureList"
-          :key="index"
-        >
-          <img
-            @click="preview(item.meta_pages, item)"
-            v-if="item.meta_pages.length"
-            v-lazy="item.meta_pages[0].image_urls.large"
-            alt=""
-          />
-          <img
-            @click="preview(item.meta_single_page.original_image_url, item)"
-            v-else
-            v-lazy="item.meta_single_page.large_image_url"
-            alt=""
-          />
-          <p class="pop-search__list--item-title">{{ item.title }}</p>
-          <div v-if="item.page_count > 1" class="pop-search__list--item-count">
-            <img src="@/assets/images/count.svg" alt="" />
-            <span>{{ item.page_count }}</span>
+        <div class="col">
+          <div
+            class="pop-search__list--wrapper"
+            v-for="(item, index) in leftList.list"
+            :key="index"
+          >
+            <div class="pop-search__list--item">
+              <img
+                @click="preview(item)"
+                v-lazy="
+                  'https://img.pixivic.com:23334/get/' + item.imageUrls[0].large
+                "
+                :style="item.style"
+                alt=""
+              />
+              <p class="pop-search__list--item-title">{{ item.title }}</p>
+              <div
+                v-if="item.imageUrls.length > 1"
+                class="pop-search__list--item-count"
+              >
+                <img src="@/assets/images/count.svg" alt="" />
+                <span>{{ item.imageUrls.length }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div
+            class="pop-search__list--wrapper"
+            v-for="(item, index) in rightList.list"
+            :key="index"
+          >
+            <div class="pop-search__list--item">
+              <img
+                @click="preview(item)"
+                v-lazy="
+                  'https://img.pixivic.com:23334/get/' + item.imageUrls[0].large
+                "
+                :style="item.style"
+                alt=""
+              />
+              <p class="pop-search__list--item-title">{{ item.title }}</p>
+              <div
+                v-if="item.imageUrls.length > 1"
+                class="pop-search__list--item-count"
+              >
+                <img src="@/assets/images/count.svg" alt="" />
+                <span>{{ item.imageUrls.length }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -80,13 +111,19 @@ export default {
       searchKey: '',
       tagsList: [],
       pictureList: [],
+      leftList: {
+        height: 0
+      },
+      rightList: {
+        height: 0,
+        list: []
+      },
       images: [],
       info: {},
       isShow: false,
       isBottom: false,
       page: {
-        tag: 0,
-        picture: 0
+        picture: 1
       }
     }
   },
@@ -99,6 +136,36 @@ export default {
           this.getSearch()
         }
       },
+      immediate: true
+    },
+    pictureList: {
+      handler (val, old) {
+        if (val.length === 0) {
+          this.leftList.height = 0
+          this.leftList.list = []
+          this.rightList.height = 0
+          this.rightList.list = []
+        } else {
+          const list = val.filter(e => !old.includes(e))
+          list.sort((a, b) => a.height >= b.height ? 1 : -1)
+          console.log(list.map(e => e.height))
+          for (var i = 0; i < list.length / 2; i++) {
+            const a = list[i]
+            const b = list[list.length - 1 - i]
+            if (this.leftList.height <= this.rightList.height) {
+              this.leftList.height += a.height + b.height
+              this.leftList.list.push(a)
+              this.leftList.list.push(b)
+            } else {
+              this.rightList.height += a.height + b.height
+              this.rightList.list.push(a)
+              this.rightList.list.push(b)
+            }
+          }
+          console.log(this.leftList.height, this.rightList.height)
+        }
+      },
+      deep: true,
       immediate: true
     }
   },
@@ -118,38 +185,42 @@ export default {
         })
       }
     },
-    getSearch (page = 0) {
-      this.$api.rank
+    getSearch (page = 1) {
+      this.$api.search
         .getSearch({ keyword: this.keyword, page })
         .then(({ data: { data } }) => {
           this.page.picture = page
+          console.log('sadasds', this.page.picture)
+          console.log(data)
           if (data) {
-            this.pictureList = this.pictureList.concat(data)
+            const width = (window.innerWidth - 20) / 2
+            this.pictureList = this.pictureList.concat(
+              data.map(e => ({
+                ...e,
+                imageUrls: e.imageUrls.map(img => ({
+                  ...img,
+                  large: img.large.replace('_webp', '')
+                })),
+                height: (e.height / e.width) * width,
+                style: { height: `${(e.height / e.width) * width}px` }
+              }))
+            )
+            // this.preview(this.pictureList[0]);
           }
         })
     },
     getTags () {
-      const page = 0
       this.tagsList = []
-      this.$api.rank
-        .getTags({ keyword: this.keyword, page })
-        .then(({ data: { data } }) => {
-          this.page.tag = page
-          if (data) {
-            this.tagsList = this.tagsList.concat(data)
-          }
-        })
+      this.$api.search.getTags(this.keyword).then(({ data: { data } }) => {
+        if (data) {
+          this.tagsList = data
+        }
+      })
     },
-    preview (val, info) {
+    preview (info) {
       this.info = info
       this.images = []
-      if (Array.isArray(val)) {
-        val.forEach(item => {
-          this.images.push(item.image_urls.original)
-        })
-      } else {
-        this.images.push(val)
-      }
+      this.images = info.imageUrls
       this.isShow = true
     },
     loadMore () {
@@ -178,6 +249,9 @@ export default {
     height auto
   &__tag
     position relative
+    left 0
+    right 0
+    margin 0 auto
     display flex
     overflow-x scroll
     margin 20px
@@ -202,19 +276,16 @@ export default {
     .sub
       font-size 10px
   &__list
-    -moz-column-count 2
-    -webkit-column-count 2
-    column-count 2
-    -moz-column-gap 0.4rem
-    -webkit-column-gap 0.4rem
-    column-gap 0.4rem
-    padding-top 0.2rem
+    display flex
+    padding-top 2px
+    .col
+      position relative
+      width 50%
+    &--wrapper
+      position relative
+      padding 10px 4px
     &--item
       position relative
-      margin 10px 4px
-      -moz-page-break-inside avoid
-      -webkit-column-break-inside avoid
-      break-inside avoid
       box-shadow 0 1px 3px rgba(0, 0, 0, .3)
       border-radius 0.3rem
       overflow hidden

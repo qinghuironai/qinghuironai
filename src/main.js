@@ -10,7 +10,9 @@ import router from './router'
 import store from './store'
 import api from './api'
 import './style/index.styl'
+// import VConsole from 'vconsole'
 
+// new VConsole()
 Vue.config.productionTip = false
 Vue.use(AMsg, { color: ['#b9eee5'] })
 Vue.use(VueTouch, { name: 'v-touch' })
@@ -18,15 +20,18 @@ VueTouch.config.swipe = {
   threshold: 100
 }
 Vue.use(VueLazyload, {
-  loading: require('@/assets/images/loading.svg')
+  loading: require('@/assets/images/loading.svg'),
+  error: require('@/assets/images/loading.svg')
 })
 Vue.use(vueiInfinite)
 Vue.use(animated)
 Vue.use(Vuelidate)
 Vue.prototype.$api = api
 
-new Vue({
+const app = new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+})
+
+app.$mount('#app')

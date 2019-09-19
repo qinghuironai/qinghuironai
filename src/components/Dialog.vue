@@ -95,7 +95,9 @@ export default {
     isShow: {
       handler: function (val) {
         if (val) {
-          this.imagesList = [...this.images]
+          this.imagesList = this.images.map(e => {
+            return 'https://img.pixivic.com:23334/get/' + e.original
+          })
           const img = this.$refs.dialogBg.children[0]
           img.src = this.imagesList[0]
           img.onload = () => {
@@ -106,8 +108,6 @@ export default {
             })
           }
           this.$nextTick(() => {
-            console.log(this.$refs)
-            console.log(this.$refs.dialogContent.offsetHeight)
           })
         } else {
           this.imagesList = []
@@ -132,8 +132,10 @@ export default {
   opacity: 0;
 .dialog
   position fixed
-  width 100%
-  height 100%
+  width 100vw
+  height 100vh
+  left 0
+  top 0
   font-size 1rem
   overflow hidden
   z-index 1
@@ -141,8 +143,8 @@ export default {
     opacity 1
   &__mask
     position fixed
-    width 100%
-    height 100%
+    width 100vw
+    height 100vh
     left 0
     top 0
     background-color #0b2431e6
@@ -206,7 +208,6 @@ export default {
     justify-content center
     align-items center
     overflow-y auto
-    pointer-events none
     &--item
       display inline-block
       width 100%
@@ -220,8 +221,11 @@ export default {
       transition  all 1s ease
       &.loading
         position absolute
+        pointer-events none
     &--wapper
-      position absolute
+      position fixed
+      top: 0;
+      left: 0;
       width 100%
       height 100%
       overflow-y auto

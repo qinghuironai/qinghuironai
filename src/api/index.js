@@ -1,7 +1,9 @@
-import * as rank from './rank'
+import * as rank from './modules/rank'
+import * as search from './modules/search'
 
 const api = {
-  rank
+  rank,
+  search
 }
 
 export default api
