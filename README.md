@@ -41,7 +41,7 @@ npm run build
 npm run lint
 ```
 
-### Jenkins test1
+### Jenkins test2
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
