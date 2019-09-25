@@ -1,14 +1,26 @@
 <template>
-  <input
-    class="text-input"
-    v-model="value"
-    :placeholder="placeholder"
-    @blur="blur"
-    @keyup.enter="enter"/>
+  <div :class="['text-input__wrapper', { typing }]">
+    <input
+      class="text-input"
+      v-model="value"
+      :placeholder="placeholder"
+      @blur="blur"
+      @keyup.enter="enter"/>
+    <div class="text-input__keyword" v-if="typing">
+      <router-link
+        class="text-input__keyword--item"
+        v-for="(item, index) in keywords"
+        :key="index"
+        :to="{ name: 'PopSearch', query: { keyword: item } }"
+      >
+        <p>{{ item }}</p>
+      </router-link>
+    </div>
+  </div>
 </template>
 
 <script>
-// import debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'TextInput',
@@ -25,14 +37,17 @@ export default {
   data () {
     return {
       typing: false,
+      keywords: [],
       value: ''
     }
   },
   watch: {
     value: {
-      handler (val) {
+      handler (val, old) {
         if (val) {
-          this.typing = true
+          if (old !== '') {
+            this.typing = true
+          }
           this.getKeyword()
           this.$emit('change', val)
         }
@@ -48,18 +63,20 @@ export default {
     }
   },
   methods: {
-    getKeyword () {
+    getKeyword: debounce(function () {
       if (!this.typing) return
       this.$api.search
         .getKeyword(this.value).then(({ data: { data } }) => {
+          this.keywords = data.keywordList
           console.log(data)
         })
-    },
+    }, 500),
     blur () {
       this.typing = false
       this.$emit('blur', this.value)
     },
     enter () {
+      this.typing = false
       this.$emit('enter', this.value)
     }
   }
@@ -68,16 +85,43 @@ export default {
 
 <style lang="stylus" scoped>
   .text-input
-    padding: .8rem
-    border: 0 none
-    left: 0
-    right: 0
-    margin: 0 auto
-    border-radius: .25rem
-    width: 16rem
-    background: $white
-    font-size: 1.4rem
-    -webkit-appearance: none
+    padding .8rem
+    border 0 none
+    border-radius .25rem
+    width 16rem
+    background $white
+    font-size 1.4rem
+    -webkit-appearance none
     border none
     outline none
+    &__wrapper
+      position relative
+      box-sizing border-box
+      left 0
+      right 0
+      margin .8rem
+      // &.typing
+      //   position fixed
+      //   top 0
+    &__keyword
+      position absolute
+      top 100%
+      left 0
+      color black
+      z-index 1
+      margin .4rem 0
+      border-radius .25rem
+      width 100%
+      background white
+      overflow hidden
+      &--item
+        display inline-block
+        box-sizing border-box
+        width 100%
+        font-size 20px
+        padding 0.8rem
+        color white
+        background #33a3dc4d
+        + .text-input__keyword--item
+          border-top 1px solid white
 </style>

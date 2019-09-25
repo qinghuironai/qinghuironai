@@ -16,7 +16,7 @@
 
 ### Optimization
 
-- [ ] 搜索提示词
+- [x] 搜索提示词
 - [ ] 搜索的日期范围选定
 - [ ] 日排行页面和搜索页面的作品详情
 - [ ] 排行模式切换以及前后切换
@@ -41,7 +41,6 @@ npm run build
 npm run lint
 ```
 
-### Jenkins test3
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

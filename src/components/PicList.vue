@@ -1,35 +1,78 @@
 <template>
-  <div class="pop-search">
-    <div class="pop-search__header">
-      <TextInput
-        class="pop-search__search"
-        :preset="keyword"
-        v-on:blur="popSearch"
-        v-on:enter="popSearch"
-      />
-      <div class="pop-search__tag" v-if="tagsList.length">
-        <router-link
-          v-for="(item, index) in tagsList"
-          :key="index"
-          :to="{ name: 'PopSearch', query: { keyword: item.keyword } }"
+<div class="pic__content">
+  <img-dialog :images="images" :info="info" :isShow.sync="isShow" />
+  <div class="pic__list">
+    <div class="col">
+      <div
+        class="pic__list--wrapper"
+        v-for="(item, index) in leftList.list"
+        :key="index"
         >
-          <p>{{ item.keyword }}</p>
-          <p v-if="item.keywordTranslated" class="sub">
-            {{ item.keywordTranslated }}
-          </p>
-        </router-link>
+        <div class="pic__list--item">
+          <img
+            @click="preview(item)"
+            v-lazy="
+                    'https://img.pixivic.com:23334/get/' + item.imageUrls[0].large
+                    "
+            :style="item.style"
+            alt=""
+            />
+          <p class="pic__list--item-title">{{ item.title }}</p>
+          <div
+            v-if="item.imageUrls.length > 1"
+            class="pic__list--item-count"
+            >
+            <img src="@/assets/images/count.svg" alt="" />
+            <span>{{ item.imageUrls.length }}</span>
+          </div>
+        </div>
       </div>
     </div>
-   <PicList :keyword="keyword"></PicList>
+    <div class="col">
+      <div
+        class="pic__list--wrapper"
+        v-for="(item, index) in rightList.list"
+        :key="index"
+        >
+        <div class="pic__list--item">
+          <img
+            @click="preview(item)"
+            v-lazy="
+                    'https://img.pixivic.com:23334/get/' + item.imageUrls[0].large
+                    "
+            :style="item.style"
+            alt=""
+            />
+          <p class="pic__list--item-title">{{ item.title }}</p>
+          <div
+            v-if="item.imageUrls.length > 1"
+            class="pic__list--item-count"
+            >
+            <img src="@/assets/images/count.svg" alt="" />
+            <span>{{ item.imageUrls.length }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+   <div
+     v-infinite-scroll="loadMore"
+     infinite-scroll-disabled="isBottom"
+     infinite-scroll-distance="10"
+     class="rank__more"
+     >
+     <div v-if="isBottom" class="rank__more--bottom">
+       (￣ˇ￣)俺也是有底线的
+     </div>
+   </div>
+</div>
 </template>
 
 <script>
-import TextInput from '@/components/TextInput'
-import PicList from '@/components/PicList'
+import imgDialog from '@/components/Dialog'
 
 export default {
-  name: 'PopSearch',
+  name: 'PicList',
   props: {
     keyword: {
       require: true,
@@ -37,13 +80,11 @@ export default {
     }
   },
   components: {
-    PicList,
-    TextInput
+    imgDialog
   },
   data () {
     return {
       searchKey: '',
-      tagsList: [],
       pictureList: [],
       leftList: {
         height: 0
@@ -66,7 +107,6 @@ export default {
       handler (val) {
         if (val) {
           this.pictureList = []
-          this.getTags()
           this.getSearch()
         }
       },
@@ -139,17 +179,8 @@ export default {
                 style: { height: `${(e.height / e.width) * width}px` }
               }))
             )
-            // this.preview(this.pictureList[0]);
           }
         })
-    },
-    getTags () {
-      this.tagsList = []
-      this.$api.search.getTags(this.keyword).then(({ data: { data } }) => {
-        if (data) {
-          this.tagsList = data
-        }
-      })
     },
     preview (info) {
       this.info = info
@@ -165,51 +196,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.pop-search
-  display block
-  background-color white
-  box-sizing border-box
-  padding-top 20px
-  min-height 100vh
-  &__search::v-deep input
-    display block
-    box-sizing border-box
-    background #33a3dc4d
-    width 100%
-    height 50px
-    border-radius 6px
-    margin 0 auto
-    font-size 20px
-    color white
-    height auto
-  &__tag
-    position relative
-    left 0
-    right 0
-    margin 0 auto
-    display flex
-    overflow-x scroll
-    margin 20px
-    height 60px
-    a
-      display block
-      float left
-      text-align center
-      padding 10px
-      background $primary
-      border-radius 4px
-      + a
-        margin-left 8px
-    p
-      white-space nowrap
-      font-size 16px
-      color white
-      + p
-        margin-top 8px
-      &:last-child
-        margin-right 10px
-    .sub
-      font-size 10px
+.pic
   &__list
     display flex
     padding-top 2px
