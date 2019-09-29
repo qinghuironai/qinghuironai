@@ -11,6 +11,7 @@ module.exports = {
     'style-resources-loader': {
       preProcessor: 'stylus',
       patterns: [
+        path.join(__dirname, './src/style/mixin.styl'),
         path.join(__dirname, './src/style/color.styl')
       ]
     }

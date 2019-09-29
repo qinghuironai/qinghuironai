@@ -6,8 +6,8 @@
 
 - [x] 基础架构 20190616 Arius
 - [x] Home 20190616 Arius
-- [ ] DailyRank 20190709 Kim & Arius
-- [ ] PopSearch Arius
+- [x] DailyRank 20190709 Kim & Arius
+- [x] PopSearch Arius
 - [ ] Intro
 - [ ] Links
 - [ ] Donate
@@ -16,7 +16,7 @@
 
 ### Optimization
 
-- [ ] 搜索提示词
+- [x] 搜索提示词
 - [ ] 搜索的日期范围选定
 - [ ] 日排行页面和搜索页面的作品详情
 - [ ] 排行模式切换以及前后切换
@@ -40,6 +40,7 @@ npm run build
 ```
 npm run lint
 ```
+
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

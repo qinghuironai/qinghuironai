@@ -1,5 +1,6 @@
 <template>
   <div class="rank">
+    <!-- <div class="rank__header"></div> -->
     <!-- 日历弹窗 -->
     <div class="rank__content">
       <div v-show="calendarShow" class="rank__calendar-picker">
@@ -35,26 +36,28 @@
       >
         <div class="rank__list">
           <div
-            class="rank__list--item"
+            class="rank__list--wrapper"
             v-for="(item, index) in pictureList"
             :key="index"
           >
-            <img
-              @click="preview(item.meta_pages, item)"
-              v-if="item.meta_pages.length"
-              v-lazy="item.meta_pages[0].image_urls.large"
-              alt=""
-            />
-            <img
-              @click="preview(item.meta_single_page.original_image_url, item)"
-              v-else
-              v-lazy="item.meta_single_page.large_image_url"
-              alt=""
-            />
-            <p class="rank__list--item-title">{{ item.title }}</p>
-            <div v-if="item.page_count > 1" class="rank__list--item-count">
-              <img src="@/assets/images/count.svg" alt="" />
-              <span>{{ item.page_count }}</span>
+            <div class="rank__list--item">
+              <img
+                @click="preview(item.meta_pages, item)"
+                v-if="item.meta_pages.length"
+                v-lazy="item.meta_pages[0].image_urls.large"
+                alt=""
+              />
+              <img
+                @click="preview(item.meta_single_page.original_image_url, item)"
+                v-else
+                v-lazy="item.meta_single_page.large_image_url"
+                alt=""
+              />
+              <p class="rank__list--item-title">{{ item.title }}</p>
+              <div v-if="item.page_count > 1" class="rank__list--item-count">
+                <img src="@/assets/images/count.svg" alt="" />
+                <span>{{ item.page_count }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -251,169 +254,134 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.rank {
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-  background-color: #fff;
-
-  &__content {
-    position: absolute;
-    box-sizing: border-box;
-    padding: 0 0.5rem;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-  }
-
-  &__more {
-    &--bottom {
-      font-size: 1rem;
-      text-align: center;
-      padding: 0.6rem;
-      color: #33a3dc;
-    }
-  }
-
-  &__list {
-    -moz-column-count: 2;
-    -webkit-column-count: 2;
-    column-count: 2;
-    -moz-column-gap: 0.4rem;
-    -webkit-column-gap: 0.4rem;
-    column-gap: 0.4rem;
-    padding-top: 0.2rem;
-
-    &--item {
-      position: relative;
-      margin: 4px;
-      -moz-page-break-inside: avoid;
-      -webkit-column-break-inside: avoid;
-      break-inside: avoid;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-      border-radius: 0.3rem;
-      overflow: hidden;
-
-      img {
-        width: 100%;
-      }
-
-      &-title {
-        line-height: 0.8rem;
-        text-align: center;
-        padding: 0.2rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: #666666;
-        font-size: 0.8rem;
-      }
-
-      &-count {
-        position: absolute;
-        top: 0.4rem;
-        right: 0.4rem;
-        background-color: #0000009e;
-        padding: 0.2rem;
-        border-radius: 0.25rem;
-
-        img {
-          width: 1.25rem;
-          height: 1.25rem;
-          margin-right: 0.2rem;
-          vertical-align: middle;
-        }
-
-        span {
-          color: #fff;
-          vertical-align: middle;
-          line-height: 1.25rem;
-          font-size: 1rem;
-        }
-      }
-    }
-  }
-
-  &__calendar {
-    height: 4rem;
-    text-align: center;
-    padding: 0.4rem;
-
-    img {
-      width: 4rem;
-      height: 4rem;
-    }
-  }
-
-  &__select {
-    position: relative;
-    text-align: center;
-    margin-bottom: 0.5rem;
-
-    select {
-      position: absolute;
-      display: block;
-      top: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
-      width: 4rem;
-      height: 1.5rem;
-      outline: none;
-      opacity: 0;
-    }
-
-    span {
-      padding: 0.2rem 1rem;
-      width: auto;
-      outline: none;
-      background-color: #5c9cd8;
-      font-size: 1rem;
-      color: #ffffff;
-      border-radius: 0.4rem;
-    }
-  }
-
-  &__calendar {
-    position: relative;
-
-    &-picker {
-      &--mask {
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        left: 0;
-        top: 0;
-        background: rgba(51, 163, 220, 0.3);
-        z-index: 200;
-      }
-
-      &--date {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        margin: 1rem;
-        z-index: 300;
-
-        >>> .wh_content_all {
-          background-color: #33a3dcd1;
-          border-radius: 10px;
-
-          .wh_isToday {
-            background: #ffffffb3;
-            color: #0bcead;
-            font-weight: bold;
-          }
-        }
-
-        >>> .wh_content_item .wh_chose_day {
-          background: white;
-          color: #0bcead;
-          font-weight: bold;
-        }
-      }
-    }
-  }
-}
+.rank
+  position relative
+  height 100%
+  overflow hidden
+  background-color #fff
+  &__header
+    position absolute
+    width: 100%
+    height 3rem
+    background $primary
+  &__content
+    position absolute
+    box-sizing border-box
+    padding 0 .5rem
+    // padding-top 3.5rem
+    width 100%
+    height 100%
+    overflow auto
+  &__more
+    &--bottom
+      font-size 1rem
+      text-align center
+      padding 0.6rem
+      color #33a3dc
+  &__list
+    -moz-column-count 2
+    -webkit-column-count 2
+    column-count 2
+    -moz-column-gap 0.4rem
+    -webkit-column-gap 0.4rem
+    column-gap 0.4rem
+    padding-top 0.2rem
+    &--wrapper
+      position relative
+      padding 10px 4px
+    &--item
+      position relative
+      -moz-page-break-inside avoid
+      -webkit-column-break-inside avoid
+      break-inside avoid
+      box-shadow 0 1px 3px rgba(0, 0, 0, .3)
+      border-radius 0.3rem
+      overflow hidden
+      img
+        width 100%
+      &-title
+        line-height 0.8rem
+        text-align center
+        padding 0.2rem
+        white-space nowrap
+        overflow hidden
+        text-overflow ellipsis
+        color #666666
+        font-size 0.8rem
+      &-count
+        position absolute
+        top 0.4rem
+        right 0.4rem
+        background-color #0000009e
+        padding 0.2rem
+        border-radius 0.25rem
+        img
+          width 1.25rem
+          height 1.25rem
+          margin-right 0.2rem
+          vertical-align middle
+        span
+          color #fff
+          vertical-align middle
+          line-height 1.25rem
+          font-size 1rem
+  &__calendar
+      height 4rem
+      text-align center
+      padding 0.4rem
+      img
+        width 4rem
+        height 4rem
+  &__select
+    position: relative
+    text-align center
+    margin-bottom 1rem
+    select
+      position absolute
+      display block
+      top 0
+      left 0
+      right 0
+      margin auto
+      width 4rem
+      height 1.5rem
+      outline none
+      opacity 0
+    span
+      padding .2rem 1rem
+      width auto
+      outline none
+      background-color #5c9cd8
+      font-size 1rem
+      color #ffffff
+      border-radius 0.4rem
+  &__calendar
+    position relative
+    &-picker
+      &--mask
+        width 100%
+        height 100%
+        position fixed
+        left 0
+        top 0
+        background rgba(51, 163, 220, .3)
+        z-index 200
+      &--date
+        position fixed
+        top 0
+        left 0
+        right 0
+        margin 1rem
+        z-index 300
+        >>> .wh_content_all
+          background-color #33a3dcd1
+          border-radius 10px
+          .wh_isToday
+            background #ffffffb3
+            color #0bcead
+            font-weight bold
+        >>> .wh_content_item .wh_chose_day
+            background white
+            color #0bcead
+            font-weight bold
 </style>
