@@ -3,10 +3,29 @@
     <h1 class="login__title">Login</h1>
     <img src="@/assets/images/QQ.svg" alt="">
     <div class="login__group">
-      <input type="text" v-model="form.email" class="login__group--name" placeholder="邮箱/用户名" />
+      <input
+        type="text"
+        v-model="form.username"
+        class="login__group--name"
+        placeholder="邮箱/用户名"
+      />
     </div>
     <div class="login__group">
       <PwdInput v-model="form.password"/>
+    </div>
+    <div class="login__group">
+      <input
+        type="text"
+        v-model="form.vid"
+        class="login__group--name"
+        placeholder="验证码"
+        maxlength="4"
+      />
+      <img
+        class="login__group--code"
+        :src="codeImg"
+        @click.stop="getCode"
+      />
     </div>
     <div class="login__group">
       <div @click="login" class="login__group--btn">登录</div>
@@ -22,9 +41,11 @@ export default {
   data () {
     return {
       form: {
-        email: '',
-        password: ''
-      }
+        username: '',
+        password: '',
+        vid: ''
+      },
+      codeImg: ''
     }
   },
   components: {
@@ -34,14 +55,28 @@ export default {
     signUp () {
       this.$emit('signUp', 'register')
     },
-    login () {
-      if (!this.form.email || !this.form.password) {
-        this.$aMsg.error('请将信息填写完整哦 QAQ')
+    async login () {
+      if (!this.form.username || !this.form.password || !this.form.vid) {
+        return this.$aMsg.error('请将信息填写完整哦 QAQ')
+      }
+      const res = await this.$api.user.login(this.form)
+      console.log(res)
+      if (res.status === 200) {
+
       }
     },
     lostPwd () {
       this.$emit('lostPwd', 'find')
+    },
+    async getCode () {
+      const res = await this.$api.user.verificationCode()
+      if (res.status === 200) {
+        this.codeImg = res.data.data.imageBase64
+      }
     }
+  },
+  mounted () {
+    this.getCode()
   }
 }
 </script>
@@ -61,6 +96,7 @@ export default {
     margin 0 auto
   &__group
     margin-bottom 2rem
+    position relative
     &--name
       background-color #ECF0F1
       border 0.2rem solid transparent
@@ -70,6 +106,13 @@ export default {
       &:focus
         border 0.2rem solid #3498DB
         box-shadow none
+    &--code
+      width 100%
+      position absolute
+      top 0.2rem
+      right 2rem
+      color #073f84
+      font-size 0.8rem
     &--btn
       border 0.2rem solid transparent
       background #3498DB
