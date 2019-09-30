@@ -42,21 +42,14 @@
           >
             <div class="rank__list--item">
               <img
-                @click="preview(item.meta_pages, item)"
-                v-if="item.meta_pages.length"
-                v-lazy="item.meta_pages[0].image_urls.large"
-                alt=""
-              />
-              <img
-                @click="preview(item.meta_single_page.original_image_url, item)"
-                v-else
-                v-lazy="item.meta_single_page.large_image_url"
+                @click="preview(item)"
+                v-lazy="item.imageUrls[0].large"
                 alt=""
               />
               <p class="rank__list--item-title">{{ item.title }}</p>
-              <div v-if="item.page_count > 1" class="rank__list--item-count">
+              <div v-if="item.pageCount > 1" class="rank__list--item-count">
                 <img src="@/assets/images/count.svg" alt="" />
-                <span>{{ item.page_count }}</span>
+                <span>{{ item.pageCount }}</span>
               </div>
             </div>
           </div>
@@ -73,7 +66,6 @@
         </div>
       </div>
     </div>
-    <!-- 图片弹窗 下次重写 -->
     <img-dialog :images="images" :info="info" :isShow.sync="isShow" />
   </div>
 </template>
@@ -130,7 +122,7 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.page++
-            let data = res.data.data.illustrations
+            let data = res.data.data.data
             this.isBottom = false
             if (!data || !data.length) {
               this.isBottom = true
@@ -158,16 +150,9 @@ export default {
           this.isBottom = true
         })
     },
-    preview (val, info) {
-      this.info = info
-      this.images = []
-      if (Array.isArray(val)) {
-        val.forEach(item => {
-          this.images.push(item.image_urls.original)
-        })
-      } else {
-        this.images.push(val)
-      }
+    preview (val) {
+      this.info = val
+      this.images = val.imageUrls
       this.isShow = true
     },
     showCalendar () {
