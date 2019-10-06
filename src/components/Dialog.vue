@@ -1,70 +1,96 @@
 <template>
-  <transition name="dialog-fade">
-    <div class="dialog" v-show="isShow">
-      <div  class="dialog__content--wapper" >
-        <div ref="dialogContent" class="dialog__content" v-if="imagesList.length > 0" >
-            <div v-for="(item, index) in imagesList"
-              :key="index"
-              :class="['dialog__content--item', {loading: !showList.includes(index)}]">
-              <img
-                :key="index"
-                src="@/assets/images/loading.svg"
-                :class="['loading', {opacity: !showList.includes(index)}]"/>
-              <img
-                :src="item"
-                @load="onload(index)"
-                :class="{opacity: showList.includes(index)}"/>
-            </div>
-        </div>
+  <div>
+    <div :class="['detail', { 'is-active': isShow }]">
+      <div class="detail-header">
+        <i class="pixicon icon-back" @click="close"></i>
+        <i class="pixicon icon-more"></i>
       </div>
-      <div class="dialog__mask" ref="dialogBg" @click="close">
-        <img :src="bg" :class="[bgClass,{opacity: bgShow}]">
-      </div>
-      <div class="dialog__menu" @click.stop="close">
-        <!-- <div class="text dialog__save" @click.stop="download">
-          save
-        </div> -->
-        <div class="text dialog__link" @click.stop="close">
-          back
-          <!-- <img src="@/assets/images/close.svg" alt=""> -->
+      <!-- improving performance -->
+      <template v-if="isShow">
+        <div
+          class="detail-pics is-single"
+          v-if="imagesList.length === 1"
+          :style="{ minHeight: `${picHeight}px` }"
+        >
+          <img v-lazy="imagesList[0].src" />
         </div>
-        <div class="text dialog__save" @click.stop="pixiv">
-          Link
+        <swiper
+          class="detail-pics"
+          v-if="imagesList.length > 1"
+          :options="swiperOption"
+          :style="{ minHeight: `${picHeight}px` }"
+        >
+          <swiper-slide v-for="(img, idx) in imagesList" :key="idx">
+            <img :src="img.src" />
+          </swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+      </template>
+      <div class="detail-intro">
+        <p class="detail-intro__title">{{ info.title }}</p>
+        <div class="detail-intro__author">
+          <img
+            :src="addPrefix(info.artistPreView.avatar)"
+          />
+          <span>{{ info.artistPreView.name }}</span>
         </div>
       </div>
     </div>
-  </transition>
+    <div
+      :class="['detail-preview', { 'is-active': !isShow }]"
+      @click="isShow = true"
+    >
+      <img
+        v-if="imagesList[0]"
+        v-lazy="imagesList[0].src"
+        :style="{ height: `${minHeight}px` }"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
+import 'swiper/dist/css/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
+  name: 'imgDialog',
+  components: {
+    swiper,
+    swiperSlide
+  },
   data () {
-    const { width, height } = window.screen
     return {
-      screanWH: width / height,
+      isShow: false,
+      height: 0,
       imagesList: [],
-      showList: [],
-      bg: '',
-      bgShow: false,
-      bgClass: ''
+
+      swiperOption: {
+        pagination: {
+          el: '.swiper-pagination',
+          dynamicBullets: true,
+          clickable: true
+        }
+      },
+      showList: []
     }
   },
   props: {
-    images: {
-      type: Array
-    },
     info: {
       type: Object
-    },
-    isShow: {
-      type: Boolean,
-      default: false
     }
   },
   methods: {
+    addPrefix (url) {
+      let prefix = ''
+      if (url.includes('i.pximg')) {
+        prefix = 'https://img.pixivic.com:23334/get/'
+      }
+      return prefix + url
+    },
     close () {
-      this.$emit('update:isShow', false)
+      this.isShow = false
+      this.download()
     },
     pixiv () {
       window.open(this.info.user.profile_image_urls.medium, '_blank')
@@ -73,12 +99,13 @@ export default {
       var link = document.createElement('a')
       if ('download' in link) {
         link.style.display = 'none'
-        const e = this.imagesList[0]
+        const e = this.imagesList[0].src
         // this.imagesList.map(e => {
-        link.setAttribute('download', 'download')
+        // link.setAttribute('target', '_blank')
+        link.setAttribute('download', '')
         link.href = e
         document.body.appendChild(link)
-        link.click()
+        // link.click()
         document.body.removeChild(link)
         // })
       } else {
@@ -91,143 +118,90 @@ export default {
       }, 200)
     }
   },
-  watch: {
-    isShow: {
-      handler: function (val) {
-        if (val) {
-          this.imagesList = this.images.map(e => {
-            return 'https://img.pixivic.com:23334/get/' + e.original
-          })
-          const img = this.$refs.dialogBg.children[0]
-          img.src = this.imagesList[0]
-          img.onload = () => {
-            this.$nextTick(() => {
-              const { width, height } = img
-              this.bgShow = true
-              this.bgClass = width / height > this.screanWH ? 'height' : 'width'
-            })
-          }
-          this.$nextTick(() => {
-          })
-        } else {
-          this.imagesList = []
-          this.showList = []
-          this.bg = ''
-          this.bgShow = false
-        }
-      },
-      immediate: true
-    }
+  mounted () {
+    const width = window.innerWidth
+    const minWidth = (window.innerWidth - 20) / 2
+    this.imagesList = this.info.imageUrls.map(e => ({
+      src: this.addPrefix(e.large)
+    }))
+    this.picHeight = (this.info.height / this.info.width) * width
+    this.minHeight = (this.info.height / this.info.width) * minWidth
   }
 }
-
 </script>
-<style lang='stylus' scoped>
-.dialog-fade-enter-active
-  transition: all .3s ease
-.dialog-fade-leave-active
-  transition: all .5s ease
-.dialog-fade-enter,
-.dialog-fade-leave-to
-  opacity: 0;
-.dialog
+<style lang="stylus" scoped>
+.pixicon
+  display inline-block
+  font-size 30px
+  padding 12px 12px
+  cusor pointer
+.detail
   position fixed
-  width 100vw
-  height 100vh
-  left 0
   top 0
-  font-size 1rem
-  overflow hidden
-  z-index 1
-  .opacity
+  left 0
+  display flex
+  flex-direction column
+  background $mask
+  height 100vh
+  width 100vw
+  overflow scroll
+  z-index 2
+  transform scale(0)
+  opacity 0
+  pointer-events none
+  transform-origin bottom center
+  &.is-active
     opacity 1
-  &__mask
-    position fixed
-    width 100vw
-    height 100vh
-    left 0
+    pointer-events all
+    transform scale(1)
+  &-header
+    padding 0 10px
+    position sticky
+    background white
     top 0
-    background-color #0b2431e6
-    overflow-y hidden
-    z-index -1
-    img
-      position absolute
-      opacity 0
-      top 50%
-      left 50%
-      transform translate(-50%, -50%)
-      filter blur(4px) grayscale(20%)
-      transition opacity .8s
-      &.width
-        width 100%
-      &.height
-        height 100%
-  &__menu
-    position fixed
-    display flex
-    bottom: 0
+  &-pics
     width 100%
-    height 6rem
-    justify-content center
-    align-items center
-    z-index 2
-    div
-      margin-right 1rem
-      &.text
-        padding .5rem 1rem
-        // box-shadow: inset -2px -2px 4px black;
-      &.icon
-        padding .5rem
-      &:last-child
-        margin-right 0
-  &__save
-    border-radius 4px
-    color: #fff
-    background-color: #e60023
-  &__link
-    border-radius 4px
-    color: #333
-    background-color: #efefef
-  &__close
-    width 1.2rem
-    height 1.2rem
-    border-radius 50%
-    background-color: #fff
-    img
-      height 1.2rem
-  &__info
-    position fixed
-    top 0
-  &__content
-    position absolute
-    display: flex
-    width 100%
-    height auto
-    min-height 100vh
-    flex-direction column
-    justify-content center
-    align-items center
-    overflow-y auto
-    &--item
-      display inline-block
-      width 100%
-      height auto
-      &.loading
-        height 100vw
+    &.is-single
+      display flex
+      flex-direction column
+      justify-content center
+    ::v-deep
+      .swiper
+        &-slide
+          display flex
+          flex-direction column
+          justify-content center
+        &-pagination
+          top 20px
+          &-bullet
+            height 6px
+            width 40px
+            border-radius 2px
+            &-active
+              background $primary
+  &-pics, &-preview
     img
       width 100%
-      opacity 0
-      line-height 1
-      transition  all 1s ease
-      &.loading
-        position absolute
-        pointer-events none
-    &--wapper
-      position fixed
-      top: 0;
-      left: 0;
+  &-intro
+    flex 1
+    padding 12px 16px
+    background white
+    &__title
+      font-size 21px
+      font-weight 700
       width 100%
-      height 100%
-      overflow-y auto
-      z-index 1
+    &__author
+      margin-top 12px
+      display flex
+      align-items center
+      margin-bottom 40px
+      img
+        border-radius 50%
+        height 40px
+        width 40px
+        margin-right 8px
+      span
+        flex 1
+        font-size 16px
+        font-weight 700
 </style>

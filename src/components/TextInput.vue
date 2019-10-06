@@ -1,20 +1,23 @@
 <template>
-  <div :class="['text-input__wrapper', { typing }]">
+  <div
+    :class="['text-input__wrapper', { typing }]">
     <input
       class="text-input"
       v-model="value"
       :placeholder="placeholder"
-      @blur="blur"
+      @input="change"
       @keyup.enter="enter"/>
-    <div class="text-input__keyword" v-if="typing">
-      <router-link
-        class="text-input__keyword--item"
-        v-for="(item, index) in keywords"
-        :key="index"
-        :to="{ name: 'PopSearch', query: { keyword: item } }"
-      >
-        <p>{{ item }}</p>
-      </router-link>
+    <div class="text-input__keyword--mask" v-if="typing" @click="blur">
+      <div class="text-input__keyword" v-if="typing">
+        <div
+          class="text-input__keyword--item"
+          v-for="(item, index) in keywords"
+          :key="index"
+          @click="redirect(item)"
+        >
+          <p>{{ item }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -42,17 +45,6 @@ export default {
     }
   },
   watch: {
-    value: {
-      handler (val, old) {
-        if (val) {
-          if (old !== '') {
-            this.typing = true
-          }
-          this.getKeyword()
-          this.$emit('change', val)
-        }
-      }
-    },
     preset: {
       handler (val) {
         if (val) {
@@ -63,6 +55,12 @@ export default {
     }
   },
   methods: {
+    change () {
+      if (this.value) {
+        this.typing = true
+        this.getKeyword()
+      }
+    },
     getKeyword: debounce(function () {
       if (!this.typing) return
       this.$api.search
@@ -78,6 +76,12 @@ export default {
     enter () {
       this.typing = false
       this.$emit('enter', this.value)
+    },
+    redirect (val) {
+      this.$router.push({ name: 'PopSearch', query: { keyword: val } })
+        .catch(e => {
+          this.value = val
+        })
     }
   }
 }
@@ -99,21 +103,23 @@ export default {
       box-sizing border-box
       left 0
       right 0
-      margin .8rem
+      padding .8rem
       // &.typing
       //   position fixed
       //   top 0
+
     &__keyword
-      position absolute
-      top 100%
-      left 0
       color black
-      z-index 1
-      margin .4rem 0
       border-radius .25rem
-      width 100%
       background white
       overflow hidden
+      &--mask
+        position absolute
+        top -20px
+        left 0
+        padding 100px .8rem
+        height 100vh
+        z-index 1
       &--item
         display inline-block
         box-sizing border-box
