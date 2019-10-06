@@ -1,11 +1,14 @@
 <template>
   <div :class="['text-input__wrapper', { typing }]">
+    <img src="../assets/images/cat.png" alt="cat">
     <input
       class="text-input"
       v-model="value"
       :placeholder="placeholder"
       @blur="blur"
       @keyup.enter="enter"/>
+    <img src="../assets/images/camera.svg" alt="camera">
+    <img src="../assets/images/search.svg" @click="enter" alt="search">
     <div class="text-input__keyword" v-if="typing">
       <router-link
         class="text-input__keyword--item"
@@ -88,21 +91,35 @@ export default {
     padding .8rem
     border 0 none
     border-radius .25rem
-    width 16rem
+    width 100%
     background $white
     font-size 1.4rem
     -webkit-appearance none
     border none
     outline none
+    padding-right 6rem
+    box-sizing border-box
     &__wrapper
       position relative
       box-sizing border-box
       left 0
       right 0
       margin .8rem
-      // &.typing
-      //   position fixed
-      //   top 0
+      img
+        position absolute
+        &:first-child
+          width 6rem
+          top -5.2rem
+        &:nth-of-type(2), &:nth-of-type(3)
+          width 2rem
+          height 2rem
+          top 0.5rem
+        &:nth-of-type(2)
+          right 3rem
+        &:nth-of-type(3)
+          right 0.8rem
+    img:first-child
+      margin-right 2rem
     &__keyword
       position absolute
       top 100%
