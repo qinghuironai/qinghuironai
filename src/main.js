@@ -9,7 +9,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import api from './api'
+import util from './util'
 import './style/index.styl'
+import './assets/icon/iconfont.css'
+
 // import VConsole from 'vconsole'
 
 // new VConsole()
@@ -27,6 +30,7 @@ Vue.use(vueiInfinite)
 Vue.use(animated)
 Vue.use(Vuelidate)
 Vue.prototype.$api = api
+Vue.prototype.$util = util
 
 const app = new Vue({
   router,

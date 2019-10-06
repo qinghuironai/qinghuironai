@@ -1,13 +1,12 @@
 <template>
   <div class="pop-search">
     <div class="pop-search__header">
-      <TextInput
+      <text-input
         class="pop-search__search"
         :preset="keyword"
-        v-on:blur="popSearch"
         v-on:enter="popSearch"
       />
-      <div class="pop-search__tag" v-if="tagsList.length">
+      <div class="pop-search__tag">
         <router-link
           v-for="(item, index) in tagsList"
           :key="index"
@@ -20,11 +19,12 @@
         </router-link>
       </div>
     </div>
-   <PicList :keyword="keyword"></PicList>
+   <pic-list :pictureList="pictureList" @loadMore="loadMore"></pic-list>
   </div>
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
 import TextInput from '@/components/TextInput'
 import PicList from '@/components/PicList'
 
@@ -43,17 +43,8 @@ export default {
   data () {
     return {
       searchKey: '',
-      tagsList: [],
       pictureList: [],
-      leftList: {
-        height: 0
-      },
-      rightList: {
-        height: 0,
-        list: []
-      },
-      images: [],
-      info: {},
+      tagsList: [],
       isShow: false,
       isBottom: false,
       page: {
@@ -71,36 +62,6 @@ export default {
         }
       },
       immediate: true
-    },
-    pictureList: {
-      handler (val, old) {
-        if (val.length === 0) {
-          this.leftList.height = 0
-          this.leftList.list = []
-          this.rightList.height = 0
-          this.rightList.list = []
-        } else {
-          const list = val.filter(e => !old.includes(e))
-          list.sort((a, b) => a.height >= b.height ? 1 : -1)
-          console.log(list.map(e => e.height))
-          for (var i = 0; i < list.length / 2; i++) {
-            const a = list[i]
-            const b = list[list.length - 1 - i]
-            if (this.leftList.height <= this.rightList.height) {
-              this.leftList.height += a.height + b.height
-              this.leftList.list.push(a)
-              this.leftList.list.push(b)
-            } else {
-              this.rightList.height += a.height + b.height
-              this.rightList.list.push(a)
-              this.rightList.list.push(b)
-            }
-          }
-          console.log(this.leftList.height, this.rightList.height)
-        }
-      },
-      deep: true,
-      immediate: true
     }
   },
   mounted () {
@@ -111,21 +72,19 @@ export default {
     }
   },
   methods: {
-    popSearch (keyword) {
+    popSearch: debounce(function (keyword) {
       if (keyword) {
         this.$router.push({
           path: '/popSearch',
           query: { keyword }
         })
       }
-    },
+    }, 500),
     getSearch (page = 1) {
       this.$api.search
         .getSearch({ keyword: this.keyword, page })
         .then(({ data: { data } }) => {
           this.page.picture = page
-          console.log('sadasds', this.page.picture)
-          console.log(data)
           if (data) {
             const width = (window.innerWidth - 20) / 2
             this.pictureList = this.pictureList.concat(
@@ -135,11 +94,9 @@ export default {
                   ...img,
                   large: img.large.replace('_webp', '')
                 })),
-                height: (e.height / e.width) * width,
                 style: { height: `${(e.height / e.width) * width}px` }
               }))
             )
-            // this.preview(this.pictureList[0]);
           }
         })
     },
@@ -150,12 +107,6 @@ export default {
           this.tagsList = data
         }
       })
-    },
-    preview (info) {
-      this.info = info
-      this.images = []
-      this.images = info.imageUrls
-      this.isShow = true
     },
     loadMore () {
       this.pictureList.length !== 0 && this.getSearch(this.page.picture + 1)
