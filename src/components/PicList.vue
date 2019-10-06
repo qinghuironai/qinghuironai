@@ -6,19 +6,11 @@
         v-for="(list, listIdx) in [leftList, rightList]"
         :key="listIdx"
       >
-        <div
-          class="pic__list--wrapper"
+        <img-dialog
           v-for="(item, index) in list.list"
           :key="index"
-        >
-          <div class="pic__list--item">
-            <img-dialog :info="item" />
-            <div v-if="item.imageUrls.length > 1" class="pic__list--item-count">
-              <img src="@/assets/images/count.svg" alt="" />
-              <span>{{ item.imageUrls.length }}</span>
-            </div>
-          </div>
-        </div>
+          :info="item"
+        />
       </div>
     </div>
     <div
@@ -80,8 +72,7 @@ export default {
           const list = val.filter(e => !old.includes(e))
           for (let i = list.length - 1; i > 0; i--) {
             const a = list[i]
-            const height = parseInt(a.height / a.width * 10, 10)
-            console.log(a.height, this.leftList.height, this.rightList.height, a)
+            const height = parseInt((a.height / a.width) * 10, 10)
             if (this.leftList.height <= this.rightList.height) {
               this.leftList.height += height
               this.leftList.list.push(a)
@@ -152,40 +143,4 @@ export default {
     .col
       position relative
       width 50%
-    &--wrapper
-      position relative
-      padding 10px 4px
-    &--item
-      position relative
-      box-shadow 0 1px 3px rgba(0, 0, 0, .3)
-      border-radius 8px
-      overflow hidden
-      img
-        width 100%
-      &-title
-        line-height 0.8rem
-        text-align center
-        padding 0.2rem
-        white-space nowrap
-        overflow hidden
-        text-overflow ellipsis
-        color #666666
-        font-size 0.8rem
-      &-count
-        position absolute
-        top 0.4rem
-        right 0.4rem
-        background-color #0000009e
-        padding 0.2rem
-        border-radius 0.25rem
-        img
-          width 1.25rem
-          height 1.25rem
-          margin-right 0.2rem
-          vertical-align middle
-        span
-          color #fff
-          vertical-align middle
-          line-height 1.25rem
-          font-size 1rem
 </style>
