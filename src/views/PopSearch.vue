@@ -42,6 +42,7 @@ export default {
   },
   data () {
     return {
+      loading: true,
       searchKey: '',
       pictureList: [],
       tagsList: [],
@@ -60,6 +61,12 @@ export default {
           this.getTags()
           this.getSearch()
         }
+      },
+      immediate: true
+    },
+    loading: {
+      handler (val) {
+        val && this.$aMsg.loading('loading...')
       },
       immediate: true
     }
@@ -81,6 +88,7 @@ export default {
       }
     }, 500),
     getSearch (page = 1) {
+      this.loading = true
       this.$api.search
         .getSearch({ keyword: this.keyword, page })
         .then(({ data: { data } }) => {
@@ -98,6 +106,12 @@ export default {
               }))
             )
           }
+          this.loading = false
+        })
+        .catch(err => {
+          this.$aMsg.error(err)
+          this.loading = false
+          this.isBottom = true
         })
     },
     getTags () {

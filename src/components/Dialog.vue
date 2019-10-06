@@ -3,16 +3,17 @@
     <div :class="['detail', { 'is-active': isShow }]">
       <div class="detail-header">
         <i class="pixicon icon-back" @click="close"></i>
-        <i class="pixicon icon-more"></i>
+        <i class="pixicon icon-more" @click="more"></i>
       </div>
       <!-- improving performance -->
-      <template v-if="isShow">
+      <!-- <template v-if="isShow"> -->
+      <template>
         <div
           class="detail-pics is-single"
           v-if="imagesList.length === 1"
           :style="{ minHeight: `${picHeight}px` }"
         >
-          <img v-lazy="imagesList[0].src" />
+          <img :src="imagesList[0].src" />
         </div>
         <swiper
           class="detail-pics"
@@ -37,14 +38,20 @@
       </div>
     </div>
     <div
-      :class="['detail-preview', { 'is-active': !isShow }]"
+      :class="['detail-preview--wrapper', { 'is-active': isShow }]"
       @click="isShow = true"
     >
-      <img
-        v-if="imagesList[0]"
-        v-lazy="imagesList[0].src"
-        :style="{ height: `${minHeight}px` }"
-      />
+      <div class="detail-preview">
+        <img
+          v-if="imagesList[0]"
+          v-lazy="imagesList[0].src"
+          :style="{ height: `${minHeight}px` }"
+        />
+        <div v-if="imagesList.length > 1" class="detail-preview-count">
+          <img src="@/assets/images/count.svg" alt="" class="detail-preview-count__icon"/>
+          <span>{{ imagesList.length }}</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -90,13 +97,13 @@ export default {
     },
     close () {
       this.isShow = false
-      this.download()
     },
-    pixiv () {
-      window.open(this.info.user.profile_image_urls.medium, '_blank')
+    more () {
+      // do something
     },
     download () {
-      var link = document.createElement('a')
+      // todo
+      const link = document.createElement('a')
       if ('download' in link) {
         link.style.display = 'none'
         const e = this.imagesList[0].src
@@ -105,7 +112,7 @@ export default {
         link.setAttribute('download', '')
         link.href = e
         document.body.appendChild(link)
-        // link.click()
+        link.click()
         document.body.removeChild(link)
         // })
       } else {
@@ -146,19 +153,49 @@ export default {
   width 100vw
   overflow scroll
   z-index 2
-  transform scale(0)
   opacity 0
   pointer-events none
-  transform-origin bottom center
+  transition-delay .3s
   &.is-active
     opacity 1
     pointer-events all
-    transform scale(1)
+  &-preview
+    position relative
+    box-shadow 0 1px 3px rgba(0, 0, 0, .3)
+    border-radius 8px
+    overflow hidden
+    &-count
+      position absolute
+      top 0.4rem
+      right 0.4rem
+      background-color #0000009e
+      padding 0.2rem
+      border-radius 0.25rem
+      & > &__icon
+        width 1.25rem
+        height 1.25rem
+        margin-right 0.2rem
+        vertical-align middle
+      span
+        color #fff
+        vertical-align middle
+        line-height 1.25rem
+        font-size 1rem
+    &--wrapper
+      position relative
+      padding 10px 4px
+      &.is-active
+        opacity 0
+        overflow auto
+        pointer-events none
+        transform scale(2.5)
+        z-index 2
   &-header
     padding 0 10px
     position sticky
     background white
     top 0
+    z-index 3
   &-pics
     width 100%
     &.is-single
