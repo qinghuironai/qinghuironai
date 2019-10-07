@@ -66,7 +66,6 @@ export default {
       this.$api.search
         .getKeyword(this.value).then(({ data: { data } }) => {
           this.keywords = data.keywordList
-          console.log(data)
         })
     }, 500),
     blur () {

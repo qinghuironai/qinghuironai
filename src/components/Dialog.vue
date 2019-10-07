@@ -1,42 +1,5 @@
 <template>
   <div>
-    <div :class="['detail', { 'is-active': isShow }]">
-      <div class="detail-header">
-        <i class="pixicon icon-back" @click="close"></i>
-        <i class="pixicon icon-more" @click="more"></i>
-      </div>
-      <!-- improving performance -->
-      <!-- <template v-if="isShow"> -->
-      <template>
-        <div
-          class="detail-pics is-single"
-          v-if="imagesList.length === 1"
-          :style="{ minHeight: `${picHeight}px` }"
-        >
-          <img :src="imagesList[0].src" />
-        </div>
-        <swiper
-          class="detail-pics"
-          v-if="imagesList.length > 1"
-          :options="swiperOption"
-          :style="{ minHeight: `${picHeight}px` }"
-        >
-          <swiper-slide v-for="(img, idx) in imagesList" :key="idx">
-            <img :src="img.src" />
-          </swiper-slide>
-          <div class="swiper-pagination" slot="pagination"></div>
-        </swiper>
-      </template>
-      <div class="detail-intro">
-        <p class="detail-intro__title">{{ info.title }}</p>
-        <div class="detail-intro__author">
-          <img
-            :src="addPrefix(info.artistPreView.avatar)"
-          />
-          <span>{{ info.artistPreView.name }}</span>
-        </div>
-      </div>
-    </div>
     <div
       :class="['detail-preview--wrapper', { 'is-active': isShow }]"
       @click="isShow = true"
@@ -50,6 +13,49 @@
         <div v-if="imagesList.length > 1" class="detail-preview-count">
           <img src="@/assets/images/count.svg" alt="" class="detail-preview-count__icon"/>
           <span>{{ imagesList.length }}</span>
+        </div>
+      </div>
+    </div>
+    <div :class="['detail', { 'is-active': isShow }]">
+      <div class="detail-header">
+        <i class="pixicon icon-back" @click="close"></i>
+        <i class="pixicon icon-more" @click="more"></i>
+        <div class="download" @click="original">
+          <i class="pixicon icon-download"></i>
+          <span>查看原图</span>
+        </div>
+      </div>
+      <!-- improving performance -->
+      <!-- <template v-if="isShow"> -->
+      <template>
+        <div
+          class="detail-pics is-single"
+          v-if="imagesList.length === 1"
+          :style="{ minHeight: `${picHeight}px` }"
+        >
+          <img :src="imagesList[0].src" />
+        </div>
+        <swiper
+          class="detail-pics"
+          ref="swiper"
+          v-if="imagesList.length > 1"
+          :options="swiperOption"
+          :style="{ minHeight: `${picHeight}px` }"
+          @slideChange="slideChange"
+        >
+          <swiper-slide v-for="(img, idx) in imagesList" :key="idx" :name="idx" >
+            <img :src="img.src" />
+          </swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+      </template>
+      <div class="detail-intro">
+        <p class="detail-intro__title">{{ info.title }}</p>
+        <div class="detail-intro__author">
+          <img
+            :src="addPrefix(info.artistPreView.avatar)"
+          />
+          <span>{{ info.artistPreView.name }}</span>
         </div>
       </div>
     </div>
@@ -71,7 +77,7 @@ export default {
       isShow: false,
       height: 0,
       imagesList: [],
-
+      activeIndex: 0,
       swiperOption: {
         pagination: {
           el: '.swiper-pagination',
@@ -88,6 +94,13 @@ export default {
     }
   },
   methods: {
+    slideChange () {
+      this.activeIndex = this.$refs.swiper.$data.swiper.activeIndex
+    },
+    original () {
+      const url = this.info.imageUrls[this.activeIndex].original
+      window.open(this.addPrefix(url))
+    },
     addPrefix (url) {
       let prefix = ''
       if (url.includes('i.pximg')) {
@@ -196,6 +209,20 @@ export default {
     background white
     top 0
     z-index 3
+    .download
+      display inline-block
+      float right
+      color white
+      background #e60023
+      margin 12px 16px
+      padding 8px 10px
+      font-size 16px
+      border-radius 8px
+      flex 1
+      i
+        font-size 16px
+        padding 0
+        margin-right 4px
   &-pics
     width 100%
     &.is-single
