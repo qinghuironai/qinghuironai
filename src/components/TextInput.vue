@@ -90,7 +90,7 @@ export default {
   .text-input
     padding .8rem
     border 0 none
-    border-radius .25rem
+    border-radius 1rem
     width 100%
     background $white
     font-size 1.4rem
@@ -108,8 +108,9 @@ export default {
       img
         position absolute
         &:first-child
-          width 6rem
-          top -5.2rem
+          width 8rem
+          top -6.5rem
+          left .7rem
         &:nth-of-type(2), &:nth-of-type(3)
           width 2rem
           height 2rem

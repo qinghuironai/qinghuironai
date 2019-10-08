@@ -1,5 +1,6 @@
 import axios from '../base'
 
+// 获取图形验证码
 function verificationCode () {
   return axios({
     url: `/verificationCode`,
@@ -7,19 +8,19 @@ function verificationCode () {
   })
 }
 
-function register (data) {
+function register (data, params) {
   return axios({
-    url: `/user`,
+    url: `/users?vid=${params.vid}&value=${params.value}`,
     method: 'post',
     data
   })
 }
 
-function login (params) {
+function login (data, params) {
   return axios({
-    url: `/users/token`,
-    method: 'get',
-    params
+    url: `/users/token?vid=${params.vid}&value=${params.value}`,
+    method: 'post',
+    data
   })
 }
 

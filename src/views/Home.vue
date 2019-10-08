@@ -8,10 +8,12 @@
           <span></span><span></span><span></span>
         </div>
         <div class="home__content--header-right">
-          <img src="../assets/images/avatar.png" @click="openRight" alt="">
+          <!-- 用户登陆后显示头像 -->
+          <img v-if="Object.keys(user).length" src="../assets/images/avatar.png" @click="openRight" alt="">
+          <div v-else :class="['home__login', { 'home__login--bobble': isBobble }]" @click="goLogin">GO</div>
         </div>
       </div>
-      <div class="home__content--search">
+      <div class="home__content--search" v-show="!isShow">
         <TextInput v-on:enter="popSearch"/>
       </div>
     </div>
@@ -20,7 +22,7 @@
     <!-- 登录注册弹窗 -->
     <div class="home__dialog" v-show="isShow">
       <div class="home__dialog--content">
-        <Login v-show="status === 'login'" @signUp="sign" @lostPwd="sign" class="animated jackInTheBox"/>
+        <Login v-show="status === 'login'" @signUp="sign" @lostPwd="sign" class="animated jackInTheBox" @closeLogin="closeLogin"/>
         <Register v-show="status === 'register'" @signIn="sign" class="animated jackInTheBox"/>
         <FindPwd v-show="status === 'find'" class="animated jackInTheBox"/>
       </div>
@@ -79,6 +81,11 @@ export default {
       showRightSlider: false
     }
   },
+  computed: {
+    user () {
+      return this.$store.getters.user
+    }
+  },
   methods: {
     popSearch (keyword) {
       this.$router.push({
@@ -109,6 +116,10 @@ export default {
     },
     openRight () {
       this.showRightSlider = true
+    },
+    closeLogin () {
+      this.isBobble = false
+      this.isShow = false
     }
   },
   mounted () {
@@ -163,6 +174,12 @@ export default {
               transform translateY(0.6rem) rotate(0deg)
             &:nth-child(3)
               transform translateY(1.2rem) rotate(0deg)
+          div
+            position absolute
+            top 1.8rem
+            right 1.4rem
+            font-size 0.6rem
+            text-align center
         .active
           z-index 104
           span
@@ -213,6 +230,9 @@ export default {
         background-color transparent
         z-index 200
     &__login
+      display flex
+      justify-content center
+      align-items center
       width 2rem
       height 2rem
       overflow hidden
@@ -221,6 +241,7 @@ export default {
       transition all 1000ms, 1000ms cubic-bezier(0.680, -0.550, 0.265, 1.550)
       transition-timing-function cubic-bezier(0.680, -0.550, 0.265, 1.550)
       &--bobble
-        transform scale(32)
+        transform scale(50)
+        font-size 0 !important
         // background-color #FFB5C5
 </style>
