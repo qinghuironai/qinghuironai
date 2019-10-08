@@ -19,10 +19,10 @@
     <div :class="['detail', { 'is-active': isShow }]">
       <div class="detail-header">
         <i class="pixicon icon-back" @click="close"></i>
-        <i class="pixicon icon-more" @click="more"></i>
-        <div class="download" @click="original">
+        <!-- <i class="pixicon icon-more" @click="more"></i> -->
+        <div class="download" @click="download">
           <i class="pixicon icon-download"></i>
-          <span>查看原图</span>
+          <span>下载原图</span>
         </div>
       </div>
       <!-- improving performance -->
@@ -97,10 +97,6 @@ export default {
     slideChange () {
       this.activeIndex = this.$refs.swiper.$data.swiper.activeIndex
     },
-    original () {
-      const url = this.info.imageUrls[this.activeIndex].original
-      window.open(this.addPrefix(url))
-    },
     addPrefix (url) {
       let prefix = ''
       if (url.includes('i.pximg')) {
@@ -111,26 +107,9 @@ export default {
     close () {
       this.isShow = false
     },
-    more () {
-      // do something
-    },
     download () {
-      // todo
-      const link = document.createElement('a')
-      if ('download' in link) {
-        link.style.display = 'none'
-        const e = this.imagesList[0].src
-        // this.imagesList.map(e => {
-        // link.setAttribute('target', '_blank')
-        link.setAttribute('download', '')
-        link.href = e
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        // })
-      } else {
-        this.$aMsg.error('本地浏览器不支持自动下载～')
-      }
+      const url = this.info.imageUrls[this.activeIndex].original
+      this.$util.dom.downloadByBlob(this.addPrefix(url))
     },
     onload (idx) {
       setTimeout(() => {
