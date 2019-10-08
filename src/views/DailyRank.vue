@@ -8,7 +8,7 @@
           class="rank__calendar-picker--mask"
           @click.stop="calendarShow = false"
         ></div>
-        <Calendar
+        <calendar
           ref="datePicker"
           class="rank__calendar-picker--date"
           :futureDayHide="futureDayHide"
@@ -28,39 +28,12 @@
           <option value="month">Month</option>
         </select>
       </div>
-
       <v-touch
         v-on:swipeleft="onSwipeLeft"
         v-on:swiperight="onSwipeRight"
         :swipe-options="{ direction: 'horizontal' }"
       >
-        <div class="rank__list">
-          <div
-            class="rank__list--wrapper"
-            v-for="(item, index) in pictureList"
-            :key="index"
-          >
-            <div class="rank__list--item">
-              <img
-                @click="preview(item.meta_pages, item)"
-                v-if="item.meta_pages.length"
-                v-lazy="item.meta_pages[0].image_urls.large"
-                alt=""
-              />
-              <img
-                @click="preview(item.meta_single_page.original_image_url, item)"
-                v-else
-                v-lazy="item.meta_single_page.large_image_url"
-                alt=""
-              />
-              <p class="rank__list--item-title">{{ item.title }}</p>
-              <div v-if="item.page_count > 1" class="rank__list--item-count">
-                <img src="@/assets/images/count.svg" alt="" />
-                <span>{{ item.page_count }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <pic-list :pictureList="pictureList" @loadMore="loadMore"></pic-list>
       </v-touch>
       <div
         v-infinite-scroll="loadMore"
@@ -73,21 +46,19 @@
         </div>
       </div>
     </div>
-    <!-- 图片弹窗 下次重写 -->
-    <img-dialog :images="images" :info="info" :isShow.sync="isShow" />
   </div>
 </template>
 
 <script>
 import Calendar from 'vue-calendar-component'
 import moment from 'moment'
-import imgDialog from '@/components/Dialog'
+import PicList from '@/components/PicList'
 
 export default {
   name: 'DailyRank',
   components: {
-    imgDialog,
-    Calendar
+    Calendar,
+    PicList
   },
   data () {
     return {
@@ -130,7 +101,7 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.page++
-            let data = res.data.data.illustrations
+            let data = res.data.data.data
             this.isBottom = false
             if (!data || !data.length) {
               this.isBottom = true
@@ -157,18 +128,6 @@ export default {
           this.loading = false
           this.isBottom = true
         })
-    },
-    preview (val, info) {
-      this.info = info
-      this.images = []
-      if (Array.isArray(val)) {
-        val.forEach(item => {
-          this.images.push(item.image_urls.original)
-        })
-      } else {
-        this.images.push(val)
-      }
-      this.isShow = true
     },
     showCalendar () {
       this.calendarShow = true
@@ -256,22 +215,17 @@ export default {
 <style lang="stylus" scoped>
 .rank
   position relative
-  height 100%
-  overflow hidden
-  background-color #fff
   &__header
     position absolute
-    width: 100%
+    width 100%
     height 3rem
     background $primary
   &__content
     position absolute
     box-sizing border-box
-    padding 0 .5rem
-    // padding-top 3.5rem
     width 100%
-    height 100%
-    overflow auto
+    min-height 100vh
+    background-color white
   &__more
     &--bottom
       font-size 1rem
