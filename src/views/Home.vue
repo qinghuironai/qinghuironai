@@ -1,32 +1,22 @@
 <template>
-  <div class="home">
+  <div class="home" :style="{backgroundImage: `url(${bg})`}">
     <Snow/>
-    <Banner/>
     <div class="home__content">
+      <div class="home__content--header">
+        <div :class="[{ active: showLeftSlider }, 'home__content--header-left']" @click="openLeft">
+          <!-- <img src="../assets/images/菜单.svg" alt="" :class="{ rotate: showLeftSlider }"> -->
+          <span></span><span></span><span></span>
+        </div>
+        <div class="home__content--header-right">
+          <img src="../assets/images/avatar.png" @click="openRight" alt="">
+        </div>
+      </div>
       <div class="home__content--search">
         <TextInput v-on:enter="popSearch"/>
       </div>
-      <router-link
-        class="home__content--daily-rank"
-        tag="a"
-        to="/dailyRank">
-        <img src="@/assets/images/beer.svg"/>
-        <p>插画排行榜</p>
-      </router-link>
-      <div class="home__content--help">
-        <router-link
-          tag="a"
-          v-for="path in paths"
-          :key="path.label"
-          :to="path.route">
-          {{ path.label }}
-          <span>{{ path.suffix }}</span>
-        </router-link>
-      </div>
     </div>
-    <div :class="['home__login', { 'home__login--bobble': isBobble }]" @click="goLogin"></div>
-    <Footer/>
-
+    <LeftSlider :showLeftSlider.sync="showLeftSlider" :bgImage="bg" />
+    <RightSlider :showRightSlider.sync="showRightSlider" />
     <!-- 登录注册弹窗 -->
     <div class="home__dialog" v-show="isShow">
       <div class="home__dialog--content">
@@ -40,24 +30,27 @@
 </template>
 
 <script>
-import Banner from '@/components/Banner'
 import TextInput from '@/components/TextInput'
-import Footer from '@/components/Footer'
 import Snow from '@/components/Snow'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import FindPwd from '@/components/FindPwd'
+import RightSlider from '@/components/RightSlider'
+import LeftSlider from '@/components/LeftSlider'
+import bg1 from '@/assets/images/background/bg1.jpg'
+import bg2 from '@/assets/images/background/bg2.jpg'
+import bg3 from '@/assets/images/background/bg3.jpg'
 
 export default {
   name: 'Home',
   components: {
     Snow,
-    Banner,
     TextInput,
-    Footer,
     Login,
     Register,
-    FindPwd
+    FindPwd,
+    RightSlider,
+    LeftSlider
   },
   data () {
     return {
@@ -79,7 +72,11 @@ export default {
       }],
       isShow: false,
       status: 'login',
-      isBobble: false
+      isBobble: false,
+      backgroundImage: `url(${bg1})`,
+      bg: bg1,
+      showLeftSlider: false,
+      showRightSlider: false
     }
   },
   methods: {
@@ -106,7 +103,30 @@ export default {
     sign (val) {
       console.log(val)
       this.status = val
+    },
+    openLeft () {
+      this.showLeftSlider = !this.showLeftSlider
+    },
+    openRight () {
+      this.showRightSlider = true
     }
+  },
+  mounted () {
+    this.timer = setInterval(() => {
+      switch (this.bg) {
+        case bg1:
+          this.bg = bg2
+          break
+        case bg2:
+          this.bg = bg3
+          break
+        case bg3:
+          this.bg = bg1
+      }
+    }, 5000)
+  },
+  destroyed () {
+    clearInterval(this.timer)
   }
 }
 </script>
@@ -119,10 +139,43 @@ export default {
     height: 100vh
     flex-direction: column
     overflow hidden
+    // background-image url('../assets/images/background/bg1.jpg')
+    background-size cover
+    transition background 0.2s linear
     &__content
       flex: 1
+      &--header
+        display flex
+        justify-content space-between
+        color #fff
+        &-right, &-left
+          margin 1.2rem
+          img
+            width 3rem
+            margin-top 0.6rem
+          span
+            position absolute
+            width 2rem
+            height 1.8px
+            margin-top 1rem
+            background-color rgba(255,255,255,1)
+            &:nth-child(1)
+              transform translateY(0.6rem) rotate(0deg)
+            &:nth-child(3)
+              transform translateY(1.2rem) rotate(0deg)
+        .active
+          z-index 104
+          span
+            background red
+            transition all 0.5s
+            &:nth-child(1)
+              transform translateY(0) rotate(45deg)
+            &:nth-child(3)
+              transform translateY(0) rotate(-45deg)
+            &:nth-child(2)
+              opacity 0
       &--search
-        margin-top: 1.4rem
+        margin-top: 30vh
         text-align: center
       &--daily-rank
         display: block
