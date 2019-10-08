@@ -92,17 +92,17 @@
 </template>
 
 <script>
-import Calendar from 'vue-calendar-component';
-import moment from 'moment';
-import PicList from '@/components/PicList';
+import Calendar from 'vue-calendar-component'
+import moment from 'moment'
+import PicList from '@/components/PicList'
 
 export default {
   name: 'DailyRank',
   components: {
     Calendar,
-    PicList,
+    PicList
   },
-  data() {
+  data () {
     return {
       pictureList: [],
       page: 0,
@@ -116,147 +116,147 @@ export default {
       calendarShow: false,
       loading: false,
       isBottom: false,
-      futureDayHide: '',
-    };
+      futureDayHide: ''
+    }
   },
-  mounted() {
-    const initDate = moment().add(-3, 'days');
-    this.futureDayHide = initDate.unix().toString();
-    this.initCalendar(initDate);
+  mounted () {
+    const initDate = moment().add(-3, 'days')
+    this.futureDayHide = initDate.unix().toString()
+    this.initCalendar(initDate)
   },
   methods: {
-    initCalendar(initDate) {
-      this.calendarShow = true;
+    initCalendar (initDate) {
+      this.calendarShow = true
       this.$nextTick(() => {
-        this.$refs.datePicker.getList(new Date(), initDate.format('YYYY/M/D'));
-      });
+        this.$refs.datePicker.getList(new Date(), initDate.format('YYYY/M/D'))
+      })
     },
-    getPictures() {
+    getPictures () {
       const data = {
         date: this.date,
         page: this.page,
-        mode: this.mode,
-      };
-      this.loading = true;
+        mode: this.mode
+      }
+      this.loading = true
       return this.$api.rank
         .getRank(data)
         .then(res => {
           if (res.status === 200) {
-            this.page++;
-            let data = res.data.data.data;
-            this.isBottom = false;
+            this.page++
+            let data = res.data.data.data
+            this.isBottom = false
             if (!data || !data.length) {
-              this.isBottom = true;
+              this.isBottom = true
             } else {
-              this.pictureList = this.pictureList.concat(data);
+              this.pictureList = this.pictureList.concat(data)
             }
           } else {
-            this.$aMsg.error(res.data);
+            this.$aMsg.error(res.data)
           }
-          this.loading = false;
+          this.loading = false
           if (this.guide) {
-            this.guide = false;
+            this.guide = false
             setTimeout(() => {
               this.$aMsg({
                 message: '左右滑动可以切换日期喔～',
                 type: 'none',
-                timeout: 3000,
-              });
-            }, 1000);
+                timeout: 3000
+              })
+            }, 1000)
           }
         })
         .catch(err => {
-          this.$aMsg.error(err);
-          this.loading = false;
-          this.isBottom = true;
-        });
+          this.$aMsg.error(err)
+          this.loading = false
+          this.isBottom = true
+        })
     },
-    preview(val) {
-      this.info = val;
-      this.images = val.imageUrls;
-      this.isShow = true;
+    preview (val) {
+      this.info = val
+      this.images = val.imageUrls
+      this.isShow = true
     },
-    showCalendar() {
-      this.calendarShow = true;
+    showCalendar () {
+      this.calendarShow = true
     },
-    clickDay(data) {
+    clickDay (data) {
       const date = data
         .split('/')
         .map(e => e.padStart(2, '0'))
-        .join('-');
-      const newDate = moment(date).format('YYYY-MM-DD');
-      if (newDate === this.date) return;
-      this.date = newDate;
-      this.page = 0;
+        .join('-')
+      const newDate = moment(date).format('YYYY-MM-DD')
+      if (newDate === this.date) return
+      this.date = newDate
+      this.page = 0
       if (this.mode !== 'day') {
-        this.mode = 'day';
-        this.calendarShow = false;
-        return;
+        this.mode = 'day'
+        this.calendarShow = false
+        return
       }
-      this.mode = 'day';
-      this.calendarShow = false;
-      this.pictureList = [];
-      this.getPictures();
+      this.mode = 'day'
+      this.calendarShow = false
+      this.pictureList = []
+      this.getPictures()
     },
-    swipe(page) {
-      let newDate;
+    swipe (page) {
+      let newDate
       if (this.mode === 'day') {
         newDate = moment(this.date)
           .add('days', page)
-          .format('YYYY-MM-DD');
+          .format('YYYY-MM-DD')
       } else if (this.mode === 'week') {
         newDate = moment(this.date)
           .week(moment(this.date).week() + page)
           .startOf('week')
           .add('days', 1)
-          .format('YYYY-MM-DD');
+          .format('YYYY-MM-DD')
       } else if (this.mode === 'month') {
         newDate = moment(this.date)
           .month(moment(this.date).month() + page)
           .startOf('month')
-          .format('YYYY-MM-DD');
+          .format('YYYY-MM-DD')
       }
       if (moment(newDate).unix() > this.futureDayHide) {
-        this.$aMsg.error('新数据尚未注入。。');
-        return;
+        this.$aMsg.error('新数据尚未注入。。')
+        return
       }
-      this.date = newDate;
-      this.page = 0;
-      this.pictureList = [];
-      this.getPictures();
+      this.date = newDate
+      this.page = 0
+      this.pictureList = []
+      this.getPictures()
     },
-    onSwipeLeft() {
-      this.swipe(1);
+    onSwipeLeft () {
+      this.swipe(1)
     },
-    onSwipeRight() {
-      this.swipe(-1);
+    onSwipeRight () {
+      this.swipe(-1)
     },
-    loadMore() {
-      this.pictureList.length !== 0 && this.getPictures();
-    },
+    loadMore () {
+      this.pictureList.length !== 0 && this.getPictures()
+    }
   },
   watch: {
-    mode(val) {
-      this.page = 0;
-      this.pictureList = [];
+    mode (val) {
+      this.page = 0
+      this.pictureList = []
       // 这里选择模式后 周的话要本周一 月的话要本月1号
       if (val === 'week') {
         this.date = moment(this.date)
           .weekday(1)
-          .format('YYYY-MM-DD');
+          .format('YYYY-MM-DD')
       } else if (val === 'month') {
         this.date =
           moment(this.date)
             .add('month', 0)
-            .format('YYYY-MM') + '-01';
+            .format('YYYY-MM') + '-01'
       }
-      this.getPictures();
+      this.getPictures()
     },
-    loading(val) {
-      val && this.$aMsg.loading('loading...');
-    },
-  },
-};
+    loading (val) {
+      val && this.$aMsg.loading('loading...')
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>
