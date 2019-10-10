@@ -3,10 +3,29 @@
     <h1 class="login__title">Login</h1>
     <img src="@/assets/images/QQ.svg" alt="">
     <div class="login__group">
-      <input type="text" v-model="form.email" class="login__group--name" placeholder="邮箱/用户名" />
+      <input
+        type="text"
+        v-model="form.username"
+        class="login__group--name"
+        placeholder="邮箱/用户名"
+      />
     </div>
     <div class="login__group">
       <PwdInput v-model="form.password"/>
+    </div>
+    <div class="login__group">
+      <input
+        type="text"
+        v-model="form.value"
+        class="login__group--name"
+        placeholder="验证码"
+        maxlength="4"
+      />
+      <img
+        class="login__group--code"
+        :src="codeImg"
+        @click.stop="getCode"
+      />
     </div>
     <div class="login__group">
       <div @click="login" class="login__group--btn">登录</div>
@@ -18,13 +37,17 @@
 
 <script>
 import PwdInput from './PwdInput'
+import cookie from 'js-cookie'
 export default {
   data () {
     return {
       form: {
-        email: '',
-        password: ''
-      }
+        username: '',
+        password: '',
+        value: ''
+      },
+      vid: '',
+      codeImg: ''
     }
   },
   components: {
@@ -34,14 +57,43 @@ export default {
     signUp () {
       this.$emit('signUp', 'register')
     },
-    login () {
-      if (!this.form.email || !this.form.password) {
-        this.$aMsg.error('请将信息填写完整哦 QAQ')
+    async login () {
+      if (!this.form.username || !this.form.password || !this.form.value) {
+        return this.$aMsg.error('请将信息填写完整哦 QAQ')
+      }
+      const params = {
+        vid: this.vid,
+        value: this.form.value
+      }
+      const data = {
+        username: this.form.username,
+        password: this.form.password
+      }
+      const res = await this.$api.user.login(data, params)
+      if (res.status === 200) {
+        cookie.set('jwt', res.config.headers.Authorization)
+        localStorage.setItem('user', JSON.stringify(res.data.data))
+        this.$store.dispatch('setUser', res.data.data)
+        this.$aMsg.success(res.data.message)
+        this.$emit('closeLogin')
+      } else {
+        this.$aMsg.error(res.data.message)
+        this.getCode()
       }
     },
     lostPwd () {
       this.$emit('lostPwd', 'find')
+    },
+    async getCode () {
+      const res = await this.$api.user.verificationCode()
+      if (res.status === 200) {
+        this.codeImg = 'data:image/png;base64,' + res.data.data.imageBase64
+        this.vid = res.data.data.vid
+      }
     }
+  },
+  mounted () {
+    this.getCode()
   }
 }
 </script>
@@ -56,11 +108,12 @@ export default {
   &__title
     color #777
   img
-    width 1.6rem
+    width 3rem
     height 1.6rem
     margin 0 auto
   &__group
     margin-bottom 2rem
+    position relative
     &--name
       background-color #ECF0F1
       border 0.2rem solid transparent
@@ -70,6 +123,13 @@ export default {
       &:focus
         border 0.2rem solid #3498DB
         box-shadow none
+    &--code
+      width 100%
+      position absolute
+      top 0.2rem
+      right 2rem
+      color #073f84
+      font-size 0.8rem
     &--btn
       border 0.2rem solid transparent
       background #3498DB
