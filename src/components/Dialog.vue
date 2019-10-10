@@ -78,6 +78,7 @@ export default {
       height: 0,
       imagesList: [],
       activeIndex: 0,
+      downloadLoading: false,
       swiperOption: {
         pagination: {
           el: '.swiper-pagination',
@@ -91,6 +92,17 @@ export default {
   props: {
     info: {
       type: Object
+    }
+  },
+  watch: {
+    downloadLoading: {
+      handler (val) {
+        val && this.$aMsg({
+          type: 'loading',
+          message: 'downloadLoading...',
+          loadingParam: 'downloadLoading'
+        })
+      }
     }
   },
   methods: {
@@ -108,8 +120,12 @@ export default {
       this.isShow = false
     },
     download () {
+      if (this.downloadLoading) return
+      this.downloadLoading = true
       const url = this.info.imageUrls[this.activeIndex].original
-      this.$util.dom.downloadByBlob(this.addPrefix(url))
+      this.$util.dom.downloadByBlob(this.addPrefix(url), () => {
+        this.downloadLoading = false
+      })
     },
     onload (idx) {
       setTimeout(() => {
