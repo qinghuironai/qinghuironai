@@ -16,7 +16,7 @@
     <div class="login__group">
       <input
         type="text"
-        v-model="form.vid"
+        v-model="form.value"
         class="login__group--name"
         placeholder="验证码"
         maxlength="4"
@@ -37,14 +37,16 @@
 
 <script>
 import PwdInput from './PwdInput'
+import cookie from 'js-cookie'
 export default {
   data () {
     return {
       form: {
         username: '',
         password: '',
-        vid: ''
+        value: ''
       },
+      vid: '',
       codeImg: ''
     }
   },
@@ -56,13 +58,27 @@ export default {
       this.$emit('signUp', 'register')
     },
     async login () {
-      if (!this.form.username || !this.form.password || !this.form.vid) {
+      if (!this.form.username || !this.form.password || !this.form.value) {
         return this.$aMsg.error('请将信息填写完整哦 QAQ')
       }
-      const res = await this.$api.user.login(this.form)
-      console.log(res)
+      const params = {
+        vid: this.vid,
+        value: this.form.value
+      }
+      const data = {
+        username: this.form.username,
+        password: this.form.password
+      }
+      const res = await this.$api.user.login(data, params)
       if (res.status === 200) {
-
+        cookie.set('jwt', res.config.headers.Authorization)
+        localStorage.setItem('user', JSON.stringify(res.data.data))
+        this.$store.dispatch('setUser', res.data.data)
+        this.$aMsg.success(res.data.message)
+        this.$emit('closeLogin')
+      } else {
+        this.$aMsg.error(res.data.message)
+        this.getCode()
       }
     },
     lostPwd () {
@@ -71,7 +87,8 @@ export default {
     async getCode () {
       const res = await this.$api.user.verificationCode()
       if (res.status === 200) {
-        this.codeImg = res.data.data.imageBase64
+        this.codeImg = 'data:image/png;base64,' + res.data.data.imageBase64
+        this.vid = res.data.data.vid
       }
     }
   },
@@ -91,7 +108,7 @@ export default {
   &__title
     color #777
   img
-    width 1.6rem
+    width 3rem
     height 1.6rem
     margin 0 auto
   &__group

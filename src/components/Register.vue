@@ -33,10 +33,24 @@
         :placeholder="'密码确认'"
         :incorrect="!$v.form.confirmPassword.sameAsPassword"/>
     </div>
-    <div class="register__group">
+    <!-- <div class="register__group">
       <input type="text" v-model="form.code" class="register__group--name" placeholder="验证码" />
       <span class="register__group--code" @click="getCode" v-if="!this.isSend">获取邮箱验证码</span>
       <span class="register__group--code" v-else>{{ this.time }}s后再次获取</span>
+    </div> -->
+    <div class="register__group">
+      <input
+        type="text"
+        v-model="form.code"
+        class="register__group--name"
+        placeholder="验证码"
+        maxlength="4"
+      />
+      <img
+        class="register__group--code"
+        :src="codeImg"
+        @click.stop="getCode"
+      />
     </div>
     <div class="register__group">
       <div @click="register" class="register__group--btn">注册</div>
@@ -59,7 +73,9 @@ export default {
         code: ''
       },
       time: 60,
-      isSend: false
+      isSend: false,
+      codeImg: '',
+      vid: ''
     }
   },
 
@@ -85,18 +101,37 @@ export default {
       this.$emit('signIn', 'login')
     },
     register () {
-      console.log('register')
+      const userInfo = {
+        username: this.form.user,
+        email: this.form.email,
+        password: this.form.password
+      }
+      const params = {
+        vid: this.vid,
+        value: this.form.code
+      }
+      this.$api.user.register(userInfo, params).then(res => {
+        console.log(res)
+      })
     },
-    getCode () {
-      this.isSend = true
-      let timer = setInterval(() => {
-        if ((this.time--) <= 0) {
-          this.time = 60
-          this.isSend = false
-          clearInterval(timer)
-        }
-      }, 1000)
+    async getCode () {
+      // this.isSend = true
+      // let timer = setInterval(() => {
+      //   if ((this.time--) <= 0) {
+      //     this.time = 60
+      //     this.isSend = false
+      //     clearInterval(timer)
+      //   }
+      // }, 1000)
+      const res = await this.$api.user.verificationCode()
+      if (res.status === 200) {
+        this.codeImg = 'data:image/png;base64,' + res.data.data.imageBase64
+        this.vid = res.data.data.vid
+      }
     }
+  },
+  mounted () {
+    this.getCode()
   }
 }
 
@@ -124,16 +159,16 @@ export default {
         border 0.2rem solid #3498DB
         box-shadow none
     img
-      width 1.2rem
+      width 3rem
       position absolute
-      top 0.2rem
+      top 0.5rem
       right 1.4rem
-    &--code
-      position absolute
-      top 0.6rem
-      right 1.4rem
-      color #073f84
-      font-size 0.8rem
+    // &--code
+    //   position absolute
+    //   top 0.6rem
+    //   right 1.4rem
+    //   color #073f84
+    //   font-size 0.8rem
     &--btn
       border 0.2rem solid transparent
       background #3498DB

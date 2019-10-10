@@ -29,6 +29,7 @@ instance.interceptors.response.use(
   response => {
     if (response.status === 401) {
       cookie.remove('jwt')
+      localStorage.remove('user')
     }
     return response
   },

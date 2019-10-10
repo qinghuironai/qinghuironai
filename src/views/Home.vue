@@ -16,14 +16,24 @@
           <span></span>
         </div>
         <div class="home__content--header-right">
+          <!-- 用户登陆后显示头像 -->
           <img
             @click="openRight"
             alt
             src="../assets/images/avatar.png"
+            v-if="Object.keys(user).length"
           />
+          <div
+            :class="['home__login', { 'home__login--bobble': isBobble }]"
+            @click="goLogin"
+            v-else
+          >GO</div>
         </div>
       </div>
-      <div class="home__content--search">
+      <div
+        class="home__content--search"
+        v-show="!isShow"
+      >
         <TextInput v-on:enter="popSearch" />
       </div>
     </div>
@@ -39,6 +49,7 @@
     >
       <div class="home__dialog--content">
         <Login
+          @closeLogin="closeLogin"
           @lostPwd="sign"
           @signUp="sign"
           class="animated jackInTheBox"
@@ -117,6 +128,11 @@ export default {
       showRightSlider: false
     }
   },
+  computed: {
+    user () {
+      return this.$store.getters.user
+    }
+  },
   methods: {
     popSearch (keyword) {
       this.$router.push({
@@ -147,6 +163,10 @@ export default {
     },
     openRight () {
       this.showRightSlider = true
+    },
+    closeLogin () {
+      this.isBobble = false
+      this.isShow = false
     }
   },
   mounted () {
@@ -211,6 +231,14 @@ export default {
           &:nth-child(3) {
             transform: translateY(1.2rem) rotate(0deg);
           }
+        }
+
+        div {
+          position: absolute;
+          top: 1.8rem;
+          right: 1.4rem;
+          font-size: 0.6rem;
+          text-align: center;
         }
       }
 
@@ -292,6 +320,9 @@ export default {
   }
 
   &__login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 2rem;
     height: 2rem;
     overflow: hidden;
@@ -301,7 +332,8 @@ export default {
     transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     &--bobble {
-      transform: scale(32);
+      transform: scale(50);
+      font-size: 0 !important;
       // background-color #FFB5C5
     }
   }
