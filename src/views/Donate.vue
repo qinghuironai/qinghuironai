@@ -9,9 +9,7 @@
       <div class="donate__container__version">
         <h4>捐助渠道</h4>
         <ul>
-          <li>
-            维护不易，且行且珍惜，捐助的朋友们烦请留下昵称（支付宝 &amp; 微信）
-          </li>
+          <li>维护不易，且行且珍惜，捐助的朋友们烦请留下昵称（支付宝 &amp; 微信）</li>
           <img
             class="donate__container__version__alipay"
             src="../assets/images/alipay.jpg"
@@ -31,7 +29,10 @@
               <th>捐赠时间</th>
             </tr>
 
-            <tr v-for="(item, index) in tableData" :key="index">
+            <tr
+              :key="index"
+              v-for="(item, index) in tableData"
+            >
               <th>{{ item.id }}</th>
               <th>{{ item.sum }}</th>
               <th>{{ item.postscript }}</th>
@@ -40,14 +41,14 @@
           </tbody>
         </table>
         <div
-          v-infinite-scroll="loadMore"
+          class="donate__more"
           infinite-scroll-disabled="isBottom"
           infinite-scroll-distance="10"
-          class="donate__more"
+          v-infinite-scroll="loadMore"
         >
           <!-- <div v-if="isBottom" class="donate__more--bottom">
             (￣ˇ￣)俺也是有底线的
-          </div> -->
+          </div>-->
         </div>
       </div>
     </div>
@@ -106,13 +107,11 @@ export default {
   min-height: 100%;
 
   &__container {
-    width: 700px;
+    width: 100vw;
     margin: auto;
     font-family: 'SF Pro SC', 'SF Pro Display', 'SF Pro Icons', 'AOS Icons', 'PingFang SC', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 
     &__info {
-      width: 100vw;
-      margin-left: calc(350px - 50vw);
       padding: 15px calc(50vw - 350px);
       background-color: #f8f9fa;
       box-sizing: border-box;
@@ -167,23 +166,25 @@ export default {
     }
 
     &__version {
-      overflow: hidden;
-      padding: 10px;
+      width: 100vw;
       margin: -10px;
 
       h4, ul, li {
         color: #454d5d;
+        width: 80vw;
       }
 
       &__alipay {
         display: inline;
-        margin-right: 20px;
+        margin-right: 10px;
         width: 150px;
         border-radius: 10px;
       }
 
       ul {
+        padding-right: -20px;
         margin-left: 10px;
+        width: 90vw;
         display: block;
         list-style-type: disc;
         margin-block-start: 1em;
@@ -219,7 +220,6 @@ export default {
 
         &::after {
           content: '';
-          height: 100vh;
           width: 2px;
           background: #b9eee5;
           position: absolute;

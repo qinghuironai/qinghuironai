@@ -69,17 +69,11 @@
         <h4>阅读完毕</h4>
         <ul>
           <li>
-            <a href="https://pixivic.com/">点击此行返回主页，觉得站点好用的话请收藏噢(`・ω・´)</a>
+            <router-link to="/">点击此行返回主页，觉得站点好用的话请收藏噢(`・ω・´)</router-link>
           </li>
         </ul>
       </div>
     </div>
-
-    <div
-      class="jlzs-container jlzs-gate"
-      id="jlzsCpn_0_component_0"
-      style="width: auto; height: 937px;"
-    ></div>
   </div>
 </template>
 
@@ -102,7 +96,6 @@ export default {
   display: flex;
   box-sizing: border-box;
   width: 100vw;
-  height: 100vh;
   flex-direction: column;
 
   &__container {
@@ -112,8 +105,6 @@ export default {
 
     &__info {
       width: 100vw;
-      margin-left: calc(350px - 50vw);
-      padding: 15px calc(50vw - 350px);
       background-color: #f8f9fa;
       box-sizing: border-box;
       color: #454d5d;
@@ -167,10 +158,6 @@ export default {
     }
 
     &__version {
-      overflow: hidden;
-      padding: 10px;
-      margin: -10px;
-
       h4, ul, li {
         color: #454d5d;
       }
@@ -212,7 +199,6 @@ export default {
 
         &::after {
           content: '';
-          height: 100vh;
           width: 2px;
           background: #b9eee5;
           position: absolute;
