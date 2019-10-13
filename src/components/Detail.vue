@@ -1,28 +1,63 @@
 <template>
-  <div>
-    <div
-      :class="['detail-preview--wrapper', { 'is-active': isShow }]"
-      @click="isShow = true"
-    >
-      <div class="detail-preview">
-        <img
-          v-if="imagesList[0]"
-          v-lazy="imagesList[0].src"
-          :style="{ height: `${minHeight}px` }"
-        />
-        <div v-if="imagesList.length > 1" class="detail-preview-count">
-          <img src="@/assets/images/count.svg" alt="" class="detail-preview-count__icon"/>
-          <span>{{ imagesList.length }}</span>
+   <div :class="['detail', { 'is-active': isShow }]">
+      <div class="detail-header">
+        <i class="pixicon icon-back" @click="close"></i>
+        <!-- <i class="pixicon icon-more" @click="more"></i> -->
+        <!-- <div class="download" @click="download">
+          <i class="pixicon icon-download"></i>
+          <span>下载原图</span>
+        </div> -->
+      </div>
+      <!-- improving performance -->
+      <!-- <template v-if="isShow"> -->
+      <template>
+        <div
+          :style="{ minHeight: `${picHeight}px` }"
+        >
+        <div
+          class="detail-pics is-single"
+          v-if="imagesList.length === 1 && isShow"
+          :style="{ minHeight: `${picHeight}px` }"
+        >
+          <img :src="imagesList[0].src" />
+        </div>
+        <swiper
+          class="detail-pics"
+          ref="swiper"
+          v-if="imagesList.length > 1 && isShow"
+          :options="swiperOption"
+          :style="{ minHeight: `${picHeight}px` }"
+          @slideChange="slideChange"
+        >
+          <swiper-slide v-for="(img, idx) in imagesList" :key="idx" :name="idx" >
+            <img :src="img.src" />
+          </swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+        </div>
+      </template>
+      <div class="detail-intro">
+        <p class="detail-intro__title">{{ info.title }}</p>
+        <div class="detail-intro__author">
+          <img
+            :src="addPrefix(info.artistPreView.avatar)"
+          />
+          <span>{{ info.artistPreView.name }}</span>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
+import 'swiper/dist/css/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
   name: 'imgDialog',
+  components: {
+    swiper,
+    swiperSlide
+  },
   data () {
     return {
       isShow: false,

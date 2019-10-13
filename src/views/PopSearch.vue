@@ -122,9 +122,9 @@ export default {
         }
       })
     },
-    loadMore () {
+    loadMore: debounce(function () {
       this.pictureList.length !== 0 && this.getSearch(this.page.picture + 1)
-    }
+    }, 1000)
   }
 }
 </script>
