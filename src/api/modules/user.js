@@ -24,4 +24,20 @@ function login (data, params) {
   })
 }
 
-export { verificationCode, register, login }
+// 发送密码重置邮件
+function resetPasswordEmail (email) {
+  return axios({
+    url: `/users/emails/${email}/resetPasswordEmail`,
+    method: 'get'
+  })
+}
+
+// 效验邮箱可用性
+function checkEmail (email) {
+  return axios({
+    url: `/users/emails/${email}`,
+    method: 'get'
+  })
+}
+
+export { verificationCode, register, login, resetPasswordEmail, checkEmail }

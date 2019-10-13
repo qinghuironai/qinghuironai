@@ -5,54 +5,25 @@
       <input type="text" v-model="form.email" class="find__group--name" placeholder="邮箱" />
     </div>
     <div class="find__group">
-      <PwdInput v-model="form.password" :placeholder="'新密码'"/>
-    </div>
-    <div class="find__group">
-      <PwdInput v-model="form.confirmPassword" :placeholder="'确认新密码'"/>
-    </div>
-    <div class="find__group">
-      <input type="text" v-model="form.code" class="find__group--name" placeholder="邮箱验证码" />
-      <span class="find__group--code" @click="getCode" v-if="!this.isSend">获取邮箱验证码</span>
-      <span class="find__group--code" v-else>{{ this.time }}s后再次获取</span>
-    </div>
-    <div class="find__group">
-      <div @click="find" class="find__group--btn">确认</div>
+      <div @click="find" class="find__group--btn">发送到邮箱</div>
     </div>
     <!-- <a @click.prevent="signUp" class="find__link">立即去登录</a> -->
   </div>
 </template>
 
 <script>
-import PwdInput from './PwdInput'
 export default {
   data () {
     return {
       form: {
-        email: '',
-        password: '',
-        confirmPassword: '',
-        code: ''
-      },
-      time: 60,
-      isSend: false
+        email: ''
+      }
     }
   },
-  components: {
-    PwdInput
-  },
   methods: {
-    find () {
-      console.log('find')
-    },
-    getCode () {
-      this.isSend = true
-      let timer = setInterval(() => {
-        if ((this.time--) <= 0) {
-          this.time = 60
-          this.isSend = false
-          clearInterval(timer)
-        }
-      }, 1000)
+    async find () {
+      const res = await this.$api.user.resetPasswordEmail(this.form.email)
+      this.$aMsg.success(res.data.message)
     }
   }
 }

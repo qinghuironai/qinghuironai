@@ -1,14 +1,20 @@
 <template>
   <div class="register">
     <h1 class="register__title">Register</h1>
+    <!-- <div
+      class="register__group--message"
+      v-if="!$v.form.email.isRegister"
+      style="color: red; margin-bottom: 0.2rem;">已被注册
+    </div> -->
     <div :class="[{ 'register__error': $v.form.email.$error }, 'register__group']">
       <input type="text"
         @blur="$v.form.email.$touch()"
         v-model="form.email"
-        :class="[{ 'bounceIn': !$v.form.email.required || !$v.form.email.email  }, 'register__group--name', 'animated']"
+        :class="[{ 'bounceIn': !$v.form.email.required || !$v.form.email.email || !$v.form.email.isRegister  }, 'register__group--name', 'animated']"
         placeholder="邮箱" />
       <!-- <div class="register__group--message" v-if="!$v.form.email.required">邮箱不能为空</div>
-      <div class="register__group--message" v-if="!$v.form.email.email">请填写正确的邮箱格式</div>  -->
+      <div class="register__group--message" v-if="!$v.form.email.email">请填写正确的邮箱格式</div>
+      <div class="register__group--message" v-if="!$v.form.email.isRegister">已被注册</div>  -->
     </div>
     <div :class="[{ 'register__error': $v.form.user.$error }, 'register__group']">
       <input
@@ -83,7 +89,16 @@ export default {
     form: {
       email: {
         // 先验证存在 再合理 最后是否被注册
-        required, email
+        required,
+        email,
+        async isRegister (value) {
+          if (value === '') return true
+          console.log('value', value)
+          const res = await this.$api.user.checkEmail(value)
+          console.log(res)
+          if (res.status === 404) return true
+          if (res.status === 409) return false
+        }
       },
       user: { required },
       password: { required },
@@ -100,7 +115,7 @@ export default {
     signIn () {
       this.$emit('signIn', 'login')
     },
-    register () {
+    async register () {
       const userInfo = {
         username: this.form.user,
         email: this.form.email,
@@ -110,9 +125,15 @@ export default {
         vid: this.vid,
         value: this.form.code
       }
-      this.$api.user.register(userInfo, params).then(res => {
-        console.log(res)
-      })
+      const res = await this.$api.user.register(userInfo, params)
+      if (res.status === 200) {
+        this.$aMsg.success('在邮箱验证后 完成注册')
+        // this.$aMsg.success(res.data.message)
+        this.$emit('signIn', 'login')
+      } else {
+        this.$aMsg.error(res.data.message)
+        this.getCode()
+      }
     },
     async getCode () {
       // this.isSend = true
