@@ -147,10 +147,14 @@ export default {
     padding-top: 10vh;
 
     div {
-      width: 80%;
+      width: 100%;
       height: 10vh;
       display: flex;
       align-items: center;
+
+      &:active {
+        background #ccc
+      }
 
       img {
         width: 2rem;

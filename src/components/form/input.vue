@@ -8,7 +8,10 @@
       :value="currentValue"
       @input="handleInput"
       @blur="handleBlur"
+      @focus="handleFocus"
     />
+    <div :class="['i-input__line']"></div>
+    <div :class="['i-input__focusline', {'i-input__isfocus': showFocus}]"></div>
     <span v-if="type === 'password'">
       <img v-show="showPassword && value" @click="showPassword = false" src="@/assets/images/showpwd.svg" alt="">
       <img v-show="!showPassword && value" @click="showPassword = true" src="@/assets/images/hidepwd.svg" alt="">
@@ -40,7 +43,8 @@ export default {
   data () {
     return {
       currentValue: this.value,
-      showPassword: false
+      showPassword: false,
+      showFocus: false // 是否获取焦点
     }
   },
   watch: {
@@ -67,7 +71,11 @@ export default {
       this.dispatch('iFormItem', 'on-form-change', value)
     },
     handleBlur () {
+      this.showFocus = false
       this.dispatch('iFormItem', 'on-form-blur', this.currentValue)
+    },
+    handleFocus () {
+      this.showFocus = true
     }
   }
 }
@@ -77,16 +85,36 @@ export default {
   .i-input
     width 100%
     position relative
+    &__line
+      position absolute
+      left 10%
+      right 10%
+      background rgba(0, 0, 0, .12)
+      height 1px
+      transition transform .45 cubic-bezier(.23, 1, .32, 1)
+    &__focusline
+      position absolute
+      left 10%
+      right 10%
+      background #2196f3
+      height 2px
+      transform scaleX(0)
+      transition transform .45s cubic-bezier(.23, 1, .32, 1)
+    &__isfocus
+      transform scaleX(1)
     input
       box-sizing border-box
-      background-color #ECF0F1
-      border 0.1rem solid transparent
+      // background-color #ECF0F1
+      // border 0.1rem solid transparent
       padding 0.2rem 0
       width 80%
       transition border .5s
-      &:focus
-        border 0.1rem solid #3498DB
-        box-shadow none
+      outline none
+      border none
+      box-shadow none
+      // &:focus
+      //   border 0.1rem solid #3498DB
+      //   box-shadow none
     .padding-right
       padding-right 10%
     span
