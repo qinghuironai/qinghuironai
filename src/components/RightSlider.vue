@@ -9,23 +9,49 @@
         <img src="../assets/images/关注.svg" alt="">
         <img src="../assets/images/收藏.svg" alt="">
         <img src="../assets/images/设置.svg" alt="">
+        <img src="../assets/images/退出.svg" @click="confirmLogout" alt="">
       </div>
     </transition>
+    <Comfirm
+      title="退出登录"
+      :show.sync="showLogout"
+      @close="showLogout = false"
+      @confirm="logout"
+      >
+      <p>确定要退出登录？</p>
+    </Comfirm>
   </div>
 </template>
 
 <script>
+import Comfirm from './Confirm'
 export default {
+  data () {
+    return {
+      showLogout: false
+    }
+  },
   props: {
     showRightSlider: {
       type: Boolean,
       default: false
     }
   },
+  components: {
+    Comfirm
+  },
   methods: {
     close () {
       console.log(1)
       this.$emit('update:showRightSlider', false) // 不能加空格
+    },
+    confirmLogout () {
+      this.showLogout = true
+    },
+    logout () {
+      this.$store.dispatch('clearCurrentState')
+      this.$emit('update:showRightSlider', false)
+      this.$aMsg.success('欢迎再次光临~')
     }
   }
 }
@@ -61,9 +87,12 @@ export default {
     img
       width 10vw
       margin-top 1rem
+      &:nth-last-child(2)
+        position absolute
+        bottom 4rem
       &:last-child
-       position absolute
-       bottom 1rem
+        position absolute
+        bottom 1rem
   .slide-fade-leave-active, .slide-fade-enter-active
     transition transform 0.3s
   .slide-fade-enter, .slide-fade-leave-to

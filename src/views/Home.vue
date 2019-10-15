@@ -34,7 +34,7 @@
         class="home__content--search"
         v-show="!isShow"
       >
-        <TextInput v-on:enter="popSearch" />
+        <TextInput v-on:enter="popSearch" v-show="showInput" />
       </div>
     </div>
     <LeftSlider
@@ -131,6 +131,10 @@ export default {
   computed: {
     user () {
       return this.$store.getters.user
+    },
+    showInput () {
+      if (this.isBobble) return false
+      return true
     }
   },
   methods: {

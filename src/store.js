@@ -28,6 +28,7 @@ export default new Vuex.Store({
       commit(types.SET_USER, user)
     },
     clearCurrentState: ({ commit }) => {
+      localStorage.removeItem('user')
       commit(types.SET_USER, null)
     }
   }

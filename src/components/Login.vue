@@ -2,42 +2,35 @@
   <div class="login">
     <h1 class="login__title">Login</h1>
     <img src="@/assets/images/QQ.svg" alt="">
-    <div class="login__group">
-      <input
-        type="text"
-        v-model="form.username"
-        class="login__group--name"
-        placeholder="邮箱/用户名"
-      />
-    </div>
-    <div class="login__group">
-      <PwdInput v-model="form.password"/>
-    </div>
-    <div class="login__group">
-      <input
-        type="text"
-        v-model="form.value"
-        class="login__group--name"
-        placeholder="验证码"
-        maxlength="4"
-      />
-      <img
-        class="login__group--code"
-        :src="codeImg"
-        @click.stop="getCode"
-      />
-    </div>
-    <div class="login__group">
-      <div @click="login" class="login__group--btn">登录</div>
-    </div>
+    <i-form :model="form" ref="form" class="login__form">
+      <i-form-item prop="username">
+        <i-input v-model="form.username" placeholder="邮箱/用户名"></i-input>
+      </i-form-item>
+      <i-form-item prop="password">
+        <i-input v-model="form.password" type="password" placeholder="用户密码"></i-input>
+      </i-form-item>
+      <i-form-item prop="value" class="login__form--code">
+        <i-input v-model="form.value" maxlength="4" placeholder="右侧验证码"></i-input>
+        <img
+          class="login__group--code"
+          :src="codeImg"
+          @click.stop="getCode"
+        />
+      </i-form-item>
+      <i-form-item class="login__form--btn">
+        <div @click="login">登录</div>
+      </i-form-item>
+    </i-form>
     <a @click.prevent="lostPwd" class="login__link">忘记你的密码?</a>
     <a @click.prevent="signUp" class="login__link">还没账号？立即去注册</a>
   </div>
 </template>
 
 <script>
-import PwdInput from './PwdInput'
 import cookie from 'js-cookie'
+import iForm from '../components/form/form'
+import iFormItem from '../components/form/form-item'
+import iInput from '../components/form/input'
 export default {
   data () {
     return {
@@ -51,7 +44,7 @@ export default {
     }
   },
   components: {
-    PwdInput
+    iForm, iFormItem, iInput
   },
   methods: {
     signUp () {
@@ -111,25 +104,19 @@ export default {
     width 3rem
     height 1.6rem
     margin 0 auto
-  &__group
-    margin-bottom 2rem
-    position relative
-    &--name
-      background-color #ECF0F1
-      border 0.2rem solid transparent
-      padding 0.2rem 0
-      width 80%
-      transition border .5s
-      &:focus
-        border 0.2rem solid #3498DB
-        box-shadow none
+  &__form
     &--code
-      width 100%
-      position absolute
-      top 0.2rem
-      right 2rem
-      color #073f84
-      font-size 0.8rem
+      position relative
+      >>> input
+        padding-right 2rem
+      img
+        width 2.2rem
+        height 1.6rem
+        position absolute
+        top 0rem
+        right 10%
+        color #073f84
+        font-size 0.8rem
     &--btn
       border 0.2rem solid transparent
       background #3498DB
