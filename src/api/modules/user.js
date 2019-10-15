@@ -32,6 +32,16 @@ function resetPasswordEmail (email) {
   })
 }
 
+// 用户重置密码
+function resetPassword (data) {
+  return axios({
+    // url: `/users/password?password=${data.password}&vid=${data.vid}&value=${data.value}`,
+    url: `/users/password`,
+    method: 'put',
+    data
+  })
+}
+
 // 效验邮箱可用性
 function checkEmail (email) {
   return axios({
@@ -40,4 +50,12 @@ function checkEmail (email) {
   })
 }
 
-export { verificationCode, register, login, resetPasswordEmail, checkEmail }
+// 校验用户名可用性
+function checkUser (user) {
+  return axios({
+    url: `/users/usernames/${user}`,
+    method: 'get'
+  })
+}
+
+export { verificationCode, register, login, resetPasswordEmail, checkEmail, checkUser, resetPassword }

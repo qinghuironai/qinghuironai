@@ -1,9 +1,7 @@
 <template>
   <div class="find">
     <h1 class="find__title">Reset</h1>
-    <div class="find__group">
-      <input type="text" v-model="form.email" class="find__group--name" placeholder="邮箱" />
-    </div>
+    <i-input v-model="form.email" placeholder="邮箱"></i-input>
     <div class="find__group">
       <div @click="find" class="find__group--btn">发送到邮箱</div>
     </div>
@@ -12,6 +10,7 @@
 </template>
 
 <script>
+import iInput from '../components/form/input'
 export default {
   data () {
     return {
@@ -20,8 +19,14 @@ export default {
       }
     }
   },
+  components: {
+    iInput
+  },
   methods: {
     async find () {
+      if (!this.form.email) {
+        return this.$aMsg.error('请输入邮箱')
+      }
       const res = await this.$api.user.resetPasswordEmail(this.form.email)
       this.$aMsg.success(res.data.message)
     }
@@ -40,22 +45,7 @@ export default {
     color #777
   &__group
     position relative
-    margin-bottom 2rem
-    &--name
-      background-color #ECF0F1
-      border 0.2rem solid transparent
-      padding 0.2rem 0
-      width 80%
-      transition border .5s
-      &:focus
-        border 0.2rem solid #3498DB
-        box-shadow none
-    &--code
-      position absolute
-      top 0.6rem
-      right 1.4rem
-      color #073f84
-      font-size 0.8rem
+    margin-top 2rem
     &--btn
       border 0.2rem solid transparent
       background #3498DB
