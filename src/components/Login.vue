@@ -113,7 +113,7 @@ export default {
         width 2.2rem
         height 1.6rem
         position absolute
-        top 0rem
+        top -0.5rem
         right 10%
         color #073f84
         font-size 0.8rem
