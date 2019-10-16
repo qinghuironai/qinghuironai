@@ -2,20 +2,20 @@
   <div class="register">
     <h1 class="register__title">Register</h1>
     <i-form :model="form" :rules="ruleValidate" ref="form" class="register__form">
-      <i-form-item prop="email">
-        <i-input v-model="form.email" placeholder="邮箱"></i-input>
+      <i-form-item label="邮箱" prop="email">
+        <i-input v-model="form.email"></i-input>
       </i-form-item>
-      <i-form-item prop="user">
-        <i-input v-model="form.user" placeholder="用户名"></i-input>
+      <i-form-item label="用户名" prop="user">
+        <i-input v-model="form.user"></i-input>
       </i-form-item>
-      <i-form-item prop="password">
-        <i-input v-model="form.password" type="password" placeholder="用户密码"></i-input>
+      <i-form-item label="用户密码" prop="password">
+        <i-input v-model="form.password" type="password"></i-input>
       </i-form-item>
-      <i-form-item prop="confirmPassword">
-        <i-input v-model="form.confirmPassword" type="password" placeholder="确认密码"></i-input>
+      <i-form-item label="确认密码" prop="confirmPassword">
+        <i-input v-model="form.confirmPassword" type="password"></i-input>
       </i-form-item>
-      <i-form-item prop="code" class="register__form--code">
-        <i-input v-model="form.code" maxlength="4" placeholder="右侧验证码"></i-input>
+      <i-form-item label="验证码" prop="code" class="register__form--code">
+        <i-input v-model="form.code" maxlength="4"></i-input>
         <img
           class="register__group--code"
           :src="codeImg"
@@ -54,7 +54,7 @@ export default {
     }
     const userExit = (rule, value, callback) => {
       if (value === '' || value.length < 3) {
-        return callback(new Error('用户名必须3位以上'))
+        return callback(new Error('必须3位以上'))
       }
       if (value.length >= 3) {
         this.$api.user.checkUser(value).then(res => {
@@ -71,7 +71,7 @@ export default {
         return callback(new Error('请再次输入密码'))
       }
       if (value !== this.form.password) {
-        return callback(new Error('两次输入的密码不一致'))
+        return callback(new Error('密码不一致'))
       }
       callback()
     }
@@ -93,7 +93,7 @@ export default {
         ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          { min: 8, max: 15, message: '密码必须在8-15位之间', trigger: 'blur' }
+          { min: 8, max: 15, message: '必须8-15位', trigger: 'blur' }
         ],
         confirmPassword: [
           { required: true, validator: checkConfirmPassword, trigger: 'blur' }

@@ -3,14 +3,14 @@
     <h1 class="login__title">Login</h1>
     <img src="@/assets/images/QQ.svg" alt="">
     <i-form :model="form" ref="form" class="login__form">
-      <i-form-item prop="username">
-        <i-input v-model="form.username" placeholder="邮箱/用户名"></i-input>
+      <i-form-item label="邮箱/用户名" prop="username">
+        <i-input v-model="form.username"></i-input>
       </i-form-item>
-      <i-form-item prop="password">
-        <i-input v-model="form.password" type="password" placeholder="用户密码"></i-input>
+      <i-form-item label="用户密码" prop="password">
+        <i-input v-model="form.password" type="password"></i-input>
       </i-form-item>
-      <i-form-item prop="value" class="login__form--code">
-        <i-input v-model="form.value" maxlength="4" placeholder="右侧验证码"></i-input>
+      <i-form-item label="右侧验证码" prop="value" class="login__form--code">
+        <i-input v-model="form.value" maxlength="4"></i-input>
         <img
           class="login__group--code"
           :src="codeImg"

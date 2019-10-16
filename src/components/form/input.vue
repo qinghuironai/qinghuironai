@@ -6,6 +6,7 @@
       :maxlength="maxlength"
       :type="inputType"
       :value="currentValue"
+      ref="input"
       @input="handleInput"
       @blur="handleBlur"
       @focus="handleFocus"
@@ -51,6 +52,9 @@ export default {
     value (val) {
       this.currentValue = val
     }
+    // labelFloat (val) {
+    //   console.log(val)
+    // }
   },
   computed: {
     inputType () {
@@ -76,7 +80,16 @@ export default {
     },
     handleFocus () {
       this.showFocus = true
+      this.dispatch('iFormItem', 'on-form-focus', this.currentValue)
     }
+  },
+  mounted () {
+    this.$on('on-label-click', (val) => {
+      if (val) {
+        // 点击 label 升起时要获得焦点
+        this.$refs.input.focus()
+      }
+    })
   }
 }
 </script>
@@ -91,7 +104,6 @@ export default {
       right 10%
       background rgba(0, 0, 0, .12)
       height 1px
-      transition transform .45 cubic-bezier(.23, 1, .32, 1)
     &__focusline
       position absolute
       left 10%
@@ -104,17 +116,13 @@ export default {
       transform scaleX(1)
     input
       box-sizing border-box
-      // background-color #ECF0F1
-      // border 0.1rem solid transparent
       padding 0.2rem 0
       width 80%
-      transition border .5s
       outline none
       border none
       box-shadow none
-      // &:focus
-      //   border 0.1rem solid #3498DB
-      //   box-shadow none
+      position relative
+      // border-bottom  1px solid rgba(0, 0, 0, .12)
     .padding-right
       padding-right 10%
     span

@@ -1,8 +1,14 @@
 <template>
   <div class="i-form-item">
-    <label v-if="label" :class="{'i-form-item-label-required': isRequired}">{{label}}</label>
+    <label
+      v-if="label"
+      @click.stop="toggleFloat"
+      :class="['i-form-item__label', {'i-form-item__label-required': isRequired, 'i-form-item__label-float': labelFloat}]"
+    >
+      {{ label }}
+      <span v-if="validateState === 'error' && labelFloat">({{validateMessage}})</span>
+    </label>
     <div>
-      <div v-if="validateState === 'error'" class="i-form-item-message">{{validateMessage}}</div>
       <slot></slot>
     </div>
   </div>
@@ -26,7 +32,8 @@ export default {
     return {
       isRequired: false, // 是否为必填
       validateState: '', // 校验状态
-      validateMessage: '' // 校验不通过时的提示信息
+      validateMessage: '', // 校验不通过时的提示信息
+      labelFloat: false // label标签是否上浮
     }
   },
   computed: {
@@ -87,6 +94,11 @@ export default {
       this.validateState = ''
       this.validateMessage = ''
       this.form.model[this.prop] = this.initialValue
+    },
+    toggleFloat () {
+      this.labelFloat = true
+      // 点击后 把值派发给 input 来控制 聚/失焦
+      this.broadcast('iInput', 'on-label-click', this.labelFloat)
     }
   },
   mounted () {
@@ -96,26 +108,43 @@ export default {
       this.setRules()
     }
   },
+  created () {
+    this.$on('on-form-blur', (val) => {
+      // 失去焦点 label 降下来 (input有值就不降)
+      if (!val) {
+        this.labelFloat = false
+      }
+    })
+    // 获得焦点 label 升起
+    this.$on('on-form-focus', (val) => {
+      this.labelFloat = true
+    })
+  },
   beforeDestroy () {
     this.dispatch('iForm', 'on-form-item-remove', this)
   }
 }
 </script>
 
-<style scoped>
-.i-form-item {
-  position: relative;
-  margin-bottom: 1.2rem;
-}
-.i-form-item-label-required:before {
-  content: '*';
-  color: red;
-}
-.i-form-item-message {
-  color: red;
-  text-align: left;
-  padding-left: 10%;
-  margin-top: 0.2rem;
-  font-size: 0.5rem;
-}
+<style lang="stylus" scoped>
+.i-form-item
+  position relative
+  margin-bottom 1.8rem
+  &__label
+    position absolute
+    left 10%
+    z-index 1
+    color rgba(0, 0, 0, .38)
+    transform translateY(0)
+    transform-origin 0 0
+    transition transform .3s cubic-bezier(.4, 0, .2, 1), color .3s cubic-bezier(.4, 0, .2, 1)
+    span
+      color red
+      font-size 0.8rem
+  &__label-required:before
+    content '*'
+    color red
+  &__label-float
+    transform scale(.85714, .85714) translateY(-1.5rem)
+    color #188ae2
 </style>
