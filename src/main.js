@@ -9,6 +9,7 @@ import router from './router'
 import store from './store'
 import api from './api'
 import util from './util'
+import Confirm from './components/confirm/index'
 import './style/index.styl'
 import './assets/icon/iconfont.css'
 
@@ -27,6 +28,7 @@ Vue.use(VueLazyload, {
 })
 Vue.use(vueiInfinite)
 Vue.use(animated)
+Vue.use(Confirm)
 Vue.prototype.$api = api
 Vue.prototype.$util = util
 

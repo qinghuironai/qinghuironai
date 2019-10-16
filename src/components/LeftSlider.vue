@@ -151,9 +151,11 @@ export default {
       height: 10vh;
       display: flex;
       align-items: center;
+      background-color #fff
+      transition background .4s
 
       &:active {
-        background #ccc
+        background-color #ccc
       }
 
       img {

@@ -9,27 +9,16 @@
         <img src="../assets/images/关注.svg" alt="">
         <img src="../assets/images/收藏.svg" alt="">
         <img src="../assets/images/设置.svg" alt="">
-        <img src="../assets/images/退出.svg" @click="confirmLogout" alt="">
+        <img src="../assets/images/退出.svg" @click="logout" alt="">
       </div>
     </transition>
-    <Comfirm
-      title="退出登录"
-      :show.sync="showLogout"
-      @close="showLogout = false"
-      @confirm="logout"
-      >
-      <p>确定要退出登录？</p>
-    </Comfirm>
   </div>
 </template>
 
 <script>
-import Comfirm from './Confirm'
 export default {
   data () {
-    return {
-      showLogout: false
-    }
+    return {}
   },
   props: {
     showRightSlider: {
@@ -37,21 +26,21 @@ export default {
       default: false
     }
   },
-  components: {
-    Comfirm
-  },
   methods: {
     close () {
-      console.log(1)
       this.$emit('update:showRightSlider', false) // 不能加空格
     },
-    confirmLogout () {
-      this.showLogout = true
-    },
     logout () {
-      this.$store.dispatch('clearCurrentState')
-      this.$emit('update:showRightSlider', false)
-      this.$aMsg.success('欢迎再次光临~')
+      this.$confirm.showConfirm({
+        title: '退出',
+        content: '确认退出吗？'
+      }).then(() => {
+        this.$store.dispatch('clearCurrentState')
+        this.$emit('update:showRightSlider', false)
+        this.$aMsg.success('欢迎再次光临~')
+      }).catch(err => {
+        console.error(err)
+      })
     }
   }
 }
