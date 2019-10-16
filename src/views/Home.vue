@@ -1,9 +1,12 @@
 <template>
   <div class="home">
     <div class="home__background">
-      <img v-show="bg === 'one'" src="../assets/images/background/bg1.jpg" alt="" class="animated rotateIn" />
-      <img v-show="bg === 'two'" src="../assets/images/background/bg2.jpg" alt="" class="animated rotateIn" />
-      <img v-show="bg === 'three'" src="../assets/images/background/bg3.jpg" alt="" class="animated rotateIn" />
+      <swiper :options="swiperOption" ref="mySwiper">
+        <swiper-slide><img src="../assets/images/background/bg1.jpg" alt=""></swiper-slide>
+        <swiper-slide><img src="../assets/images/background/bg2.jpg" alt=""></swiper-slide>
+        <swiper-slide><img src="../assets/images/background/bg3.jpg" alt=""></swiper-slide>
+        <div class="swiper-pagination"  slot="pagination"></div>
+      </swiper>
     </div>
     <Snow />
     <div class="home__content">
@@ -22,7 +25,7 @@
           <img
             @click="openRight"
             alt
-            src="../assets/images/avatar.png"
+            src="https://avatars0.githubusercontent.com/u/43082053?s=40&v=4"
             v-if="Object.keys(user).length"
           />
           <div
@@ -40,7 +43,6 @@
       </div>
     </div>
     <LeftSlider
-      :bgImage="bg"
       :showLeftSlider.sync="showLeftSlider"
     />
     <RightSlider :showRightSlider.sync="showRightSlider" />
@@ -83,6 +85,8 @@ import Register from '@/components/Register'
 import FindPwd from '@/components/FindPwd'
 import RightSlider from '@/components/RightSlider'
 import LeftSlider from '@/components/LeftSlider'
+import 'swiper/dist/css/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
   name: 'Home',
@@ -93,7 +97,9 @@ export default {
     Register,
     FindPwd,
     RightSlider,
-    LeftSlider
+    LeftSlider,
+    swiper,
+    swiperSlide
   },
   data () {
     return {
@@ -121,9 +127,19 @@ export default {
       isShow: false,
       status: 'login',
       isBobble: false,
-      bg: 'one',
       showLeftSlider: false,
-      showRightSlider: false
+      showRightSlider: false,
+      swiperOption: {
+        pagination: {
+          el: '.swiper-pagination',
+          dynamicBullets: true,
+          clickable: true
+        },
+        loop: true,
+        autoplay: true,
+        delay: 3000,
+        effect: 'fade'
+      }
     }
   },
   computed: {
@@ -170,23 +186,6 @@ export default {
       this.isBobble = false
       this.isShow = false
     }
-  },
-  mounted () {
-    this.timer = setInterval(() => {
-      switch (this.bg) {
-        case 'one':
-          this.bg = 'two'
-          break
-        case 'two':
-          this.bg = 'three'
-          break
-        case 'three':
-          this.bg = 'one'
-      }
-    }, 5000)
-  },
-  destroyed () {
-    clearInterval(this.timer)
   }
 }
 </script>
@@ -220,6 +219,7 @@ export default {
         img
           width 3rem
           margin-top 0.6rem
+          border-radius 50%
         span
           position absolute
           width 2rem

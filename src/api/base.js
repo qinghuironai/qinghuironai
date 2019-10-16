@@ -17,7 +17,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     if (cookie.get('jwt')) {
-      config.headers.Authorization = cookie.get('jwt')
+      config.headers.Authorization = 'Bearer ' + cookie.get('jwt')
     }
     return config
   },
