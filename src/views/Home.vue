@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <div class="home__background">
-      <img :src="bg" alt="">
+      <img v-show="bg === 'one'" src="../assets/images/background/bg1.jpg" alt="" class="animated rotateIn" />
+      <img v-show="bg === 'two'" src="../assets/images/background/bg2.jpg" alt="" class="animated rotateIn" />
+      <img v-show="bg === 'three'" src="../assets/images/background/bg3.jpg" alt="" class="animated rotateIn" />
     </div>
     <Snow />
     <div class="home__content">
@@ -81,9 +83,6 @@ import Register from '@/components/Register'
 import FindPwd from '@/components/FindPwd'
 import RightSlider from '@/components/RightSlider'
 import LeftSlider from '@/components/LeftSlider'
-import bg1 from '@/assets/images/background/bg1.jpg'
-import bg2 from '@/assets/images/background/bg2.jpg'
-import bg3 from '@/assets/images/background/bg3.jpg'
 
 export default {
   name: 'Home',
@@ -122,8 +121,7 @@ export default {
       isShow: false,
       status: 'login',
       isBobble: false,
-      backgroundImage: `url(${bg1})`,
-      bg: bg1,
+      bg: 'one',
       showLeftSlider: false,
       showRightSlider: false
     }
@@ -176,14 +174,14 @@ export default {
   mounted () {
     this.timer = setInterval(() => {
       switch (this.bg) {
-        case bg1:
-          this.bg = bg2
+        case 'one':
+          this.bg = 'two'
           break
-        case bg2:
-          this.bg = bg3
+        case 'two':
+          this.bg = 'three'
           break
-        case bg3:
-          this.bg = bg1
+        case 'three':
+          this.bg = 'one'
       }
     }, 5000)
   },
@@ -206,6 +204,7 @@ export default {
     height 100vh
     position absolute
     z-index -1
+    overflow hidden
     img
       width 100%
       height 100%

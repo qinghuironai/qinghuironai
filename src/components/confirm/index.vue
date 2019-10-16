@@ -1,13 +1,13 @@
 <template>
-  <div class="confirm" v-show="show">
-    <div class="confirm__container animated fadeIn">
+  <div class="confirm" v-show="isShow">
+    <div class="confirm__container animated bounceIn">
       <div class="confirm__container--title">{{title}}</div>
       <div class="confirm__container--content">
-        <slot></slot>
+        <p>{{content}}</p>
       </div>
       <div class="confirm__container--footer">
-        <div class="left btn" @click="close">{{cancelText}}</div>
-        <div class="right btn" @click="confirm">{{confirmText}}</div>
+        <div class="left btn" @click="cancel" v-show="showCancelBtn">{{cancelText}}</div>
+        <div class="right btn" @click="confirm" v-show="showCofirmBtn">{{confirmText}}</div>
       </div>
     </div>
   </div>
@@ -17,30 +17,66 @@
 export default {
   name: 'confirm',
   props: {
-    show: {
-      type: Boolean,
-      default: true
-    },
     title: {
       type: String,
       default: '标题'
+    },
+    content: {
+      type: String,
+      default: '确认要退出吗？'
     },
     cancelText: {
       type: String,
       default: '取消'
     },
+    showCancelBtn: {
+      type: Boolean,
+      default: true
+    },
     confirmText: {
       type: String,
       default: '确认'
+    },
+    showCofirmBtn: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data () {
+    return {
+      isShow: false,
+      resolve: '',
+      reject: '',
+      promise: ''
     }
   },
   methods: {
-    close () {
-      this.$emit('close')
+    cancel () {
+      this.isShow = false
+      this.reject('cancel')
+      this.remove()
     },
     confirm () {
-      this.$emit('update:show', false)
-      this.$emit('confirm')
+      this.isShow = false
+      this.resolve('confirm')
+      this.remove()
+    },
+    remove () {
+      setTimeout(() => {
+        this.destroy()
+      }, 300)
+    },
+    destroy () {
+      this.$destroy()
+      document.body.removeChild(this.$el)
+    },
+    showConfirm () {
+      this.isShow = true
+      this.promise = new Promise((resolve, reject) => {
+        this.resolve = resolve
+        this.reject = reject
+      })
+      return this.promise
     }
   }
 }
