@@ -4,7 +4,6 @@ import VueLazyload from 'vue-lazyload'
 import vueiInfinite from 'vue-infinite-scroll'
 import AMsg from 'amsg'
 import animated from 'animate.css'
-import Vuelidate from 'vuelidate'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -28,7 +27,6 @@ Vue.use(VueLazyload, {
 })
 Vue.use(vueiInfinite)
 Vue.use(animated)
-Vue.use(Vuelidate)
 Vue.prototype.$api = api
 Vue.prototype.$util = util
 
