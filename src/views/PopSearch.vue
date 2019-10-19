@@ -22,10 +22,10 @@
           >{{ item.keywordTranslated }}</p>
         </router-link>
       </div>
-      <div
-        class="pop-search__tag"
-        v-else
-      >😞No results found.</div>
+      <!-- <div -->
+        <!-- v-else -->
+        <!-- class="pop-search__tag" -->
+      <!-- >😞No results found.</div> -->
     </div>
     <pic-list
       :pictureList="pictureList"
@@ -54,7 +54,7 @@ export default {
   data () {
     return {
       // tagList为空 为true
-      tagEmptyFlag: true,
+      tagEmptyFlag: false,
       loading: true,
       searchKey: '',
       pictureList: [],
@@ -132,15 +132,13 @@ export default {
       this.$api.search.getTags(this.keyword).then(({ data: { data } }) => {
         if (data) {
           this.tagsList = data
-          this.tagEmptyFlag = false
-        } else {
-          this.tagEmptyFlag = true
+          this.tagEmptyFlag = data.length === 0
         }
       })
     },
-    loadMore () {
-      this.pictureList.length !== 0 && this.getSearch(this.page.picture + 1)
-    }
+    loadMore: debounce(function () {
+      // this.pictureList.length !== 0 && this.getSearch(this.page.picture + 1)
+    }, 1000)
   }
 }
 </script>

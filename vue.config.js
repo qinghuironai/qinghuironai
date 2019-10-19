@@ -4,9 +4,11 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
+console.log('Url prefix: ', process.env.PREFIX)
+
 module.exports = {
   lintOnSave: false,
-  publicPath: '/pix/',
+  publicPath: process.env.PREFIX,
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'stylus',

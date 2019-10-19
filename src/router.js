@@ -6,6 +6,7 @@ Vue.use(Router)
 const pages = {
   Home: () => import('./views/Home'),
   DailyRank: () => import('./views/DailyRank'),
+  Detail: () => import('./views/Detail.vue'),
   PopSearch: () => import('./views/PopSearch'),
   Intro: () => import('./views/Intro'),
   Links: () => import('./views/Links'),
@@ -23,6 +24,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: pages.Home
+    }, {
+      path: '/detail/:pid',
+      name: 'Detail',
+      component: pages.Detail,
+      props: true
     }, {
       path: '/dailyRank',
       name: 'DailyRank',

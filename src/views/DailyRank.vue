@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
 import Calendar from 'vue-calendar-component'
 import moment from 'moment'
 import PicList from '@/components/PicList'
@@ -176,9 +177,9 @@ export default {
     onSwipeRight () {
       this.swipe(-1)
     },
-    loadMore () {
+    loadMore: debounce(function () {
       this.pictureList.length !== 0 && this.getPictures()
-    }
+    }, 1000)
   },
   watch: {
     mode (val) {
