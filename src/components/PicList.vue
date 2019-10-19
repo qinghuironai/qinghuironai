@@ -6,7 +6,7 @@
         v-for="(list, listIdx) in [leftList, rightList]"
         :key="listIdx"
       >
-        <img-dialog
+        <img-preview
           v-for="(item, index) in list.list"
           :key="index"
           :info="item"
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import imgDialog from '@/components/Dialog'
+import ImgPreview from '@/components/ImgPreview'
 
 export default {
   name: 'PicList',
@@ -44,7 +44,7 @@ export default {
     }
   },
   components: {
-    imgDialog
+    ImgPreview
   },
   data () {
     return {

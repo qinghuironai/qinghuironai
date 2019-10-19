@@ -6,6 +6,7 @@ Vue.use(Router)
 const pages = {
   Home: () => import('./views/Home'),
   DailyRank: () => import('./views/DailyRank'),
+  Detail: () => import('./views/Detail.vue'),
   PopSearch: () => import('./views/PopSearch'),
   Intro: () => import('./views/Intro'),
   Links: () => import('./views/Links'),
@@ -17,12 +18,17 @@ const pages = {
 
 export default new Router({
   mode: 'history',
-  base: process.env.PREFIX,
+  base: 'pix',
   routes: [
     {
       path: '/',
       name: 'Home',
       component: pages.Home
+    }, {
+      path: '/detail/:pid',
+      name: 'Detail',
+      component: pages.Detail,
+      props: true
     }, {
       path: '/dailyRank',
       name: 'DailyRank',
