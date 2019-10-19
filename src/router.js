@@ -11,6 +11,7 @@ const pages = {
   Links: () => import('./views/Links'),
   Donate: () => import('./views/Donate'),
   Comments: () => import('./views/Comments'),
+  ResetPassword: () => import('./views/ResetPassword.vue'),
   NotFound: () => import('./views/NotFound')
 }
 
@@ -48,6 +49,11 @@ export default new Router({
       name: 'Comments',
       component: pages.Comments
     }, {
+      path: '/resetPassword',
+      name: 'ResetPassword',
+      component: pages.ResetPassword
+    },
+    {
       path: '/404',
       name: 'NotFound',
       component: pages.NotFound

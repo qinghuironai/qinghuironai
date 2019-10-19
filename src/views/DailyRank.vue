@@ -3,21 +3,18 @@
     <!-- <div class="rank__header"></div> -->
     <!-- 日历弹窗 -->
     <div class="rank__content">
-      <div v-show="calendarShow" class="rank__calendar-picker">
-        <div
-          class="rank__calendar-picker--mask"
-          @click.stop="calendarShow = false"
-        ></div>
+      <div class="rank__calendar-picker" v-show="calendarShow">
+        <div @click.stop="calendarShow = false" class="rank__calendar-picker--mask"></div>
         <calendar
-          ref="datePicker"
-          class="rank__calendar-picker--date"
           :futureDayHide="futureDayHide"
+          class="rank__calendar-picker--date"
+          ref="datePicker"
           v-on:choseDay="clickDay"
         />
       </div>
 
       <div class="rank__calendar">
-        <img src="@/assets/images/calendar.svg" @click="showCalendar" alt="" />
+        <img @click="showCalendar" alt src="@/assets/images/calendar.svg" />
       </div>
 
       <div class="rank__select">
@@ -29,22 +26,12 @@
         </select>
       </div>
       <v-touch
+        :swipe-options="{ direction: 'horizontal' }"
         v-on:swipeleft="onSwipeLeft"
         v-on:swiperight="onSwipeRight"
-        :swipe-options="{ direction: 'horizontal' }"
       >
         <pic-list :pictureList="pictureList" @loadMore="loadMore"></pic-list>
       </v-touch>
-      <div
-        v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="isBottom"
-        infinite-scroll-distance="10"
-        class="rank__more"
-      >
-        <div v-if="isBottom" class="rank__more--bottom">
-          (￣ˇ￣)俺也是有底线的
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -129,6 +116,11 @@ export default {
           this.loading = false
           this.isBottom = true
         })
+    },
+    preview (val) {
+      this.info = val
+      this.images = val.imageUrls
+      this.isShow = true
     },
     showCalendar () {
       this.calendarShow = true
@@ -249,7 +241,7 @@ export default {
       -moz-page-break-inside avoid
       -webkit-column-break-inside avoid
       break-inside avoid
-      box-shadow 0 1px 3px rgba(0, 0, 0, .3)
+      box-shadow 0 1px 3px rgba(0, 0, 0, 0.3)
       border-radius 0.3rem
       overflow hidden
       img
@@ -281,14 +273,14 @@ export default {
           line-height 1.25rem
           font-size 1rem
   &__calendar
+    height 4rem
+    text-align center
+    padding 0.4rem
+    img
+      width 4rem
       height 4rem
-      text-align center
-      padding 0.4rem
-      img
-        width 4rem
-        height 4rem
   &__select
-    position: relative
+    position relative
     text-align center
     margin-bottom 1rem
     select
@@ -303,7 +295,7 @@ export default {
       outline none
       opacity 0
     span
-      padding .2rem 1rem
+      padding 0.2rem 1rem
       width auto
       outline none
       background-color #5c9cd8
@@ -319,7 +311,7 @@ export default {
         position fixed
         left 0
         top 0
-        background rgba(51, 163, 220, .3)
+        background rgba(51, 163, 220, 0.3)
         z-index 200
       &--date
         position fixed
@@ -336,7 +328,7 @@ export default {
             color #0bcead
             font-weight bold
         >>> .wh_content_item .wh_chose_day
-            background white
-            color #0bcead
-            font-weight bold
+          background white
+          color #0bcead
+          font-weight bold
 </style>

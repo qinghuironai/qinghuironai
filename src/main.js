@@ -4,12 +4,12 @@ import VueLazyload from 'vue-lazyload'
 import vueiInfinite from 'vue-infinite-scroll'
 import AMsg from 'amsg'
 import animated from 'animate.css'
-import Vuelidate from 'vuelidate'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import api from './api'
 import util from './util'
+import Confirm from './components/confirm/index'
 import './style/index.styl'
 import './assets/icon/iconfont.css'
 
@@ -28,7 +28,7 @@ Vue.use(VueLazyload, {
 })
 Vue.use(vueiInfinite)
 Vue.use(animated)
-Vue.use(Vuelidate)
+Vue.use(Confirm)
 Vue.prototype.$api = api
 Vue.prototype.$util = util
 

@@ -1,55 +1,80 @@
 <template>
   <div class="register">
     <h1 class="register__title">Register</h1>
-    <div :class="[{ 'register__error': $v.form.email.$error }, 'register__group']">
-      <input type="text"
-        @blur="$v.form.email.$touch()"
-        v-model="form.email"
-        :class="[{ 'bounceIn': !$v.form.email.required || !$v.form.email.email  }, 'register__group--name', 'animated']"
-        placeholder="邮箱" />
-      <!-- <div class="register__group--message" v-if="!$v.form.email.required">邮箱不能为空</div>
-      <div class="register__group--message" v-if="!$v.form.email.email">请填写正确的邮箱格式</div>  -->
-    </div>
-    <div :class="[{ 'register__error': $v.form.user.$error }, 'register__group']">
-      <input
-        type="text"
-        @input="$v.form.user.$touch()"
-        v-model="form.user"
-        :class="[{ 'bounceIn': !$v.form.user.required }, 'register__group--name', 'animated']"
-        placeholder="用户名" />
-      <!-- <span class="register__group--message" v-if="!$v.form.email.required">用户名不能为空</span> -->
-    </div>
-    <div class="register__group">
-      <PwdInput v-model="form.password"/>
-    </div>
-    <div class="register__group">
-      <!-- <PwdInput
-        v-model="form.confirmPassword"
-        :placeholder="'密码确认'"
-        @blur.native="$v.form.confirmPassword.$touch()"
-        :class="[{ 'bounceIn': !$v.form.confirmPassword.sameAsPassword }, 'register__group--name', 'animated']"/> -->
-      <PwdInput
-        v-model="form.confirmPassword"
-        :placeholder="'密码确认'"
-        :incorrect="!$v.form.confirmPassword.sameAsPassword"/>
-    </div>
-    <div class="register__group">
-      <input type="text" v-model="form.code" class="register__group--name" placeholder="验证码" />
-      <span class="register__group--code" @click="getCode" v-if="!this.isSend">获取邮箱验证码</span>
-      <span class="register__group--code" v-else>{{ this.time }}s后再次获取</span>
-    </div>
-    <div class="register__group">
-      <div @click="register" class="register__group--btn">注册</div>
-    </div>
+    <i-form :model="form" :rules="ruleValidate" ref="form" class="register__form">
+      <i-form-item label="邮箱" prop="email">
+        <i-input v-model="form.email"></i-input>
+      </i-form-item>
+      <i-form-item label="用户名" prop="user">
+        <i-input v-model="form.user"></i-input>
+      </i-form-item>
+      <i-form-item label="用户密码" prop="password">
+        <i-input v-model="form.password" type="password"></i-input>
+      </i-form-item>
+      <i-form-item label="确认密码" prop="confirmPassword">
+        <i-input v-model="form.confirmPassword" type="password"></i-input>
+      </i-form-item>
+      <i-form-item label="验证码" prop="code" class="register__form--code">
+        <i-input v-model="form.code" maxlength="4"></i-input>
+        <img
+          class="register__group--code"
+          :src="codeImg"
+          @click.stop="getCode"
+        />
+      </i-form-item>
+    </i-form>
+    <div @click="register" class="register__btn">注册</div>
     <a @click.prevent="signIn" class="register__link">已有账号？去登录</a>
   </div>
 </template>
 
 <script>
-import PwdInput from './PwdInput'
-import { required, email, sameAs } from 'vuelidate/lib/validators'
+import iForm from '../components/form/form'
+import iFormItem from '../components/form/form-item'
+import iInput from '../components/form/input'
 export default {
   data () {
+    const emailExit = (rule, value, callback) => {
+      const emailReg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+      if (value === '') {
+        return callback(new Error('邮箱不能为空'))
+      }
+      if (!emailReg.test(value)) {
+        return callback(new Error('邮箱格式不正确'))
+      }
+      if (value !== '' && emailReg.test(value)) {
+        this.$api.user.checkEmail(value).then(res => {
+          if (res.status === 409) {
+            callback(new Error('邮箱已被注册'))
+          } else if (res.status === 404) {
+            callback()
+          }
+        })
+      }
+    }
+    const userExit = (rule, value, callback) => {
+      if (value === '' || value.length < 3) {
+        return callback(new Error('必须3位以上'))
+      }
+      if (value.length >= 3) {
+        this.$api.user.checkUser(value).then(res => {
+          if (res.status === 409) {
+            callback(new Error('用户名已被注册'))
+          } else if (res.status === 404) {
+            callback()
+          }
+        })
+      }
+    }
+    const checkConfirmPassword = (rule, value, callback) => {
+      if (value === '') {
+        return callback(new Error('请再次输入密码'))
+      }
+      if (value !== this.form.password) {
+        return callback(new Error('密码不一致'))
+      }
+      callback()
+    }
     return {
       form: {
         email: '',
@@ -58,26 +83,31 @@ export default {
         confirmPassword: '',
         code: ''
       },
-      time: 60,
-      isSend: false
-    }
-  },
-
-  validations: {
-    form: {
-      email: {
-        // 先验证存在 再合理 最后是否被注册
-        required, email
-      },
-      user: { required },
-      password: { required },
-      confirmPassword: { sameAsPassword: sameAs('password') },
-      code: { required }
+      codeImg: '',
+      ruleValidate: {
+        email: [
+          { required: true, validator: emailExit, trigger: 'blur' }
+        ],
+        user: [
+          { required: true, validator: userExit, trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { min: 8, max: 15, message: '必须8-15位', trigger: 'blur' }
+        ],
+        confirmPassword: [
+          { required: true, validator: checkConfirmPassword, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '验证码不能为空', trigger: 'blur' },
+          { min: 4, max: 4, message: '验证码为4位数', trigger: 'blur' }
+        ]
+      }
     }
   },
 
   components: {
-    PwdInput
+    iForm, iFormItem, iInput
   },
 
   methods: {
@@ -85,18 +115,42 @@ export default {
       this.$emit('signIn', 'login')
     },
     register () {
-      console.log('register')
-    },
-    getCode () {
-      this.isSend = true
-      let timer = setInterval(() => {
-        if ((this.time--) <= 0) {
-          this.time = 60
-          this.isSend = false
-          clearInterval(timer)
+      this.$refs.form.validate(async valid => {
+        console.log(valid)
+        if (valid) {
+          const userInfo = {
+            username: this.form.user,
+            email: this.form.email,
+            password: this.form.password
+          }
+          const params = {
+            vid: this.vid,
+            value: this.form.code
+          }
+          const res = await this.$api.user.register(userInfo, params)
+          if (res.status === 200) {
+            this.$aMsg.success('请前往邮箱验证 完成注册')
+            this.$emit('signIn', 'login')
+            this.$refs.form.resetFields()
+          } else {
+            this.$aMsg.error(res.data.message)
+            this.getCode()
+          }
+        } else {
+          this.$aMsg.error('请正确填写信息QAQ')
         }
-      }, 1000)
+      })
+    },
+    async getCode () {
+      const res = await this.$api.user.verificationCode()
+      if (res.status === 200) {
+        this.codeImg = 'data:image/png;base64,' + res.data.data.imageBase64
+        this.vid = res.data.data.vid
+      }
     }
+  },
+  mounted () {
+    this.getCode()
   }
 }
 
@@ -111,59 +165,30 @@ export default {
   background-color #fff
   &__title
     color #777
-  &__group
-    position relative
-    margin-bottom 1rem
-    &--name
-      background-color #ECF0F1
-      border 0.2rem solid transparent
-      padding 0.2rem 0
-      width 80%
-      transition border .5s
-      &:focus
-        border 0.2rem solid #3498DB
-        box-shadow none
-    img
-      width 1.2rem
-      position absolute
-      top 0.2rem
-      right 1.4rem
+  &__form
     &--code
-      position absolute
-      top 0.6rem
-      right 1.4rem
-      color #073f84
-      font-size 0.8rem
-    &--btn
-      border 0.2rem solid transparent
-      background #3498DB
-      color #ffffff
-      line-height 1rem
-      padding 0.3rem 0
-      width 80%
-      border-radius 0.2rem
-      box-shadow none
-      transition 0.25s
-      margin 0 auto
-  &__error
-    input
-      border 0.2rem solid red
-      transition border .5s
-      &:focus
-        border 0.2rem solid red
-  //   &--message
-  //     display none
-  //     color #cc3333
-  //     text-align center
-  //     padding-top 0.1rem
-  //     font-size 0.6rem
-  // &__error
-  //   & > input + .register__group--message
-  //     display block
-  //     color #CC3333
-  //     text-align center
-  //     padding-top 0.1rem
-  //     font-size 0.6rem
+      position relative
+      >>> input
+        padding-right 2rem
+      img
+        width 2.2rem
+        height 1.6rem
+        position absolute
+        top -0.5rem
+        right 10%
+        color #073f84
+        font-size 0.8rem
+  &__btn
+    border 0.2rem solid transparent
+    background #3498DB
+    color #ffffff
+    line-height 1rem
+    padding 0.3rem 0
+    width 80%
+    border-radius 0.2rem
+    box-shadow none
+    transition 0.25s
+    margin 0 auto
   &__link
     font-size 12px
     color #444
