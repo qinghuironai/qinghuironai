@@ -100,7 +100,7 @@ export default {
       if (url.includes('i.pximg')) {
         prefix = 'https://img.pixivic.com:23334/get/'
       }
-      return prefix + url
+      return prefix + url.replace('_webp', '')
     },
     close () {
       this.$router.go(-1)

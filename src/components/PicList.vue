@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
 import ImgPreview from '@/components/ImgPreview'
 
 export default {
@@ -91,9 +92,11 @@ export default {
     loadMore () {
       this.$emit('loadMore')
     },
-    showBackUpOrNot () {
-      this.showBackUp = document.querySelector('html').scrollTop > 100
-    },
+    showBackUpOrNot: debounce(function () {
+      const now = document.querySelector('html').scrollTop
+      this.showBackUp = this.scrollTop && now < this.scrollTop
+      this.scrollTop = now
+    }, 300),
     scrollToTop () {
       window.scrollTo({
         top: 0,
