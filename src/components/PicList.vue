@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
+import throttle from 'lodash/throttle'
 import ImgPreview from '@/components/ImgPreview'
 
 export default {
@@ -92,7 +92,7 @@ export default {
     loadMore () {
       this.$emit('loadMore')
     },
-    showBackUpOrNot: debounce(function () {
+    showBackUpOrNot: throttle(function () {
       const now = document.querySelector('html').scrollTop
       this.showBackUp = this.scrollTop && now < this.scrollTop
       this.scrollTop = now
