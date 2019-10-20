@@ -150,7 +150,7 @@ export default {
   left 0
   display flex
   flex-direction column
-  background $mask
+  background white
   height 100vh
   width 100vw
   overflow scroll
