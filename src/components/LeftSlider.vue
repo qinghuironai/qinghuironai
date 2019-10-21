@@ -6,6 +6,7 @@
         class="left-slider__mask"
         v-show="showLeftSlider"
       ></div>
+      <div>adsadasa321321312321s</div>
     </transition>
     <transition name="slide">
       <div
@@ -121,9 +122,10 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
+    height: 10vh;
+    width: 60vw;
     opacity: 1;
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.5);
+    z-index: 120;
   }
 
   .fade-enter-to, .fade-leave-to {
@@ -151,11 +153,11 @@ export default {
       height: 10vh;
       display: flex;
       align-items: center;
-      background-color #fff
-      transition background .4s
+      background-color: #fff;
+      transition: background 0.4s;
 
       &:active {
-        background-color #ccc
+        background-color: #ccc;
       }
 
       img {

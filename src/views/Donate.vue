@@ -25,8 +25,8 @@
             <tr>
               <th>ID</th>
               <th>金额</th>
-              <th>附言</th>
-              <th>捐赠时间</th>
+              <th style="width:6rem;">附言</th>
+              <th style="width:6rem;">捐赠时间</th>
             </tr>
 
             <tr
@@ -35,21 +35,15 @@
             >
               <th>{{ item.id }}</th>
               <th>{{ item.sum }}</th>
-              <th>{{ item.postscript }}</th>
+              <th title="item.postscript">{{ item.postscript }}</th>
               <th>{{ item.time }}</th>
             </tr>
           </tbody>
         </table>
-        <div
-          class="donate__more"
-          infinite-scroll-disabled="isBottom"
-          infinite-scroll-distance="10"
-          v-infinite-scroll="loadMore"
-        >
-          <!-- <div v-if="isBottom" class="donate__more--bottom">
-            (￣ˇ￣)俺也是有底线的
-          </div>-->
-        </div>
+        <h4
+          @click="goHome"
+          style="margin-bottom:0px;padding-bottom:15px;"
+        >点击我返回首页</h4>
       </div>
     </div>
   </div>
@@ -62,37 +56,18 @@ export default {
   components: {},
   data () {
     return {
-      isBottom: false,
       data: [],
       tableData: [],
-      count: 0,
-      isrealBottom: false
+      count: 0
     }
   },
   methods: {
-    loadMore: function () {
-      this.isBottom = true
-
-      console.log(this.count)
-
-      setTimeout(() => {
-        if (this.count <= this.data.length) {
-          for (var i = 0, j = 10; i < j; i++) {
-            if (this.count === this.data.length) {
-              this.isrealBottom = true
-              break
-            }
-            this.tableData.push(this.data[this.count])
-            this.count++
-            console.log(this.data)
-          }
-        }
-        this.isBottom = false
-      }, 1000)
+    goHome () {
+      this.$router.push('/')
     }
   },
   mounted () {
-    this.data = donateData
+    this.tableData = donateData
   }
 }
 </script>
@@ -108,14 +83,15 @@ export default {
 
   &__container {
     width: 100vw;
-    margin: auto;
     font-family: 'SF Pro SC', 'SF Pro Display', 'SF Pro Icons', 'AOS Icons', 'PingFang SC', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    height: 100%;
 
     &__info {
       padding: 15px calc(50vw - 350px);
       background-color: #f8f9fa;
       box-sizing: border-box;
       color: #454d5d;
+      padding-left: 5vh;
 
       img {
         width: 150px;
@@ -197,7 +173,6 @@ export default {
       h4 {
         font-size: 1.2rem;
         position: relative;
-        display: block;
         margin-block-start: 1.33em;
         margin-block-end: 1.33em;
         margin-inline-start: 0px;
@@ -213,6 +188,7 @@ export default {
           vertical-align: middle;
           margin-top: -4px;
           margin-right: 11px;
+          margin-left: 16px;
           border-radius: 100%;
           border: 3px solid #fff;
           box-shadow: 0 0 5px #b0b0b0;
@@ -232,7 +208,7 @@ export default {
         padding-left: 10%;
         width: 100%;
         max-width: 100%;
-        margin-bottom: 20px;
+        font-size: 1rem;
 
         tr {
           display: table-row;
@@ -242,11 +218,15 @@ export default {
 
         th {
           text-align: left;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 6rem;
+          white-space: nowrap;
         }
 
         th, td {
           padding: 8px;
-          line-height: 1.42857143;
+          line-height: 1rem;
           vertical-align: top;
           border-top: 2px solid #b9eee5;
           color: #454d5d;

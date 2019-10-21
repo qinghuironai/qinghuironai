@@ -108,6 +108,7 @@ export default {
       background-color: #f8f9fa;
       box-sizing: border-box;
       color: #454d5d;
+      padding-left: 5vh;
 
       img {
         width: 150px;
@@ -162,6 +163,10 @@ export default {
         color: #454d5d;
       }
 
+      li {
+        padding-right: 15px;
+      }
+
       ul {
         margin-left: 10px;
         display: block;
@@ -176,7 +181,6 @@ export default {
       h4 {
         font-size: 1.2rem;
         position: relative;
-        display: block;
         margin-block-start: 1.33em;
         margin-block-end: 1.33em;
         margin-inline-start: 0px;
@@ -192,9 +196,19 @@ export default {
           vertical-align: middle;
           margin-top: -4px;
           margin-right: 11px;
+          margin-left: 16px;
           border-radius: 100%;
           border: 3px solid #fff;
           box-shadow: 0 0 5px #b0b0b0;
+        }
+
+        &::after {
+          content: '';
+          width: 2px;
+          background: #b9eee5;
+          position: absolute;
+          left: 9px;
+          top: 6px;
         }
 
         &::after {
