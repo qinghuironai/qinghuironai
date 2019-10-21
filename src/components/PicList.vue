@@ -6,7 +6,7 @@
         v-for="(list, listIdx) in [leftList, rightList]"
         :key="listIdx"
       >
-        <img-dialog
+        <img-preview
           v-for="(item, index) in list.list"
           :key="index"
           :info="item"
@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import imgDialog from '@/components/Dialog'
+import throttle from 'lodash/throttle'
+import ImgPreview from '@/components/ImgPreview'
 
 export default {
   name: 'PicList',
@@ -44,7 +45,7 @@ export default {
     }
   },
   components: {
-    imgDialog
+    ImgPreview
   },
   data () {
     return {
@@ -91,9 +92,11 @@ export default {
     loadMore () {
       this.$emit('loadMore')
     },
-    showBackUpOrNot () {
-      this.showBackUp = document.querySelector('html').scrollTop > 100
-    },
+    showBackUpOrNot: throttle(function () {
+      const now = document.querySelector('html').scrollTop
+      this.showBackUp = this.scrollTop && now < this.scrollTop
+      this.scrollTop = now
+    }, 300),
     scrollToTop () {
       window.scrollTo({
         top: 0,

@@ -1,34 +1,16 @@
 <template>
   <div class="home">
-    <div class="home__background">
-      <swiper
-        :options="swiperOption"
-        ref="mySwiper"
-      >
-        <swiper-slide>
-          <img
-            alt
-            src="../assets/images/background/bg1.jpg"
-          />
-        </swiper-slide>
-        <swiper-slide>
-          <img
-            alt
-            src="../assets/images/background/bg2.jpg"
-          />
-        </swiper-slide>
-        <swiper-slide>
-          <img
-            alt
-            src="../assets/images/background/bg3.jpg"
-          />
-        </swiper-slide>
-        <div
-          class="swiper-pagination"
-          slot="pagination"
-        ></div>
-      </swiper>
-    </div>
+    <swiper class="home__background" :options="swiperOption">
+      <swiper-slide>
+        <img src="../assets/images/background/bg1.jpg" />
+      </swiper-slide>
+      <swiper-slide>
+        <img src="../assets/images/background/bg2.jpg" />
+      </swiper-slide>
+      <swiper-slide>
+        <img src="../assets/images/background/bg3.jpg" />
+      </swiper-slide>
+    </swiper>
     <Snow />
     <div class="home__content">
       <div class="home__content--header">
@@ -53,13 +35,12 @@
             :class="['home__login', { 'home__login--bobble': isBobble }]"
             @click="goLogin"
             v-else
-          >GO</div>
+          >
+            GO
+          </div>
         </div>
       </div>
-      <div
-        class="home__content--search"
-        v-show="!isShow"
-      >
+      <div class="home__content--search" v-show="!isShow">
         <TextInput
           :showCat="showCat"
           v-on:enter="popSearch"
@@ -70,10 +51,7 @@
     <LeftSlider :showLeftSlider.sync="showLeftSlider" />
     <RightSlider :showRightSlider.sync="showRightSlider" />
     <!-- 登录注册弹窗 -->
-    <div
-      class="home__dialog"
-      v-show="isShow"
-    >
+    <div class="home__dialog" v-show="isShow">
       <div class="home__dialog--content">
         <Login
           @closeLogin="closeLogin"
@@ -87,15 +65,9 @@
           class="animated jackInTheBox"
           v-show="status === 'register'"
         />
-        <FindPwd
-          class="animated jackInTheBox"
-          v-show="status === 'find'"
-        />
+        <FindPwd class="animated jackInTheBox" v-show="status === 'find'" />
       </div>
-      <div
-        @click="close"
-        class="home__dialog--mask"
-      ></div>
+      <div @click="close" class="home__dialog--mask"></div>
     </div>
   </div>
 </template>
@@ -155,11 +127,6 @@ export default {
       showLeftSlider: false,
       showRightSlider: false,
       swiperOption: {
-        pagination: {
-          el: '.swiper-pagination',
-          dynamicBullets: true,
-          clickable: true
-        },
         loop: true,
         autoplay: true,
         delay: 3000,
@@ -234,7 +201,7 @@ export default {
     img {
       width: 100%;
       height: 100%;
-      transition: all 0.2s linear;
+      object-fit: cover;
     }
   }
 
