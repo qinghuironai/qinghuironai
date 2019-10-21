@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <swiper class="home__background" :options="swiperOption">
+    <swiper
+      :options="swiperOption"
+      class="home__background"
+    >
       <swiper-slide>
         <img src="../assets/images/background/bg1.jpg" />
       </swiper-slide>
@@ -35,12 +38,13 @@
             :class="['home__login', { 'home__login--bobble': isBobble }]"
             @click="goLogin"
             v-else
-          >
-            GO
-          </div>
+          >GO</div>
         </div>
       </div>
-      <div class="home__content--search" v-show="!isShow">
+      <div
+        class="home__content--search"
+        v-show="!isShow"
+      >
         <TextInput
           :showCat="showCat"
           v-on:enter="popSearch"
@@ -51,7 +55,10 @@
     <LeftSlider :showLeftSlider.sync="showLeftSlider" />
     <RightSlider :showRightSlider.sync="showRightSlider" />
     <!-- 登录注册弹窗 -->
-    <div class="home__dialog" v-show="isShow">
+    <div
+      class="home__dialog"
+      v-show="isShow"
+    >
       <div class="home__dialog--content">
         <Login
           @closeLogin="closeLogin"
@@ -65,9 +72,15 @@
           class="animated jackInTheBox"
           v-show="status === 'register'"
         />
-        <FindPwd class="animated jackInTheBox" v-show="status === 'find'" />
+        <FindPwd
+          class="animated jackInTheBox"
+          v-show="status === 'find'"
+        />
       </div>
-      <div @click="close" class="home__dialog--mask"></div>
+      <div
+        @click="close"
+        class="home__dialog--mask"
+      ></div>
     </div>
   </div>
 </template>
