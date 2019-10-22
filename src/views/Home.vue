@@ -1,9 +1,6 @@
 <template>
   <div class="home">
-    <swiper
-      :options="swiperOption"
-      class="home__background"
-    >
+    <swiper :options="swiperOption" class="home__background">
       <swiper-slide>
         <img src="../assets/images/background/bg1.jpg" />
       </swiper-slide>
@@ -17,10 +14,7 @@
     <Snow />
     <div class="home__content">
       <div class="home__content--header">
-        <div
-          :class="[{ active: showLeftSlider }, 'home__content--header-left']"
-          @click="openLeft"
-        >
+        <div :class="[{ active: showLeftSlider }, 'home__content--header-left']" @click="openLeft">
           <!-- <img src="../assets/images/菜单.svg" alt="" :class="{ rotate: showLeftSlider }"> -->
           <span></span>
           <span></span>
@@ -36,29 +30,22 @@
           />
           <div
             :class="['home__login', { 'home__login--bobble': isBobble }]"
+            ref="bobble"
             @click="goLogin"
             v-else
-          >GO</div>
+          >
+            <img ref="avatar" src="../assets/images/注册.svg" alt />
+          </div>
         </div>
       </div>
-      <div
-        class="home__content--search"
-        v-show="!isShow"
-      >
-        <TextInput
-          :showCat="showCat"
-          v-on:enter="popSearch"
-          v-show="showInput"
-        />
+      <div class="home__content--search" v-show="!isShow">
+        <TextInput :showCat="showCat" v-on:enter="popSearch" v-show="showInput" />
       </div>
     </div>
     <LeftSlider :showLeftSlider.sync="showLeftSlider" />
     <RightSlider :showRightSlider.sync="showRightSlider" />
     <!-- 登录注册弹窗 -->
-    <div
-      class="home__dialog"
-      v-show="isShow"
-    >
+    <div class="home__dialog" v-show="isShow">
       <div class="home__dialog--content">
         <Login
           @closeLogin="closeLogin"
@@ -67,20 +54,10 @@
           class="animated jackInTheBox"
           v-show="status === 'login'"
         />
-        <Register
-          @signIn="sign"
-          class="animated jackInTheBox"
-          v-show="status === 'register'"
-        />
-        <FindPwd
-          class="animated jackInTheBox"
-          v-show="status === 'find'"
-        />
+        <Register @signIn="sign" class="animated jackInTheBox" v-show="status === 'register'" />
+        <FindPwd class="animated jackInTheBox" v-show="status === 'find'" />
       </div>
-      <div
-        @click="close"
-        class="home__dialog--mask"
-      ></div>
+      <div @click="close" class="home__dialog--mask"></div>
     </div>
   </div>
 </template>
@@ -167,6 +144,11 @@ export default {
       this.$router.push('/dailyRank')
     },
     goLogin () {
+      this.$refs.bobble.style.background = '#FFB5C5'
+      this.$refs.avatar.style.display = 'none'
+      setTimeout(() => {
+        this.$refs.bobble.style.transform = 'scale(50)'
+      }, 200)
       this.isBobble = true
       setTimeout(() => {
         this.isShow = true
@@ -176,6 +158,11 @@ export default {
       this.isShow = false
       this.status = 'login'
       this.isBobble = false
+      this.$refs.bobble.style.transform = 'scale(1)'
+      setTimeout(() => {
+        this.$refs.bobble.style.background = 'transparent'
+      }, 200)
+      this.$refs.avatar.style.display = ''
     },
     sign (val) {
       console.log(val)
@@ -196,163 +183,114 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.home {
-  display: flex;
-  box-sizing: border-box;
-  width: 100vw;
-  height: 100vh;
-  flex-direction: column;
-  overflow: hidden;
-
-  &__background {
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
-    z-index: -1;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  &__content {
-    flex: 1;
-
-    &--header {
-      display: flex;
-      justify-content: space-between;
-      color: #fff;
-
-      &-right, &-left {
-        margin: 1.2rem;
-
-        img {
-          width: 3rem;
-          margin-top: 0.6rem;
-          border-radius: 50%;
-        }
-
-        span {
-          position: absolute;
-          width: 2rem;
-          height: 1.8px;
-          margin-top: 1rem;
-          background-color: rgba(255, 255, 255, 1);
-
-          &:nth-child(1) {
-            transform: translateY(0.6rem) rotate(0deg);
-          }
-
-          &:nth-child(3) {
-            transform: translateY(1.2rem) rotate(0deg);
-          }
-        }
-
-        div {
-          position: absolute;
-          top: 1.8rem;
-          right: 1.4rem;
-          font-size: 0.6rem;
-          text-align: center;
-        }
-      }
-
-      .active {
-        z-index: 104;
-
-        span {
-          background: red;
-          transition: all 0.5s;
-
-          &:nth-child(1) {
-            transform: translateY(0) rotate(45deg);
-          }
-
-          &:nth-child(3) {
-            transform: translateY(0) rotate(-45deg);
-          }
-
-          &:nth-child(2) {
-            opacity: 0;
-          }
-        }
-      }
-    }
-
-    &--search {
-      margin-top: 30vh;
-      text-align: center;
-    }
-
-    &--daily-rank {
-      display: block;
-      margin: 2rem;
-      text-align: center;
-
-      p {
-        margin: 0.8rem;
-        text-align: center;
-        color: $white;
-        font-size: 1rem;
-      }
-    }
-
-    &--help {
-      color: $white;
-      text-align: center;
-
-      a {
-        font-size: 1.4rem;
-      }
-    }
-  }
-
-  &__dialog {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    font-size: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &--content {
-      position: relative;
-      width: 80vw;
-      z-index: 999;
-    }
-
-    &--mask {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
+.home
+  display flex
+  box-sizing border-box
+  width 100vw
+  height 100vh
+  flex-direction column
+  overflow hidden
+  &__background
+    width 100vw
+    height 100vh
+    position absolute
+    z-index -1
+    overflow hidden
+    img
+      width 100%
+      height 100%
+      object-fit cover
+  &__content
+    flex 1
+    &--header
+      display flex
+      justify-content space-between
+      color #fff
+      &-right, &-left
+        margin 1.2rem
+        img
+          width 3rem
+          margin-top 0.6rem
+          border-radius 50%
+        span
+          position absolute
+          width 2rem
+          height 1.8px
+          margin-top 1rem
+          background-color rgba(255, 255, 255, 1)
+          &:nth-child(1)
+            transform translateY(0.6rem) rotate(0deg)
+          &:nth-child(3)
+            transform translateY(1.2rem) rotate(0deg)
+        div
+          position absolute
+          top 1.8rem
+          right 1.4rem
+          font-size 0.6rem
+          text-align center
+      .active
+        z-index 104
+        span
+          background red
+          transition all 0.5s
+          &:nth-child(1)
+            transform translateY(0) rotate(45deg)
+          &:nth-child(3)
+            transform translateY(0) rotate(-45deg)
+          &:nth-child(2)
+            opacity 0
+    &--search
+      margin-top 30vh
+      text-align center
+    &--daily-rank
+      display block
+      margin 2rem
+      text-align center
+      p
+        margin 0.8rem
+        text-align center
+        color $white
+        font-size 1rem
+    &--help
+      color $white
+      text-align center
+      a
+        font-size 1.4rem
+  &__dialog
+    position fixed
+    width 100%
+    height 100%
+    font-size 1rem
+    display flex
+    justify-content center
+    align-items center
+    &--content
+      position relative
+      width 80vw
+      z-index 999
+    &--mask
+      position fixed
+      width 100%
+      height 100%
+      left 0
+      top 0
       // background rgba(51, 163, 220, .3)
-      background-color: transparent;
-      z-index: 200;
-    }
-  }
-
-  &__login {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 2rem;
-    height: 2rem;
-    overflow: hidden;
-    background-color: #FFB5C5;
-    border-radius: 50%;
-    transition: all 1000ms, 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-    &--bobble {
-      transform: scale(50);
-      font-size: 0 !important;
-    }
-  }
-}
+      background-color transparent
+      z-index 200
+  &__login
+    display flex
+    justify-content center
+    align-items center
+    width 3rem
+    height 3rem
+    overflow hidden
+    // background-color #FFB5C5
+    border-radius 50%
+    transition all 1000ms, 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55)
+    transition-timing-function cubic-bezier(0.68, -0.55, 0.265, 1.55)
+    img
+      width 100%
+      height 100%
+    // &--bobble
+    //   transform scale(50)
 </style>
