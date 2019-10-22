@@ -224,7 +224,7 @@ export default {
             transform translateY(1.2rem) rotate(0deg)
         div
           position absolute
-          top 1.8rem
+          // top 1.8rem
           right 1.4rem
           font-size 0.6rem
           text-align center
