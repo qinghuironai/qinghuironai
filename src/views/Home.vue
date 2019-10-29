@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <swiper :options="swiperOption" class="home__background">
+    <swiper
+      :options="swiperOption"
+      class="home__background"
+    >
       <swiper-slide>
         <img src="../assets/images/background/bg1.jpg" />
       </swiper-slide>
@@ -11,10 +14,13 @@
         <img src="../assets/images/background/bg3.jpg" />
       </swiper-slide>
     </swiper>
-    <Snow />
+    <!-- <Snow /> -->
     <div class="home__content">
       <div class="home__content--header">
-        <div :class="[{ active: showLeftSlider }, 'home__content--header-left']" @click="openLeft">
+        <div
+          :class="[{ active: showLeftSlider }, 'home__content--header-left']"
+          @click="openLeft"
+        >
           <!-- <img src="../assets/images/菜单.svg" alt="" :class="{ rotate: showLeftSlider }"> -->
           <span></span>
           <span></span>
@@ -30,22 +36,36 @@
           />
           <div
             :class="['home__login', { 'home__login--bobble': isBobble }]"
-            ref="bobble"
             @click="goLogin"
+            ref="bobble"
             v-else
           >
-            <img ref="avatar" src="../assets/images/注册.svg" alt />
+            <img
+              alt
+              ref="avatar"
+              src="../assets/images/注册.svg"
+            />
           </div>
         </div>
       </div>
-      <div class="home__content--search" v-show="!isShow">
-        <TextInput :showCat="showCat" v-on:enter="popSearch" v-show="showInput" />
+      <div
+        class="home__content--search"
+        v-show="!isShow"
+      >
+        <TextInput
+          :showCat="showCat"
+          v-on:enter="popSearch"
+          v-show="showInput"
+        />
       </div>
     </div>
     <LeftSlider :showLeftSlider.sync="showLeftSlider" />
     <RightSlider :showRightSlider.sync="showRightSlider" />
     <!-- 登录注册弹窗 -->
-    <div class="home__dialog" v-show="isShow">
+    <div
+      class="home__dialog"
+      v-show="isShow"
+    >
       <div class="home__dialog--content">
         <Login
           @closeLogin="closeLogin"
@@ -54,17 +74,27 @@
           class="animated jackInTheBox"
           v-show="status === 'login'"
         />
-        <Register @signIn="sign" class="animated jackInTheBox" v-show="status === 'register'" />
-        <FindPwd class="animated jackInTheBox" v-show="status === 'find'" />
+        <Register
+          @signIn="sign"
+          class="animated jackInTheBox"
+          v-show="status === 'register'"
+        />
+        <FindPwd
+          class="animated jackInTheBox"
+          v-show="status === 'find'"
+        />
       </div>
-      <div @click="close" class="home__dialog--mask"></div>
+      <div
+        @click="close"
+        class="home__dialog--mask"
+      ></div>
     </div>
   </div>
 </template>
 
 <script>
 import TextInput from '@/components/TextInput'
-import Snow from '@/components/Snow'
+// import Snow from '@/components/Snow';
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import FindPwd from '@/components/FindPwd'
@@ -76,7 +106,7 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
   name: 'Home',
   components: {
-    Snow,
+    // Snow,
     TextInput,
     Login,
     Register,
@@ -119,7 +149,7 @@ export default {
       swiperOption: {
         loop: true,
         autoplay: true,
-        delay: 3000,
+        delay: 6000,
         effect: 'fade'
       }
     }
