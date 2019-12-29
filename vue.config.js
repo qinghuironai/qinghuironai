@@ -8,19 +8,37 @@ console.log('Url prefix: ', process.env.PREFIX)
 
 module.exports = {
   lintOnSave: false,
-  publicPath: process.env.PREFIX,
+  // publicPath: process.env.PREFIX,
+  publicPath: './',
+
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'stylus',
       patterns: [
-        path.join(__dirname, './src/style/mixin.styl'),
-        path.join(__dirname, './src/style/color.styl')
+        'D:\\project\\learn\\pixivic-mobile-master\\pixivic-mobile-master\\src\\style\\mixin.styl',
+        'D:\\project\\learn\\pixivic-mobile-master\\pixivic-mobile-master\\src\\style\\color.styl'
       ]
+    },
+    'cube-ui': {
+      postCompile: true,
+      theme: true
     }
   },
+
   // 路径别名
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
+  },
+
+  css: {
+    loaderOptions: {
+      stylus: {
+        'resolve url': true,
+        'import': [
+          './src/theme'
+        ]
+      }
+    }
   }
 }

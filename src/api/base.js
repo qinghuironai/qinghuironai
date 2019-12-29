@@ -4,8 +4,8 @@ import router from '../router'
 
 // 创建axios实例
 const instance = axios.create({
-  // baseURL: 'https://api.pixivic.com',
-  baseURL: 'https://v1.api.pixivic.com',
+  baseURL: 'https://api.pixivic.com',
+  // baseURL: 'https://v1.api.pixivic.com',
   // baseURL: "https://search.api.pixivic.com",
   // baseURL: 'http://114.67.107.177:8080',
   headers: {
@@ -33,10 +33,15 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     if (response.headers.hasOwnProperty('Authorization')) {
-      cookie.set('jwt', response.headers.Authorization, { expires: 365 })
+      cookie.set('jwt', response.headers.Authorization, {
+        expires: 365
+      })
     }
     if (response.status === 401) {
-      this.$aMsg.error('身份验证过期，请重新登录')
+      this.$createToast({
+        txt: '身份验证过期，请重新登录',
+        type: 'txt'
+      }).show()
       cookie.remove('jwt')
       localStorage.remove('user')
       router.push('/')

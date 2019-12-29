@@ -4,16 +4,18 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const pages = {
-  Home: () => import('./views/Home'),
-  DailyRank: () => import('./views/DailyRank'),
-  Detail: () => import('./views/Detail.vue'),
-  PopSearch: () => import('./views/PopSearch'),
-  Intro: () => import('./views/Intro'),
-  Links: () => import('./views/Links'),
-  Donate: () => import('./views/Donate'),
-  Comments: () => import('./views/Comments'),
-  ResetPassword: () => import('./views/ResetPassword.vue'),
-  NotFound: () => import('./views/NotFound')
+  DailyRank: () => import('./views/rank/DailyRank'),
+  Detail: () => import('./views/detail/Detail'),
+  Artist: () => import('./views/artist/Artist'),
+  Search: () => import('./views/search/Search'),
+  Find: () => import('./views/find/Find'),
+  Me: () => import('./views/me/Me'),
+  NotFound: () => import('./views/not-found/NotFound')
+}
+
+const originalPush = Router.prototype.push
+Router.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
 }
 
 export default new Router({
@@ -23,61 +25,64 @@ export default new Router({
     if (savedPosition) {
       return savedPosition
     } else {
-      return { x: 0, y: 0 }
+      return {
+        x: 0,
+        y: 0
+      }
     }
   },
-  routes: [
-    {
-      path: '/',
-      name: 'Home',
-      component: pages.Home
-    },
-    {
-      path: '/detail/:pid',
-      name: 'Detail',
-      component: pages.Detail,
-      props: true
-    },
-    {
-      path: '/dailyRank',
-      name: 'DailyRank',
-      component: pages.DailyRank
-    },
-    {
-      path: '/popSearch',
-      name: 'PopSearch',
-      component: pages.PopSearch,
-      props: route => ({ ...route.query })
-    },
-    {
-      path: '/intro',
-      name: 'Intro',
-      component: pages.Intro
-    },
-    {
-      path: '/links',
-      name: 'Links',
-      component: pages.Links
-    },
-    {
-      path: '/donate',
-      name: 'Donate',
-      component: pages.Donate
-    },
-    {
-      path: '/comments',
-      name: 'Comments',
-      component: pages.Comments
-    },
-    {
-      path: '/resetPassword',
-      name: 'ResetPassword',
-      component: pages.ResetPassword
-    },
-    {
-      path: '/404',
-      name: 'NotFound',
-      component: pages.NotFound
+  routes: [{
+    path: '/',
+    redirect: '/dailyRank'
+  },
+  {
+    path: '/detail/:pid',
+    name: 'Detail',
+    component: pages.Detail,
+    props: true
+  },
+  {
+    path: '/artist/:artistId',
+    name: 'Artist',
+    component: pages.Artist,
+    props: true
+  },
+  {
+    path: '/dailyRank',
+    name: 'DailyRank',
+    component: pages.DailyRank
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: pages.Search,
+    meta: {
+      noCache: false
     }
+  },
+  {
+    path: '/find',
+    name: 'Find',
+    component: pages.Find,
+    meta: {
+      noCache: true
+    }
+  },
+  {
+    path: '/me',
+    name: 'Me',
+    component: pages.Me,
+    meta: {
+      noCache: true
+    }
+  },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: pages.NotFound,
+    meta: {
+      noCache: false
+    }
+  }
   ]
 })

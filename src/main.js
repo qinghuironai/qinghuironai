@@ -1,34 +1,28 @@
 import Vue from 'vue'
-import VueTouch from 'vue-touch'
+import './cube-ui'
 import VueLazyload from 'vue-lazyload'
-import vueiInfinite from 'vue-infinite-scroll'
-import AMsg from 'amsg'
 import animated from 'animate.css'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store/'
 import api from './api'
 import util from './util'
-import Confirm from './components/confirm/index'
+import Mixin from './mixins'
 import './style/index.styl'
-import './assets/icon/iconfont.css'
+import 'amfe-flexible'
 
 // import VConsole from 'vconsole'
 
+// eslint-disable-next-line no-new
 // new VConsole()
 Vue.config.productionTip = false
-Vue.use(AMsg, { color: ['#b9eee5'] })
-Vue.use(VueTouch, { name: 'v-touch' })
-VueTouch.config.swipe = {
-  threshold: 100
-}
 Vue.use(VueLazyload, {
-  loading: require('@/assets/images/loading.svg'),
+  // loading: require('@/assets/images/loading2.svg'),
+  loading: require('@/assets/images/loading.gif'),
   error: require('@/assets/images/loading.svg')
 })
-Vue.use(vueiInfinite)
 Vue.use(animated)
-Vue.use(Confirm)
+Vue.mixin(Mixin)
 Vue.prototype.$api = api
 Vue.prototype.$util = util
 

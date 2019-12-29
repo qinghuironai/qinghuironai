@@ -15,14 +15,59 @@ function getSearch (params) {
   return axios({
     url: `/illustrations`,
     method: 'get',
-    params: { ...params, pageSize: 30 }
+    params: {
+      ...params,
+      pageSize: 30
+    }
   })
 }
 
+// 获取该搜索词相关联的tag
 function getTags (param) {
   return axios({
-    url: `/keywords/${format(param)}/pixivSuggestions`
+    url: `/keywords/${format(param)}/pixivSuggestions`,
+    method: 'get'
   })
 }
 
-export { getSearch, getTags, getKeyword }
+// 获取该搜索词的专属词条（往往是一些词汇所对应的acg作品名称）
+function getExclusive (param) {
+  return axios({
+    url: `/keywords/${format(param)}/suggestions`,
+    method: 'get'
+  })
+}
+
+function getTranslations (param) {
+  return axios({
+    url: `/keywords/${format(param)}/translations`,
+    method: 'get'
+  })
+}
+
+// 图片上传
+function uploadImg (data, isTemp = true) {
+  return axios({
+    url: `https://pic.pixivic.com/upload?isTemp=${isTemp}`,
+    method: 'post',
+    data
+  })
+}
+
+// 以图搜图
+function searchByImg (imageUrl) {
+  return axios({
+    url: `https://api.pixivic.com/similarityImages?imageUrl=${imageUrl}`,
+    method: 'get'
+  })
+}
+
+export {
+  getSearch,
+  getTags,
+  getKeyword,
+  getTranslations,
+  getExclusive,
+  uploadImg,
+  searchByImg
+}
