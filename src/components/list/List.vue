@@ -61,7 +61,7 @@ export default {
   methods: {
     goDetail (column) {
       if (column.xrestrict === 1 || column.sanityLevel > 6) return
-      this.$router.push(`/detail/${column.pid}`)
+      this.$router.push(`/detail/${column.id}`)
     },
     goArtist (artistId) {
       this.$router.push(`/artist/${artistId}`)
