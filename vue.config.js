@@ -8,8 +8,8 @@ console.log('Url prefix: ', process.env.PREFIX)
 
 module.exports = {
   lintOnSave: false,
-  // publicPath: process.env.PREFIX,
-  publicPath: './',
+  publicPath: process.env.PREFIX,
+  // publicPath: './',
 
   pluginOptions: {
     'style-resources-loader': {
