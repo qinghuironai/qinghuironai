@@ -142,7 +142,7 @@ export default {
       this.getTags(val)
       this.getExclusive(val)
     },
-    getData (options = {}) {
+    getData () {
       if (this.noData) {
         return this.$refs.scroll.forceUpdate()
       }
@@ -156,7 +156,7 @@ export default {
         // xRestrict: 1,
         // maxSanityLevel: 10
       }
-      const params = Object.assign(param, options)
+      const params = Object.assign(param, this.optionsParams)
       this.$api.search.getSearch(params).then(res => {
         if (!res.data.data.illustrations.length) {
           this.$refs.scroll.forceUpdate()
@@ -276,6 +276,14 @@ export default {
     box-sizing border-box
     >i
       flex-basis 40px
+      position relative
+      &:after
+        content ''
+        position absolute
+        top -10px
+        right -10px
+        bottom -10px
+        left 0
     .menu
       text-align right
     .input

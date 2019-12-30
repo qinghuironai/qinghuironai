@@ -49,13 +49,13 @@ const dateSegmentData = [
     is: 'cube-date-picker',
     title: '开始时间',
     min: new Date(2008, 0, 1),
-    max: new Date(2030, 11, 31)
+    max: new Date()
   },
   {
     is: 'cube-date-picker',
     title: '结束时间',
     min: new Date(2008, 0, 1),
-    max: new Date(2030, 11, 31)
+    max: new Date()
   }
 ]
 

@@ -139,7 +139,7 @@ export default {
       text-align center
       position relative
       overflow hidden
-      background-color #5c5c5c
+      // background-color #5c5c5c
       >img
         width 100%
         height 100%
@@ -148,6 +148,8 @@ export default {
         transition opacity 0.3s
         opacity 1
         object-fit cover
+      img[lazy=loading]
+        transform scale(0.2)
     .top__content
       padding 10px
       .title

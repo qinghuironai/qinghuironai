@@ -18,7 +18,7 @@ import 'amfe-flexible'
 Vue.config.productionTip = false
 Vue.use(VueLazyload, {
   // loading: require('@/assets/images/loading2.svg'),
-  loading: require('@/assets/images/loading.gif'),
+  loading: require('@/assets/images/loading.svg'),
   error: require('@/assets/images/loading.svg')
 })
 Vue.use(animated)
