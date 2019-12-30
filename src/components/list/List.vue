@@ -131,13 +131,18 @@ export default {
       .item-content
         width 100%
         height calc(100% - 50px)
+        display flex
+        justify-content center
+        align-items center
         img
           width 100%
           height 100%
           object-fit cover
           border-radius 5px 5px 0 0
         img[lazy=loading]
-          transform scale(0.3)
+          // transform scale(0.3)
+          width 50px
+          height 50px
       .isSetu
         position relative
         img:first-child

@@ -140,6 +140,9 @@ export default {
       position relative
       overflow hidden
       // background-color #5c5c5c
+      display flex
+      justify-content center
+      align-items center
       >img
         width 100%
         height 100%
@@ -149,7 +152,9 @@ export default {
         opacity 1
         object-fit cover
       img[lazy=loading]
-        transform scale(0.2)
+        // transform scale(0.3)
+        width 50px
+        height 50px
     .top__content
       padding 10px
       .title
