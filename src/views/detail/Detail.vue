@@ -153,8 +153,8 @@ export default {
         object-fit cover
       img[lazy=loading]
         // transform scale(0.3)
-        width 50px
-        height 50px
+        width 100px
+        height 100px
     .top__content
       padding 10px
       .title
