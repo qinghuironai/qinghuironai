@@ -71,7 +71,7 @@ export default {
   right 0
   bottom 0
   background #ffffff
-  height 60px
+  height 50px
   z-index 2
   .cube-tab
     >i

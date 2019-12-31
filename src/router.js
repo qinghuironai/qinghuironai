@@ -86,3 +86,18 @@ export default new Router({
   }
   ]
 })
+
+// 没有 tabs 切换情况
+// let routerList = []
+// router.beforeEach((to, from, next) => {
+//   if (routerList.length && routerList.indexOf(to.name) === routerList.length - 1) {
+//     // 后退
+//     routerList.splice(routerList.length - 1, 1)
+//     to.meta.isBack = true
+//   } else {
+//     // 前进
+//     routerList.push(from.name || '/')
+//     to.meta.isBack = false
+//   }
+//   next()
+// })

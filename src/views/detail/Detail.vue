@@ -3,9 +3,14 @@
               leave-active-class="animated rollOut"
               :duration="200">
     <div class="detail">
-      <cube-scroll v-if="illustDetail"
-                   class="detail__scroll"
-                   :data="pictureList">
+      <Scroll
+        v-if="illustDetail"
+        :data="pictureList"
+        ref="scroll"
+        :options="options"
+        :loading="loading"
+        @onPullingUp="onPullingUp"
+      >
         <div class="detail__top animated zoomIn">
           <div class="top__img"
                :style="`height: ${illustDetail.itemHeight}px`"
@@ -33,27 +38,23 @@
         </div>
         <h2 class="detail__middle"
             v-if="pictureList.length">相关作品</h2>
-        <List :list="pictureList" />
-      </cube-scroll>
+      </Scroll>
       <Bottom :detail="illustDetail"
               @handleClick="handleClick" />
-      <Loading v-if="loading" />
     </div>
   </transition>
 </template>
 
 <script>
 import dayjs from 'dayjs'
-import List from '@/components/list/List'
-import Loading from '@/components/loading/Loading'
+import Scroll from '@/components/scroll/Scroll'
 import Bottom from './bottom/Bottom'
 
 export default {
   name: 'Detail',
   components: {
-    List,
-    Loading,
-    Bottom
+    Bottom,
+    Scroll
   },
   props: {
     pid: {
@@ -66,7 +67,9 @@ export default {
       pictureList: [],
       illustDetail: null,
       illustType: 'illust',
-      loading: false
+      loading: false,
+      page: 1,
+      noData: false
     }
   },
   computed: {
@@ -74,6 +77,17 @@ export default {
       return this.illustDetail.imageUrls.reduce((pre, cur) => {
         return pre.concat(`${this.PREFIX + cur.original}`)
       }, [])
+    },
+    options () {
+      return {
+        pullUpLoad: {
+          threshold: 0,
+          txt: { more: '上拉加载更多', noMore: '(￣ˇ￣)俺也是有底线的' },
+          visible: false
+        },
+        scrollbar: true,
+        probeType: 3
+      }
     }
   },
   mounted () {
@@ -94,10 +108,22 @@ export default {
         })
     },
     getRelatedList () {
+      if (this.noData) {
+        return this.$refs.scroll.forceUpdate()
+      }
+      const data = {
+        page: this.page++,
+        illustId: this.pid
+      }
       this.$api.detail
-        .reqRelatedIllust(this.pid)
+        .reqRelatedIllust(data)
         .then(res => {
-          this.pictureList = res.data.data || []
+          if (!res.data.data.length) {
+            this.$refs.scroll.forceUpdate()
+            this.noData = true
+            return
+          }
+          this.pictureList = this.pictureList.concat(res.data.data)
         })
     },
     showImagePreview () {
@@ -107,6 +133,9 @@ export default {
     },
     handleClick () {
       this.$router.back()
+    },
+    onPullingUp () {
+      this.getRelatedList()
     }
   },
   filters: {
@@ -114,6 +143,15 @@ export default {
       return dayjs(val).format('YYYY-MM-DD HH:mm')
     }
   }
+  // 会出现 前进后退都是 Detail 的情况
+  // beforeRouteLeave (to, from, next) {
+  //   console.log('to', to)
+  //   console.log('from', from) // Detail
+  //   let cache = this.$vnode.parent.componentInstance.cache
+  //   let keys = this.$vnode.parent.componentInstance.keys
+  //   console.log('cache', cache) // {/dailyRank: VNode, /search: VNode, /detail/48233212: VNode}
+  //   console.log('keys', keys) // ["/dailyRank", "/search", "/detail/48233212"]
+  // }
 }
 </script>
 <style lang="stylus" scoped>

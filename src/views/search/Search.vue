@@ -15,8 +15,6 @@
           <i class="iconfont icon-xiangji1">
           </i>
           <div class="save">
-            <!-- <label class="btn"
-                   for="uploads">头像上传</label> -->
             <input type="file"
                    id="uploads"
                    accept="image/png, image/jpeg, image/gif, image/jpg"
@@ -44,34 +42,16 @@
       </div>
       <div class="search-content"
            v-else>
-        <!-- dom长列表优化版本 暂未实现 -->
-        <!-- <cube-recycle-list :data="pictureList"
-                           :size="30"
-                           :on-fetch="onFetch"
-                           :offset="100"
-                           class="list">
-          <template slot="item"
-                    slot-scope="{ data }">
-            <div :id="data.id"
-                 class="item"
-                 style="width: 50vw;"
-                 @click="handleClick(data)">
-              {{data.title}}
-            </div>
-          </template>
-        </cube-recycle-list> -->
-        <cube-scroll :data="pictureList"
-                     :options="options"
-                     ref="scroll"
-                     class="scroll"
-                     @pulling-up="onPullingUp">
-          <Tags :data="tags"
+        <!-- dom长列表优化版本 recycle-list 暂未实现 -->
+        <Scroll :data="pictureList"
+                :options="options"
+                ref="scroll"
+                @pulling-up="onPullingUp">
+          <Tags v-for="(item, index) in [tags, exclusive]"
+                :key="index"
+                :data="item"
                 @handleClick="clickTag" />
-          <Tags :data="exclusive"
-                @handleClick="clickTag" />
-          <List :list="pictureList" />
-        </cube-scroll>
-        <Loading v-if="loading" />
+        </Scroll>
       </div>
       <search-options ref="options"
                       @searchFor="searchFor"></search-options>
@@ -81,18 +61,16 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import Loading from '@/components/loading/Loading'
-import List from '@/components/list/List'
 import searchOptions from './options/Options'
 import Tags from '@/components/tags/Tags'
+import Scroll from '@/components/scroll/Scroll'
 
 export default {
   name: 'Search',
   components: {
-    Loading,
-    List,
     searchOptions,
-    Tags
+    Tags,
+    Scroll
   },
   data () {
     return {
@@ -239,22 +217,22 @@ export default {
   activated () {
     // ?
     this.$refs.scroll && this.$refs.scroll.refresh()
+  },
+  beforeRouteLeave (to, from, next) {
+    if (to.name === 'Detail' || to.name === 'Artist') {
+      // 去详情和作者页面 (前进) 不需销毁
+      next()
+    } else {
+      // 返回排行页 清除缓存并销毁该组件 (后退)
+      let cache = this.$vnode.parent.componentInstance.cache
+      let keys = this.$vnode.parent.componentInstance.keys
+      delete cache['/search']
+      let index = keys.indexOf('/search')
+      keys.splice(index, 1)
+      this.$destroy()
+      next()
+    }
   }
-  // beforeRouteLeave (to, from, next) {
-  //   console.log('to', to)
-  //   console.log('from', from)
-  //   if (to.name === 'Detail' || to.name === 'Artist') {
-  //     if (from.meta.noCache) {
-  //       from.meta.noCache = false
-  //     }
-  //     this.$store.dispatch('addCachedView', this.$route)
-  //     next()
-  //   } else {
-  //     from.meta.noCache = true
-  //     this.$destroy()
-  //     next()
-  //   }
-  // }
 }
 </script>
 
