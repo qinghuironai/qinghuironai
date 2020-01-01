@@ -147,10 +147,11 @@ export default {
       onSelect: (selectedDates, selectedVals, selectedTexts) => {
         console.log(selectedTexts)
         this.form.beginDate = selectedTexts[0].reduce((pre, cur) => {
-          return pre + (pre ? '/' : '') + cur
+          return pre + (pre ? '-' : '') + (cur < 10 ? '0' + cur : cur)
         }, '')
+        console.log(this.form.beginDate)
         this.form.endDate = selectedTexts[1].reduce((pre, cur) => {
-          return pre + (pre ? '/' : '') + cur
+          return pre + (pre ? '-' : '') + (cur < 10 ? '0' + cur : cur)
         }, '')
       },
       onNext: (i, selectedDate, selectedValue, selectedText) => {

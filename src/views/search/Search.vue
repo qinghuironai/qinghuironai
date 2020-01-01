@@ -36,15 +36,6 @@
         </div>
         <div v-show="!keywords.length && this.value"
              class="suggest-no">(●'◡'●)ﾉ</div>
-        <div v-show="value"
-             class="suggest-btn">
-          <cube-button :light="true"
-                       @click="translateKeyword">翻译并搜索</cube-button>
-          <cube-button :light="true"
-                       @click="searchType('artist')">用户搜索</cube-button>
-          <cube-button :light="true"
-                       @click="searchType('illust')">画作搜索</cube-button>
-        </div>
       </div>
       <div class="search-content"
            v-else>
@@ -59,6 +50,15 @@
                 :data="item"
                 @handleClick="clickTag" />
         </Scroll>
+      </div>
+      <div v-show="value && isSearch"
+           class="search-btn">
+        <cube-button :light="true"
+                     @click="translateKeyword">翻译并搜索</cube-button>
+        <cube-button :light="true"
+                     @click="searchType('artist')">用户搜索</cube-button>
+        <cube-button :light="true"
+                     @click="searchType('illust')">画作搜索</cube-button>
       </div>
       <search-options ref="options"
                       @searchFor="searchFor"></search-options>
@@ -337,23 +337,23 @@ export default {
         >input
           width 100%
           height 100%
+  .search-btn
+    position fixed
+    top 370px
+    left 0
+    right 0
+    margin 5px 15px
+    // width 50%
+    display flex
+    justify-content center
+    align-items center
+    height 40px
   .search-suggest
     width 100%
     position absolute
     top 80px
     height 300px
     overflow scroll
-    .suggest-btn
-      position fixed
-      top 370px
-      left 0
-      right 0
-      margin 5px 15px
-      // width 50%
-      display flex
-      justify-content center
-      align-items center
-      height 40px
     .suggest-item
       width 100%
       padding 9px 12px 9px 16px

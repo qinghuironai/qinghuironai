@@ -10,8 +10,8 @@
                    @pulling-up="onPullingUp">
         <slot></slot>
         <List :list="data" />
-        <div v-if="!data || !data.length"
-             class="no-result">(●'◡'●)ﾉ暂无结果</div>
+        <!-- <div v-if="!data || !data.length"
+             class="no-result">(●'◡'●)ﾉ暂无结果</div> -->
       </cube-scroll>
     </div>
     <div :class="['top', { 'is-active': showBackUp }]"
