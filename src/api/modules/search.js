@@ -62,6 +62,14 @@ function searchByImg (imageUrl) {
   })
 }
 
+// 获取存在信息
+function getExists (param) {
+  return axios({
+    url: `https://api.pixivic.com/exists/${param.type}/${param.id}`,
+    method: 'get'
+  })
+}
+
 export {
   getSearch,
   getTags,
@@ -69,5 +77,6 @@ export {
   getTranslations,
   getExclusive,
   uploadImg,
-  searchByImg
+  searchByImg,
+  getExists
 }

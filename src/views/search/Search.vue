@@ -9,7 +9,6 @@
           <input v-model="value"
                  ref="input"
                  placeholder="(●'◡'●)ﾉ關鍵字の輸入"
-                 @input="getKeyword"
                  @keyup.enter="enter(value)"
                  @focus="focus" />
           <i class="iconfont icon-xiangji1">
@@ -32,12 +31,19 @@
              :key="index">
           <div class="tag"
                @click="enter(item)">{{item}}</div>
-          <i class="iconfont icon-jiantou-copy-copy-copy"></i>
+          <i class="iconfont icon-jiantou-copy-copy-copy"
+             @click="enter(item)"></i>
         </div>
+        <div v-show="!keywords.length && this.value"
+             class="suggest-no">(●'◡'●)ﾉ</div>
         <div v-show="value"
              class="suggest-btn">
           <cube-button :light="true"
                        @click="translateKeyword">翻译并搜索</cube-button>
+          <cube-button :light="true"
+                       @click="searchType('artist')">用户搜索</cube-button>
+          <cube-button :light="true"
+                       @click="searchType('illust')">画作搜索</cube-button>
         </div>
       </div>
       <div class="search-content"
@@ -45,6 +51,7 @@
         <!-- dom长列表优化版本 recycle-list 暂未实现 -->
         <Scroll :data="pictureList"
                 :options="options"
+                :loading="loading"
                 ref="scroll"
                 @pulling-up="onPullingUp">
           <Tags v-for="(item, index) in [tags, exclusive]"
@@ -94,16 +101,17 @@ export default {
           txt: { more: '上拉加载更多', noMore: '(￣ˇ￣)俺也是有底线的' },
           visible: false
         },
-        scrollbar: true,
+        scrollbar: false,
         probeType: 2
       }
     }
   },
   methods: {
     getKeyword: debounce(function () {
-      this.$api.search.getKeyword(this.value).then(({ data: { data } }) => {
-        this.keywords = data.keywordList
-      })
+      this.$api.search.getKeyword(this.value)
+        .then(({ data: { data } }) => {
+          this.keywords = data.keywordList || []
+        })
     }, 500),
     initParam () {
       this.noData = false
@@ -212,6 +220,28 @@ export default {
       const res = await this.$api.search.searchByImg(result.data.data)
       this.pictureList = res.data.data
       this.loading = false
+    },
+    searchType (type) {
+      const param = {
+        type,
+        id: this.value
+      }
+      this.$api.search.getExists(param)
+        .then(res => {
+          if (res.data.data) {
+            if (type === 'artist') {
+              this.$router.push(`/artist/${this.value}`)
+            } else if (type === 'illust') {
+              this.$router.push(`/detail/${this.value}`)
+            }
+          } else {
+            this.$createDialog({
+              type: 'alert',
+              title: '不存在',
+              icon: 'cubeic-alert'
+            }).show()
+          }
+        })
     }
   },
   activated () {
@@ -232,11 +262,17 @@ export default {
       this.$destroy()
       next()
     }
+  },
+  watch: {
+    value (val) {
+      this.getKeyword()
+    }
   }
 }
 </script>
 
 <style lang="stylus" scope>
+@import '~@/style/color.styl'
 .search
   position fixed
   top 0
@@ -276,7 +312,7 @@ export default {
         // font-size 16px
         box-sizing border-box
         height 40px
-        padding 0 9px
+        padding 0 25px 0 9px
         border-radius 5px
         background-color rgb(245, 245, 245)
         color rgb(31, 31, 31)
@@ -312,8 +348,11 @@ export default {
       top 370px
       left 0
       right 0
-      margin auto
-      width 50%
+      margin 5px 15px
+      // width 50%
+      display flex
+      justify-content center
+      align-items center
       height 40px
     .suggest-item
       width 100%
@@ -335,10 +374,14 @@ export default {
           right -10px
           bottom -10px
           left -10px
+    .suggest-no
+      text-align center
+      color $primary
+      font-size 20px
   .search-content
     width 100%
     position absolute
-    top 80px
+    top 70px
     bottom 0
     left 0
     // 要在这里设置样式 组件内无效

@@ -1,7 +1,6 @@
 <template>
   <transition enter-active-class="animated zoomIn"
-              leave-active-class="animated rollOut"
-              :duration="200">
+              leave-active-class="animated rollOut">
     <div class="artists"
          v-if="artistDetail">
       <Header :title="title"
@@ -25,17 +24,15 @@
            ref="layer"></div>
       <div class="artists__scroll"
            ref="scrollWrapper">
-        <cube-scroll :data="pictureList"
-                     :options="options"
-                     ref="scroll"
-                     class="scroll"
-                     :scroll-events="['scroll']"
-                     @scroll="onScroll"
-                     @pulling-up="onPullingUp">
+        <Scroll :data="pictureList"
+                :options="options"
+                ref="scroll"
+                :scroll-events="['scroll']"
+                @scroll="onScroll"
+                @pulling-up="onPullingUp">
           <cube-button @click="showPicker"
                        :light="true">{{typeText}}({{typeText === '插画' ? illustSum : mangaSum}})</cube-button>
-          <List :list="pictureList" />
-        </cube-scroll>
+        </Scroll>
       </div>
     </div>
   </transition>
@@ -43,10 +40,10 @@
 
 <script>
 import Header from '@/components/header/Header'
-import List from '@/components/list/List'
-// import Loading from '@/components/Loading'
+import Scroll from '@/components/scroll/Scroll'
 const OFFSET = 10
 const HEADER_HEIGHT = 40
+
 export default {
   name: 'Artist',
   props: {
@@ -57,8 +54,7 @@ export default {
   },
   components: {
     Header,
-    List
-    // Loading
+    Scroll
   },
   computed: {
     options () {
@@ -93,10 +89,6 @@ export default {
     this.getArtistInfo()
     this.getArtistList()
     this.getSummary()
-    // 要数据获取完 nextTick 才能得到dom
-    // this.$nextTick(() => {
-    //   console.log(this.$refs.imgWrapper.offsetHeight)
-    // })
   },
   methods: {
     init () {
@@ -276,9 +268,8 @@ export default {
     bottom 0
     right 0
     z-index 51
-    >div
-      position absolute
-      left 0
-      width 100%
-      overflow visible
+    .scroll-list
+      .scroll-container
+        .cube-scroll-wrapper
+          overflow visible !important
 </style>

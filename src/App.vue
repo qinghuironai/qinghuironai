@@ -23,18 +23,18 @@
 export default {
   data () {
     return {
-      selectedLabelSlots: 'dailyRank',
+      selectedLabelSlots: '/dailyRank',
       tabs: [{
         label: '排名',
-        value: 'dailyRank',
+        value: '/dailyRank',
         icon: 'iconfont icon-paiming'
       }, {
         label: '发现',
-        value: 'find',
+        value: '/find',
         icon: 'iconfont icon-faxian'
       }, {
         label: '我的',
-        value: 'me',
+        value: '/me',
         icon: 'iconfont icon-xiaolian'
       }]
     }
@@ -51,14 +51,13 @@ export default {
   },
   methods: {
     changeHandler (value) {
-      this.$router.push(`/${value}`)
+      this.$router.push(value)
     }
   },
   watch: {
     $route (val) {
-      if (val.name) {
-        this.$store.dispatch('addCachedView', val)
-      }
+      this.selectedLabelSlots = val.path
+      this.$store.dispatch('addCachedView', val)
     }
   }
 }
@@ -71,7 +70,7 @@ export default {
   right 0
   bottom 0
   background #ffffff
-  height 50px
+  height 60px
   z-index 2
   .cube-tab
     >i

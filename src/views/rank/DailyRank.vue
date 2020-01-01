@@ -1,16 +1,12 @@
 <template>
   <div class="rank">
-    <Scroll
-      ref="scroll"
-      :data="pictureList"
-      :options="options"
-      :loading="loading"
-      @onPullingUp="onPullingUp"
-    >
-      <Header
-        @selectMode="selectMode"
-        @selectDate="selectDate"
-      />
+    <Scroll ref="scroll"
+            :data="pictureList"
+            :options="options"
+            :loading="loading"
+            @pulling-up="onPullingUp">
+      <Header @selectMode="selectMode"
+              @selectDate="selectDate" />
     </Scroll>
   </div>
 </template>
@@ -44,7 +40,7 @@ export default {
           txt: { more: '上拉加载更多', noMore: '(￣ˇ￣)俺也是有底线的' },
           visible: false
         },
-        scrollbar: true,
+        scrollbar: false,
         probeType: 3
       }
     }
