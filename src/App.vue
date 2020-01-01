@@ -1,19 +1,35 @@
+<!--
+ * @Author: Dongzy
+ * @since: 2019-10-10 22:04:08
+ * @lastTime     : 2020-01-01 13:23:03
+ * @LastAuthor   : Dongzy
+ * @文件相对于项目的路径: \code\pixivic-mobile\src\App.vue
+ * @message:
+ -->
 <template>
   <div id="app">
-    <keep-alive :include="cachedViews"
-                :max="10">
+    <keep-alive
+      :include="cachedViews"
+      :max="10"
+    >
       <router-view :key="key" />
     </keep-alive>
-    <cube-tab-bar v-model="selectedLabelSlots"
-                  class="tabs"
-                  :inline="false"
-                  @change="changeHandler">
-      <cube-tab v-for="(item, index) in tabs"
-                :label="item.label"
-                :value="item.value"
-                :key="index">
-        <i slot="icon"
-           :class="item.icon"></i>
+    <cube-tab-bar
+      :inline="false"
+      @change="changeHandler"
+      class="tabs"
+      v-model="selectedLabelSlots"
+    >
+      <cube-tab
+        :key="index"
+        :label="item.label"
+        :value="item.value"
+        v-for="(item, index) in tabs"
+      >
+        <i
+          :class="item.icon"
+          slot="icon"
+        ></i>
       </cube-tab>
     </cube-tab-bar>
   </div>
@@ -23,20 +39,24 @@
 export default {
   data () {
     return {
-      selectedLabelSlots: 'dailyRank',
-      tabs: [{
-        label: '排名',
-        value: 'dailyRank',
-        icon: 'iconfont icon-paiming'
-      }, {
-        label: '发现',
-        value: 'find',
-        icon: 'iconfont icon-faxian'
-      }, {
-        label: '我的',
-        value: 'me',
-        icon: 'iconfont icon-xiaolian'
-      }]
+      selectedLabelSlots: 'DailyRank',
+      tabs: [
+        {
+          label: '排名',
+          value: 'DailyRank',
+          icon: 'iconfont icon-paiming'
+        },
+        {
+          label: '发现',
+          value: 'Find',
+          icon: 'iconfont icon-faxian'
+        },
+        {
+          label: '我的',
+          value: 'Me',
+          icon: 'iconfont icon-xiaolian'
+        }
+      ]
     }
   },
   computed: {
@@ -52,31 +72,48 @@ export default {
   methods: {
     changeHandler (value) {
       this.$router.push(`/${value}`)
+      console.log(this.$route)
     }
   },
   watch: {
-    $route (val) {
-      if (val.name) {
-        this.$store.dispatch('addCachedView', val)
-      }
+    'this.$route': {
+      hander (val) {
+        if (val.name) {
+          this.$store.dispatch('addCachedView', val)
+        }
+      },
+      immediate: false
     }
+
+  },
+  created () {
+    setTimeout(() => {
+      console.log(this.$route.name)
+      this.selectedLabelSlots = this.$route.name
+    }, 200)
   }
 }
 </script>
 
 <style lang="stylus">
-.tabs
-  position fixed
-  left 0
-  right 0
-  bottom 0
-  background #ffffff
-  height 50px
-  z-index 2
-  .cube-tab
-    >i
-      font-size 18px
-    >div
-      font-size 16px
-      margin-top 5px
+.tabs {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  height: 50px;
+  z-index: 2;
+
+  .cube-tab {
+    >i {
+      font-size: 18px;
+    }
+
+    >div {
+      font-size: 16px;
+      margin-top: 5px;
+    }
+  }
+}
 </style>
