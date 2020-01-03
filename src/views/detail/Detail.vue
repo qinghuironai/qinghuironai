@@ -3,14 +3,12 @@
               leave-active-class="animated rollOut"
               :duration="200">
     <div class="detail">
-      <Scroll
-        v-if="illustDetail"
-        :data="pictureList"
-        ref="scroll"
-        :options="options"
-        :loading="loading"
-        @onPullingUp="onPullingUp"
-      >
+      <Scroll v-if="illustDetail"
+              :data="pictureList"
+              ref="scroll"
+              :options="options"
+              :loading="loading"
+              @pulling-up="onPullingUp">
         <div class="detail__top animated zoomIn">
           <div class="top__img"
                :style="`height: ${illustDetail.itemHeight}px`"
@@ -22,6 +20,7 @@
             <h2 class="title">{{illustDetail.title}}</h2>
             <div class="artist">
               <img :src="PREFIX + illustDetail.artistPreView.avatar"
+                   @click="goArtist"
                    alt="" />
               <h2>{{illustDetail.artistPreView.name}}</h2>
             </div>
@@ -118,7 +117,8 @@ export default {
       this.$api.detail
         .reqRelatedIllust(data)
         .then(res => {
-          if (!res.data.data.length) {
+          console.log(res)
+          if (!res.data.data) {
             this.$refs.scroll.forceUpdate()
             this.noData = true
             return
@@ -136,6 +136,9 @@ export default {
     },
     onPullingUp () {
       this.getRelatedList()
+    },
+    goArtist () {
+      this.$router.push(`/artist/${this.illustDetail.artistId}`)
     }
   },
   filters: {

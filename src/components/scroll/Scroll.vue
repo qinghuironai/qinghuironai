@@ -10,6 +10,8 @@
                    @pulling-up="onPullingUp">
         <slot></slot>
         <List :list="data" />
+        <!-- <div v-if="!data || !data.length"
+             class="no-result">(●'◡'●)ﾉ暂无结果</div> -->
       </cube-scroll>
     </div>
     <div :class="['top', { 'is-active': showBackUp }]"
@@ -53,12 +55,13 @@ export default {
   },
   data () {
     return {
-      showBackUp: false
+      showBackUp: false,
+      scrollY: 0
     }
   },
   methods: {
     onPullingUp () {
-      this.$emit('onPullingUp')
+      this.$emit('pulling-up')
     },
     onScroll (pos) {
       if (pos.y < -300) {
@@ -71,14 +74,17 @@ export default {
       } else {
         this.showBackUp = false
       }
-      this.$emit('onScroll', pos)
+      this.$emit('scroll', pos)
     },
     scrollToTop () {
       // tip: 或者根据滚动的距离 比例来计算所需时间
-      this.$refs.scroll.scrollTo(0, 0, 1000)
+      this.$refs.scroll.scrollTo(0, 0, 2000)
     },
     forceUpdate () {
       this.$refs.scroll.forceUpdate()
+    },
+    refresh () {
+      this.$refs.scroll.refresh()
     }
   }
 }
@@ -96,11 +102,16 @@ export default {
     right 0
     bottom 0
     left 0
+    .scroll
+      .no-result
+        text-align center
+        font-size 24px
+        color $primary
   .top
     position fixed
     width 40px
     height 40px
-    bottom 55px
+    bottom 62px
     left 0
     right 0
     margin auto

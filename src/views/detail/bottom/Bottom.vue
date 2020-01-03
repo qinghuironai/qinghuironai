@@ -23,6 +23,7 @@
 <script>
 import progressCircle from '@/components/circle/Circle'
 import { downloadImage, replaceImg } from '@/util'
+
 export default {
   props: {
     detail: {

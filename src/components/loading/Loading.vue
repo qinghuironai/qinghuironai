@@ -43,7 +43,7 @@ export default {
   left 0
   margin 0
   z-index 100
-  background-color hsla(0, 0%, 100%, 0.9)
+  background-color hsla(0, 0%, 100%, 1)
   transition opacity 0.3s
   .loading-spinner
     position absolute

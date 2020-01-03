@@ -14,7 +14,7 @@
             <img v-lazy="PREFIX + column.imageUrls[0].medium"
                  alt="" />
             <img v-if="column.xrestrict === 1 || column.sanityLevel > 6"
-                 src="../../assets/images/图片.svg"
+                 src="../../assets/images/error.svg"
                  alt="" />
           </div>
           <div class="artist">
@@ -139,7 +139,7 @@ export default {
           height 100%
           object-fit cover
           border-radius 5px 5px 0 0
-        img[lazy=loading]
+        img[lazy=loading], img[lazy=error]
           // transform scale(0.3)
           width 50px
           height 50px

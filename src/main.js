@@ -19,7 +19,7 @@ Vue.config.productionTip = false
 Vue.use(VueLazyload, {
   // loading: require('@/assets/images/loading2.svg'),
   loading: require('@/assets/images/loading.svg'),
-  error: require('@/assets/images/loading.svg')
+  error: require('@/assets/images/error.svg')
 })
 Vue.use(animated)
 Vue.mixin(Mixin)

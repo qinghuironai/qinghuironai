@@ -71,6 +71,7 @@ export default {
   },
   methods: {
     changeHandler (value) {
+
       this.$router.push(`/${value}`)
       console.log(this.$route)
     }
@@ -83,6 +84,7 @@ export default {
         }
       },
       immediate: false
+
     }
 
   },
@@ -96,6 +98,7 @@ export default {
 </script>
 
 <style lang="stylus">
+
 .tabs {
   position: fixed;
   left: 0;
@@ -116,4 +119,5 @@ export default {
     }
   }
 }
+
 </style>

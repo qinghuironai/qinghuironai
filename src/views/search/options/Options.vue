@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import Header from '@/components/header/Header'
 const column1 = [{ text: '插画', value: 'illust' }, { text: '漫画', value: 'manga' }]
 const column2 = [{ text: '原始', value: 'original' }, { text: '自动翻译', value: 'autoTranslate' }]
@@ -49,13 +48,13 @@ const dateSegmentData = [
     is: 'cube-date-picker',
     title: '开始时间',
     min: new Date(2008, 0, 1),
-    max: new Date()
+    max: new Date(2020, 0, 1)
   },
   {
     is: 'cube-date-picker',
     title: '结束时间',
     min: new Date(2008, 0, 1),
-    max: new Date()
+    max: new Date(2020, 0, 1)
   }
 ]
 
@@ -146,8 +145,14 @@ export default {
     this.dateSegmentPicker = this.$createSegmentPicker({
       data: dateSegmentData,
       onSelect: (selectedDates, selectedVals, selectedTexts) => {
-        this.form.beginDate = dayjs(selectedTexts[0]).format('YYYY-MM-DD')
-        this.form.endDate = dayjs(selectedTexts[1]).format('YYYY-MM-DD')
+        console.log(selectedTexts)
+        this.form.beginDate = selectedTexts[0].reduce((pre, cur) => {
+          return pre + (pre ? '-' : '') + (cur < 10 ? '0' + cur : cur)
+        }, '')
+        console.log(this.form.beginDate)
+        this.form.endDate = selectedTexts[1].reduce((pre, cur) => {
+          return pre + (pre ? '-' : '') + (cur < 10 ? '0' + cur : cur)
+        }, '')
       },
       onNext: (i, selectedDate, selectedValue, selectedText) => {
         dateSegmentData[1].min = selectedDate
