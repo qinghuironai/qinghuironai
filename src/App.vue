@@ -22,7 +22,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
 export default {
   data () {
     return {
@@ -48,8 +47,6 @@ export default {
       'showTab'
     ]),
     key () {
-      // 这样写的话 详情返回到排行 排行也每次都变了 回不到原来位置
-      // return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
       return this.$route.fullPath
     }
   },
