@@ -78,7 +78,7 @@ export default {
         } else {
           let winWidth = window.innerWidth
           let itemWidth = (winWidth - 20) / 2
-          let maxHeight = parseInt(itemWidth / 0.8) + 50 // 避免图片太长霸屏
+          let maxHeight = parseInt(itemWidth / 0.7) + 50 // 避免图片太长霸屏
           const list = val.filter(e => !old.includes(e))
           for (let i = list.length - 1; i >= 0; i--) {
             let tmp = list[i]
@@ -114,7 +114,7 @@ export default {
   flex-direction row
   overflow hidden
   position relative
-  padding-bottom 60px
+  // padding-bottom 60px
   background #ffffff
   box-sizing border-box
   .column

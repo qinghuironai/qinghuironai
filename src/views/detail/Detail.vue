@@ -8,7 +8,8 @@
               ref="scroll"
               :options="options"
               :loading="loading"
-              @pulling-up="onPullingUp">
+              :noMore="noMore"
+              @pulling-up="getMoreData">
         <div class="detail__top animated zoomIn">
           <div class="top__img"
                :style="`height: ${illustDetail.itemHeight}px`"
@@ -65,10 +66,9 @@ export default {
     return {
       pictureList: [],
       illustDetail: null,
-      illustType: 'illust',
       loading: false,
       page: 1,
-      noData: false
+      noMore: false
     }
   },
   computed: {
@@ -87,43 +87,59 @@ export default {
         scrollbar: true,
         probeType: 3
       }
+    },
+    param () {
+      return {
+        page: this.page,
+        illustId: this.pid
+      }
     }
   },
   mounted () {
-    // router-view 设置了key 所以每次进来不同的key都会执行
     this.getIllustDetail()
     this.getRelatedList()
   },
   methods: {
     getIllustDetail () {
-      this.loading = true
       this.$api.detail
         .reqIllustDetail(this.pid)
         .then(res => {
-          this.illustDetail = res.data.data
-          const itemHeight = parseInt((this.illustDetail.height / this.illustDetail.width) * window.innerWidth)
-          this.illustDetail.itemHeight = itemHeight
-          this.loading = false
+          const data = res.data.data
+          this.illustDetail = { ...data, itemHeight: parseInt((data.height / data.width) * window.innerWidth) }
         })
     },
-    getRelatedList () {
-      if (this.noData) {
-        return this.$refs.scroll.forceUpdate()
-      }
-      const data = {
-        page: this.page++,
-        illustId: this.pid
-      }
+    getData () {
+      this.loading = true
+      this.page = 1
+      this.pictureList = []
+      this.noMore = false
       this.$api.detail
-        .reqRelatedIllust(data)
+        .reqRelatedIllust(this.param)
         .then(res => {
-          console.log(res)
           if (!res.data.data) {
-            this.$refs.scroll.forceUpdate()
-            this.noData = true
-            return
+            this.noMore = true
+          } else {
+            this.pictureList = res.data.data
           }
-          this.pictureList = this.pictureList.concat(res.data.data)
+          this.loading = false
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    getMoreData () {
+      this.page++
+      this.$api.detail
+        .reqRelatedIllust(this.param)
+        .then(res => {
+          if (!res.data.data) {
+            this.noMore = true
+          } else {
+            this.pictureList = this.pictureList.concat(res.data.data)
+          }
+        })
+        .catch(err => {
+          console.error(err)
         })
     },
     showImagePreview () {
@@ -133,9 +149,6 @@ export default {
     },
     handleClick () {
       this.$router.back()
-    },
-    onPullingUp () {
-      this.getRelatedList()
     },
     goArtist () {
       this.$router.push(`/artist/${this.illustDetail.artistId}`)
@@ -173,27 +186,23 @@ export default {
   &__top
     width 100%
     background $white
-    // border-bottom 1px solid #cccccc
     transition all 0.2s
     .top__img
       max-height 500px
       text-align center
       position relative
       overflow hidden
-      // background-color #5c5c5c
       display flex
       justify-content center
       align-items center
       >img
         width 100%
         height 100%
-        // max-height 600px
         vertical-align middle
         transition opacity 0.3s
         opacity 1
         object-fit cover
       img[lazy=loading]
-        // transform scale(0.3)
         width 100px
         height 100px
     .top__content
@@ -221,7 +230,6 @@ export default {
       .time
         display flex
         align-items center
-        // justify-content space-between
         font-size 14px
         color #cccccc
         >span

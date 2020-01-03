@@ -26,12 +26,13 @@
            ref="scrollWrapper">
         <Scroll :data="pictureList"
                 :options="options"
+                :loading="loading"
+                :noMore="noMore"
                 ref="scroll"
-                :scroll-events="['scroll']"
                 @scroll="onScroll"
-                @pulling-up="onPullingUp">
+                @pulling-up="getMoreData">
           <cube-button @click="showPicker"
-                       :light="true">{{typeText}}({{typeText === '插画' ? illustSum : mangaSum}})</cube-button>
+                       :light="true">{{typeText}}</cube-button>
         </Scroll>
       </div>
     </div>
@@ -43,6 +44,7 @@ import Header from '@/components/header/Header'
 import Scroll from '@/components/scroll/Scroll'
 const OFFSET = 10
 const HEADER_HEIGHT = 40
+const types = [{ text: `插画`, value: 'illust' }, { text: `漫画`, value: 'manga' }]
 
 export default {
   name: 'Artist',
@@ -67,10 +69,24 @@ export default {
         scrollbar: true,
         probeType: 3
       }
+    },
+    param () {
+      return {
+        artistId: this.artistId,
+        type: this.illustType,
+        page: this.page
+      }
+    },
+    typeText () {
+      if (this.illustType === 'illust') {
+        return `插画(${this.illustSum})`
+      } else if (this.illustType === 'manga') {
+        return `漫画(${this.mangaSum})`
+      }
+      return null
     }
   },
   data () {
-    const types = [{ text: `插画`, value: 'illust' }, { text: `漫画`, value: 'manga' }]
     return {
       artistDetail: null,
       title: '画师详情',
@@ -78,16 +94,16 @@ export default {
       pictureList: [],
       imgInitHeight: 0,
       scrollY: 0,
-      types,
-      typeText: '插画',
       page: 1,
       illustSum: 0,
-      mangaSum: 0
+      mangaSum: 0,
+      loading: false,
+      noMore: false
     }
   },
   mounted () {
     this.getArtistInfo()
-    this.getArtistList()
+    this.getData()
     this.getSummary()
   },
   methods: {
@@ -96,9 +112,6 @@ export default {
       this.$refs.scrollWrapper.style.top = `${this.imgInitHeight - OFFSET}px`
       this.$refs.imgWrapper.style.zIndex = -1
       this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET}px`
-    },
-    handleClick () {
-      this.$router.back()
     },
     getArtistInfo () {
       this.$api.detail
@@ -110,24 +123,43 @@ export default {
           })
         })
     },
-    getArtistList () {
-      const params = {
-        artistId: this.artistId,
-        type: this.illustType,
-        page: this.page++
-      }
+    getData () {
+      this.loading = true
+      this.page = 1
+      this.pictureList = []
+      this.noMore = false
       this.$api.detail
-        .reqArtistIllust(params)
+        .reqArtistIllust(this.param)
         .then(res => {
           if (!res.data.data) {
-            this.$refs.scroll.forceUpdate()
-            return
+            this.noMore = true
+          } else {
+            this.pictureList = res.data.data
           }
-          this.pictureList = this.pictureList.concat(res.data.data)
+          this.loading = false
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    getMoreData () {
+      this.page++
+      this.$api.detail
+        .reqArtistIllust(this.param)
+        .then(res => {
+          if (!res.data.data) {
+            this.noMore = true
+          } else {
+            this.pictureList = this.pictureList.concat(res.data.data)
+          }
+        })
+        .catch(err => {
+          console.error(err)
         })
     },
     getSummary () {
-      this.$api.detail.reqSummary(this.artistId)
+      this.$api.detail
+        .reqSummary(this.artistId)
         .then(res => {
           this.illustSum = res.data.data.find(item => item.type === 'illust')['sum']
           this.mangaSum = res.data.data.find(item => item.type === 'manga')['sum']
@@ -166,22 +198,19 @@ export default {
       if (!this.picker) {
         this.picker = this.$createPicker({
           title: 'Picker',
-          data: [this.types],
+          data: [types],
           onSelect: this.selectHandle
         })
       }
       this.picker.show()
     },
     selectHandle (selectedVal, selectedIndex, selectedText) {
-      this.typeText = selectedText[0]
       this.illustType = selectedVal[0]
-      this.page = 1
-      this.pictureList = []
       this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET}px`
-      this.getArtistList()
+      this.getData()
     },
-    onPullingUp () {
-      this.getArtistList()
+    handleClick () {
+      this.$router.back()
     }
   }
 }

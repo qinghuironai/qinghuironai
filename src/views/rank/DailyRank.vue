@@ -4,7 +4,9 @@
             :data="pictureList"
             :options="options"
             :loading="loading"
-            @pulling-up="onPullingUp">
+            :noMore="noMore"
+            @scroll="onScroll"
+            @pulling-up="getMoreData">
       <Header @selectMode="selectMode"
               @selectDate="selectDate" />
     </Scroll>
@@ -24,11 +26,13 @@ export default {
   },
   data () {
     return {
+      param: {
+        page: 1,
+        mode: '',
+        date: null
+      },
       pictureList: [],
-      page: 1,
-      mode: '',
-      date: null,
-      noData: false,
+      noMore: false,
       loading: false
     }
   },
@@ -46,56 +50,63 @@ export default {
     }
   },
   mounted () {
-    this.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD')
-    this.mode = 'day'
-    this.getPictures()
+    this.param.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD')
+    this.param.mode = 'day'
+    this.getData()
   },
   methods: {
-    initParams () {
-      this.page = 1
-      this.pictureList = []
-      this.noData = false
-    },
-    getPictures () {
-      if (this.noData) {
-        return this.$refs.scroll.forceUpdate()
-      }
-      if (this.page === 1) {
-        this.loading = true
-      }
-      const data = {
-        date: this.date,
-        page: this.page++,
-        mode: this.mode
-      }
+    getData () {
+      this.loading = true
+      this.param.page = 1
+      this.pictureList = [] // 不清空会追加
+      this.noMore = false
       this.$api.rank
-        .getRank(data)
+        .getRank(this.param)
         .then(res => {
           if (!res.data.data.data.length) {
-            this.$refs.scroll.forceUpdate()
-            this.noData = true
-            this.loading = false
-            return
+            this.noMore = true
+          } else {
+            this.pictureList = res.data.data.data
           }
-          this.pictureList = this.pictureList.concat(res.data.data.data)
           this.loading = false
         })
         .catch(err => {
           console.error(err)
         })
     },
-    onPullingUp () {
-      this.getPictures()
+    getMoreData () {
+      this.param.page++
+      this.$api.rank
+        .getRank(this.param)
+        .then(res => {
+          if (!res.data.data.data.length) {
+            this.noMore = true
+          } else {
+            // push视图不更新的原因： watch新值和旧值都是指向的还是同一个数组 val和old会相等
+            // this.pictureList.push(...res.data.data.data)
+            this.pictureList = this.pictureList.concat(res.data.data.data)
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     },
     selectDate (date) {
-      this.date = dayjs(date).format('YYYY-MM-DD')
-      this.initParams()
-      this.getPictures()
+      this.param.date = dayjs(date).format('YYYY-MM-DD')
+      this.getData()
     },
     selectMode (selectedVal) {
-      this.mode = selectedVal[1]
-      this.initParams()
-      this.getPictures()
+      this.param.mode = selectedVal[1]
+      this.getData()
+    },
+    onScroll (pos, direction) {
+      if (direction === 1) {
+        // 上滑
+        this.$store.dispatch('changeTab', false)
+      } else {
+        // 下滑或者不动
+        this.$store.dispatch('changeTab', true)
+      }
     }
   }
 }
@@ -106,7 +117,7 @@ export default {
   position fixed
   top 0
   right 0
-  bottom 60px
+  bottom 0
   left 0
   font-size 16px
 </style>

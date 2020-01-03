@@ -10,8 +10,8 @@
                    @pulling-up="onPullingUp">
         <slot></slot>
         <List :list="data" />
-        <!-- <div v-if="!data || !data.length"
-             class="no-result">(●'◡'●)ﾉ暂无结果</div> -->
+        <div v-show="noMore && !data.length"
+             class="no-result">(●'◡'●)ﾉ (●'◡'●)ﾉ</div>
       </cube-scroll>
     </div>
     <div :class="['top', { 'is-active': showBackUp }]"
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+
 import Loading from '@/components/loading/Loading'
 import List from '@/components/list/List'
 
@@ -47,6 +48,10 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    noMore: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -61,11 +66,14 @@ export default {
   },
   methods: {
     onPullingUp () {
+      if (this.noMore) {
+        return this.$refs.scroll.forceUpdate()
+      }
       this.$emit('pulling-up')
     },
     onScroll (pos) {
+      const direction = this.$refs.scroll.scroll.movingDirectionY
       if (pos.y < -300) {
-        const direction = this.$refs.scroll.scroll.movingDirectionY
         if (direction === 1) {
           this.showBackUp = false
         } else if (direction === -1) {
@@ -74,17 +82,21 @@ export default {
       } else {
         this.showBackUp = false
       }
-      this.$emit('scroll', pos)
+      this.$emit('scroll', pos, direction)
     },
     scrollToTop () {
       // tip: 或者根据滚动的距离 比例来计算所需时间
       this.$refs.scroll.scrollTo(0, 0, 2000)
     },
-    forceUpdate () {
-      this.$refs.scroll.forceUpdate()
-    },
     refresh () {
       this.$refs.scroll.refresh()
+    }
+  },
+  watch: {
+    noMore (val) {
+      if (val) {
+        this.$refs.scroll.forceUpdate()
+      }
     }
   }
 }
@@ -111,7 +123,7 @@ export default {
     position fixed
     width 40px
     height 40px
-    bottom 62px
+    bottom 68px
     left 0
     right 0
     margin auto

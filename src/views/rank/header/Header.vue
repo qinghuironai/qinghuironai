@@ -49,7 +49,7 @@ export default {
       if (!this.datePicker) {
         this.datePicker = this.$createDatePicker({
           title: '日期选择',
-          min: new Date(2018, 12, 12),
+          min: new Date(2018, 0, 1),
           max: new Date(dayjs(new Date()).add(-3, 'days')),
           value: new Date(dayjs(new Date()).add(-3, 'days')),
           onSelect: this.selectDate

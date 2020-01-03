@@ -6,6 +6,7 @@
     </keep-alive>
     <cube-tab-bar v-model="selectedLabelSlots"
                   class="tabs"
+                  :class="['tabs', {'hide': !showTab}]"
                   :inline="false"
                   @change="changeHandler">
       <cube-tab v-for="(item, index) in tabs"
@@ -20,6 +21,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
@@ -40,13 +43,14 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'cachedViews',
+      'showTab'
+    ]),
     key () {
       // 这样写的话 详情返回到排行 排行也每次都变了 回不到原来位置
       // return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
       return this.$route.fullPath
-    },
-    cachedViews () {
-      return this.$store.getters.cachedViews
     }
   },
   methods: {
@@ -72,10 +76,14 @@ export default {
   background #ffffff
   height 60px
   z-index 2
+  transform translateY(0)
+  transition transform .3s
   .cube-tab
     >i
       font-size 18px
     >div
       font-size 16px
       margin-top 5px
+.hide
+  transform translateY(60px)
 </style>
