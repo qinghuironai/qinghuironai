@@ -19,6 +19,9 @@ const mutations = {
     if (index > -1) {
       state.cachedViews.splice(index, 1)
     }
+  },
+  [types.SHOW_TAB] (state, flag) {
+    state.showTab = flag
   }
 }
 

@@ -24,3 +24,9 @@ export const delCachedView = ({
 }, name) => {
   commit(types.DEL_CACHED_VIEW, name)
 }
+
+export const changeTab = ({
+  commit
+}, flag) => {
+  commit(types.SHOW_TAB, flag)
+}

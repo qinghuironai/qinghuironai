@@ -43,8 +43,9 @@
         <Scroll :data="pictureList"
                 :options="options"
                 :loading="loading"
+                :noMore="noMore"
                 ref="scroll"
-                @pulling-up="onPullingUp">
+                @pulling-up="getMoreData">
           <Tags v-for="(item, index) in [tags, exclusive]"
                 :key="index"
                 :data="item"
@@ -85,12 +86,12 @@ export default {
       isSearch: true,
       keywords: '',
       pictureList: [],
-      noData: false,
       page: 1,
       tags: [],
       exclusive: [],
-      optionsParams: null, // 设置的筛选条件
-      loading: false
+      optionsParams: {}, // 设置的筛选条件
+      loading: false,
+      noMore: false
     }
   },
   computed: {
@@ -104,6 +105,15 @@ export default {
         scrollbar: false,
         probeType: 2
       }
+    },
+    param () {
+      return {
+        keyword: this.value,
+        page: this.page,
+        ...this.optionsParams
+        // xRestrict: 1,
+        // maxSanityLevel: 10
+      }
     }
   },
   methods: {
@@ -113,14 +123,8 @@ export default {
           this.keywords = data.keywordList || []
         })
     }, 500),
-    initParam () {
-      this.noData = false
-      this.page = 1
-      this.pictureList = []
-    },
     enter (val) {
       if (!this.value) return
-      this.initParam()
       this.value = val
       this.$refs.input.blur()
       this.isSearch = false
@@ -129,39 +133,49 @@ export default {
       this.getExclusive(val)
     },
     getData () {
-      if (this.noData) {
-        return this.$refs.scroll.forceUpdate()
-      }
-      // 避免上拉分页的时候出现全局loading
-      if (this.page === 1) {
-        this.loading = true
-      }
-      const param = {
-        keyword: this.value,
-        page: this.page++
-        // xRestrict: 1,
-        // maxSanityLevel: 10
-      }
-      const params = Object.assign(param, this.optionsParams)
-      this.$api.search.getSearch(params).then(res => {
-        if (!res.data.data.illustrations.length) {
-          this.$refs.scroll.forceUpdate()
-          this.noData = true
+      this.loading = true
+      this.page = 1
+      this.pictureList = []
+      this.noMore = false
+      this.$api.search
+        .getSearch(this.param)
+        .then(res => {
+          if (!res.data.data.illustrations.length) {
+            this.noMore = true
+          } else {
+            this.pictureList = res.data.data.illustrations
+          }
           this.loading = false
-          return
-        }
-        this.pictureList = this.pictureList.concat(res.data.data.illustrations)
-        this.loading = false
-      })
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    getMoreData () {
+      this.page++
+      this.$api.search
+        .getSearch(this.param)
+        .then(res => {
+          if (!res.data.data.illustrations.length) {
+            this.noMore = true
+          } else {
+            this.pictureList = this.pictureList.concat(res.data.data.illustrations)
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     },
     getTags (param) {
-      this.$api.search.getTags(param)
+      this.$api.search
+        .getTags(param)
         .then(res => {
           this.tags = res.data.data
         })
     },
     getExclusive (param) {
-      this.$api.search.getExclusive(param)
+      this.$api.search
+        .getExclusive(param)
         .then(res => {
           this.exclusive = res.data.data
         })
@@ -169,29 +183,26 @@ export default {
     focus () {
       this.isSearch = true
     },
-    onPullingUp () {
-      this.getData()
-    },
     showOptions () {
       this.$refs.options.show()
     },
     translateKeyword () {
-      this.$api.search.getTranslations(this.value)
+      this.$api.search
+        .getTranslations(this.value)
         .then(res => {
           this.enter(res.data.data.keyword)
         })
     },
     searchFor (options) {
       this.optionsParams = options
-      this.initParam()
-      this.getData(options)
+      this.getData()
     },
     clickTag (val) {
       this.value = val.keyword
       this.tags = this.exclusive = []
       this.getTags(val.keyword)
       this.getExclusive(val.keyword)
-      this.searchFor(this.optionsParams)
+      this.getData()
     },
     async uploadImg (e) {
       const file = e.target.files[0]
@@ -212,13 +223,13 @@ export default {
       this.isSearch = false
       this.loading = true
       this.pictureList = [] // 清空下 不然会接着之前搜索的
-      this.noData = true
+      this.noMore = true
       this.tags = this.exclusive = []
       let formData = new FormData()
       formData.append('file', e.target.files[0])
       const result = await this.$api.search.uploadImg(formData)
       const res = await this.$api.search.searchByImg(result.data.data)
-      this.pictureList = res.data.data
+      this.pictureList = res.data.data || []
       this.loading = false
     },
     searchType (type) {
@@ -226,7 +237,8 @@ export default {
         type,
         id: this.value
       }
-      this.$api.search.getExists(param)
+      this.$api.search
+        .getExists(param)
         .then(res => {
           if (res.data.data) {
             if (type === 'artist') {
@@ -264,7 +276,7 @@ export default {
     }
   },
   watch: {
-    value (val) {
+    value () {
       this.getKeyword()
     }
   }
