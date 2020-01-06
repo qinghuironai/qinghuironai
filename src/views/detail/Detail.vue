@@ -67,7 +67,7 @@ export default {
       pictureList: [],
       illustDetail: null,
       loading: false,
-      page: 1,
+      page: 0,
       noMore: false
     }
   },
@@ -81,7 +81,7 @@ export default {
       return {
         pullUpLoad: {
           threshold: 0,
-          txt: { more: '上拉加载更多', noMore: '(￣ˇ￣)俺也是有底线的' },
+          txt: { more: '上拉加载相关作品', noMore: '(￣ˇ￣)俺也是有底线的' },
           visible: false
         },
         scrollbar: true,
@@ -97,7 +97,7 @@ export default {
   },
   mounted () {
     this.getIllustDetail()
-    this.getRelatedList()
+    // this.getData()
   },
   methods: {
     getIllustDetail () {
@@ -109,7 +109,7 @@ export default {
         })
     },
     getData () {
-      this.loading = true
+      // this.loading = true
       this.page = 1
       this.pictureList = []
       this.noMore = false
@@ -121,7 +121,7 @@ export default {
           } else {
             this.pictureList = res.data.data
           }
-          this.loading = false
+          // this.loading = false
         })
         .catch(err => {
           console.error(err)
@@ -210,6 +210,8 @@ export default {
       .title
         font-size 18px
         margin-bottom 8px
+        line-height 25px
+        height 25px
         no-wrap()
       .subtitle
         font-size 16px

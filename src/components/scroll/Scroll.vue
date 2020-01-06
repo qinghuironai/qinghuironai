@@ -41,7 +41,8 @@ export default {
           probeType: 1,
           scrollbar: false,
           pullDownRefresh: false,
-          pullUpLoad: false
+          pullUpLoad: false,
+          bounce: false
         }
       }
     },
