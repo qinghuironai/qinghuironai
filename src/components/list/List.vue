@@ -24,7 +24,7 @@
                    alt="" />
             </div>
             <div class="artist__title">
-              <h2>{{column.title}}</h2>
+              <p>{{column.title}}</p>
               <span>{{column.artistPreView.name}}</span>
             </div>
             <i class="iconfont icon-xinaixin"></i>
@@ -78,13 +78,13 @@ export default {
         } else {
           let winWidth = window.innerWidth
           let itemWidth = (winWidth - 20) / 2
-          let maxHeight = parseInt(itemWidth / 0.7) + 50 // 避免图片太长霸屏
+          let maxHeight = parseInt(itemWidth / 0.7) + 60 // 避免图片太长霸屏
           const list = val.filter(e => !old.includes(e))
           for (let i = list.length - 1; i >= 0; i--) {
             let tmp = list[i]
             tmp = { ...tmp, itemWidth: itemWidth }
             let per = tmp.width / tmp.itemWidth
-            tmp = { ...tmp, itemHeight: parseInt(tmp.height / per) + 50 } // 50留给底部用
+            tmp = { ...tmp, itemHeight: parseInt(tmp.height / per) + 60 } // 60留给底部用
             if (tmp.itemHeight > maxHeight) {
               tmp.itemHeight = maxHeight
             }
@@ -130,7 +130,7 @@ export default {
       box-sizing border-box
       .item-content
         width 100%
-        height calc(100% - 50px)
+        height calc(100% - 60px)
         display flex
         justify-content center
         align-items center
@@ -160,7 +160,7 @@ export default {
       .artist
         display flex
         align-items center
-        height 50px
+        height 60px
         box-sizing border-box
         padding-left 10px
         .artist-avatar
@@ -179,10 +179,12 @@ export default {
           justify-content center
           height 100%
           overflow hidden
-          h2
+          p
             font-size 14px
             font-weight bold
-            margin-bottom 5px
+            margin-bottom 0px
+            height 18px
+            line-height 18px
             no-wrap()
           span
             font-size 12px

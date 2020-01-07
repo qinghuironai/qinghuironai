@@ -6,8 +6,8 @@ export const modeData = [
       { text: '日排行', value: 'day' },
       { text: '周排行', value: 'week' },
       { text: '月排行', value: 'month' },
-      { text: '男性日排行', value: 'day_male' },
-      { text: '女性日排行', value: 'day_female' }
+      { text: '男性日排行', value: 'male' },
+      { text: '女性日排行', value: 'female' }
     ]
   },
   {

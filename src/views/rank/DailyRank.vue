@@ -103,8 +103,8 @@ export default {
       if (direction === 1) {
         // 上滑
         this.$store.dispatch('changeTab', false)
-      } else {
-        // 下滑或者不动
+      } else if (direction === -1) {
+        // 下滑
         this.$store.dispatch('changeTab', true)
       }
     }
