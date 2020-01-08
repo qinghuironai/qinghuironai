@@ -3,39 +3,36 @@
     <div v-for="(item, index) in [leftList, rightList]"
          :key="index"
          class="column">
-      <transition-group enter-active-class="animated fadeInUp"
-                        leave-active-class="animated fadeIn">
-        <div v-for="column in item"
-             :key="column.id"
-             @click="goDetail(column)"
-             class="item"
-             :style="`width: ${column.itemWidth}px; height: ${column.itemHeight}px`">
-          <div :class="['item-content', { 'isSetu': column.xrestrict === 1 || column.sanityLevel > 6 }]">
-            <img v-lazy="PREFIX + column.imageUrls[0].medium"
-                 alt="" />
-            <img v-if="column.xrestrict === 1 || column.sanityLevel > 6"
-                 src="../../assets/images/error.svg"
-                 alt="" />
-          </div>
-          <div class="artist">
-            <div class="artist-avatar">
-              <img :src="PREFIX + column.artistPreView.avatar"
-                   @click.stop="goArtist(column.artistId)"
-                   alt="" />
-            </div>
-            <div class="artist__title">
-              <p>{{column.title}}</p>
-              <span>{{column.artistPreView.name}}</span>
-            </div>
-            <i class="iconfont icon-xinaixin"></i>
-          </div>
-          <div class="count"
-               v-if="column.pageCount > 1">
-            <img src="../../assets/images/count.svg" />
-            <span>{{column.pageCount}}</span>
-          </div>
+      <div v-for="column in item"
+           :key="column.id"
+           @click="goDetail(column)"
+           class="item"
+           :style="`width: ${column.itemWidth}px; height: ${column.itemHeight}px`">
+        <div :class="['item-content', { 'isSetu': column.xrestrict === 1 || column.sanityLevel > 6 }]">
+          <img :src="PREFIX + column.imageUrls[0].medium"
+               alt="" />
+          <img v-if="column.xrestrict === 1 || column.sanityLevel > 6"
+               src="../../assets/images/error.svg"
+               alt="" />
         </div>
-      </transition-group>
+        <div class="artist">
+          <div class="artist-avatar">
+            <img :src="PREFIX + column.artistPreView.avatar"
+                 @click.stop="goArtist(column.artistId)"
+                 alt="" />
+          </div>
+          <div class="artist__title">
+            <p>{{column.title}}</p>
+            <span>{{column.artistPreView.name}}</span>
+          </div>
+          <i class="iconfont icon-xinaixin"></i>
+        </div>
+        <div class="count"
+             v-if="column.pageCount > 1">
+          <img src="../../assets/images/count.svg" />
+          <span>{{column.pageCount}}</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>

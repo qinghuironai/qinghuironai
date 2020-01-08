@@ -13,12 +13,12 @@
       </div>
       <div class="artists__info"
            ref="info">
-        <img :src="`${PREFIX + artistDetail.avatar}`"
+        <!-- <img :src="`${PREFIX + artistDetail.avatar}`"
              width="80"
              height="80"
              alt="" />
         <p>{{artistDetail.name}}</p>
-        <div class="follow">关注</div>
+        <div class="follow">关注</div> -->
       </div>
       <div class="artists__bglayer"
            ref="layer"></div>
@@ -31,8 +31,55 @@
                 ref="scroll"
                 @scroll="onScroll"
                 @pulling-up="getMoreData">
+          <div class="avatar"
+               ref="avatar">
+            <img :src="`${PREFIX + artistDetail.avatar}`"
+                 alt="" />
+          </div>
+          <div class="info">
+            <p class="name">{{artistDetail.name}}</p>
+            <div class="link">
+              <div>
+                <i class="iconfont icon-home"></i>
+                webPage
+              </div>
+              <div>
+                <i class="iconfont icon-ttww"></i>
+                {{artistDetail.twitterAccount}}
+              </div>
+            </div>
+            <div class="friends">
+              <span>
+                {{artistDetail.totalFollowUsers}} <span>关注</span>
+              </span>
+              <span>
+                {{artistDetail.totalIllustBookmarksPublic}}
+                <span>好基友</span>
+              </span>
+            </div>
+            <div ref="comments"
+                 class="comments">
+              <!-- {comment.map((item: string, index: number) => (
+              <p key={index}
+                 className="comment">
+                {item}
+              </p>
+              ))} -->
+              <p v-for="(item, index) in comment"
+                 :key="index"
+                 class="comment">
+                {{item}}
+              </p>
+            </div>
+            <div ref="lookmore"
+                 class="lookmore"
+                 @click="lookMore">
+              查看更多
+            </div>
+          </div>
           <cube-button @click="showPicker"
-                       :light="true">{{typeText}}</cube-button>
+                       :light="true"
+                       style="background: #fff; box-shadow: none; margin-top: 20px;">{{typeText}}</cube-button>
         </Scroll>
       </div>
     </div>
@@ -84,6 +131,9 @@ export default {
         return `漫画(${this.mangaSum})`
       }
       return null
+    },
+    comment () {
+      return this.artistDetail.comment.split('\r\n').filter(item => item)
     }
   },
   data () {
@@ -178,11 +228,13 @@ export default {
       } else if (newY > minScrollY) {
         this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET - Math.abs(newY)}px`
         this.$refs.layer.style.zIndex = 1
-        this.$refs.imgWrapper.style.paddingTop = '75%'
+        this.$refs.imgWrapper.style.paddingTop = '35%'
         this.$refs.imgWrapper.style.height = 0
         this.$refs.imgWrapper.style.zIndex = -1
-        this.$refs.info.style['transform'] = `translate3d(0, ${newY}px, 0)`
-        this.$refs.info.style['opacity'] = `${1 - percent * 2}`
+        // this.$refs.info.style['transform'] = `translate3d(0, ${newY}px, 0)`
+        // this.$refs.info.style['opacity'] = `${1 - percent * 2}`
+        this.$refs.avatar.style['opacity'] = `${1 - percent * 2}`
+        this.$refs.avatar.style['transform'] = `scale(${1 - percent * 2})`
       } else {
         this.title = this.artistDetail.name
         this.$refs.layer.style.top = `${HEADER_HEIGHT - OFFSET}px`
@@ -211,6 +263,10 @@ export default {
     },
     handleClick () {
       this.$router.back()
+    },
+    lookMore () {
+      this.$refs.comments.style.maxHeight = `3000px`
+      this.$refs.lookmore.style.display = `none`
     }
   }
 }
@@ -233,7 +289,7 @@ export default {
     position relative
     width 100%
     height 0
-    padding-top 75%
+    padding-top 35%
     transform-origin top
     background-size cover
     z-index 60
@@ -301,4 +357,66 @@ export default {
       .scroll-container
         .cube-scroll-wrapper
           overflow visible !important
+    .avatar
+      width 80px
+      height 80px
+      position absolute
+      left 0
+      right 0
+      top -1.06667rem
+      margin auto
+      img
+        width 100%
+        height 100%
+        border-radius 50%
+    .info
+      margin-top 60px
+      text-align center
+      .name
+        font-size 20px
+      .link
+        display flex
+        align-items center
+        justify-content center
+        margin-top 10px
+        >div
+          width 40%
+          font-size 14px
+          color #ccc
+          i
+            margin-right 4px
+      .friends
+        font-size 14px
+        margin-top 10px
+        >span:first-child
+          margin-right 20px
+        >span
+          span
+            color #ccc
+            margin-left 5px
+      .comments
+        width 100%
+        margin-top 20px
+        padding 0 5px
+        box-sizing border-box
+        word-break break-all
+        max-height 88.2px
+        overflow hidden
+        transition max-height 1s
+        .comment
+          font-size 16px
+          line-height 30px
+      .lookmore
+        font-size 16px
+        color #cccccc
+        margin-top 20px
+        &::after
+          content ''
+          display inline-block
+          width 8px
+          height 8px
+          border-top 1px solid #656565
+          border-right 1px solid #656565
+          border-color #bbbbbb
+          transform rotate(135deg) translate(-8px, -4px)
 </style>
