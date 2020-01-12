@@ -102,8 +102,7 @@ export default {
           txt: { more: '上拉加载更多', noMore: '(￣ˇ￣)俺也是有底线的' },
           visible: false
         },
-        scrollbar: false,
-        probeType: 2
+        probeType: 3
       }
     },
     param () {

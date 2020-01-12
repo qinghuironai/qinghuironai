@@ -9,7 +9,8 @@
                    @scroll="onScroll"
                    @pulling-up="onPullingUp">
         <slot></slot>
-        <List :list="data" />
+        <List :list="data"
+              :scrollY="scrollY" />
         <div v-show="noMore && !data.length"
              class="no-result">(●'◡'●)ﾉ (●'◡'●)ﾉ</div>
       </cube-scroll>
@@ -38,11 +39,9 @@ export default {
         return {
           observeDOM: true,
           click: true,
-          probeType: 1,
-          scrollbar: false,
+          probeType: 3,
           pullDownRefresh: false,
-          pullUpLoad: false,
-          bounce: false
+          pullUpLoad: false
         }
       }
     },
@@ -73,6 +72,7 @@ export default {
       this.$emit('pulling-up')
     },
     onScroll (pos) {
+      this.scrollY = -pos.y
       const direction = this.$refs.scroll.scroll.movingDirectionY
       if (pos.y < -300) {
         if (direction === 1) {
