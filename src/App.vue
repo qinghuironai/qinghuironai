@@ -4,7 +4,7 @@
                 :max="10">
       <router-view :key="key" />
     </keep-alive>
-    <cube-tab-bar v-model="selectedLabelSlots"
+    <!-- <cube-tab-bar v-model="selectedLabelSlots"
                   class="tabs"
                   :class="['tabs', {'hide': !showTab}]"
                   :inline="false"
@@ -16,7 +16,7 @@
         <i slot="icon"
            :class="item.icon"></i>
       </cube-tab>
-    </cube-tab-bar>
+    </cube-tab-bar> -->
   </div>
 </template>
 
@@ -74,7 +74,7 @@ export default {
   height 60px
   z-index 2
   transform translateY(0)
-  transition transform .3s
+  transition transform 0.3s
   .cube-tab
     >i
       font-size 18px

@@ -1,13 +1,14 @@
 <template>
   <div @click="goDetail(column)"
-       class="item"
-       :style="column.style">
+       class="item">
     <div :class="['item-content', { 'isSetu': column.xrestrict === 1 || column.sanityLevel > 6 }]"
-         :style="{backgroundColor}">
+         style="backgroundColor: pink">
       <img :src="column.src"
            loading="lazy"
            width="100%"
            height="100%"
+           :class="{'show': show}"
+           @load="handleLoad"
            alt="" />
       <img v-if="column.xrestrict === 1 || column.sanityLevel > 6"
            src="../../assets/images/error.svg"
@@ -42,6 +43,11 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      show: false
+    }
+  },
   computed: {
     backgroundColor () {
       return color[Math.floor(Math.random() * 8)]
@@ -54,6 +60,9 @@ export default {
     },
     goArtist (artistId) {
       this.$router.push(`/artist/${artistId}`)
+    },
+    handleLoad () {
+      this.show = true
     }
   }
 }
@@ -67,10 +76,12 @@ export default {
   // border-radius 5px
   // position relative
   box-sizing border-box
-  position absolute
-  top 0
-  left 0
-  padding 10px
+  // position absolute
+  // top 0
+  // left 0
+  width 100%
+  height 100%
+  padding 8px
   .item-content
     width 100%
     height calc(100% - 100px)
@@ -83,10 +94,13 @@ export default {
       height 100%
       object-fit cover
       border-radius 8px
+      opacity 0
     img[lazy=loading], img[lazy=error]
       // transform scale(0.3)
       width 50px
       height 50px
+    .show
+      opacity 1
   .isSetu
     position relative
     img:first-child

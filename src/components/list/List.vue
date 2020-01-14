@@ -1,10 +1,19 @@
 <template>
-  <div class="list">
-    <div :style="{minHeight: `${contentHeight}px`}">
-      <Item v-for="(item, index) in data"
-            :key="index"
-            :column="item" />
-    </div>
+  <div ref="list"
+       class="list">
+    <VirtualCollection :cellSizeAndPositionGetter="cellSizeAndPositionGetter"
+                       :collection="newList"
+                       :height="667"
+                       :width="width"
+                       @infinite="infinite">
+      <div slot="cell"
+           slot-scope="props"
+           style="height: 100%; display: flex; justifyContent: center;">
+        <Item :column="props.data" />
+      </div>
+
+    </VirtualCollection>
+    <!-- <infinite-loading @infinite="infiniteHandler"></infinite-loading> -->
   </div>
 </template>
 
@@ -19,9 +28,6 @@ export default {
       default () {
         return []
       }
-    },
-    scrollY: {
-      type: Number
     }
   },
   components: {
@@ -39,12 +45,46 @@ export default {
     },
     data () {
       return this.list.filter(item => item.top > this.scrollY - 2 * this.height && item.top < this.scrollY + 2 * this.height)
+    },
+    newList () {
+      return this.list
     }
   },
   data () {
     return {
       leftHight: 0,
-      rightHight: 0
+      rightHight: 0,
+      scrollY: 0,
+      refreshing: false,
+      loading: false
+    }
+  },
+  mounted () {
+    // window.addEventListener('scroll', this.onScroll, true)
+  },
+  methods: {
+    infiniteHandler ($state) {
+      this.$emit('infinite', $state)
+    },
+    onScroll (pos) {
+      // console.log(this.$refs.scroll)
+      this.scrollY = document.documentElement.scrollTop
+    },
+    infinite ($state) {
+      console.log('Jiazai')
+      this.$emit('infinite', $state)
+    },
+    refresh () {
+
+    },
+    cellSizeAndPositionGetter (item, index) {
+      // console.log(item)
+      return {
+        width: (document.body.clientWidth || document.documentElement.clientWidth) / 2 - 5,
+        height: item.style.height - 10,
+        x: item.x,
+        y: item.top
+      }
     }
   },
   watch: {
@@ -62,17 +102,19 @@ export default {
             let style, transform
             if (this.leftHight <= this.rightHight) {
               transform = `translate3d(0, ${this.leftHight}px, 0)`
-              this.leftHight += height
               tmp.top = this.leftHight
+              tmp.x = 0
+              this.leftHight += height
             } else {
               transform = `translate3d(${this.width / 2}px, ${this.rightHight}px, 0)`
-              this.rightHight += height
               tmp.top = this.rightHight
+              tmp.x = 187.5
+              this.rightHight += height
             }
             style = {
               transform,
               width: `${this.width / 2}px`,
-              height: `${height}px`
+              height: `${height}`
             }
             tmp['style'] = style
             tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`

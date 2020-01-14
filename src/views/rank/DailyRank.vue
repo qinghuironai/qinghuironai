@@ -1,33 +1,27 @@
 <template>
   <div class="rank">
-    <Scroll ref="scroll"
-            :data="pictureList"
-            :options="options"
-            :loading="loading"
-            :noMore="noMore"
-            @scroll="onScroll"
-            @pulling-up="getMoreData">
-      <Header @selectMode="selectMode"
-              @selectDate="selectDate" />
-    </Scroll>
+    <!-- <Header @selectMode="selectMode"
+              @selectDate="selectDate" /> -->
+    <List :list="pictureList"
+          @infinite="infinite" />
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs'
-import Scroll from '@/components/scroll/Scroll'
-import Header from './header/Header'
+import List from '@/components/list/List'
+// import Header from './header/Header'
 
 export default {
   name: 'DailyRank',
   components: {
-    Scroll,
-    Header
+    List
+    // Header
   },
   data () {
     return {
       param: {
-        page: 1,
+        page: 0,
         mode: '',
         date: null
       },
@@ -51,7 +45,7 @@ export default {
   mounted () {
     this.param.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD')
     this.param.mode = 'day'
-    this.getData()
+    // this.getData()
   },
   methods: {
     getData () {
@@ -90,6 +84,22 @@ export default {
           console.error(err)
         })
     },
+    infinite ($state) {
+      console.log(1111)
+      this.param.page++
+      this.$api.rank
+        .getRank(this.param)
+        .then(res => {
+          if (!res.data.data.data.length) {
+            $state.complete()
+          } else {
+            // push视图不更新的原因： watch新值和旧值都是指向的还是同一个数组 val和old会相等
+            // this.pictureList.push(...res.data.data.data)
+            this.pictureList = this.pictureList.concat(res.data.data.data)
+            $state.loaded()
+          }
+        })
+    },
     selectDate (date) {
       this.param.date = dayjs(date).format('YYYY-MM-DD')
       this.getData()
@@ -113,10 +123,12 @@ export default {
 
 <style lang="stylus" scoped>
 .rank
-  position fixed
-  top 0
-  right 0
-  bottom 0
-  left 0
+  // position fixed
+  // top 0
+  // right 0
+  // bottom 0
+  // left 0
+  width 100%
+  height 100vh
   font-size 16px
 </style>
