@@ -18,9 +18,10 @@ Router.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
+console.log(process.env)
 export default new Router({
   mode: 'history',
-  base: 'pix',
+  base: process.env.VUE_APP_PREFIX || 'pix',
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
