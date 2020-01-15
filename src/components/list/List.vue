@@ -3,7 +3,7 @@
        class="list">
     <VirtualCollection :cellSizeAndPositionGetter="cellSizeAndPositionGetter"
                        :collection="newList"
-                       :height="667"
+                       :height="height"
                        :width="width"
                        @infinite="infinite">
       <div slot="cell"
@@ -19,7 +19,7 @@
 
 <script>
 import Item from './Item'
-import { IMG_PREFIX } from '@/util/constants'
+import { IMG_PREFIX, color } from '@/util/constants'
 
 export default {
   props: {
@@ -98,7 +98,7 @@ export default {
           for (let i = 0; i < list.length; i++) {
             let tmp = list[i]
             let per = tmp.width / (this.width / 2)
-            let height = Math.min(parseInt(tmp.height / per) + 100, 350)
+            let height = Math.min(parseInt(tmp.height / per), 300)
             let style, transform
             if (this.leftHight <= this.rightHight) {
               transform = `translate3d(0, ${this.leftHight}px, 0)`
@@ -119,6 +119,7 @@ export default {
             tmp['style'] = style
             tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`
             tmp['avatarSrc'] = `${IMG_PREFIX}${tmp.artistPreView.avatar}`
+            tmp['backgroundColor'] = color[Math.floor(Math.random() * 8)]
           }
         }
       },

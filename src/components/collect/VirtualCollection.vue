@@ -145,6 +145,7 @@ export default {
       }
     },
     onScroll (e) {
+      console.log(this.$refs.outer.scrollTop)
       this.flushDisplayItems()
       this.scrollY = this.$refs.outer.scrollTop
     },

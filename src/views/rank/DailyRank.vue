@@ -45,7 +45,7 @@ export default {
   mounted () {
     this.param.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD')
     this.param.mode = 'day'
-    // this.getData()
+    this.getData()
   },
   methods: {
     getData () {

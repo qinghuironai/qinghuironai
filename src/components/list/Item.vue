@@ -2,39 +2,25 @@
   <div @click="goDetail(column)"
        class="item">
     <div :class="['item-content', { 'isSetu': column.xrestrict === 1 || column.sanityLevel > 6 }]"
-         style="backgroundColor: pink">
+         :style="{backgroundColor: column.backgroundColor}">
       <img :src="column.src"
            loading="lazy"
-           width="100%"
-           height="100%"
-           :class="{'show': show}"
-           @load="handleLoad"
+           :style="{opacity}"
+           @load="opacity = 1"
            alt="" />
-      <img v-if="column.xrestrict === 1 || column.sanityLevel > 6"
-           src="../../assets/images/error.svg"
-           alt="" />
-    </div>
-    <div class="artist">
-      <p class="artist-title">{{column.title}}</p>
-      <div class="artist-avatar">
-        <img :src="column.avatarSrc"
-             @click.stop="goArtist(column.artistId)"
-             alt="" />
-        <span>{{column.artistPreView.name}}</span>
-        <i class="iconfont icon-xinaixin"></i>
-      </div>
-    </div>
-    <div class="count"
+      <div class="count"
          v-if="column.pageCount > 1">
-      <img src="../../assets/images/count.svg" />
-      <span>{{column.pageCount}}</span>
+        <img src="../../assets/images/count.svg" />
+        <span>{{column.pageCount}}</span>
+      </div>
+      <div class="like">
+        <img src="../../assets/images/aixin.svg" alt="">
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { color } from '@/util/constants'
-
 export default {
   name: 'Item',
   props: {
@@ -45,24 +31,13 @@ export default {
   },
   data () {
     return {
-      show: false
-    }
-  },
-  computed: {
-    backgroundColor () {
-      return color[Math.floor(Math.random() * 8)]
+      opacity: 0
     }
   },
   methods: {
     goDetail (column) {
       if (column.xrestrict === 1 || column.sanityLevel > 6) return
       this.$router.push(`/detail/${column.id}`)
-    },
-    goArtist (artistId) {
-      this.$router.push(`/artist/${artistId}`)
-    },
-    handleLoad () {
-      this.show = true
     }
   }
 }
@@ -83,29 +58,57 @@ export default {
   height 100%
   padding 8px
   .item-content
+    position relative
     width 100%
-    height calc(100% - 100px)
+    height 100%
     // display flex
     // justify-content center
     // align-items center
     border-radius 8px
-    img
+    >img
       width 100%
       height 100%
       object-fit cover
-      border-radius 8px
+      // border-radius 8px
       opacity 0
-    img[lazy=loading], img[lazy=error]
+    >img[lazy=loading], img[lazy=error]
       // transform scale(0.3)
       width 50px
       height 50px
-    .show
-      opacity 1
+    .count
+      position absolute
+      display inline-block
+      top 8px
+      right 8px
+      color white
+      background-color #0000009e
+      padding 2px
+      border-radius 4px
+      img
+        float left
+        fill white
+        height 20px
+        width 20px
+      span
+        float right
+        padding 0 2px
+        line-height 20px
+    .like
+      position absolute
+      bottom 8px
+      right 8px
+      width 20px
+      height 20px
+      img
+        width 100%
+        height 100%
   .isSetu
     position relative
-    img:first-child
+    img
       filter blur(30px)
-    img:last-child
+    &::after
+      content url('~@/assets/images/error.svg')
+      // background-image url('~@/assets/images/error.svg')
       position absolute
       top 0
       right 0
@@ -114,54 +117,5 @@ export default {
       width 40px
       height 40px
       margin auto
-      z-index 100
-  .artist
-    display flex
-    flex-direction column
-    justify-content space-around
-    height 100px
-    box-sizing border-box
-    .artist-title
-      height 50px
-      line-height 50px
-      margin-left 5px
-      no-wrap()
-    .artist-avatar
-      display flex
-      align-items center
-      flex 1
-      // width 35px
-      // height 35px
-      // margin-right 5px
-      img
-        width 40px
-        height 40px
-        // border-radius 50%
-        border-radius 50%
-      span
-        flex 1
-        font-size 14px
-        color #ccc
-        margin 0 8px
-        no-wrap()
-      i
-        flex-basis 30px
-  .count
-    position absolute
-    display inline-block
-    top 16px
-    right 16px
-    color white
-    background-color #0000009e
-    padding 2px
-    border-radius 4px
-    img
-      float left
-      fill white
-      height 20px
-      width 20px
-    span
-      float right
-      padding 0 2px
-      line-height 20px
+      // z-index 100
 </style>
