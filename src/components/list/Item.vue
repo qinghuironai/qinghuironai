@@ -2,19 +2,20 @@
   <div @click="goDetail(column)"
        class="item">
     <div :class="['item-content', { 'isSetu': column.xrestrict === 1 || column.sanityLevel > 6 }]"
-         :style="{backgroundColor: column.backgroundColor}">
+         :style="column.style">
       <img :src="column.src"
            loading="lazy"
            :style="{opacity}"
            @load="opacity = 1"
            alt="" />
       <div class="count"
-         v-if="column.pageCount > 1">
+           v-if="column.pageCount > 1">
         <img src="../../assets/images/count.svg" />
         <span>{{column.pageCount}}</span>
       </div>
       <div class="like">
-        <img src="../../assets/images/aixin.svg" alt="">
+        <img src="../../assets/images/aixin.svg"
+             alt="">
       </div>
     </div>
   </div>
@@ -56,11 +57,12 @@ export default {
   // left 0
   width 100%
   height 100%
-  padding 8px
+  padding 5px
   .item-content
     position relative
     width 100%
     height 100%
+    box-shadow 0 1px 5px rgba(0, 0, 0, 0.3)
     // display flex
     // justify-content center
     // align-items center
@@ -69,6 +71,7 @@ export default {
       width 100%
       height 100%
       object-fit cover
+      border-radius 8px
       // border-radius 8px
       opacity 0
     >img[lazy=loading], img[lazy=error]

@@ -1,22 +1,29 @@
 <template>
-  <div class="rank">
-    <!-- <Header @selectMode="selectMode"
-              @selectDate="selectDate" /> -->
-    <List :list="pictureList"
-          @infinite="infinite" />
+  <div>
+    <Header @selectMode="selectMode"
+            @selectDate="selectDate" />
+    <div class="rank">
+      <mescroll-vue ref="mescroll"
+                    :up="mescrollUp"
+                    @init="mescrollInit">
+        <List :list="pictureList" />
+      </mescroll-vue>
+    </div>
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs'
-import List from '@/components/list/List'
-// import Header from './header/Header'
+import List from '@/components/list/Test'
+import Header from './header/Header'
+import MescrollVue from 'mescroll.js/mescroll.vue'
 
 export default {
   name: 'DailyRank',
   components: {
-    List
-    // Header
+    List,
+    Header,
+    MescrollVue
   },
   data () {
     return {
@@ -27,7 +34,10 @@ export default {
       },
       pictureList: [],
       noMore: false,
-      loading: false
+      loading: false,
+      mescrollUp: {
+        callback: this.upCallback
+      }
     }
   },
   computed: {
@@ -116,6 +126,12 @@ export default {
         // 下滑
         this.$store.dispatch('changeTab', true)
       }
+    },
+    upCallback () {
+
+    },
+    mescrollInit () {
+
     }
   }
 }
@@ -123,12 +139,12 @@ export default {
 
 <style lang="stylus" scoped>
 .rank
-  // position fixed
-  // top 0
-  // right 0
-  // bottom 0
-  // left 0
-  width 100%
-  height 100vh
+  position fixed
+  top 40px
+  right 0
+  bottom 0
+  left 0
+  // width 100%
+  // height 100vh
   font-size 16px
 </style>
