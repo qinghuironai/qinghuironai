@@ -39,8 +39,7 @@
       </div>
       <div class="search-content"
            v-else>
-        <!-- dom长列表优化版本 recycle-list 暂未实现 -->
-        <Scroll :data="pictureList"
+        <!-- <Scroll :data="pictureList"
                 :options="options"
                 :loading="loading"
                 :noMore="noMore"
@@ -50,7 +49,10 @@
                 :key="index"
                 :data="item"
                 @handleClick="clickTag" />
-        </Scroll>
+        </Scroll> -->
+        <List :list="pictureList"
+              :identifier="identifier"
+              @infinite="infinite" />
       </div>
       <div v-show="value && isSearch"
            class="search-btn">
@@ -70,15 +72,17 @@
 <script>
 import debounce from 'lodash/debounce'
 import searchOptions from './options/Options'
-import Tags from '@/components/tags/Tags'
-import Scroll from '@/components/scroll/Scroll'
+// import Tags from '@/components/tags/Tags'
+// import Scroll from '@/components/scroll/Scroll'
+import List from '@/components/list/Test'
 
 export default {
   name: 'Search',
   components: {
     searchOptions,
-    Tags,
-    Scroll
+    // Tags,
+    // Scroll,
+    List
   },
   data () {
     return {
@@ -91,7 +95,8 @@ export default {
       exclusive: [],
       optionsParams: {}, // 设置的筛选条件
       loading: false,
-      noMore: false
+      noMore: false,
+      identifier: +new Date()
     }
   },
   computed: {
@@ -127,7 +132,7 @@ export default {
       this.value = val
       this.$refs.input.blur()
       this.isSearch = false
-      this.getData()
+      // this.getData()
       this.getTags(val)
       this.getExclusive(val)
     },
@@ -253,6 +258,23 @@ export default {
             }).show()
           }
         })
+    },
+    infinite ($state) {
+      this.page++
+      this.$api.search
+        .getSearch(this.param)
+        .then(res => {
+          if (!res.data.data.illustrations.length) {
+            this.noMore = true
+            $state.complete()
+          } else {
+            this.pictureList = this.pictureList.concat(res.data.data.illustrations)
+            $state.loaded()
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   },
   activated () {
@@ -285,14 +307,15 @@ export default {
 <style lang="stylus" scope>
 @import '~@/style/color.styl'
 .search
-  position fixed
-  top 0
-  right 0
-  bottom 0
-  left 0
-  background-color #ffffff
+  // position fixed
+  // top 0
+  // right 0
+  // bottom 0
+  // left 0
+  // background-color #ffffff
   z-index 100
   font-size 16px
+  // overflow scroll
   .search-header
     display flex
     align-items center
@@ -390,14 +413,15 @@ export default {
       color $primary
       font-size 20px
   .search-content
-    width 100%
-    position absolute
-    top 70px
-    bottom 0
-    left 0
-    // 要在这里设置样式 组件内无效
-    .scroll
-      .horizontal-scroll
-        .cube-scroll-content
-          display inline-block
+    overflow scroll
+    // width 100%
+    // position absolute
+    // top 70px
+    // bottom 0
+    // left 0
+    // // 要在这里设置样式 组件内无效
+    // .scroll
+    // .horizontal-scroll
+    // .cube-scroll-content
+    // display inline-block
 </style>

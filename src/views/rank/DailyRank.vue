@@ -50,47 +50,6 @@ export default {
     // this.getData()
   },
   methods: {
-    getData () {
-      this.loading = true
-      this.param.page = 1
-      this.pictureList = [] // 不清空会追加
-      this.infiniteId += 1
-      this.noMore = false
-      this.infiniteId += 1
-      this.$api.rank
-        .getRank(this.param)
-        .then(res => {
-          if (!res.data.data.data.length) {
-            this.noMore = true
-          } else {
-            this.pictureList = res.data.data.data
-          }
-          this.loading = false
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    },
-    getMoreData () {
-      this.$api.rank
-        .getRank({
-          page: this.page++,
-          date: this.date,
-          mode: this.mode
-        })
-        .then(res => {
-          if (!res.data.data.data.length) {
-            this.noMore = true
-          } else {
-            // push视图不更新的原因： watch新值和旧值都是指向的还是同一个数组 val和old会相等
-            // this.pictureList.push(...res.data.data.data)
-            this.pictureList = this.pictureList.concat(res.data.data.data)
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    },
     infinite ($state) {
       this.$api.rank
         .getRank({
@@ -117,8 +76,10 @@ export default {
       this.infiniteId += 1
     },
     selectMode (selectedVal) {
-      this.param.mode = selectedVal[1]
-      // this.getData()
+      this.mode = selectedVal[1]
+      this.page = 1
+      this.pictureList = []
+      this.infiniteId += 1
     },
     onScroll (pos, direction) {
       if (direction === 1) {

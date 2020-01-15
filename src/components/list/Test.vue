@@ -3,14 +3,15 @@
     <div class="list"
          @touchstart="touchStart"
          :style="{minHeight: `${contentHeight}px`}">
-
       <Item v-for="(item, index) in list"
             :key="index"
             :column="item" />
-
     </div>
     <infinite-loading :identifier="identifier"
-                      @infinite="infinite"></infinite-loading>
+                      @infinite="infinite">
+      <div slot="no-more"
+           style="color: #b9eee5; margin: 10px;">(￣ˇ￣)俺也是有底线的</div>
+    </infinite-loading>
   </div>
 </template>
 
