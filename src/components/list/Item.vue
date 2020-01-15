@@ -1,8 +1,9 @@
 <template>
   <div @click="goDetail(column)"
-       class="item">
+       class="item animated fadeIn"
+       :style="column.style">
     <div :class="['item-content', { 'isSetu': column.xrestrict === 1 || column.sanityLevel > 6 }]"
-         :style="column.style">
+         :style="{backgroundColor: column.color}">
       <img :src="column.src"
            loading="lazy"
            :style="{opacity}"
@@ -52,9 +53,9 @@ export default {
   // border-radius 5px
   // position relative
   box-sizing border-box
-  // position absolute
-  // top 0
-  // left 0
+  position absolute
+  top 0
+  left 0
   width 100%
   height 100%
   padding 5px

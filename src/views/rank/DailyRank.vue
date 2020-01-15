@@ -3,11 +3,9 @@
     <Header @selectMode="selectMode"
             @selectDate="selectDate" />
     <div class="rank">
-      <mescroll-vue ref="mescroll"
-                    :up="mescrollUp"
-                    @init="mescrollInit">
-        <List :list="pictureList" />
-      </mescroll-vue>
+      <List :list="pictureList"
+            :identifier="identifier"
+            @infinite="infinite" />
     </div>
   </div>
 </template>
@@ -16,28 +14,22 @@
 import dayjs from 'dayjs'
 import List from '@/components/list/Test'
 import Header from './header/Header'
-import MescrollVue from 'mescroll.js/mescroll.vue'
 
 export default {
   name: 'DailyRank',
   components: {
     List,
-    Header,
-    MescrollVue
+    Header
   },
   data () {
     return {
-      param: {
-        page: 0,
-        mode: '',
-        date: null
-      },
+      page: 1,
+      mode: '',
+      date: null,
       pictureList: [],
       noMore: false,
       loading: false,
-      mescrollUp: {
-        callback: this.upCallback
-      }
+      identifier: +new Date()
     }
   },
   computed: {
@@ -53,16 +45,18 @@ export default {
     }
   },
   mounted () {
-    this.param.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD')
-    this.param.mode = 'day'
-    this.getData()
+    this.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD')
+    this.mode = 'day'
+    // this.getData()
   },
   methods: {
     getData () {
       this.loading = true
       this.param.page = 1
       this.pictureList = [] // 不清空会追加
+      this.infiniteId += 1
       this.noMore = false
+      this.infiniteId += 1
       this.$api.rank
         .getRank(this.param)
         .then(res => {
@@ -78,9 +72,12 @@ export default {
         })
     },
     getMoreData () {
-      this.param.page++
       this.$api.rank
-        .getRank(this.param)
+        .getRank({
+          page: this.page++,
+          date: this.date,
+          mode: this.mode
+        })
         .then(res => {
           if (!res.data.data.data.length) {
             this.noMore = true
@@ -95,10 +92,12 @@ export default {
         })
     },
     infinite ($state) {
-      console.log(1111)
-      this.param.page++
       this.$api.rank
-        .getRank(this.param)
+        .getRank({
+          page: this.page++,
+          date: this.date,
+          mode: this.mode
+        })
         .then(res => {
           if (!res.data.data.data.length) {
             $state.complete()
@@ -111,12 +110,15 @@ export default {
         })
     },
     selectDate (date) {
-      this.param.date = dayjs(date).format('YYYY-MM-DD')
-      this.getData()
+      this.date = dayjs(date).format('YYYY-MM-DD')
+      this.page = 1
+      this.pictureList = []
+      // this.getData()
+      this.infiniteId += 1
     },
     selectMode (selectedVal) {
       this.param.mode = selectedVal[1]
-      this.getData()
+      // this.getData()
     },
     onScroll (pos, direction) {
       if (direction === 1) {
@@ -126,12 +128,6 @@ export default {
         // 下滑
         this.$store.dispatch('changeTab', true)
       }
-    },
-    upCallback () {
-
-    },
-    mescrollInit () {
-
     }
   }
 }
@@ -139,12 +135,14 @@ export default {
 
 <style lang="stylus" scoped>
 .rank
-  position fixed
-  top 40px
-  right 0
-  bottom 0
-  left 0
+  // position fixed
+  // top 0
+  // right 0
+  // bottom 0
+  // left 0
   // width 100%
   // height 100vh
   font-size 16px
+  margin-top 40px
+  position relative
 </style>
