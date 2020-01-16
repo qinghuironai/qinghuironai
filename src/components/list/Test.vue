@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     width () {
-      return document.body.clientWidth
+      return document.body.clientWidth || document.documentElement.clientWidth
     },
     contentHeight () {
       return Math.max(this.leftHight, this.rightHight)
@@ -55,7 +55,7 @@ export default {
       this.$emit('infinite', $state)
     },
     touchStart () {
-      console.log(1)
+      console.log('touchStart')
     }
   },
   watch: {
@@ -76,7 +76,7 @@ export default {
               transform = `translate3d(0, ${this.leftHight}px, 0)`
               this.leftHight += height
             } else {
-              transform = `translate3d(${this.width / 2}px, ${this.rightHight}px, 0)`
+              transform = `translate3d(${width}px, ${this.rightHight}px, 0)`
               this.rightHight += height
             }
             let style = {

@@ -17,7 +17,7 @@ function getSearch (params) {
     method: 'get',
     params: {
       ...params,
-      pageSize: 30
+      pageSize: 300
     }
   })
 }
