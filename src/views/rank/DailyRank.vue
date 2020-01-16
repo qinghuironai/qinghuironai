@@ -12,7 +12,7 @@
 
 <script>
 import dayjs from 'dayjs'
-import List from '@/components/list/Test'
+import List from '@/components/virtual-list/VirtualList'
 import Header from './header/Header'
 
 export default {
@@ -73,13 +73,13 @@ export default {
       this.page = 1
       this.pictureList = []
       // this.getData()
-      this.infiniteId += 1
+      this.identifier += 1
     },
     selectMode (selectedVal) {
       this.mode = selectedVal[1]
       this.page = 1
       this.pictureList = []
-      this.infiniteId += 1
+      this.identifier += 1
     },
     onScroll (pos, direction) {
       if (direction === 1) {

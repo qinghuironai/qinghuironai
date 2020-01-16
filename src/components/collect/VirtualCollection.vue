@@ -24,7 +24,7 @@
               :data="item"></slot>
       </div>
     </div>
-    <infinite-loading @infinite="infinite"></infinite-loading>
+    <infinite-loading :identifier="identifier" @infinite="infinite"></infinite-loading>
   </div>
 </template>
 
@@ -58,6 +58,9 @@ export default {
     sectionSize: {
       type: Number,
       default: 300
+    },
+    identifier: {
+      default: +new Date()
     }
   },
   data () {
@@ -80,6 +83,9 @@ export default {
       this.totalWidth = 0
 
       this.onCollectionChanged()
+    },
+    identifier () {
+      this.totalHeight = 0
     }
   },
   created () {

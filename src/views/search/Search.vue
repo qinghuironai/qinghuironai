@@ -74,7 +74,7 @@ import debounce from 'lodash/debounce'
 import searchOptions from './options/Options'
 // import Tags from '@/components/tags/Tags'
 // import Scroll from '@/components/scroll/Scroll'
-import List from '@/components/list/Test'
+import List from '@/components/virtual-list/VirtualList'
 
 export default {
   name: 'Search',
