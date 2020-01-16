@@ -10,6 +10,9 @@ import util from './util'
 import Mixin from './mixins'
 import './style/index.styl'
 import 'amfe-flexible'
+import VirtualCollection from '@/components/collect'
+
+Vue.use(VirtualCollection)
 
 // import VConsole from 'vconsole'
 

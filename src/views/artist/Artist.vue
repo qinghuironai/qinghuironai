@@ -33,7 +33,7 @@
                 @pulling-up="getMoreData">
           <div class="avatar"
                ref="avatar">
-            <img :src="`${PREFIX + artistDetail.avatar}`"
+            <img :src="`${artistDetail.avatarSrc}`"
                  alt="" />
           </div>
           <div class="info">
@@ -89,6 +89,7 @@
 <script>
 import Header from '@/components/header/Header'
 import Scroll from '@/components/scroll/Scroll'
+import { IMG_PREFIX } from '@/util/constants'
 const OFFSET = 10
 const HEADER_HEIGHT = 40
 const types = [{ text: `插画`, value: 'illust' }, { text: `漫画`, value: 'manga' }]
@@ -113,7 +114,6 @@ export default {
           txt: { more: '上拉加载更多', noMore: '(￣ˇ￣)俺也是有底线的' },
           visible: false
         },
-        scrollbar: true,
         probeType: 3
       }
     },
@@ -167,7 +167,7 @@ export default {
       this.$api.detail
         .reqArtist(this.artistId)
         .then(res => {
-          this.artistDetail = res.data.data
+          this.artistDetail = { ...res.data.data, avatarSrc: IMG_PREFIX + res.data.data.avatar }
           this.$nextTick(() => {
             this.init()
           })

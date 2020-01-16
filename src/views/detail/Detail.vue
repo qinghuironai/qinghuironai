@@ -14,13 +14,13 @@
           <div class="top__img"
                :style="`height: ${illustDetail.itemHeight}px`"
                @click="showImagePreview">
-            <img v-lazy="PREFIX + illustDetail.imageUrls[0].large.replace('_webp', '')"
+            <img v-lazy="illustDetail.src"
                  alt="" />
           </div>
           <div class="top__content">
             <h2 class="title">{{illustDetail.title}}</h2>
             <div class="artist">
-              <img :src="PREFIX + illustDetail.artistPreView.avatar"
+              <img :src="illustDetail.avatarSrc"
                    @click="goArtist"
                    alt="" />
               <h2>{{illustDetail.artistPreView.name}}</h2>
@@ -49,6 +49,7 @@
 import dayjs from 'dayjs'
 import Scroll from '@/components/scroll/Scroll'
 import Bottom from './bottom/Bottom'
+import { IMG_PREFIX } from '@/util/constants'
 
 export default {
   name: 'Detail',
@@ -74,7 +75,7 @@ export default {
   computed: {
     imgs () {
       return this.illustDetail.imageUrls.reduce((pre, cur) => {
-        return pre.concat(`${this.PREFIX + cur.original}`)
+        return pre.concat(`${IMG_PREFIX + cur.original}`)
       }, [])
     },
     options () {
@@ -84,7 +85,6 @@ export default {
           txt: { more: '上拉加载相关作品', noMore: '(￣ˇ￣)俺也是有底线的' },
           visible: false
         },
-        scrollbar: true,
         probeType: 3
       }
     },
@@ -105,7 +105,12 @@ export default {
         .reqIllustDetail(this.pid)
         .then(res => {
           const data = res.data.data
-          this.illustDetail = { ...data, itemHeight: parseInt((data.height / data.width) * window.innerWidth) }
+          this.illustDetail = {
+            ...data,
+            itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
+            src: IMG_PREFIX + data.imageUrls[0].large.replace('_webp', ''),
+            avatarSrc: IMG_PREFIX + data.artistPreView.avatar
+          }
         })
     },
     getData () {

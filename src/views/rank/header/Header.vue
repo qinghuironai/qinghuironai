@@ -1,11 +1,11 @@
 <template>
   <div class="rank-header">
     <i class="iconfont icon-sousuo1"
-      @click="goSearch"></i>
+       @click="goSearch"></i>
     <span :class="isDown ? '' : 'active'"
           @click="showModePicker">{{modeText}}</span>
     <i class="iconfont icon-rili"
-      @click="showDatePicker"></i>
+       @click="showDatePicker"></i>
   </div>
 </template>
 
@@ -70,13 +70,16 @@ export default {
   width 100%
   height 40px
   line-height 40px
-  z-index 2
+  z-index 100
   display flex
   align-items center
   justify-content space-between
   padding 5px 15px
   box-sizing border-box
   margin-bottom 8px
+  position fixed
+  top 0
+  background #fff
   i
     font-size 18px
   span

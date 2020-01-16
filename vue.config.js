@@ -4,12 +4,11 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-console.log('Url prefix: ', process.env.PREFIX)
+console.log('Url prefix: ', process.env.VUE_APP_PREFIX)
 
 module.exports = {
   lintOnSave: false,
-  publicPath: process.env.PREFIX,
-  // publicPath: './',
+  publicPath: process.env.VUE_APP_PREFIX,
 
   pluginOptions: {
     'style-resources-loader': {
