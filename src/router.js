@@ -20,7 +20,7 @@ Router.prototype.push = function push (location) {
 
 export default new Router({
   mode: 'history',
-  base: 'pix',
+  base: process.env.VUE_APP_PREFIX,
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
