@@ -1,6 +1,6 @@
 <template>
   <transition enter-active-class="animated rollIn"
-              leave-active-class="animated rollOut">
+              leave-active-class="">
     <div class="search">
       <div class="search-header">
         <i class="iconfont icon-icon-test"
@@ -316,6 +316,8 @@ export default {
   z-index 100
   font-size 16px
   // overflow scroll
+  width 100%
+  height 100%
   .search-header
     display flex
     align-items center

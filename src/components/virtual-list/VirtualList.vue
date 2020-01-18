@@ -83,7 +83,7 @@ export default {
     cellSizeAndPositionGetter (item, index) {
       // console.log(item)
       return {
-        width: (document.body.clientWidth || document.documentElement.clientWidth) / 2 - 5,
+        width: (document.body.clientWidth || document.documentElement.clientWidth) / 2,
         height: item.style.height - 10,
         x: item.x,
         y: item.top
@@ -122,7 +122,7 @@ export default {
             tmp['style'] = style
             tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`
             tmp['avatarSrc'] = `${IMG_PREFIX}${tmp.artistPreView.avatar}`
-            tmp['backgroundColor'] = color[Math.floor(Math.random() * 8)]
+            tmp['color'] = color[Math.floor(Math.random() * 8)]
           }
         }
       },
