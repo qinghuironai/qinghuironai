@@ -11,13 +11,6 @@ module.exports = {
   publicPath: process.env.VUE_APP_PREFIX,
 
   pluginOptions: {
-    'style-resources-loader': {
-      preProcessor: 'stylus',
-      patterns: [
-        'D:\\project\\learn\\pixivic-mobile-master\\pixivic-mobile-master\\src\\style\\mixin.styl',
-        'D:\\project\\learn\\pixivic-mobile-master\\pixivic-mobile-master\\src\\style\\color.styl'
-      ]
-    },
     'cube-ui': {
       postCompile: true,
       theme: true
