@@ -58,7 +58,7 @@ export default {
   left 0
   width 100%
   height 100%
-  padding 5px
+  padding 10px
   .item-content
     position relative
     width 100%

@@ -24,7 +24,8 @@
               :data="item"></slot>
       </div>
     </div>
-    <infinite-loading :identifier="identifier" @infinite="infinite"></infinite-loading>
+    <infinite-loading :identifier="identifier"
+                      @infinite="infinite"></infinite-loading>
   </div>
 </template>
 
@@ -57,7 +58,7 @@ export default {
     },
     sectionSize: {
       type: Number,
-      default: 300
+      default: document.body.clientWidth || document.documentElement.clientWidth
     },
     identifier: {
       default: +new Date()
@@ -151,7 +152,7 @@ export default {
       }
     },
     onScroll (e) {
-      console.log(this.$refs.outer.scrollTop)
+      // console.log(this.$refs.outer.scrollTop)
       this.flushDisplayItems()
       this.scrollY = this.$refs.outer.scrollTop
     },

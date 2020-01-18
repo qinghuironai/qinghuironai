@@ -1,12 +1,12 @@
 <template>
   <div @click="goDetail(column)"
-       class="item animated fadeIn">
+       class="item">
     <div :class="['item-content', { 'isSetu': column.xrestrict === 1 || column.sanityLevel > 6 }]"
-         :style="{backgroundColor: column.color}">
-      <img :src="column.src"
+         :style="contentStyle">
+      <!-- <img :src="column.src"
            :style="{opacity}"
-           @load="opacity = 1"
-           alt="" />
+           @load="opacity = 0"
+           alt="" /> -->
       <div class="count"
            v-if="column.pageCount > 1">
         <img src="../../assets/images/count.svg" />
@@ -34,6 +34,14 @@ export default {
       opacity: 0
     }
   },
+  computed: {
+    contentStyle () {
+      return {
+        backgroundImage: `url(${this.column.src})`,
+        backgroundColor: this.column.color
+      }
+    }
+  },
   methods: {
     goDetail (column) {
       if (column.xrestrict === 1 || column.sanityLevel > 6) return
@@ -56,19 +64,22 @@ export default {
   left 0
   width 100%
   height 100%
-  padding 5px
+  padding 5px 10px
   .item-content
     position relative
     width 100%
     height 100%
     box-shadow 0 1px 5px rgba(0, 0, 0, 0.3)
-    border-radius 8px
+    background-size cover
+    background-repeat no-repeat
+    border-radius 16px
     >img
       width 100%
       height 100%
       object-fit cover
       border-radius 8px
       opacity 0
+      transition opacity 0.3s ease-in
     >img[lazy=loading], img[lazy=error]
       width 50px
       height 50px
