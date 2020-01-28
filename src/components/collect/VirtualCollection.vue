@@ -2,6 +2,7 @@
 .vue-virtual-collection
   overflow scroll
   -webkit-overflow-scrolling touch
+  margin 0 auto
   &::-webkit-scrollbar
     display none /* Chrome Safari */
   &-container

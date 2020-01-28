@@ -1,13 +1,6 @@
 <template>
   <div class="artworks">
-    <List :list="pictureList" @infinite="infinite">
-      <v-toolbar class="primary" dark height="50">
-        <v-btn icon @click="$router.back()">
-          <v-icon>mdi-arrow-left</v-icon>
-        </v-btn>
-        <v-toolbar-title>{{ type | filterType }}作品</v-toolbar-title>
-      </v-toolbar>
-    </List>
+    <List :list="pictureList" @infinite="infinite" />
   </div>
 </template>
 

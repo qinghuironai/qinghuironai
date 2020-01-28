@@ -48,7 +48,7 @@ export default {
       headerHeight: 0,
       columnHeight: [],
       column: 0,
-      width: getClient().width,
+      width: getClient().width - 16,
       height: getClient().height
     };
   },
@@ -81,6 +81,11 @@ export default {
             tmp['width'] = width;
             tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`;
             tmp['color'] = randomColor();
+
+            tmp['style'] = {
+              backgroundColor: randomColor(),
+              filter: (tmp.xrestrict === 1 || tmp.sanityLevel > 6) ? `blur(20px)` : ''
+            };
           }
         }
       }
@@ -119,7 +124,7 @@ export default {
       console.log(item);
     },
     waterFall() {
-      this.width = getClient().width;
+      this.width = getClient().width - 16;
       this.height = getClient().height;
       this.column = Math.ceil(this.width / columnWidth);
       this.columnHeight = new Array(this.column).fill(0);
@@ -145,6 +150,10 @@ export default {
         tmp['width'] = width;
         tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`;
         tmp['color'] = randomColor();
+        tmp['style'] = {
+          backgroundColor: randomColor(),
+          filter: (tmp.xrestrict === 1 || tmp.sanityLevel > 6) ? `blur(20px)` : ''
+        };
       }
     }
   }
@@ -154,4 +163,5 @@ export default {
 <style lang="stylus" scope>
 .list
   position relative
+  background-color #fff
 </style>

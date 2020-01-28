@@ -1,6 +1,6 @@
 <template>
   <div class="item" @click="goDetail">
-    <div class="item-content" :style="contentStyle">
+    <div class="item-content" :style="column.style">
       <img
         :src="column.src"
         :style="{opacity}"
@@ -68,13 +68,12 @@ export default {
   left 0
   width 100%
   height 100%
-  padding 5px
+  padding 8px
   overflow hidden
   .item-content
     position relative
     width 100%
     height 100%
-    //box-shadow 0 1px 5px rgba(0, 0, 0, 0.3)
     border-radius 5px
     img
       width 100%
@@ -87,8 +86,8 @@ export default {
   .count
     position absolute
     display inline-block
-    top 8px
-    right 8px
+    top 15px
+    right 15px
     color white
     background-color #0000009e
     padding 2px
@@ -104,7 +103,7 @@ export default {
       line-height 20px
   .like
     position absolute
-    bottom 0
+    bottom 5px
     right -10px
     width 80px
     height 40px

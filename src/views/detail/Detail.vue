@@ -181,13 +181,13 @@ export default {
 @import '~@/style/color.styl'
 .detail
   background-size contain
-  width 100vw
+  // width 100vw
   background-color #fff
   z-index 3
   font-size 16px
   &-info
     padding 5px 10px
-    width 100vw
+    // width 100vw
     overflow hidden
     >.caption
       word-wrap break-word

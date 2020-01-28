@@ -59,6 +59,7 @@ export default {
 @import '~@/style/color.styl'
 .tabs
   width 70%
+  max-width 300px
   height 55px
   background #ffffff
   border-radius 25px
