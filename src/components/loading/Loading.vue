@@ -1,15 +1,19 @@
 <template>
   <div class="loading-mask">
     <div class="loading-spinner">
-      <svg xmlns="http://www.w3.org/2000/svg"
-           version="1.1"
-           viewBox="25 25 50 50"
-           class="circular">
-        <circle cx="50"
-                cy="50"
-                r="20"
-                fill="none"
-                class="path" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        version="1.1"
+        viewBox="25 25 50 50"
+        class="circular"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="20"
+          fill="none"
+          class="path"
+        />
       </svg>
     </div>
   </div>
@@ -18,7 +22,7 @@
 <script>
 export default {
 
-}
+};
 </script>
 
 <style lang="stylus" scope>

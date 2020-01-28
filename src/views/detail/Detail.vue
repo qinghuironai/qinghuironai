@@ -1,61 +1,109 @@
 <template>
-  <transition enter-active-class="animated zoomIn"
-              leave-active-class="animated rollOut"
-              :duration="200">
-    <div class="detail">
-      <Scroll v-if="illustDetail"
-              :data="pictureList"
-              ref="scroll"
-              :options="options"
-              :loading="loading"
-              :noMore="noMore"
-              @pulling-up="getMoreData">
-        <div class="detail__top animated zoomIn">
-          <div class="top__img"
-               :style="`height: ${illustDetail.itemHeight}px`"
-               @click="showImagePreview">
-            <img v-lazy="illustDetail.src"
-                 alt="" />
-          </div>
-          <div class="top__content">
-            <h2 class="title">{{illustDetail.title}}</h2>
-            <div class="artist">
-              <img :src="illustDetail.avatarSrc"
-                   @click="goArtist"
-                   alt="" />
-              <h2>{{illustDetail.artistPreView.name}}</h2>
+  <transition
+    enter-active-class="animated zoomIn"
+    leave-active-class="animated rollOut"
+    :duration="200"
+  >
+    <div v-if="illustDetail" class="detail">
+      <List :list="pictureList" @infinite="infinite">
+        <div class="detail-top">
+          <v-toolbar
+            class="elevation-0"
+            :height="illustDetail.itemHeight"
+            dark
+            prominent
+            :src="illustDetail.src"
+            @click="preview = true"
+          >
+            <v-btn icon @click.stop="$router.back()">
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
+            <v-spacer />
+            <v-menu>
+              <template v-slot:activator="{ on }">
+                <v-app-bar-nav-icon @click.stop v-on="on" />
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in items"
+                  :key="index"
+                  @click="clickMenu(item.val)"
+                >
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-toolbar>
+          <div class="detail-info">
+            <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
+            <p class="caption" v-html="illustDetail.caption" />
+            <div class="tags">
+              <span v-for="(item, index) in illustDetail.tags" :key="index" class="caption tag">
+                <a>{{ item.name }}</a>
+                <a>{{ item.translatedName }}</a>
+              </span>
             </div>
-            <div class="time">
-              <span>
-                {{illustDetail.createDate | formatCreateDate}}
-              </span>
-              <span>{{illustDetail.totalView}} 阅读</span>
-              <span>
-                <span>{{illustDetail.totalBookmarks}} </span>喜欢!
-              </span>
+            <div class="work-stats">
+              <a class="work-stats-a">
+                <v-icon size="16">iconfont icon-yanjing</v-icon>
+                <span>{{ illustDetail.totalView }}</span>
+              </a>
+              <a class="work-stats-a">
+                <v-icon size="16">iconfont icon-xihuan</v-icon>
+                <span>{{ illustDetail.totalBookmarks }}</span>
+              </a>
+            </div>
+            <v-divider />
+            <div class="user">
+              <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
+                <v-avatar>
+                  <v-img :src="illustDetail.avatarSrc" alt="avatar" />
+                </v-avatar>
+                <span>{{ illustDetail.artistPreView.name }}</span>
+              </router-link>
+              <v-btn color="primary" rounded>+加关注</v-btn>
             </div>
           </div>
         </div>
-        <h2 class="detail__middle"
-            v-if="pictureList.length">相关作品</h2>
-      </Scroll>
-      <Bottom :detail="illustDetail"
-              @handleClick="handleClick" />
+      </List>
+      <div v-if="preview" class="detail-preview">
+        <v-carousel
+          height="100vh"
+          hide-delimiter-background
+          hide-delimiters
+          show-arrows-on-hover
+        >
+          <v-carousel-item v-for="(item, i) in imgs" :key="i">
+            <v-row class="fill-height" align="center" justify="center">
+              <img width="100%" :src="item">
+            </v-row>
+          </v-carousel-item>
+        </v-carousel>
+        <v-btn
+          color="pink"
+          dark
+          small
+          fixed
+          top
+          right
+          fab
+          @click="preview = false"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </div>
     </div>
   </transition>
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import Scroll from '@/components/scroll/Scroll'
-import Bottom from './bottom/Bottom'
-import { IMG_PREFIX } from '@/util/constants'
+import List from '@/components/virtual-list/VirtualList';
+import { IMG_PREFIX } from '@/util/constants';
 
 export default {
   name: 'Detail',
   components: {
-    Bottom,
-    Scroll
+    List
   },
   props: {
     pid: {
@@ -63,193 +111,124 @@ export default {
       type: String
     }
   },
-  data () {
+  data() {
     return {
       pictureList: [],
       illustDetail: null,
-      loading: false,
-      page: 0,
-      noMore: false
-    }
+      page: 1,
+      preview: false,
+      items: [
+        { val: 'origin', title: '跳转原图链接' },
+        { val: 'share', title: '分享' },
+        { val: 'more', title: '更多' }
+      ]
+    };
   },
   computed: {
-    imgs () {
+    imgs() {
       return this.illustDetail.imageUrls.reduce((pre, cur) => {
-        return pre.concat(`${IMG_PREFIX + cur.original}`)
-      }, [])
-    },
-    options () {
-      return {
-        pullUpLoad: {
-          threshold: 0,
-          txt: { more: '上拉加载相关作品', noMore: '(￣ˇ￣)俺也是有底线的' },
-          visible: false
-        },
-        probeType: 3
-      }
-    },
-    param () {
-      return {
-        page: this.page,
-        illustId: this.pid
-      }
+        return pre.concat(`${IMG_PREFIX + cur.original}`);
+      }, []);
     }
   },
-  mounted () {
-    this.getIllustDetail()
-    // this.getData()
+  mounted() {
+    this.getIllustDetail();
   },
   methods: {
-    getIllustDetail () {
+    getIllustDetail() {
       this.$api.detail
         .reqIllustDetail(this.pid)
         .then(res => {
-          const data = res.data.data
+          const data = res.data.data;
           this.illustDetail = {
             ...data,
             itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
-            src: IMG_PREFIX + data.imageUrls[0].large.replace('_webp', ''),
+            src: IMG_PREFIX + data.imageUrls[0].original.replace('_webp', ''),
             avatarSrc: IMG_PREFIX + data.artistPreView.avatar
-          }
-        })
+          };
+        });
     },
-    getData () {
-      // this.loading = true
-      this.page = 1
-      this.pictureList = []
-      this.noMore = false
+    infinite($state) {
       this.$api.detail
-        .reqRelatedIllust(this.param)
+        .reqRelatedIllust({
+          page: this.page++,
+          illustId: this.pid
+        })
         .then(res => {
           if (!res.data.data) {
-            this.noMore = true
+            $state.complete();
           } else {
-            this.pictureList = res.data.data
-          }
-          // this.loading = false
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    },
-    getMoreData () {
-      this.page++
-      this.$api.detail
-        .reqRelatedIllust(this.param)
-        .then(res => {
-          if (!res.data.data) {
-            this.noMore = true
-          } else {
-            this.pictureList = this.pictureList.concat(res.data.data)
+            this.pictureList = this.pictureList.concat(res.data.data);
+            $state.loaded();
           }
         })
         .catch(err => {
-          console.error(err)
-        })
+          console.error(err);
+        });
     },
-    showImagePreview () {
-      this.$createImagePreview({
-        imgs: this.imgs
-      }).show()
-    },
-    handleClick () {
-      this.$router.back()
-    },
-    goArtist () {
-      this.$router.push(`/artist/${this.illustDetail.artistId}`)
-    }
-  },
-  filters: {
-    formatCreateDate (val) {
-      return dayjs(val).format('YYYY-MM-DD HH:mm')
+    clickMenu(id) {
+      switch (id) {
+        case 'origin': {
+          window.open(`https://www.pixiv.net/artworks/${this.pid}`);
+          break;
+        }
+      }
     }
   }
-  // 会出现 前进后退都是 Detail 的情况
-  // beforeRouteLeave (to, from, next) {
-  //   console.log('to', to)
-  //   console.log('from', from) // Detail
-  //   let cache = this.$vnode.parent.componentInstance.cache
-  //   let keys = this.$vnode.parent.componentInstance.keys
-  //   console.log('cache', cache) // {/dailyRank: VNode, /search: VNode, /detail/48233212: VNode}
-  //   console.log('keys', keys) // ["/dailyRank", "/search", "/detail/48233212"]
-  // }
-}
+};
 </script>
 <style lang="stylus" scoped>
 @import '~@/style/color.styl'
-@import '~@/style/global.styl'
 .detail
-  position fixed
-  top 0
-  left 0
-  bottom 60px
   background-size contain
   width 100vw
   background-color #fff
   z-index 3
   font-size 16px
-  &__top
-    width 100%
-    background $white
-    transition all 0.2s
-    .top__img
-      max-height 500px
-      text-align center
-      position relative
-      overflow hidden
+  &-info
+    padding 5px 10px
+    width 100vw
+    overflow hidden
+    >.caption
+      word-wrap break-word
+      margin-top 5px
+    .user
       display flex
-      justify-content center
       align-items center
-      >img
-        width 100%
-        height 100%
-        vertical-align middle
-        transition opacity 0.3s
-        opacity 1
-        object-fit cover
-      img[lazy=loading]
-        width 100px
-        height 100px
-    .top__content
-      padding 10px
-      .title
-        font-size 18px
-        margin-bottom 8px
-        line-height 25px
-        height 25px
-        no-wrap()
-      .subtitle
-        font-size 16px
-        color $primary
-        margin-bottom 8px
-      .artist
-        display flex
-        align-items center
-        margin-bottom 8px
-        img
-          width 40px
-          height 40px
-          border-radius 50%
-          margin-right 5px
-        >h2
-          flex 1
-          font-size 16px
-      .time
-        display flex
-        align-items center
-        font-size 14px
-        color #cccccc
-        >span
-          flex 1
-          text-align center
-          &:last-child
-            span
-              color $primary
-  &__middle
-    text-align center
-    height 40px
-    line-height 40px
-    font-size 20px
-    border-bottom 1px solid #cccccc
-    margin-bottom 10px
+      margin 10px 0
+      a
+        flex 1
+        span
+          margin-left 10px
+          color rgba(0, 0, 0, 0.88)
+    .tags
+      .tag
+        a:first-child
+          color $primary
+          margin-right 4px
+          &::before
+            content '#'
+        a:last-child
+          color #adadad
+          margin-right 8px
+    .work-stats
+      margin-top 10px
+      &-a
+        margin-right 10px
+        span
+          font-size 12px
+          margin-left 2px
+          color rgba(0, 0, 0, 0.32)
+  &-preview
+    position fixed
+    top 0
+    left 0
+    right 0
+    height 100vh
+    overflow scroll
+    background #fff
+    >>>.v-carousel
+      overflow-y scroll !important
+    >>>.v-responsive
+      overflow-y scroll !important
 </style>
