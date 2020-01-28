@@ -1,35 +1,36 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
-Vue.use(Router)
+Vue.use(Router);
 
 const pages = {
   DailyRank: () => import('./views/rank/DailyRank'),
   Detail: () => import('./views/detail/Detail'),
   Artist: () => import('./views/artist/Artist'),
+  Artworks: () => import('./views/artist/artworks//Artworks'),
   Search: () => import('./views/search/Search'),
   Find: () => import('./views/find/Find'),
   Me: () => import('./views/me/Me'),
   NotFound: () => import('./views/not-found/NotFound')
-}
+};
 
-const originalPush = Router.prototype.push
-Router.prototype.push = function push (location) {
-  return originalPush.call(this, location).catch(err => err)
-}
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err);
+};
 
-console.log(process.env)
+console.log(process.env);
 export default new Router({
   mode: 'history',
   base: process.env.VUE_APP_PREFIX,
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition
+      return savedPosition;
     } else {
       return {
         x: 0,
         y: 0
-      }
+      };
     }
   },
   routes: [{
@@ -46,7 +47,14 @@ export default new Router({
     path: '/artist/:artistId',
     name: 'Artist',
     component: pages.Artist,
-    props: true
+    props: true,
+    children: [
+      {
+        path: ':type',
+        name: 'Artworks',
+        component: pages.Artworks
+      }
+    ]
   },
   {
     path: '/dailyRank',
@@ -86,7 +94,7 @@ export default new Router({
     }
   }
   ]
-})
+});
 
 // 没有 tabs 切换情况
 // let routerList = []

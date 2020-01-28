@@ -24,7 +24,7 @@
         :stroke-dashoffset="dashOffset"
       />
     </svg>
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
@@ -40,17 +40,17 @@ export default {
       default: 0
     }
   },
-  data () {
+  data() {
     return {
       dashArray: Math.PI * 100
-    }
+    };
   },
   computed: {
-    dashOffset () {
-      return (1 - this.percent) * this.dashArray
+    dashOffset() {
+      return (1 - this.percent) * this.dashArray;
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

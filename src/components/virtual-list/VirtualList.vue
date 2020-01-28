@@ -1,136 +1,154 @@
 <template>
-  <div ref="list"
-       class="list">
-    <VirtualCollection :cellSizeAndPositionGetter="cellSizeAndPositionGetter"
-                       :collection="newList"
-                       :height="height"
-                       :width="width"
-                       :identifier="identifier"
-                       @infinite="infinite">
-      <div slot="cell"
-           slot-scope="props"
-           style="height: 100%; display: flex; justifyContent: center;">
-        <Item :column="props.data" />
-      </div>
-
+  <div ref="list" class="list">
+    <VirtualCollection
+      :cell-size-and-position-getter="cellSizeAndPositionGetter"
+      :collection="list"
+      :identifier="identifier"
+      :width="width"
+      :height="height"
+      @infinite="infinite"
+    >
+      <slot />
+      <template v-slot:cell="props">
+        <Item :column="props.data" @handleLike="handleLike" />
+      </template>
     </VirtualCollection>
   </div>
 </template>
 
 <script>
-import Item from './Item'
-import { IMG_PREFIX, color } from '@/util/constants'
+import VirtualCollection from '@/components/collect/VirtualCollection';
+import throttle from 'lodash/throttle';
+import Item from './Item';
+import { IMG_PREFIX } from '@/util/constants';
+import { randomColor } from '@/util';
+import { getClient } from '@/util/dom';
+const columnWidth = 200; // 屏幕小于200则1列
 
 export default {
+  components: {
+    VirtualCollection,
+    Item
+  },
   props: {
     list: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     },
     identifier: {
+      type: Number,
       default: +new Date()
     }
   },
-  components: {
-    Item
-  },
-  computed: {
-    contentHeight () {
-      return Math.max(this.leftHight, this.rightHight)
-    },
-    width () {
-      return document.body.clientWidth
-    },
-    height () {
-      return document.body.clientHeight * 2
-    },
-    data () {
-      return this.list.filter(item => item.top > this.scrollY - 2 * this.height && item.top < this.scrollY + 2 * this.height)
-    },
-    newList () {
-      return this.list
-    }
-  },
-  data () {
+  data() {
     return {
-      leftHight: 0,
-      rightHight: 0,
       scrollY: 0,
-      refreshing: false,
-      loading: false
-    }
-  },
-  mounted () {
-    // window.addEventListener('scroll', this.onScroll, true)
-  },
-  methods: {
-    infiniteHandler ($state) {
-      this.$emit('infinite', $state)
-    },
-    onScroll (pos) {
-      // console.log(this.$refs.scroll)
-      this.scrollY = document.documentElement.scrollTop
-    },
-    infinite ($state) {
-      console.log('Jiazai')
-      this.$emit('infinite', $state)
-    },
-    refresh () {
-
-    },
-    cellSizeAndPositionGetter (item, index) {
-      // console.log(item)
-      return {
-        width: (document.body.clientWidth || document.documentElement.clientWidth) / 2,
-        height: item.style.height - 10,
-        x: item.x,
-        y: item.top
-      }
-    }
+      headerHeight: 0,
+      columnHeight: [],
+      column: 0,
+      width: getClient().width,
+      height: getClient().height
+    };
   },
   watch: {
     list: {
-      handler (val, old) {
+      handler(val, old) {
         if (val.length === 0) {
-          this.leftHight = 0
-          this.rightHight = 0
+          this.columnHeight = new Array(this.column).fill(0);
         } else {
-          const list = val.filter(e => !old.includes(e))
+          const list = val.filter(e => !old.includes(e));
           for (let i = 0; i < list.length; i++) {
-            let tmp = list[i]
-            let per = tmp.width / (this.width / 2)
-            let height = Math.min(parseInt(tmp.height / per), 300)
-            let style, transform
-            if (this.leftHight <= this.rightHight) {
-              transform = `translate3d(0, ${this.leftHight}px, 0)`
-              tmp.top = this.leftHight
-              tmp.x = 0
-              this.leftHight += height
-            } else {
-              transform = `translate3d(${this.width / 2}px, ${this.rightHight}px, 0)`
-              tmp.top = this.rightHight
-              tmp.x = this.width / 2
-              this.rightHight += height
+            const tmp = list[i];
+            const per = tmp.height / tmp.width;
+            const width = Math.floor(this.width / this.column);
+            const height = Math.min(width * per, 400);
+
+            let minHeight = this.columnHeight[0];
+            let index = 0;
+            for (let j = 0; j < this.columnHeight.length; j++) {
+              if (minHeight > this.columnHeight[j]) {
+                minHeight = this.columnHeight[j];
+                index = j;
+              }
             }
-            style = {
-              transform,
-              width: `${this.width / 2}px`,
-              height: `${height}`
-            }
-            tmp['style'] = style
-            tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`
-            tmp['avatarSrc'] = `${IMG_PREFIX}${tmp.artistPreView.avatar}`
-            tmp['color'] = color[Math.floor(Math.random() * 8)]
+            tmp.x = index * width;
+            tmp.y = this.columnHeight[index];
+            this.columnHeight[index] += height;
+
+            tmp['height'] = height;
+            tmp['width'] = width;
+            tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`;
+            tmp['color'] = randomColor();
           }
         }
-      },
-      deep: true,
-      immediate: true
+      }
+    }
+  },
+  mounted() {
+    this.waterFall();
+    if (this.$slots.default) {
+      this.headerHeight = parseInt(this.$slots.default[0].elm.offsetHeight);
+    }
+    window.addEventListener('resize', throttle(this.waterFall));
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.waterFall);
+  },
+  methods: {
+    onScroll(pos) {
+      // console.log(this.$refs.scroll)
+      this.scrollY = document.documentElement.scrollTop;
+    },
+    infinite($state) {
+      this.$emit('infinite', $state);
+    },
+    cellSizeAndPositionGetter(item, index) {
+      return {
+        width: item.width,
+        height: item.height,
+        x: item.x,
+        y: item.y + this.headerHeight
+      };
+    },
+    handleLike(data) {
+      console.log(data.id);
+      const item = this.list.find(item => item.id === data.id);
+      item.isLiked = true;
+      console.log(item);
+    },
+    waterFall() {
+      this.width = getClient().width;
+      this.height = getClient().height;
+      this.column = Math.ceil(this.width / columnWidth);
+      this.columnHeight = new Array(this.column).fill(0);
+      for (let i = 0; i < this.list.length; i++) {
+        const tmp = this.list[i];
+        const per = tmp.height / tmp.width;
+        const width = Math.floor(this.width / this.column);
+        const height = Math.min(width * per, 400);
+        // 找出最小列
+        let minHeight = this.columnHeight[0];
+        let index = 0;
+        for (let j = 0; j < this.columnHeight.length; j++) {
+          if (minHeight > this.columnHeight[j]) {
+            minHeight = this.columnHeight[j];
+            index = j;
+          }
+        }
+        tmp.x = index * width;
+        tmp.y = this.columnHeight[index];
+        this.columnHeight[index] += height;
+
+        tmp['height'] = height;
+        tmp['width'] = width;
+        tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`;
+        tmp['color'] = randomColor();
+      }
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scope>

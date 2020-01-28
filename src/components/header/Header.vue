@@ -1,10 +1,11 @@
 <template>
-  <div class="header"
-       ref="header"
-       :style="{background: `${background}`}">
-    <i class="iconfont icon-fanhui"
-       @click="handleClick"></i>
-    <h1>{{title}}</h1>
+  <div
+    ref="header"
+    class="header"
+    :style="{background: `${background}`}"
+  >
+    <i class="iconfont icon-fanhui" @click="handleClick" />
+    <h1>{{ title }}</h1>
   </div>
 </template>
 
@@ -21,11 +22,11 @@ export default {
     }
   },
   methods: {
-    handleClick () {
-      this.$emit('handleClick')
+    handleClick() {
+      this.$emit('handleClick');
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scope>

@@ -1,275 +1,242 @@
 <template>
-  <transition enter-active-class="animated zoomIn"
-              leave-active-class="animated rollOut">
-    <div class="artists"
-         v-if="artistDetail">
-      <Header :title="title"
-              ref="header"
-              @handleClick="handleClick" />
-      <div class="artists__background"
-           ref="imgWrapper"
-           :style="{backgroundImage: `url(${PREFIX + artistDetail.avatar})`}">
-        <div class="filter"></div>
+  <transition enter-active-class="animated zoomIn">
+    <div v-if="artistDetail" class="artists">
+      <Header ref="header" :title="title" @handleClick="handleClick" />
+      <div
+        ref="imgWrapper"
+        class="artists__background"
+        :style="{backgroundImage: `url(${artistDetail.avatarSrc})`}"
+      >
+        <div class="filter" />
       </div>
-      <div class="artists__info"
-           ref="info">
-        <!-- <img :src="`${PREFIX + artistDetail.avatar}`"
-             width="80"
-             height="80"
-             alt="" />
-        <p>{{artistDetail.name}}</p>
-        <div class="follow">关注</div> -->
+      <div ref="layer" class="artists__bglayer">
+        <div ref="avatar" class="avatar">
+          <v-avatar :size="80">
+            <img :src="`${artistDetail.avatarSrc}`" alt="">
+          </v-avatar>
+        </div>
       </div>
-      <div class="artists__bglayer"
-           ref="layer"></div>
-      <div class="artists__scroll"
-           ref="scrollWrapper">
-        <Scroll :data="pictureList"
-                :options="options"
-                :loading="loading"
-                :noMore="noMore"
-                ref="scroll"
-                @scroll="onScroll"
-                @pulling-up="getMoreData">
-          <div class="avatar"
-               ref="avatar">
-            <img :src="`${artistDetail.avatarSrc}`"
-                 alt="" />
-          </div>
-          <div class="info">
-            <p class="name">{{artistDetail.name}}</p>
-            <div class="link">
-              <div>
-                <i class="iconfont icon-home"></i>
-                webPage
+      <div ref="scrollWrapper" class="artists__scroll">
+        <Scroll :listen-scroll="true" @scroll="onScroll">
+          <div>
+            <div class="artists-info">
+              <v-btn class="mb-5" color="primary" rounded width="35%">+加关注</v-btn>
+              <p class="name">{{ artistDetail.name }}</p>
+              <div class="link">
+                <v-btn
+                  :href="artistDetail.webPage"
+                  text
+                  icon
+                  color="lighten-2"
+                >
+                  <v-icon>iconfont icon-home</v-icon>
+                </v-btn>
+                <v-btn
+                  :href="artistDetail.twitterUrl"
+                  text
+                  icon
+                  color="lighten-2"
+                >
+                  <v-icon>iconfont icon-ttww</v-icon>
+                </v-btn>
               </div>
-              <div>
-                <i class="iconfont icon-ttww"></i>
-                {{artistDetail.twitterAccount}}
+              <div class="friends">
+                <span>
+                  {{ artistDetail.totalFollowUsers }}
+                  <span>关注</span>
+                </span>
+                <span>
+                  {{ artistDetail.totalIllustBookmarksPublic }}
+                  <span>好P友</span>
+                </span>
+              </div>
+              <p class="caption">{{ artistDetail.comment }}</p>
+              <div
+                v-for="(val, index) in list"
+                :key="index"
+                class="mt-8"
+              >
+                <div v-if="val.list.length" class="d-flex justify-space-between align-center mb-1 px-3">
+                  <h2 class="font-weight-bold" style="font-size: 18px;">{{ val.text }}</h2>
+                  <span style="font-size: 14px;">
+                    <router-link :to="{name: 'Artworks', params: {type: val.type}}" style="vertical-align: middle; color: grey;">
+                      {{ val.sum }}件作品
+                    </router-link>
+                    <v-icon size="14" color="#b9eee5">iconfont icon-right</v-icon>
+                  </span>
+                </div>
+                <v-row class="px-6">
+                  <v-col
+                    v-for="item in val.list"
+                    :key="item.id"
+                    class="d-flex child-flex pa-0"
+                    cols="4"
+                  >
+                    <router-link :to="`/detail/${item.id}`">
+                      <v-img
+                        :src="item.imageUrls[0].medium | prefix"
+                        aspect-ratio="1"
+                        class="grey lighten-2"
+                      >
+                        <template v-slot:placeholder>
+                          <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                          >
+                            <v-progress-circular indeterminate color="grey lighten-5" />
+                          </v-row>
+                        </template>
+                      </v-img>
+                    </router-link>
+                  </v-col>
+                </v-row>
               </div>
             </div>
-            <div class="friends">
-              <span>
-                {{artistDetail.totalFollowUsers}} <span>关注</span>
-              </span>
-              <span>
-                {{artistDetail.totalIllustBookmarksPublic}}
-                <span>好基友</span>
-              </span>
-            </div>
-            <div ref="comments"
-                 class="comments">
-              <!-- {comment.map((item: string, index: number) => (
-              <p key={index}
-                 className="comment">
-                {item}
-              </p>
-              ))} -->
-              <p v-for="(item, index) in comment"
-                 :key="index"
-                 class="comment">
-                {{item}}
-              </p>
-            </div>
-            <div ref="lookmore"
-                 class="lookmore"
-                 @click="lookMore">
-              查看更多
-            </div>
           </div>
-          <cube-button @click="showPicker"
-                       :light="true"
-                       style="background: #fff; box-shadow: none; margin-top: 20px;">{{typeText}}</cube-button>
         </Scroll>
       </div>
+      <router-view />
     </div>
   </transition>
 </template>
 
 <script>
-import Header from '@/components/header/Header'
-import Scroll from '@/components/scroll/Scroll'
-import { IMG_PREFIX } from '@/util/constants'
-const OFFSET = 10
-const HEADER_HEIGHT = 40
-const types = [{ text: `插画`, value: 'illust' }, { text: `漫画`, value: 'manga' }]
+import Header from '@/components/header/Header';
+import Scroll from '@/components/scroll/Scroll';
+import { IMG_PREFIX } from '@/util/constants';
+const OFFSET = 10;
+const HEADER_HEIGHT = 40;
 
 export default {
   name: 'Artist',
+  components: {
+    Header,
+    Scroll
+  },
+  filters: {
+    prefix(val) {
+      return IMG_PREFIX + val;
+    }
+  },
   props: {
     artistId: {
       required: true,
       type: String
     }
   },
-  components: {
-    Header,
-    Scroll
-  },
-  computed: {
-    options () {
-      return {
-        pullUpLoad: {
-          threshold: 0,
-          txt: { more: '上拉加载更多', noMore: '(￣ˇ￣)俺也是有底线的' },
-          visible: false
-        },
-        probeType: 3
-      }
-    },
-    param () {
-      return {
-        artistId: this.artistId,
-        type: this.illustType,
-        page: this.page
-      }
-    },
-    typeText () {
-      if (this.illustType === 'illust') {
-        return `插画(${this.illustSum})`
-      } else if (this.illustType === 'manga') {
-        return `漫画(${this.mangaSum})`
-      }
-      return null
-    },
-    comment () {
-      return this.artistDetail.comment.split('\r\n').filter(item => item)
-    }
-  },
-  data () {
+  data() {
     return {
       artistDetail: null,
       title: '画师详情',
-      illustType: 'illust',
-      pictureList: [],
       imgInitHeight: 0,
       scrollY: 0,
       page: 1,
       illustSum: 0,
       mangaSum: 0,
-      loading: false,
-      noMore: false
+      illustList: [],
+      mangaList: []
+    };
+  },
+  computed: {
+    list() {
+      return [
+        { type: 'illust', text: '插画作品', sum: this.illustSum, list: this.illustList },
+        { type: 'manga', text: '漫画作品', sum: this.mangaSum, list: this.mangaList }
+      ];
     }
   },
-  mounted () {
-    this.getArtistInfo()
-    this.getData()
-    this.getSummary()
+  mounted() {
+    this.getArtistInfo();
+    this.getList('illust');
+    this.getList('manga');
+    this.getSummary();
   },
   methods: {
-    init () {
-      this.imgInitHeight = this.$refs.imgWrapper.offsetHeight
-      this.$refs.scrollWrapper.style.top = `${this.imgInitHeight - OFFSET}px`
-      this.$refs.imgWrapper.style.zIndex = -1
-      this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET}px`
+    init() {
+      this.imgInitHeight = this.$refs.imgWrapper.offsetHeight;
+      this.$refs.scrollWrapper.style.top = `${this.imgInitHeight - OFFSET}px`;
+      this.$refs.imgWrapper.style.zIndex = -1;
+      this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET}px`;
     },
-    getArtistInfo () {
+    getArtistInfo() {
       this.$api.detail
         .reqArtist(this.artistId)
         .then(res => {
-          this.artistDetail = { ...res.data.data, avatarSrc: IMG_PREFIX + res.data.data.avatar }
+          this.artistDetail = { ...res.data.data, avatarSrc: IMG_PREFIX + res.data.data.avatar };
           this.$nextTick(() => {
-            this.init()
-          })
-        })
+            this.init();
+          });
+        });
     },
-    getData () {
-      this.loading = true
-      this.page = 1
-      this.pictureList = []
-      this.noMore = false
-      this.$api.detail
-        .reqArtistIllust(this.param)
-        .then(res => {
-          if (!res.data.data) {
-            this.noMore = true
-          } else {
-            this.pictureList = res.data.data
-          }
-          this.loading = false
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    },
-    getMoreData () {
-      this.page++
-      this.$api.detail
-        .reqArtistIllust(this.param)
-        .then(res => {
-          if (!res.data.data) {
-            this.noMore = true
-          } else {
-            this.pictureList = this.pictureList.concat(res.data.data)
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    },
-    getSummary () {
+    getSummary() {
       this.$api.detail
         .reqSummary(this.artistId)
         .then(res => {
-          this.illustSum = res.data.data.find(item => item.type === 'illust')['sum']
-          this.mangaSum = res.data.data.find(item => item.type === 'manga')['sum']
-        })
+          const { data: { data }} = res;
+          for (const item of data) {
+            if (item.type === 'illust') {
+              this.illustSum = item.sum;
+            } else if (item.type === 'manga') {
+              this.mangaSum = item.sum;
+            }
+          }
+        });
     },
-    onScroll (pos) {
-      this.scrollY = -pos.y
-      const newY = pos.y
-      const percent = Math.abs(newY / this.imgInitHeight)
-      const minScrollY = -this.imgInitHeight + HEADER_HEIGHT
+    onScroll(pos) {
+      this.scrollY = -pos.y;
+      const newY = pos.y;
+      const percent = Math.abs(newY / this.imgInitHeight);
+      const minScrollY = -this.imgInitHeight + HEADER_HEIGHT;
       if (newY > 0) {
-        this.title = '画师详情'
-        this.$refs.imgWrapper.style['transform'] = `scale(${1 + percent})`
-        this.$refs.info.style['transform'] = `translate3d(0, ${newY}px, 0)`
-        this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET + newY}px`
+        this.title = '画师详情';
+        this.$refs.imgWrapper.style['transform'] = `scale(${1 + percent})`;
+        this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET + newY}px`;
       } else if (newY > minScrollY) {
-        this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET - Math.abs(newY)}px`
-        this.$refs.layer.style.zIndex = 1
-        this.$refs.imgWrapper.style.paddingTop = '35%'
-        this.$refs.imgWrapper.style.height = 0
-        this.$refs.imgWrapper.style.zIndex = -1
-        // this.$refs.info.style['transform'] = `translate3d(0, ${newY}px, 0)`
-        // this.$refs.info.style['opacity'] = `${1 - percent * 2}`
-        this.$refs.avatar.style['opacity'] = `${1 - percent * 2}`
-        this.$refs.avatar.style['transform'] = `scale(${1 - percent * 2})`
+        this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET - Math.abs(newY)}px`;
+        this.$refs.layer.style.zIndex = 1;
+        this.$refs.imgWrapper.style.paddingTop = '35%';
+        this.$refs.imgWrapper.style.height = 0;
+        this.$refs.imgWrapper.style.zIndex = -1;
+        this.$refs.avatar.style['opacity'] = `${1 - percent * 2}`;
+        this.$refs.avatar.style['transform'] = `scale(${1 - percent * 2})`;
       } else {
-        this.title = this.artistDetail.name
-        this.$refs.layer.style.top = `${HEADER_HEIGHT - OFFSET}px`
-        this.$refs.layer.style.zIndex = 1
-        this.$refs.header.$refs.header.style.zIndex = 100
+        this.title = this.artistDetail.name;
+        this.$refs.layer.style.top = `${HEADER_HEIGHT - OFFSET}px`;
+        this.$refs.layer.style.zIndex = 1;
+        this.$refs.header.$refs.header.style.zIndex = 100;
 
-        this.$refs.imgWrapper.style.height = `${HEADER_HEIGHT}px`
-        this.$refs.imgWrapper.style.paddingTop = 0
-        this.$refs.imgWrapper.style.zIndex = 99
+        this.$refs.imgWrapper.style.height = `${HEADER_HEIGHT}px`;
+        this.$refs.imgWrapper.style.paddingTop = 0;
+        this.$refs.imgWrapper.style.zIndex = 99;
       }
     },
-    showPicker () {
-      if (!this.picker) {
-        this.picker = this.$createPicker({
-          title: 'Picker',
-          data: [types],
-          onSelect: this.selectHandle
+    handleClick() {
+      this.$router.back();
+    },
+    getList(type) {
+      this.$api.detail
+        .reqArtistIllust({
+          artistId: this.artistId,
+          type,
+          pageSize: 6
         })
-      }
-      this.picker.show()
-    },
-    selectHandle (selectedVal, selectedIndex, selectedText) {
-      this.illustType = selectedVal[0]
-      this.$refs.layer.style.top = `${this.imgInitHeight - OFFSET}px`
-      this.getData()
-    },
-    handleClick () {
-      this.$router.back()
-    },
-    lookMore () {
-      this.$refs.comments.style.maxHeight = `3000px`
-      this.$refs.lookmore.style.display = `none`
+        .then(res => {
+          if (res.data.data) {
+            const { data: { data }} = res;
+            if (type === 'illust') {
+              this.illustList = data;
+            } else if (type === 'manga') {
+              this.mangaList = data;
+            }
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scope>
@@ -293,7 +260,7 @@ export default {
     transform-origin top
     background-size cover
     z-index 60
-    filter blur(20px)
+    // filter blur(20px)
     .filter
       position absolute
       top 0
@@ -309,6 +276,18 @@ export default {
     background #fff
     border-radius 10px
     z-index 50
+    .avatar
+      width 80px
+      height 80px
+      position absolute
+      left 0
+      right 0
+      top -40px
+      margin auto
+      // img
+      // width 100%
+      // height 100%
+      // border-radius 50%
   &__tabs
     position absolute
     top 0
@@ -318,33 +297,6 @@ export default {
     background #fff
     border-radius 10px 10px 0 0
     z-index 100
-  &__info
-    position absolute
-    top 70px
-    left 0
-    right 0
-    margin auto
-    width 100%
-    display flex
-    justify-content center
-    align-items center
-    flex-direction column
-    z-index 100
-    img
-      border-radius 50%
-    p
-      color #ffffff
-      margin 10px 0
-      font-size 18px
-    .follow
-      width 120px
-      height 40px
-      background $primary
-      color #ffffff
-      border-radius 20px
-      text-align center
-      line-height 40px
-      font-size 16px
   &__scroll
     position absolute
     // top 340px
@@ -353,24 +305,8 @@ export default {
     bottom 0
     right 0
     z-index 51
-    .scroll-list
-      .scroll-container
-        .cube-scroll-wrapper
-          overflow visible !important
-    .avatar
-      width 80px
-      height 80px
-      position absolute
-      left 0
-      right 0
-      top -1.06667rem
-      margin auto
-      img
-        width 100%
-        height 100%
-        border-radius 50%
-    .info
-      margin-top 60px
+    .artists-info
+      padding-top 60px
       text-align center
       .name
         font-size 20px
@@ -379,12 +315,8 @@ export default {
         align-items center
         justify-content center
         margin-top 10px
-        >div
-          width 40%
-          font-size 14px
-          color #ccc
-          i
-            margin-right 4px
+        &-btn
+          flex 1
       .friends
         font-size 14px
         margin-top 10px
@@ -394,29 +326,7 @@ export default {
           span
             color #ccc
             margin-left 5px
-      .comments
-        width 100%
-        margin-top 20px
-        padding 0 5px
-        box-sizing border-box
-        word-break break-all
-        max-height 88.2px
-        overflow hidden
-        transition max-height 1s
-        .comment
-          font-size 16px
-          line-height 30px
-      .lookmore
-        font-size 16px
-        color #cccccc
-        margin-top 20px
-        &::after
-          content ''
-          display inline-block
-          width 8px
-          height 8px
-          border-top 1px solid #656565
-          border-right 1px solid #656565
-          border-color #bbbbbb
-          transform rotate(135deg) translate(-8px, -4px)
+      .caption
+        padding 20px
+        word-wrap break-word
 </style>

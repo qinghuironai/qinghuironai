@@ -1,86 +1,89 @@
 <template>
-  <div id="app">
-    <keep-alive :include="cachedViews"
-                :max="10">
+  <v-app id="app">
+    <keep-alive :include="cachedViews">
       <router-view :key="key" />
     </keep-alive>
-    <!-- <cube-tab-bar v-model="selectedLabelSlots"
-                  class="tabs"
-                  :class="['tabs', {'hide': !showTab}]"
-                  :inline="false"
-                  @change="changeHandler">
-      <cube-tab v-for="(item, index) in tabs"
-                :label="item.label"
-                :value="item.value"
-                :key="index">
-        <i slot="icon"
-           :class="item.icon"></i>
-      </cube-tab>
-    </cube-tab-bar> -->
-  </div>
+    <div :class="['tabs', {'show': showTab}]">
+      <router-link
+        v-for="item in tabs"
+        :key="item.value"
+        :to="item.value"
+        class="tabs-item"
+      >
+        <i :class="[item.icon, {'active': active === item.value}]" />
+      </router-link>
+    </div>
+  </v-app>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
 export default {
-  data () {
+  data() {
     return {
-      selectedLabelSlots: '/dailyRank',
+      active: '/dailyRank',
       tabs: [{
-        label: '排名',
         value: '/dailyRank',
-        icon: 'iconfont icon-paiming'
+        icon: 'iconfont icon-paihang'
       }, {
-        label: '发现',
         value: '/find',
-        icon: 'iconfont icon-faxian'
+        icon: 'iconfont icon-faxian1-copy'
       }, {
-        label: '我的',
+        value: '',
+        icon: 'iconfont icon-new13'
+      }, {
         value: '/me',
-        icon: 'iconfont icon-xiaolian'
+        icon: 'iconfont icon-user-copy'
       }]
-    }
+    };
   },
   computed: {
     ...mapGetters([
       'cachedViews',
       'showTab'
     ]),
-    key () {
-      return this.$route.fullPath
-    }
-  },
-  methods: {
-    changeHandler (value) {
-      this.$router.push(value)
+    key() {
+      return this.$route.path;
     }
   },
   watch: {
-    $route (val) {
-      this.selectedLabelSlots = val.path
-      this.$store.dispatch('addCachedView', val)
+    $route(val) {
+      this.active = val.path;
+      this.$store.dispatch('addCachedView', val);
     }
   }
-}
+};
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scope>
+@import '~@/style/color.styl'
 .tabs
+  width 70%
+  height 55px
+  background #ffffff
+  border-radius 25px
   position fixed
+  bottom 15px
   left 0
   right 0
-  bottom 0
-  background #ffffff
-  height 60px
-  z-index 2
+  margin auto
+  z-index 999
+  display flex
+  align-items center
+  transform translateY(80px)
+  opacity 0
+  transition all .3s ease
+  &-item
+    flex 1
+    text-align center
+    color #ccc !important
+    i
+      font-size 25px
+      &.active
+        color $primary
+        font-size 30px
+        transition all .3s
+.show
   transform translateY(0)
-  transition transform 0.3s
-  .cube-tab
-    >i
-      font-size 18px
-    >div
-      font-size 16px
-      margin-top 5px
-.hide
-  transform translateY(60px)
+  opacity 1
 </style>

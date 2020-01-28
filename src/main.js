@@ -1,38 +1,37 @@
-import Vue from 'vue'
-import './cube-ui'
-import VueLazyload from 'vue-lazyload'
-import animated from 'animate.css'
-import App from './App.vue'
-import router from './router'
-import store from './store/'
-import api from './api'
-import util from './util'
-import Mixin from './mixins'
-import './style/index.styl'
-import 'amfe-flexible'
-import VirtualCollection from '@/components/collect'
+import Vue from 'vue';
+import animated from 'animate.css';
+import App from './App.vue';
+import router from './router';
+import store from './store/';
+import api from './api';
+import util from './util';
+import Mixin from './mixins';
+import './style/index.styl';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
+import '@mdi/font/css/materialdesignicons.css';
 
-Vue.use(VirtualCollection)
+Vue.use(Vuetify);
 
 // import VConsole from 'vconsole'
 
 // eslint-disable-next-line no-new
 // new VConsole()
-Vue.config.productionTip = false
-Vue.use(VueLazyload, {
-  // loading: require('@/assets/images/loading2.svg'),
-  loading: require('@/assets/images/loading.svg'),
-  error: require('@/assets/images/error.svg')
-})
-Vue.use(animated)
-Vue.mixin(Mixin)
-Vue.prototype.$api = api
-Vue.prototype.$util = util
+Vue.config.productionTip = false;
+Vue.use(animated);
+Vue.mixin(Mixin);
+Vue.prototype.$api = api;
+Vue.prototype.$util = util;
 
 const app = new Vue({
   router,
   store,
+  vuetify: new Vuetify({
+    icons: {
+      iconfont: 'mdi'
+    }
+  }),
   render: h => h(App)
-})
+});
 
-app.$mount('#app')
+app.$mount('#app');

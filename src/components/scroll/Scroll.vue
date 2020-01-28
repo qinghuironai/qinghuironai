@@ -1,147 +1,79 @@
 <template>
-  <div class="scroll-list">
-    <div class="scroll-container">
-      <cube-scroll :data="data"
-                   :options="options"
-                   ref="scroll"
-                   class="scroll"
-                   :scroll-events="['scroll']"
-                   @scroll="onScroll"
-                   @pulling-up="onPullingUp">
-        <slot></slot>
-        <List :list="data"
-              :scrollY="scrollY" />
-        <div v-show="noMore && !data.length"
-             class="no-result">(●'◡'●)ﾉ (●'◡'●)ﾉ</div>
-      </cube-scroll>
-    </div>
-    <div :class="['top', { 'is-active': showBackUp }]"
-         @click="scrollToTop">
-      <i class="iconfont icon-fanhuidingbu"></i>
-    </div>
-    <Loading v-if="loading" />
+  <div ref="wrapper" class="scroll-wrapper">
+    <slot />
   </div>
 </template>
 
 <script>
 
-import Loading from '@/components/loading/Loading'
-import List from '@/components/list/List'
+import BScroll from '@better-scroll/core';
+import ObserveDOM from '@better-scroll/observe-dom';
+BScroll.use(ObserveDOM);
 
 export default {
+  name: 'Scroll',
   props: {
-    data: {
-      type: Array
-    },
-    options: {
-      type: Object,
-      default () {
-        return {
-          observeDOM: true,
-          click: true,
-          probeType: 3,
-          pullDownRefresh: false,
-          pullUpLoad: false
-        }
+    direction: {
+      type: String,
+      default: 'vertical',
+      validator: function(value) {
+        return value === 'vertical' || value === 'horizontal';
       }
     },
-    loading: {
-      type: Boolean,
-      default: false
+    probeType: {
+      type: Number,
+      default: 3
     },
-    noMore: {
+    click: {
+      type: Boolean,
+      default: true
+    },
+    data: {
+      type: Array,
+      default: null
+    },
+    listenScroll: {
       type: Boolean,
       default: false
     }
   },
-  components: {
-    Loading,
-    List
+  mounted() {
+    this.$nextTick(() => {
+      this._initScroll();
+    });
   },
-  data () {
-    return {
-      showBackUp: false,
-      scrollY: 0
-    }
+  destroyed() {
+    this.scroll && this.scroll.destroy();
+    this.scroll = null;
   },
   methods: {
-    onPullingUp () {
-      if (this.noMore) {
-        return this.$refs.scroll.forceUpdate()
+    _initScroll() {
+      if (!this.$refs.wrapper) {
+        return;
       }
-      this.$emit('pulling-up')
-    },
-    onScroll (pos) {
-      this.scrollY = -pos.y
-      const direction = this.$refs.scroll.scroll.movingDirectionY
-      if (pos.y < -300) {
-        if (direction === 1) {
-          this.showBackUp = false
-        } else if (direction === -1) {
-          this.showBackUp = true
-        }
-      } else {
-        this.showBackUp = false
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        scrollX: this.direction === 'horizontal',
+        scrollY: this.direction === 'vertical',
+        probeType: this.probeType,
+        click: this.click,
+        observeDOM: true
+      });
+      if (this.listenScroll) {
+        this.scroll.on('scroll', pos => {
+          this.$emit('scroll', pos);
+        });
       }
-      this.$emit('scroll', pos, direction)
     },
-    scrollToTop () {
-      // tip: 或者根据滚动的距离 比例来计算所需时间
-      this.$refs.scroll.scrollTo(0, 0, 2000)
-    },
-    refresh () {
-      this.$refs.scroll.refresh()
-    }
-  },
-  watch: {
-    noMore (val) {
-      if (val) {
-        this.$refs.scroll.forceUpdate()
-      }
+    refresh() {
+      this.scroll && this.scroll.refresh();
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>
-@import '~@/style/color.styl'
-.scroll-list
-  width 100%
+.scroll-wrapper
   height 100%
-  overflow hidden
-  .scroll-container
-    position absolute
-    top 0
-    right 0
-    bottom 0
-    left 0
-    .scroll
-      .no-result
-        text-align center
-        font-size 24px
-        color $primary
-  .top
-    position fixed
-    width 40px
-    height 40px
-    bottom 68px
-    left 0
-    right 0
-    margin auto
-    opacity 0
-    transform translateY(90px)
-    background $primary
-    text-align center
-    border-radius 50%
-    box-shadow 0 0 10px rgba(0, 0, 0, 0.6)
-    transition all 1s
-    z-index 999
-    &.is-active
-      transform translateY(0)
-      opacity 1
-    i
-      display block
-      font-size 30px
-      line-height 40px
-      color white
+  width 100%
+  //overflow hidden
 </style>
