@@ -85,6 +85,15 @@ function deleteCollect(data) {
   });
 }
 
+// 关注和取消关注画师
+function followArtist(data) {
+  return axios({
+    url: `/followed`,
+    method: data.follow ? 'post' : 'delete',
+    data: { artistId: data.artistId, userId: data.userId }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -95,5 +104,6 @@ export {
   resetPassword,
   collectIllust,
   getCollectList,
-  deleteCollect
+  deleteCollect,
+  followArtist
 };

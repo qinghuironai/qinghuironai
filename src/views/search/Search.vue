@@ -226,7 +226,7 @@ export default {
   },
   computed: {
     optionsParams() {
-      return {
+      const data = {
         illustType: this.illustType,
         searchType: this.searchType,
         minWidth: 0,
@@ -236,6 +236,10 @@ export default {
         xRestrict: this.xRestrict, // 0关 1开
         maxSanityLevel: this.maxSanityLevel // 16禁
       };
+      Object.keys(data).forEach(item => {
+        if (!data[item]) { delete data[item]; }
+      });
+      return data;
     }
   },
   watch: {

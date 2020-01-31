@@ -25,6 +25,9 @@ const mutations = {
   },
   [types.SET_LIKE_STATUS](state, data) {
     state.likeStatus = data;
+  },
+  [types.SET_FOLLOW_STATUS](state, data) {
+    state.followStatus = data;
   }
 };
 

@@ -1,5 +1,5 @@
 import * as types from './mutation-types';
-import { collectIllust, deleteCollect } from '@/api/modules/user';
+import { collectIllust, deleteCollect, followArtist } from '@/api/modules/user';
 
 export const setUser = ({
   commit
@@ -70,6 +70,30 @@ export const deleteCollectIllust = ({
             like: false
           };
           commit(types.SET_LIKE_STATUS, status);
+          resolve();
+        } else {
+          reject();
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+// 关注画师
+export const handleFollowArtist = ({
+  commit
+}, data) => {
+  return new Promise((resolve, reject) => {
+    followArtist(data)
+      .then(res => {
+        if (res.status === 200) {
+          const status = {
+            artistId: data.artistId,
+            follow: data.follow
+          };
+          commit(types.SET_FOLLOW_STATUS, status);
           resolve();
         } else {
           reject();

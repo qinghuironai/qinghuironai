@@ -107,6 +107,9 @@ export default {
       };
     },
     handleLike(data) {
+      if (!this.user.id) {
+        return alert('请先登录~');
+      }
       const item = this.listMap.get(data.id);
       const flag = item.isLiked;
       const params = {

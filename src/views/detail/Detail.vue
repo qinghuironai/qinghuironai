@@ -62,7 +62,9 @@
                 </v-avatar>
                 <span>{{ illustDetail.artistPreView.name }}</span>
               </router-link>
-              <v-btn color="primary" rounded>+加关注</v-btn>
+              <v-btn color="primary" rounded @click="follow">
+                {{ illustDetail.artistPreView.isFollowed ? '已关注' : '+加关注' }}
+              </v-btn>
             </div>
           </div>
         </div>
@@ -130,7 +132,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'likeStatus']),
+    ...mapGetters(['user', 'likeStatus', 'followStatus']),
     imgs() {
       return this.illustDetail.imageUrls.reduce((pre, cur) => {
         return pre.concat(`${IMG_PREFIX + cur.original}`);
@@ -143,6 +145,11 @@ export default {
       const { illustId, like } = val;
       if (illustId === this.illustDetail.id) {
         this.illustDetail.isLiked = like;
+      }
+    },
+    followStatus(val) {
+      if (val.artistId === this.illustDetail.artistPreView.id) {
+        this.illustDetail.artistPreView.isFollowed = val.follow;
       }
     }
   },
@@ -190,6 +197,9 @@ export default {
       }
     },
     handleLike() {
+      if (!this.user.id) {
+        return alert('请先登录~');
+      }
       // 注意这里有两个List列表 一个排行 一个相关作品 都会触发List里面的watch
       // 而这个列表不一定有当前作品 List需要watch里面判断下
       const params = {
@@ -215,6 +225,33 @@ export default {
           .catch(err => {
             this.illustDetail.isLiked = true;
             alert('取消收藏失败', err);
+          });
+      }
+    },
+    follow() {
+      const data = {
+        artistId: this.illustDetail.artistPreView.id,
+        userId: this.user.id
+      };
+      if (!this.illustDetail.artistPreView.isFollowed) {
+        this.illustDetail.artistPreView.isFollowed = true;
+        this.$store.dispatch('handleFollowArtist', { ...data, follow: true })
+          .then(res => {
+            console.log('关注成功');
+          })
+          .catch(() => {
+            this.illustDetail.artistPreView.isFollowed = false;
+            alert('关注失败');
+          });
+      } else {
+        this.illustDetail.artistPreView.isFollowed = false;
+        this.$store.dispatch('handleFollowArtist', { ...data, follow: false })
+          .then(res => {
+            console.log('取消关注成功');
+          })
+          .catch(() => {
+            this.illustDetail.artistPreView.isFollowed = true;
+            alert('取消关注失败');
           });
       }
     }

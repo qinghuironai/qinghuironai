@@ -15,7 +15,16 @@
           </div>
           <div class="artists-info">
             <p class="name">{{ artistDetail.name }}</p>
-            <v-btn class="mb-5" color="primary" rounded width="75%" max-width="300">+加关注</v-btn>
+            <v-btn
+              class="mb-5"
+              color="primary"
+              rounded
+              width="75%"
+              max-width="300"
+              @click="follow"
+            >
+              {{ artistDetail.isFollowed ? '已关注' : '+加关注' }}
+            </v-btn>
             <div class="link">
               <v-btn
                 :href="artistDetail.webPage"
@@ -63,6 +72,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Header from '@/components/header/Header';
 import List from '@/components/virtual-list/VirtualList';
 import { IMG_PREFIX } from '@/util/constants';
@@ -89,6 +99,16 @@ export default {
       mangaSum: 0,
       pictureList: []
     };
+  },
+  computed: {
+    ...mapGetters(['user', 'followStatus'])
+  },
+  watch: {
+    followStatus(val) {
+      if (val.artistId === this.artistDetail.id) {
+        this.artistDetail.isFollowed = val.follow;
+      }
+    }
   },
   mounted() {
     this.getArtistInfo();
@@ -147,6 +167,33 @@ export default {
       this.page = 1;
       this.pictureList = [];
       this.identifier += 1;
+    },
+    follow() {
+      const data = {
+        artistId: this.artistDetail.id,
+        userId: this.user.id
+      };
+      if (!this.artistDetail.isFollowed) {
+        this.artistDetail.isFollowed = true;
+        this.$store.dispatch('handleFollowArtist', { ...data, follow: true })
+          .then(res => {
+            console.log('关注成功');
+          })
+          .catch(() => {
+            this.artistDetail.isFollowed = false;
+            alert('关注失败');
+          });
+      } else {
+        this.artistDetail.isFollowed = false;
+        this.$store.dispatch('handleFollowArtist', { ...data, follow: false })
+          .then(res => {
+            console.log('取消关注成功');
+          })
+          .catch(() => {
+            this.artistDetail.isFollowed = true;
+            alert('取消关注失败');
+          });
+      }
     }
   }
 };
