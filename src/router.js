@@ -8,7 +8,6 @@ const pages = {
   DailyRank: () => import('./views/rank/DailyRank'),
   Detail: () => import('./views/detail/Detail'),
   Artist: () => import('./views/artist/Artist'),
-  Artworks: () => import('./views/artist/artworks//Artworks'),
   Search: () => import('./views/search/Search'),
   Find: () => import('./views/find/Find'),
   Me: () => import('./views/me/Me'),
@@ -52,14 +51,7 @@ const router = new Router({
     path: '/artist/:artistId',
     name: 'Artist',
     component: pages.Artist,
-    props: true,
-    children: [
-      {
-        path: ':type',
-        name: 'Artworks',
-        component: pages.Artworks
-      }
-    ]
+    props: true
   },
   {
     path: '/dailyRank',

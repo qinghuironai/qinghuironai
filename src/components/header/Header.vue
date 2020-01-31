@@ -40,7 +40,7 @@ export default {
   display flex
   line-height 40px
   box-sizing border-box
-  color #fff
+  color #000
   >i
     position absolute
     left 5px
