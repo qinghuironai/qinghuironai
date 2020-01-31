@@ -11,7 +11,7 @@
       <img src="../../assets/images/count.svg">
       <span>{{ column.pageCount }}</span>
     </div>
-    <div :class="['like', {'is-like': column.isLiked}]" @click.stop="handleLike" />
+    <Like :like="column.isLiked" @handleLike="handleLike" />
     <div v-if="column.xrestrict === 1 || column.sanityLevel > 6" class="setu-filter">
       <img width="100%" src="../../assets/images/error.svg">
     </div>
@@ -19,8 +19,13 @@
 </template>
 
 <script>
+import Like from '@/components/like/Like';
+
 export default {
   name: 'Item',
+  components: {
+    Like
+  },
   props: {
     column: {
       type: Object,
@@ -47,11 +52,6 @@ export default {
 
 <style lang="stylus" scope>
 @import '~@/style/global.styl'
-@keyframes heart
-  0%
-    background-position left
-  100%
-    background-position right
 .item
   box-sizing border-box
   position absolute
@@ -92,18 +92,6 @@ export default {
       float right
       padding 0 2px
       line-height 20px
-  .like
-    position absolute
-    bottom 5px
-    right -10px
-    width 80px
-    height 40px
-    background url('../../assets/images/like.png') no-repeat
-    background-position left
-    background-size 2900%
-    &.is-like
-      background-position right
-      animation heart .8s steps(28)
   .setu-filter
     position absolute
     top 0

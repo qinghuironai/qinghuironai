@@ -36,10 +36,16 @@ export const changeTab = ({
 export const handleCollectIllust = ({
   commit
 }, data) => {
+  console.log(data);
   return new Promise((resolve, reject) => {
     collectIllust(data)
       .then(res => {
         if (res.status === 200) {
+          const status = {
+            illustId: data.illustId,
+            like: true
+          };
+          commit(types.SET_LIKE_STATUS, status);
           resolve();
         } else {
           reject();
@@ -59,6 +65,11 @@ export const deleteCollectIllust = ({
     deleteCollect(data)
       .then(res => {
         if (res.status === 200) {
+          const status = {
+            illustId: data.illustId,
+            like: false
+          };
+          commit(types.SET_LIKE_STATUS, status);
           resolve();
         } else {
           reject();

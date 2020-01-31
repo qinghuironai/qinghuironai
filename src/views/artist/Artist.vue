@@ -15,7 +15,7 @@
           </div>
           <div class="artists-info">
             <p class="name">{{ artistDetail.name }}</p>
-            <v-btn class="mb-5" color="primary" rounded width="75%">+加关注</v-btn>
+            <v-btn class="mb-5" color="primary" rounded width="75%" max-width="300">+加关注</v-btn>
             <div class="link">
               <v-btn
                 :href="artistDetail.webPage"

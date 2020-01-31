@@ -33,6 +33,7 @@
                 </v-list-item>
               </v-list>
             </v-menu>
+            <Like :like="illustDetail.isLiked" @handleLike="handleLike" />
           </v-toolbar>
           <div class="detail-info">
             <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
@@ -97,13 +98,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import List from '@/components/virtual-list/VirtualList';
+import Like from '@/components/like/Like';
 import { IMG_PREFIX } from '@/util/constants';
 
 export default {
   name: 'Detail',
   components: {
-    List
+    List,
+    Like
   },
   props: {
     pid: {
@@ -121,14 +125,25 @@ export default {
         { val: 'origin', title: '跳转原图链接' },
         { val: 'share', title: '分享' },
         { val: 'more', title: '更多' }
-      ]
+      ],
+      like: false
     };
   },
   computed: {
+    ...mapGetters(['user', 'likeStatus']),
     imgs() {
       return this.illustDetail.imageUrls.reduce((pre, cur) => {
         return pre.concat(`${IMG_PREFIX + cur.original}`);
       }, []);
+    }
+  },
+  watch: {
+    // 详情去画师那里更改点赞状态 然后后退回来详情 状态也要变
+    likeStatus(val, old) {
+      const { illustId, like } = val;
+      if (illustId === this.illustDetail.id) {
+        this.illustDetail.isLiked = like;
+      }
     }
   },
   mounted() {
@@ -172,6 +187,35 @@ export default {
           window.open(`https://www.pixiv.net/artworks/${this.pid}`);
           break;
         }
+      }
+    },
+    handleLike() {
+      // 注意这里有两个List列表 一个排行 一个相关作品 都会触发List里面的watch
+      // 而这个列表不一定有当前作品 List需要watch里面判断下
+      const params = {
+        userId: this.user.id,
+        illustId: this.illustDetail.id
+      };
+      if (!this.illustDetail.isLiked) {
+        this.illustDetail.isLiked = true;
+        this.$store.dispatch('handleCollectIllust', params)
+          .then(() => {
+            console.log('收藏成功');
+          })
+          .catch(err => {
+            this.illustDetail.isLiked = false;
+            alert('收藏失败', err);
+          });
+      } else {
+        this.illustDetail.isLiked = false;
+        this.$store.dispatch('deleteCollectIllust', params)
+          .then(() => {
+            console.log('取消收藏成功');
+          })
+          .catch(err => {
+            this.illustDetail.isLiked = true;
+            alert('取消收藏失败', err);
+          });
       }
     }
   }

@@ -54,7 +54,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'likeStatus']),
     listMap() {
       const map = new Map();
       for (const item of this.list) {
@@ -73,6 +73,15 @@ export default {
           this.handleList(list);
         }
       }
+    },
+    likeStatus(val, old) {
+      // 注意 List不一定找得到item 要判断下
+      const { illustId, like } = val;
+      const item = this.listMap.get(illustId);
+      // this.$set(item, 'isLiked', like);
+      if (item) {
+        this.$set(item, 'isLiked', like);
+      }
     }
   },
   mounted() {
@@ -86,10 +95,6 @@ export default {
     window.removeEventListener('resize', this.waterFall);
   },
   methods: {
-    onScroll(pos) {
-      // console.log(this.$refs.scroll)
-      this.scrollY = document.documentElement.scrollTop;
-    },
     infinite($state) {
       this.$emit('infinite', $state);
     },
@@ -109,13 +114,13 @@ export default {
         illustId: data.id
       };
       if (!flag) {
-        this.$set(item, 'isLiked', true); // 强制视图更新
+        this.$set(item, 'isLiked', true); // 先强制视图更新 防止网络延迟不动
         this.$store.dispatch('handleCollectIllust', params)
           .then(() => {
             console.log('收藏成功');
           })
           .catch(err => {
-            this.$set(item, 'isLiked', false);
+            this.$set(item, 'isLiked', false); // 失败的话在改回去
             alert('收藏失败', err);
           });
       } else {

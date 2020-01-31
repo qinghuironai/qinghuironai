@@ -22,6 +22,9 @@ const mutations = {
   },
   [types.SHOW_TAB](state, flag) {
     state.showTab = flag;
+  },
+  [types.SET_LIKE_STATUS](state, data) {
+    state.likeStatus = data;
   }
 };
 
