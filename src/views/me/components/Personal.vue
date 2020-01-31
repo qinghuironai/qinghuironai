@@ -47,7 +47,6 @@
           <v-icon color="#b9eee5">iconfont icon-right</v-icon>
         </v-list-item-icon>
       </v-list-item>
-      <v-divider />
       <v-list-item>
         <v-list-item-icon>
           <v-icon color="#b9eee5">iconfont icon-shoucang-copy-copy-copy</v-icon>
@@ -91,7 +90,7 @@
 <script>
 import { mapGetters } from 'vuex';
 export default {
-  name: 'Me',
+  name: 'Personal',
   data() {
     return {
 
@@ -113,7 +112,7 @@ export default {
   background-color #fff
   &-header
     overflow hidden
-    background url('../../assets/images/header.png') no-repeat
+    background url('../../../assets/images/header.png') no-repeat
     background-size 100%
     // 937 283
     .header-box
@@ -144,4 +143,3 @@ export default {
     .lists-container
       margin 5px auto
 </style>
-

@@ -11,7 +11,7 @@
       <img src="../../assets/images/count.svg">
       <span>{{ column.pageCount }}</span>
     </div>
-    <div :class="['like', {'is-like': isLiked}]" @click.stop="handleLike" />
+    <div :class="['like', {'is-like': column.isLiked}]" @click.stop="handleLike" />
     <div v-if="column.xrestrict === 1 || column.sanityLevel > 6" class="setu-filter">
       <img width="100%" src="../../assets/images/error.svg">
     </div>
@@ -29,17 +29,8 @@ export default {
   },
   data() {
     return {
-      opacity: 0,
-      isLiked: false
+      opacity: 0
     };
-  },
-  computed: {
-    contentStyle() {
-      return {
-        backgroundColor: this.column.color,
-        filter: (this.column.xrestrict === 1 || this.column.sanityLevel > 6) ? `blur(20px)` : ''
-      };
-    }
   },
   methods: {
     goDetail() {
@@ -47,8 +38,8 @@ export default {
       this.$router.push(`/detail/${this.column.id}`);
     },
     handleLike() {
-      this.isLiked = !this.isLiked;
-      // this.$emit('handleLike', this.column);
+      // this.isLiked = !this.isLiked;
+      this.$emit('handleLike', this.column);
     }
   }
 };

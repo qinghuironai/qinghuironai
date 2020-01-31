@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import cookie from 'js-cookie';
 
 Vue.use(Router);
 
@@ -11,6 +12,10 @@ const pages = {
   Search: () => import('./views/search/Search'),
   Find: () => import('./views/find/Find'),
   Me: () => import('./views/me/Me'),
+  Collect: () => import('./views/me/components/Collect'),
+  Personal: () => import('./views/me/components/Personal'),
+  Login: () => import('./views/login/Login'),
+  Register: () => import('./views/register/Register'),
   NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -20,7 +25,7 @@ Router.prototype.push = function push(location) {
 };
 
 console.log(process.env);
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.VUE_APP_PREFIX,
   scrollBehavior(to, from, savedPosition) {
@@ -64,10 +69,7 @@ export default new Router({
   {
     path: '/search',
     name: 'Search',
-    component: pages.Search,
-    meta: {
-      noCache: false
-    }
+    component: pages.Search
   },
   {
     path: '/find',
@@ -80,7 +82,26 @@ export default new Router({
   {
     path: '/me',
     name: 'Me',
-    component: pages.Me,
+    component: pages.Me
+  },
+  {
+    path: '/collect/:type',
+    name: 'Collect',
+    component: pages.Collect,
+    props: true
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: pages.Login,
+    meta: {
+      noCache: true
+    }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: pages.Register,
     meta: {
       noCache: true
     }
@@ -96,17 +117,17 @@ export default new Router({
   ]
 });
 
-// 没有 tabs 切换情况
-// let routerList = []
-// router.beforeEach((to, from, next) => {
-//   if (routerList.length && routerList.indexOf(to.name) === routerList.length - 1) {
-//     // 后退
-//     routerList.splice(routerList.length - 1, 1)
-//     to.meta.isBack = true
-//   } else {
-//     // 前进
-//     routerList.push(from.name || '/')
-//     to.meta.isBack = false
-//   }
-//   next()
-// })
+router.beforeEach((to, from, next) => {
+  const isLogin = !!cookie.get('jwt');
+  console.log('isLogin', isLogin);
+  const needLogin = to.path === '/me';
+  if (!needLogin) {
+    // 不需要登录的页面直接放行
+    next();
+  } else {
+    // 需要登录的页面需要jwt
+    isLogin ? next() : next('/login');
+  }
+});
+
+export default router;

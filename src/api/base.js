@@ -20,7 +20,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     if (cookie.get('jwt')) {
-      config.headers.Authorization = 'Bearer ' + cookie.get('jwt');
+      config.headers.authorization = cookie.get('jwt');
     }
     return config;
   },
@@ -32,19 +32,17 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   response => {
-    if (response.headers.hasOwnProperty('Authorization')) {
-      cookie.set('jwt', response.headers.Authorization, {
+    // console.log('response', response);
+    if (response.headers.hasOwnProperty('authorization')) {
+      cookie.set('jwt', response.headers.authorization, {
         expires: 365
       });
     }
     if (response.status === 401) {
-      this.$createToast({
-        txt: '身份验证过期，请重新登录',
-        type: 'txt'
-      }).show();
+      // 登录过期
       cookie.remove('jwt');
       localStorage.remove('user');
-      router.push('/');
+      router.push('/login');
     }
     return response;
   },

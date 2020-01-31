@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import VirtualCollection from '@/components/collect/VirtualCollection';
 import throttle from 'lodash/throttle';
 import Item from './Item';
@@ -52,6 +53,16 @@ export default {
       height: getClient().height
     };
   },
+  computed: {
+    ...mapGetters(['user']),
+    listMap() {
+      const map = new Map();
+      for (const item of this.list) {
+        map.set(item.id, item);
+      }
+      return map;
+    }
+  },
   watch: {
     list: {
       handler(val, old) {
@@ -59,34 +70,7 @@ export default {
           this.columnHeight = new Array(this.column).fill(0);
         } else {
           const list = val.filter(e => !old.includes(e));
-          for (let i = 0; i < list.length; i++) {
-            const tmp = list[i];
-            const per = tmp.height / tmp.width;
-            const width = Math.floor(this.width / this.column);
-            const height = Math.min(width * per, 400);
-
-            let minHeight = this.columnHeight[0];
-            let index = 0;
-            for (let j = 0; j < this.columnHeight.length; j++) {
-              if (minHeight > this.columnHeight[j]) {
-                minHeight = this.columnHeight[j];
-                index = j;
-              }
-            }
-            tmp.x = index * width;
-            tmp.y = this.columnHeight[index];
-            this.columnHeight[index] += height;
-
-            tmp['height'] = height;
-            tmp['width'] = width;
-            tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`;
-            tmp['color'] = randomColor();
-
-            tmp['style'] = {
-              backgroundColor: randomColor(),
-              filter: (tmp.xrestrict === 1 || tmp.sanityLevel > 6) ? `blur(20px)` : ''
-            };
-          }
+          this.handleList(list);
         }
       }
     }
@@ -118,18 +102,44 @@ export default {
       };
     },
     handleLike(data) {
-      console.log(data.id);
-      const item = this.list.find(item => item.id === data.id);
-      item.isLiked = true;
-      console.log(item);
+      const item = this.listMap.get(data.id);
+      const flag = item.isLiked;
+      const params = {
+        userId: this.user.id,
+        illustId: data.id
+      };
+      if (!flag) {
+        this.$set(item, 'isLiked', true); // 强制视图更新
+        this.$store.dispatch('handleCollectIllust', params)
+          .then(() => {
+            console.log('收藏成功');
+          })
+          .catch(err => {
+            this.$set(item, 'isLiked', false);
+            alert('收藏失败', err);
+          });
+      } else {
+        this.$set(item, 'isLiked', false);
+        this.$store.dispatch('deleteCollectIllust', params)
+          .then(() => {
+            console.log('取消收藏成功');
+          })
+          .catch(err => {
+            this.$set(item, 'isLiked', true);
+            alert('取消收藏失败', err);
+          });
+      }
     },
     waterFall() {
       this.width = getClient().width - 16;
       this.height = getClient().height;
       this.column = Math.ceil(this.width / columnWidth);
       this.columnHeight = new Array(this.column).fill(0);
-      for (let i = 0; i < this.list.length; i++) {
-        const tmp = this.list[i];
+      this.handleList(this.list);
+    },
+    handleList(list) {
+      for (let i = 0; i < list.length; i++) {
+        const tmp = list[i];
         const per = tmp.height / tmp.width;
         const width = Math.floor(this.width / this.column);
         const height = Math.min(width * per, 400);

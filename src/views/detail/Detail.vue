@@ -143,7 +143,7 @@ export default {
           this.illustDetail = {
             ...data,
             itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
-            src: IMG_PREFIX + data.imageUrls[0].original.replace('_webp', ''),
+            src: IMG_PREFIX + data.imageUrls[0].large.replace('_webp', ''),
             avatarSrc: IMG_PREFIX + data.artistPreView.avatar
           };
         });

@@ -1,7 +1,7 @@
 const state = {
   user: JSON.parse(localStorage.getItem('user')) || {},
   cachedViews: [],
-  showTab: true
-}
+  showTab: false
+};
 
-export default state
+export default state;

@@ -10,8 +10,10 @@ import './style/index.styl';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css';
+import Navigation from 'vue-navigation';
 
 Vue.use(Vuetify);
+Vue.use(Navigation, { router, store });
 
 // import VConsole from 'vconsole'
 

@@ -1,61 +1,99 @@
-import axios from '../base'
+import axios from '../base';
 
 // 获取图形验证码
-function verificationCode () {
+function verificationCode() {
   return axios({
     url: `/verificationCode`,
     method: 'get'
-  })
+  });
 }
 
-function register (data, params) {
+function register(data) {
   return axios({
-    url: `/users?vid=${params.vid}&value=${params.value}`,
+    url: `/users?vid=${data.vid}&value=${data.value}`,
     method: 'post',
-    data
-  })
+    data: data.userInfo
+  });
 }
 
-function login (data, params) {
+function login(data) {
   return axios({
-    url: `/users/token?vid=${params.vid}&value=${params.value}`,
+    url: `/users/token?vid=${data.vid}&value=${data.value}`,
     method: 'post',
-    data
-  })
+    data: data.userInfo
+  });
 }
 
 // 发送密码重置邮件
-function resetPasswordEmail (email) {
+function resetPasswordEmail(email) {
   return axios({
     url: `/users/emails/${email}/resetPasswordEmail`,
     method: 'get'
-  })
+  });
 }
 
 // 用户重置密码
-function resetPassword (data) {
+function resetPassword(data) {
   return axios({
     // url: `/users/password?password=${data.password}&vid=${data.vid}&value=${data.value}`,
     url: `/users/password`,
     method: 'put',
     data
-  })
+  });
 }
 
 // 效验邮箱可用性
-function checkEmail (email) {
+function checkEmail(email) {
   return axios({
     url: `/users/emails/${email}`,
     method: 'get'
-  })
+  });
 }
 
 // 校验用户名可用性
-function checkUser (user) {
+function checkUser(user) {
   return axios({
     url: `/users/usernames/${user}`,
     method: 'get'
-  })
+  });
 }
 
-export { verificationCode, register, login, resetPasswordEmail, checkEmail, checkUser, resetPassword }
+// 收藏画作
+function collectIllust(data) {
+  return axios({
+    url: `/bookmarked`,
+    method: 'post',
+    data
+  });
+}
+
+// 收藏画作列表
+function getCollectList(params) {
+  return axios({
+    url: `/${params.userId}/bookmarked/${params.type}`,
+    method: 'get',
+    params: { page: params.page, pageSize: params.pageSize || 30 }
+  });
+}
+
+// 取消收藏
+function deleteCollect(data) {
+  return axios({
+    url: `/bookmarked`,
+    method: 'delete',
+    data
+  });
+}
+
+export {
+  verificationCode,
+  register,
+  login,
+  resetPasswordEmail,
+  checkEmail,
+  checkUser,
+  resetPassword,
+  collectIllust,
+  getCollectList,
+  deleteCollect
+};

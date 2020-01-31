@@ -8651,6 +8651,11 @@ vconsole@^3.3.4:
   resolved "https://registry.npm.taobao.org/vconsole/download/vconsole-3.3.4.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvconsole%2Fdownload%2Fvconsole-3.3.4.tgz#a7dacd8887b3d3e902e8d18425cda56c34e77f51"
   integrity sha1-p9rNiIez0+kC6NGEJc2lbDTnf1E=
 
+vee-validate@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-3.2.2.tgz#ec5132bca84f0549a5030a9a20e49569765eb350"
+  integrity sha512-6XogX8Y8HHBQ+be+u1tj3Je6pcIWv2j2JX/BqRpymyObtx1C4ERxY3O3z2ExRBlQ3oM0dN/Y0RsSaBsRyTNIRw==
+
 vendors@^1.0.0:
   version "1.0.3"
   resolved "https://registry.npm.taobao.org/vendors/download/vendors-1.0.3.tgz#a6467781abd366217c050f8202e7e50cc9eef8c0"
@@ -8715,6 +8720,11 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-navigation@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/vue-navigation/-/vue-navigation-1.1.4.tgz#be990190624647daa34b8cd525fad4fb6d472542"
+  integrity sha512-flOvttNizFmnAj73hxrvGEMyOrbUiS7omKOTs+My+7wYdDjcW6JB8emGijy26/HyzcuPaiXbaUjZmXKRPFGfow==
+
 vue-router@^3.0.3:
   version "3.1.3"
   resolved "https://registry.npm.taobao.org/vue-router/download/vue-router-3.1.3.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-router%2Fdownload%2Fvue-router-3.1.3.tgz#e6b14fabc0c0ee9fda0e2cbbda74b350e28e412b"
@@ -8745,6 +8755,11 @@ vue@^2.6.10:
   version "2.6.10"
   resolved "https://registry.npm.taobao.org/vue/download/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha1-pysaQqTYKnIepDjRtr9V5mGVxjc=
+
+vuelidate@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/vuelidate/-/vuelidate-0.7.5.tgz#ff48c75ae9d24ea24c24e9ea08065eda0a0cba0a"
+  integrity sha512-GAAG8QAFVp7BFeQlNaThpTbimq3+HypBPNwdkCkHZZeVaD5zmXXfhp357dcUJXHXTZjSln0PvP6wiwLZXkFTwg==
 
 vuetify@^2.2.4:
   version "2.2.4"

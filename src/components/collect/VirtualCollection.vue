@@ -63,7 +63,7 @@
     </div>
     <infinite-loading :identifier="identifier" spinner="circles" @infinite="infinite">
       <div slot="no-more">(￣ˇ￣)俺也是有底线的</div>
-      <div slot="no-results">(￣ˇ￣)飞到外星去了</div>
+      <div slot="no-results">(￣ˇ￣)无结果</div>
     </infinite-loading>
   </div>
 </template>
@@ -124,7 +124,8 @@ export default {
     containerStyle() {
       return {
         height: this.totalHeight + 'px',
-        width: this.totalWidth + 'px'
+        // width: this.totalWidth + 'px',
+        width: '100%'
       };
     },
     outerStyle() {
@@ -258,6 +259,9 @@ export default {
       this.$emit('infinite', $state);
     },
     swipe(direction) {
+      // if (this.$refs.outer.scrollTop < 400) {
+      //   return this.$store.dispatch('changeTab', false);
+      // }
       switch (direction) {
         case 'Up':
           this.$store.dispatch('changeTab', false);
@@ -269,6 +273,7 @@ export default {
     },
     scrollToTop() {
       this.$refs.outer.scrollTop = 0;
+      // this.$store.dispatch('changeTab', false);
     }
   }
 };

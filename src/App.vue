@@ -1,14 +1,18 @@
 <template>
   <v-app id="app">
-    <keep-alive :include="cachedViews">
+    <!-- <keep-alive :include="cachedViews">
       <router-view :key="key" />
-    </keep-alive>
+    </keep-alive> -->
+    <navigation>
+      <router-view />
+    </navigation>
     <div :class="['tabs', {'show': showTab}]">
       <router-link
         v-for="item in tabs"
         :key="item.value"
         :to="item.value"
         class="tabs-item"
+        @click.native="clickTab"
       >
         <i :class="[item.icon, {'active': active === item.value}]" />
       </router-link>
@@ -51,6 +55,13 @@ export default {
       this.active = val.path;
       this.$store.dispatch('addCachedView', val);
     }
+  },
+  methods: {
+    clickTab() {
+      console.log(this.$navigation);
+      // this.$navigation.cleanRoutes();
+      // this.$navigation.on('reset', () => {});
+    }
   }
 };
 </script>
@@ -68,7 +79,7 @@ export default {
   left 0
   right 0
   margin auto
-  z-index 999
+  z-index 100
   display flex
   align-items center
   transform translateY(80px)

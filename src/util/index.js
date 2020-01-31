@@ -52,3 +52,29 @@ export function randomColor() {
     (last + Math.round(Math.random() * COLOR_LIST.length / 2 + 1)) % COLOR_LIST.length;
   return COLOR_LIST[last];
 }
+
+export function debounceAsyncValidator(validator, delay) {
+  let currentTimer = null;
+  let currentPromiseReject = null;
+
+  function debounce() {
+    return new Promise((resolve, reject) => {
+      currentTimer = setTimeout(() => {
+        currentTimer = null;
+        currentPromiseReject = null;
+        resolve();
+      }, delay);
+      currentPromiseReject = reject;
+    });
+  }
+
+  return function(value) {
+    if (currentTimer) {
+      currentPromiseReject(new Error('replaced'));
+      clearTimeout(currentTimer);
+      currentTimer = null;
+    }
+
+    return validator.call(this, value, debounce);
+  };
+}
