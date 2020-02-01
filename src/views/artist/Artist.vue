@@ -1,72 +1,75 @@
 <template>
   <transition enter-active-class="animated zoomIn">
-    <div v-if="artistDetail" class="artists">
-      <Header title="画师详情" :show="showTab" />
-      <List
-        :list="pictureList"
-        :identifier="identifier"
-        @infinite="infinite"
-      >
-        <div class="list-header">
-          <div class="avatar">
-            <v-avatar :size="80">
-              <img :src="`${artistDetail.avatarSrc}`" alt="">
-            </v-avatar>
-          </div>
-          <div class="artists-info">
-            <p class="name">{{ artistDetail.name }}</p>
-            <v-btn
-              class="mb-5"
-              color="primary"
-              rounded
-              width="75%"
-              max-width="300"
-              @click="follow"
-            >
-              {{ artistDetail.isFollowed ? '已关注' : '+加关注' }}
-            </v-btn>
-            <div class="link">
-              <v-btn
-                :href="artistDetail.webPage"
-                text
-                icon
-                color="lighten-2"
-              >
-                <v-icon>iconfont icon-home</v-icon>
-              </v-btn>
-              <v-btn
-                :href="artistDetail.twitterUrl"
-                text
-                icon
-                color="lighten-2"
-              >
-                <v-icon>iconfont icon-ttww</v-icon>
-              </v-btn>
+    <div class="artist-container">
+      <div v-if="artistDetail" class="artists">
+        <Header title="画师详情" :show="showTab" />
+        <List
+          :list="pictureList"
+          :identifier="identifier"
+          @infinite="infinite"
+        >
+          <div class="list-header">
+            <div class="avatar">
+              <v-avatar :size="80">
+                <img :src="`${artistDetail.avatarSrc}`" alt="">
+              </v-avatar>
             </div>
-            <div class="friends">
-              <span>
-                {{ artistDetail.totalFollowUsers }}
-                <span>关注</span>
-              </span>
-              <span>
-                {{ artistDetail.totalIllustBookmarksPublic }}
-                <span>好P友</span>
-              </span>
+            <div class="artists-info">
+              <p class="name">{{ artistDetail.name }}</p>
+              <v-btn
+                class="mb-5"
+                color="primary"
+                rounded
+                width="75%"
+                max-width="300"
+                @click="follow"
+              >
+                {{ artistDetail.isFollowed ? '已关注' : '+加关注' }}
+              </v-btn>
+              <div class="link">
+                <v-btn
+                  :href="artistDetail.webPage"
+                  text
+                  icon
+                  color="lighten-2"
+                >
+                  <v-icon>iconfont icon-home</v-icon>
+                </v-btn>
+                <v-btn
+                  :href="artistDetail.twitterUrl"
+                  text
+                  icon
+                  color="lighten-2"
+                >
+                  <v-icon>iconfont icon-ttww</v-icon>
+                </v-btn>
+              </div>
+              <div class="friends">
+                <span>
+                  {{ artistDetail.totalFollowUsers }}
+                  <span>关注</span>
+                </span>
+                <span>
+                  {{ artistDetail.totalIllustBookmarksPublic }}
+                  <span>好P友</span>
+                </span>
+              </div>
+              <p class="caption">{{ artistDetail.comment }}</p>
             </div>
-            <p class="caption">{{ artistDetail.comment }}</p>
+            <v-tabs centered grow>
+              <v-tab @click="getList('illust')">
+                插画
+                <span>({{ illustSum }})</span>
+              </v-tab>
+              <v-tab @click="getList('manga')">
+                漫画
+                <span>({{ mangaSum }})</span>
+              </v-tab>
+            </v-tabs>
           </div>
-          <v-tabs centered grow>
-            <v-tab @click="getList('illust')">
-              插画
-              <span>({{ illustSum }})</span>
-            </v-tab>
-            <v-tab @click="getList('manga')">
-              漫画
-              <span>({{ mangaSum }})</span>
-            </v-tab>
-          </v-tabs>
-        </div>
-      </List>
+        </List>
+      </div>
+      <Loading v-else />
     </div>
   </transition>
 </template>
@@ -75,13 +78,15 @@
 import { mapGetters } from 'vuex';
 import Header from '@/components/header/Header';
 import List from '@/components/virtual-list/VirtualList';
+import Loading from '@/components/loading/Loading';
 import { IMG_PREFIX } from '@/util/constants';
 
 export default {
   name: 'Artist',
   components: {
     Header,
-    List
+    List,
+    Loading
   },
   props: {
     artistId: {
@@ -169,6 +174,9 @@ export default {
       this.identifier += 1;
     },
     follow() {
+      if (!this.user.id) {
+        return alert('请先登录~');
+      }
       const data = {
         artistId: this.artistDetail.id,
         userId: this.user.id
@@ -201,43 +209,46 @@ export default {
 
 <style lang="stylus" scope>
 @import '~@/style/color.styl'
-.artists
-  position fixed
-  top 0
-  left 0
-  right 0
-  bottom 0
+.artist-container
   width 100%
-  z-index 3
-  overflow hidden
-  background #f2f3f4
-  font-size 16px
-  .list-header
-    .avatar
-      padding-top 50px
-      text-align center
-    .artists-info
-      padding-top 15px
-      text-align center
-      .name
-        font-size 20px
-      .link
-        display flex
-        align-items center
-        justify-content center
-        margin-top 10px
-        &-btn
-          flex 1
-      .friends
-        font-size 14px
-        margin-top 10px
-        >span:first-child
-          margin-right 20px
-        >span
-          span
-            color #ccc
-            margin-left 5px
-      .caption
-        padding 20px
-        word-wrap break-word
+  height 100%
+  .artists
+    position fixed
+    top 0
+    left 0
+    right 0
+    bottom 0
+    width 100%
+    z-index 3
+    overflow hidden
+    background #f2f3f4
+    font-size 16px
+    .list-header
+      .avatar
+        padding-top 50px
+        text-align center
+      .artists-info
+        padding-top 15px
+        text-align center
+        .name
+          font-size 20px
+        .link
+          display flex
+          align-items center
+          justify-content center
+          margin-top 10px
+          &-btn
+            flex 1
+        .friends
+          font-size 14px
+          margin-top 10px
+          >span:first-child
+            margin-right 20px
+          >span
+            span
+              color #ccc
+              margin-left 5px
+        .caption
+          padding 20px
+          word-wrap break-word
 </style>

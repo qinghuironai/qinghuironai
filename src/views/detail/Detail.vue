@@ -1,120 +1,127 @@
 <template>
-  <transition
-    enter-active-class="animated zoomIn"
-    leave-active-class="animated rollOut"
-    :duration="200"
-  >
-    <div v-if="illustDetail" class="detail">
-      <List :list="pictureList" @infinite="infinite">
-        <div class="detail-top">
-          <v-img
-            class="elevation-0 grey"
-            :height="illustDetail.itemHeight"
-            :src="illustDetail.src"
-            @click="preview = true"
-          >
-            <v-btn icon @click.stop="$router.back()">
-              <v-icon>mdi-arrow-left</v-icon>
-            </v-btn>
-            <v-menu>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  icon
-                  absolute
-                  style="right: 0;"
-                  @click.stop
-                  v-on="on"
-                >
-                  <v-icon size="16">iconfont icon-menu-two</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(item, index) in items"
-                  :key="index"
-                  @click="clickMenu(item.val)"
-                >
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-            <Like :like="illustDetail.isLiked" @handleLike="handleLike" />
-          </v-img>
-          <div class="detail-info">
-            <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
-            <p class="caption" v-html="illustDetail.caption" />
-            <div class="tags">
-              <span v-for="(item, index) in illustDetail.tags" :key="index" class="caption tag">
-                <a>{{ item.name }}</a>
-                <a>{{ item.translatedName }}</a>
-              </span>
-            </div>
-            <div class="work-stats">
-              <a class="work-stats-a">
-                <v-icon size="16">iconfont icon-yanjing</v-icon>
-                <span>{{ illustDetail.totalView }}</span>
-              </a>
-              <a class="work-stats-a">
-                <v-icon size="16">iconfont icon-xihuan</v-icon>
-                <span>{{ illustDetail.totalBookmarks }}</span>
-              </a>
-            </div>
-            <v-divider />
-            <div class="user">
-              <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
-                <v-avatar>
-                  <v-img :src="illustDetail.avatarSrc" alt="avatar" />
-                </v-avatar>
-                <span>{{ illustDetail.artistPreView.name }}</span>
-              </router-link>
-              <v-btn color="primary" rounded @click="follow">
-                {{ illustDetail.artistPreView.isFollowed ? '已关注' : '+加关注' }}
+  <div v-if="illustDetail" class="detail animated zoomIn">
+    <List :list="pictureList" @infinite="infinite">
+      <div class="detail-top">
+        <v-img
+          class="grey lighten-2"
+          :height="illustDetail.itemHeight"
+          :src="illustDetail.src"
+          :lazy-src="illustDetail.mediumSrc"
+          @click="preview = true"
+        >
+          <v-btn icon @click.stop="$router.back()">
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn>
+          <v-menu>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                absolute
+                style="right: 0;"
+                @click.stop
+                v-on="on"
+              >
+                <v-icon size="16">iconfont icon-menu-two</v-icon>
               </v-btn>
-            </div>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in items"
+                :key="index"
+                @click="clickMenu(item.val)"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <Like :like="illustDetail.isLiked" @handleLike="handleLike" />
+          <template v-slot:placeholder>
+            <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+            >
+              <v-progress-circular indeterminate color="grey lighten-5" />
+            </v-row>
+          </template>
+        </v-img>
+        <div class="detail-info">
+          <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
+          <p class="caption" v-html="illustDetail.caption" />
+          <div class="tags">
+            <span v-for="(item, index) in illustDetail.tags" :key="index" class="caption tag">
+              <a>{{ item.name }}</a>
+              <a>{{ item.translatedName }}</a>
+            </span>
+          </div>
+          <div class="work-stats">
+            <a class="work-stats-a">
+              <v-icon size="16">iconfont icon-yanjing</v-icon>
+              <span>{{ illustDetail.totalView }}</span>
+            </a>
+            <a class="work-stats-a">
+              <v-icon size="16">iconfont icon-xihuan</v-icon>
+              <span>{{ illustDetail.totalBookmarks }}</span>
+            </a>
+          </div>
+          <v-divider />
+          <div class="user">
+            <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
+              <v-avatar>
+                <v-img :src="illustDetail.avatarSrc" alt="avatar" />
+              </v-avatar>
+              <span>{{ illustDetail.artistPreView.name }}</span>
+            </router-link>
+            <v-btn color="primary" rounded @click="follow">
+              {{ illustDetail.artistPreView.isFollowed ? '已关注' : '+加关注' }}
+            </v-btn>
           </div>
         </div>
-      </List>
-      <div v-if="preview" class="detail-preview">
-        <v-carousel
-          height="100vh"
-          hide-delimiter-background
-          hide-delimiters
-          show-arrows-on-hover
-        >
-          <v-carousel-item v-for="(item, i) in imgs" :key="i">
-            <v-row class="fill-height" align="center" justify="center">
-              <img width="100%" :src="item">
-            </v-row>
-          </v-carousel-item>
-        </v-carousel>
-        <v-btn
-          color="pink"
-          dark
-          small
-          fixed
-          top
-          right
-          fab
-          @click="preview = false"
-        >
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
       </div>
+    </List>
+    <div v-if="preview" class="detail-preview">
+      <v-carousel
+        height="100vh"
+        hide-delimiter-background
+        hide-delimiters
+        show-arrows-on-hover
+      >
+        <v-carousel-item v-for="(item, i) in imgs" :key="i">
+          <v-row class="fill-height" align="center" justify="center">
+            <img width="100%" :src="item">
+          </v-row>
+        </v-carousel-item>
+      </v-carousel>
+      <v-btn
+        color="pink"
+        dark
+        small
+        fixed
+        top
+        right
+        fab
+        @click="preview = false"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </div>
-  </transition>
+  </div>
+  <Loading v-else />
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
+import Loading from '@/components/loading/Loading';
 import { IMG_PREFIX } from '@/util/constants';
 
 export default {
   name: 'Detail',
   components: {
     List,
-    Like
+    Like,
+    Loading
   },
   props: {
     pid: {
@@ -170,8 +177,9 @@ export default {
           this.illustDetail = {
             ...data,
             itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
-            src: IMG_PREFIX + data.imageUrls[0].large.replace('_webp', ''),
-            avatarSrc: IMG_PREFIX + data.artistPreView.avatar
+            src: IMG_PREFIX + data.imageUrls[0].original.replace('_webp', ''),
+            avatarSrc: IMG_PREFIX + data.artistPreView.avatar,
+            mediumSrc: IMG_PREFIX + data.imageUrls[0].medium
           };
         });
     },
@@ -234,6 +242,9 @@ export default {
       }
     },
     follow() {
+      if (!this.user.id) {
+        return alert('请先登录~');
+      }
       const data = {
         artistId: this.illustDetail.artistPreView.id,
         userId: this.user.id

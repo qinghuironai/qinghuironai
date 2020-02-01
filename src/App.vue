@@ -58,8 +58,7 @@ export default {
   },
   methods: {
     clickTab() {
-      console.log(this.$navigation);
-      // this.$navigation.cleanRoutes();
+      // console.log(this.$vnode.componentInstance);
       // this.$navigation.on('reset', () => {});
     }
   }

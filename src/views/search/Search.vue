@@ -47,10 +47,7 @@
           :identifier="identifier"
           @infinite="infinite"
         >
-          <div>
-            <Tags :data="tags" @handleClick="clickTag" />
-            <Tags :data="exclusive" @handleClick="clickTag" />
-          </div>
+          <Tags :data="[...tags, ...exclusive]" @handleClick="clickTag" />
         </List>
       </div>
       <div v-show="value && isSearch" class="search-btn">
@@ -240,6 +237,9 @@ export default {
         if (!data[item]) { delete data[item]; }
       });
       return data;
+    },
+    allTags() {
+      return [...this.tags, ...this.exclusive];
     }
   },
   watch: {
@@ -272,14 +272,14 @@ export default {
       this.$api.search
         .getTags(param)
         .then(res => {
-          this.tags = res.data.data;
+          this.tags = res.data.data || [];
         });
     },
     getExclusive(param) {
       this.$api.search
         .getExclusive(param)
         .then(res => {
-          this.exclusive = res.data.data;
+          this.exclusive = res.data.data || [];
         });
     },
     focus() {
@@ -371,21 +371,6 @@ export default {
         this.date.shift();
       }
     }
-  },
-  beforeRouteLeave(to, from, next) {
-    if (to.name === 'Detail' || to.name === 'Artist') {
-      // 去详情和作者页面 (前进) 不需销毁
-      next();
-    } else {
-      // 返回排行页 清除缓存并销毁该组件 (后退)
-      const cache = this.$vnode.parent.componentInstance.cache;
-      const keys = this.$vnode.parent.componentInstance.keys;
-      delete cache['/search'];
-      const index = keys.indexOf('/search');
-      keys.splice(index, 1);
-      this.$destroy();
-      next();
-    }
   }
 };
 </script>
@@ -393,12 +378,6 @@ export default {
 <style lang="stylus" scope>
 @import '~@/style/color.styl'
 .search
-  // position fixed
-  // top 0
-  // right 0
-  // bottom 0
-  // left 0
-  // background-color #ffffff
   z-index 100
   font-size 16px
   background #fff
