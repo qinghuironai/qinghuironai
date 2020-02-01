@@ -56,11 +56,11 @@
             <p class="caption">{{ artistDetail.comment }}</p>
           </div>
           <v-tabs centered grow>
-            <v-tab v-if="illustSum" @click="getList('illust')">
+            <v-tab @click="getList('illust')">
               插画
               <span>({{ illustSum }})</span>
             </v-tab>
-            <v-tab v-if="mangaSum" @click="getList('manga')">
+            <v-tab @click="getList('manga')">
               漫画
               <span>({{ mangaSum }})</span>
             </v-tab>

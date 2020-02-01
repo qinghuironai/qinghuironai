@@ -7,21 +7,26 @@
     <div v-if="illustDetail" class="detail">
       <List :list="pictureList" @infinite="infinite">
         <div class="detail-top">
-          <v-toolbar
-            class="elevation-0"
+          <v-img
+            class="elevation-0 grey"
             :height="illustDetail.itemHeight"
-            dark
-            prominent
             :src="illustDetail.src"
             @click="preview = true"
           >
             <v-btn icon @click.stop="$router.back()">
               <v-icon>mdi-arrow-left</v-icon>
             </v-btn>
-            <v-spacer />
             <v-menu>
               <template v-slot:activator="{ on }">
-                <v-app-bar-nav-icon @click.stop v-on="on" />
+                <v-btn
+                  icon
+                  absolute
+                  style="right: 0;"
+                  @click.stop
+                  v-on="on"
+                >
+                  <v-icon size="16">iconfont icon-menu-two</v-icon>
+                </v-btn>
               </template>
               <v-list>
                 <v-list-item
@@ -34,7 +39,7 @@
               </v-list>
             </v-menu>
             <Like :like="illustDetail.isLiked" @handleLike="handleLike" />
-          </v-toolbar>
+          </v-img>
           <div class="detail-info">
             <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
             <p class="caption" v-html="illustDetail.caption" />
@@ -262,12 +267,12 @@ export default {
 @import '~@/style/color.styl'
 .detail
   background-size contain
-  // width 100vw
+  width 100%
   background-color #fff
   z-index 3
   font-size 16px
   &-info
-    padding 5px 10px
+    // padding 5px 10px
     // width 100vw
     overflow hidden
     >.caption
