@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="white" dense flat>
+  <v-app-bar color="white" dense flat fixed>
     <!-- <v-app-bar-nav-icon /> -->
     <v-btn icon>
       <router-link to="/search">

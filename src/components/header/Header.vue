@@ -1,8 +1,7 @@
 <template>
   <div
-    ref="header"
     class="header"
-    :style="{background: `${background}`}"
+    :style="{background: `${background}`, opacity: show ? 1 : 0}"
   >
     <i class="iconfont icon-fanhui" @click="handleClick" />
     <h1>{{ title }}</h1>
@@ -18,11 +17,16 @@ export default {
     },
     background: {
       type: String,
-      default: ''
+      default: '#0096fa'
+    },
+    show: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
     handleClick() {
+      this.$router.back();
       this.$emit('handleClick');
     }
   }
@@ -40,7 +44,9 @@ export default {
   display flex
   line-height 40px
   box-sizing border-box
-  color #000
+  color #fff
+  opacity 1
+  transition opacity .3s ease-in
   >i
     position absolute
     left 5px

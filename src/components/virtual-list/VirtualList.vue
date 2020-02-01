@@ -25,6 +25,7 @@ import { IMG_PREFIX } from '@/util/constants';
 import { randomColor } from '@/util';
 import { getClient } from '@/util/dom';
 const columnWidth = 200; // 屏幕小于200则1列
+const HEAD_HEIGHT = 40;
 
 export default {
   components: {
@@ -54,7 +55,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'likeStatus']),
+    ...mapGetters(['user', 'likeStatus', 'showTab']),
     listMap() {
       const map = new Map();
       for (const item of this.list) {
@@ -88,6 +89,8 @@ export default {
     this.waterFall();
     if (this.$slots.default) {
       this.headerHeight = parseInt(this.$slots.default[0].elm.offsetHeight);
+    } else {
+      this.headerHeight = HEAD_HEIGHT;
     }
     window.addEventListener('resize', throttle(this.waterFall));
   },

@@ -15,10 +15,6 @@
             <div class="info-tabs">
               <router-link to="" class="tab">
                 <span>0</span>
-                <p>创作</p>
-              </router-link>
-              <router-link to="" class="tab">
-                <span>0</span>
                 <p>消息</p>
               </router-link>
               <router-link to="" class="tab">
@@ -34,57 +30,23 @@
         </div>
       </v-card>
     </div>
-    <div class="me-lists">
-      <!-- <v-card outlined width="95%" class="lists-container"> -->
-      <v-list-item>
+    <v-list class="me-lists">
+      <v-list-item
+        v-for="item in list"
+        :key="item.val"
+        @click="$router.push(item.val)"
+      >
         <v-list-item-icon>
-          <v-icon color="#b9eee5">iconfont icon-shoucang-copy-copy-copy</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content @click="$router.push({name: 'Collect', params: {type: 'illust'}})">
-          <v-list-item-title>插画收藏</v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-icon>
-          <v-icon color="#b9eee5">iconfont icon-right</v-icon>
-        </v-list-item-icon>
-      </v-list-item>
-      <v-divider />
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="#b9eee5">iconfont icon-shoucang-copy-copy-copy</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content @click="$router.push({name: 'Collect', params: {type: 'manga'}})">
-          <v-list-item-title>漫画收藏</v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-icon>
-          <v-icon color="#b9eee5">iconfont icon-right</v-icon>
-        </v-list-item-icon>
-      </v-list-item>
-      <v-divider />
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="#b9eee5">iconfont icon-icon-copy</v-icon>
+          <v-icon color="#b9eee5">{{ item.icon }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>我的关注</v-list-item-title>
+          <v-list-item-title>{{ item.text }}</v-list-item-title>
         </v-list-item-content>
         <v-list-item-icon>
           <v-icon color="#b9eee5">iconfont icon-right</v-icon>
         </v-list-item-icon>
       </v-list-item>
-      <v-divider />
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="#b9eee5">iconfont icon-lianjie-copy</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>关于我们</v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-icon>
-          <v-icon color="#b9eee5">iconfont icon-right</v-icon>
-        </v-list-item-icon>
-      </v-list-item>
-      <!-- </v-card> -->
-    </div>
+    </v-list>
   </div>
 </template>
 
@@ -94,7 +56,11 @@ export default {
   name: 'Me',
   data() {
     return {
-
+      list: [
+        { icon: 'iconfont icon-shoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
+        { icon: 'iconfont icon-icon-copy', text: '我的关注', val: '/artistCollect' },
+        { icon: 'iconfont icon-lianjie-copy', text: '关于我们', val: '' }
+      ]
     };
   },
   computed: {
@@ -138,10 +104,5 @@ export default {
               flex 1
               p
                 color #5e5e5e
-  &-lists
-    width 100%
-    padding 10px
-    .lists-container
-      margin 5px auto
 </style>
 

@@ -94,6 +94,15 @@ function followArtist(data) {
   });
 }
 
+// 用户关注画师列表
+function getFollowArtist(data) {
+  return axios({
+    url: `${data.userId}/followed`,
+    method: 'get',
+    params: { page: data.page, pageSize: data.pageSize || 30 }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -105,5 +114,6 @@ export {
   collectIllust,
   getCollectList,
   deleteCollect,
-  followArtist
+  followArtist,
+  getFollowArtist
 };

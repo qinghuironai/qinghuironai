@@ -1,7 +1,7 @@
 <template>
   <transition enter-active-class="animated zoomIn">
     <div v-if="artistDetail" class="artists">
-      <Header title="画师详情" @handleClick="handleClick" />
+      <Header title="画师详情" :show="showTab" />
       <List
         :list="pictureList"
         :identifier="identifier"
@@ -86,7 +86,7 @@ export default {
   props: {
     artistId: {
       required: true,
-      type: String
+      type: [String, Number]
     }
   },
   data() {
@@ -101,7 +101,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'followStatus'])
+    ...mapGetters(['user', 'followStatus', 'showTab'])
   },
   watch: {
     followStatus(val) {

@@ -12,7 +12,7 @@ const pages = {
   Find: () => import('./views/find/Find'),
   Me: () => import('./views/me/Me'),
   Collect: () => import('./views/me/components/Collect'),
-  Personal: () => import('./views/me/components/Personal'),
+  ArtistCollect: () => import('./views/me/components/ArtistCollect.vue'),
   Login: () => import('./views/login/Login'),
   Register: () => import('./views/register/Register'),
   NotFound: () => import('./views/not-found/NotFound')
@@ -77,10 +77,14 @@ const router = new Router({
     component: pages.Me
   },
   {
-    path: '/collect/:type',
+    path: '/collect',
     name: 'Collect',
-    component: pages.Collect,
-    props: true
+    component: pages.Collect
+  },
+  {
+    path: '/artistCollect',
+    name: 'ArtistCollect',
+    component: pages.ArtistCollect
   },
   {
     path: '/login',

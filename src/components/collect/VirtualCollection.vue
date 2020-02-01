@@ -61,7 +61,7 @@
     >
       <i class="iconfont icon-dingbu1" />
     </div>
-    <infinite-loading :identifier="identifier" spinner="circles" @infinite="infinite">
+    <infinite-loading :identifier="identifier" @infinite="infinite">
       <div slot="no-more">(￣ˇ￣)俺也是有底线的</div>
       <div slot="no-results">(￣ˇ￣)无结果</div>
     </infinite-loading>
@@ -146,7 +146,13 @@ export default {
       this.onCollectionChanged();
     },
     identifier() {
-      this.totalHeight = 0;
+      if (this.$slots.default) {
+        this.$nextTick(() => {
+          this.totalHeight = parseInt(this.$slots.default[0].elm.offsetHeight);
+        });
+      } else {
+        this.totalHeight = 40;
+      }
     }
   },
   created() {
