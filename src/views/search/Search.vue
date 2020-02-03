@@ -2,7 +2,14 @@
   <transition enter-active-class="animated zoomIn">
     <div class="search">
       <div class="search-header">
-        <i class="iconfont icon-icon-test" @click="$router.back()" />
+        <svg
+          font-size="20"
+          class="icon"
+          aria-hidden="true"
+          @click="$router.back()"
+        >
+          <use xlink:href="#picfanhui1" />
+        </svg>
         <div class="input">
           <input
             ref="input"
@@ -11,7 +18,10 @@
             @keyup.enter="enter(value)"
             @focus="focus"
           >
-          <i class="iconfont icon-xiangji1" />
+          <!-- <i class="iconfont icon-xiangji1" /> -->
+          <svg font-size="20" class="icon" aria-hidden="true">
+            <use xlink:href="#picxiangji1-copy" />
+          </svg>
           <div class="save">
             <input
               id="uploads"
@@ -21,11 +31,14 @@
             >
           </div>
         </div>
-        <i
-          v-if="!isSearch"
-          class="iconfont icon-xuanxiang- menu"
+        <svg
+          font-size="20"
+          class="icon"
+          aria-hidden="true"
           @click="dialog = true"
-        />
+        >
+          <use xlink:href="#picshezhi" />
+        </svg>
       </div>
       <div v-if="isSearch" class="search-suggest">
         <div
@@ -66,7 +79,9 @@
         <v-card>
           <v-toolbar dark color="primary">
             <v-btn icon dark @click="dialog = false">
-              <i class="iconfont icon-icon-test" />
+              <svg font-size="20" class="icon" aria-hidden="true">
+                <use xlink:href="#picfanhui1" />
+              </svg>
             </v-btn>
             <v-toolbar-title>显示选项</v-toolbar-title>
             <v-spacer />
@@ -390,7 +405,7 @@ export default {
     justify-content space-between
     padding 12px 16px 16px
     box-sizing border-box
-    >i
+    svg
       flex-basis 40px
       position relative
       &:after
@@ -418,7 +433,7 @@ export default {
         border-radius 5px
         background-color rgb(245, 245, 245)
         color rgb(31, 31, 31)
-      >i
+      >svg
         position absolute
         top 12px
         right 5px

@@ -1,9 +1,11 @@
 <template>
-  <v-app-bar color="white" dense flat fixed>
+  <v-app-bar color="white" dense flat>
     <!-- <v-app-bar-nav-icon /> -->
     <v-btn icon>
       <router-link to="/search">
-        <v-icon color="rgba(0,0,0,.54)">mdi-magnify</v-icon>
+        <svg font-size="20" class="icon" aria-hidden="true">
+          <use xlink:href="#picsearch" />
+        </svg>
       </router-link>
     </v-btn>
     <v-spacer />
@@ -42,7 +44,9 @@
     <v-bottom-sheet v-model="showDate">
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
-          <v-icon>iconfont icon-rili</v-icon>
+          <svg font-size="20" class="icon" aria-hidden="true">
+            <use xlink:href="#picrili5" />
+          </svg>
         </v-btn>
       </template>
       <v-sheet class="text-center">

@@ -1,21 +1,24 @@
 <template>
-  <div class="item" @click="goDetail">
+  <router-link :to="{name: 'Detail', params: {pid: column.id}}" class="item">
     <div class="item-content" :style="column.style">
       <img
         :src="column.src"
         :style="{opacity}"
-        @load="opacity = 1"
+        @load="handleLoad"
       >
+      <div v-if="column.pageCount > 1" class="count">
+        <img src="../../assets/images/count.svg">
+        <span>{{ column.pageCount }}</span>
+      </div>
+      <Like :like="column.isLiked" @handleLike="handleLike" />
+      <div v-if="column.setu" class="setu-filter">
+        <!-- <img width="100%" src="../../assets/images/error.svg"> -->
+        <svg font-size="50" class="icon" aria-hidden="true">
+          <use xlink:href="#picsuo2" />
+        </svg>
+      </div>
     </div>
-    <div v-if="column.pageCount > 1" class="count">
-      <img src="../../assets/images/count.svg">
-      <span>{{ column.pageCount }}</span>
-    </div>
-    <Like :like="column.isLiked" @handleLike="handleLike" />
-    <div v-if="column.xrestrict === 1 || column.sanityLevel > 6" class="setu-filter">
-      <img width="100%" src="../../assets/images/error.svg">
-    </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -38,13 +41,14 @@ export default {
     };
   },
   methods: {
-    goDetail() {
-      if (this.column.xrestrict === 1 || this.column.sanityLevel > 6) return;
-      this.$router.push(`/detail/${this.column.id}`);
-    },
     handleLike() {
-      // this.isLiked = !this.isLiked;
       this.$emit('handleLike', this.column);
+    },
+    handleLoad() {
+      // if (!this.column.setu) {
+      //   this.opacity = 1;
+      // }
+      this.opacity = 1;
     }
   }
 };
@@ -77,8 +81,8 @@ export default {
   .count
     position absolute
     display inline-block
-    top 15px
-    right 15px
+    top 8px
+    right 8px
     color white
     background-color #0000009e
     padding 2px
@@ -98,8 +102,8 @@ export default {
     right 0
     bottom 0
     left 0
-    width 40px
-    height 40px
+    width 50px
+    height 50px
     margin auto
-    z-index 999
+    z-index 2
 </style>

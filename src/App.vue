@@ -14,7 +14,11 @@
         class="tabs-item"
         @click.native="clickTab"
       >
-        <i :class="[item.icon, {'active': active === item.value}]" />
+        <img
+          :src="active === item.value ? item.activeSrc : item.src"
+          :style="{transform: active === item.value ? 'scale(1.1)' : ''}"
+          alt=""
+        >
       </router-link>
     </div>
   </v-app>
@@ -28,23 +32,28 @@ export default {
       active: '/dailyRank',
       tabs: [{
         value: '/dailyRank',
-        icon: 'iconfont icon-paihang'
+        src: require('../src/assets/images/pixivic.svg'),
+        activeSrc: require('../src/assets/images/pixivic-active.svg')
       }, {
         value: '/find',
-        icon: 'iconfont icon-faxian1-copy'
+        src: require('../src/assets/images/find.svg'),
+        activeSrc: require('../src/assets/images/find-active.svg')
       }, {
-        value: '',
-        icon: 'iconfont icon-new13'
+        value: '/new',
+        src: require('../src/assets/images/new.svg'),
+        activeSrc: require('../src/assets/images/new-active.svg')
       }, {
         value: '/me',
-        icon: 'iconfont icon-user-copy'
+        src: require('../src/assets/images/me.svg'),
+        activeSrc: require('../src/assets/images/me-active.svg')
       }]
     };
   },
   computed: {
     ...mapGetters([
       'cachedViews',
-      'showTab'
+      'showTab',
+      'user'
     ]),
     key() {
       return this.$route.path;
@@ -87,13 +96,11 @@ export default {
   &-item
     flex 1
     text-align center
-    color #ccc !important
-    i
-      font-size 25px
-      &.active
-        color $primary
-        font-size 30px
-        transition all .3s
+    img
+      width 25px
+      height 25px
+      vertical-align middle
+      transition all .3s
 .show
   transform translateY(0)
   opacity 1

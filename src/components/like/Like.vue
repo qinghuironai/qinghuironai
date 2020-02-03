@@ -1,5 +1,5 @@
 <template>
-  <div :class="['like', {'is-like': like}]" @click.stop="handleLike">
+  <div :class="['like', {'is-like': like}]" @click.stop.prevent="handleLike">
     <svg id="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
       <g id="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
         <path
@@ -144,11 +144,11 @@ export default {
 
 .like {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: -10px;
+  right: -5px;
 
   svg {
-    width: 60px;
+    width: 50px;
     overflow: visible;
 
     #heart {

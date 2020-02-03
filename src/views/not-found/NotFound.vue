@@ -1,7 +1,7 @@
 <template>
   <div class="found">
     <h2>404</h2>
-    <i class="iconfont icon-icon-test" s@click="$router.back()" />
+    <i class="iconfont icon-icon-test" @click="$router.back()" />
   </div>
 </template>
 

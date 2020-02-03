@@ -170,10 +170,9 @@ export default {
         tmp['height'] = height;
         tmp['width'] = width;
         tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`;
-        tmp['color'] = randomColor();
+        tmp['setu'] = !!((tmp.xrestrict === 1 || tmp.sanityLevel > 5));
         tmp['style'] = {
-          backgroundColor: randomColor(),
-          filter: (tmp.xrestrict === 1 || tmp.sanityLevel > 6) ? `blur(20px)` : ''
+          backgroundColor: randomColor()
         };
       }
     }

@@ -3,7 +3,9 @@
     class="header"
     :style="{background: `${background}`, opacity: show ? 1 : 0}"
   >
-    <i class="iconfont icon-fanhui" @click="handleClick" />
+    <svg font-size="20" class="icon" aria-hidden="true" @click="handleClick">
+      <use xlink:href="#picfanhui1" />
+    </svg>
     <h1>{{ title }}</h1>
   </div>
 </template>
@@ -47,10 +49,10 @@ export default {
   color #fff
   opacity 1
   transition opacity .3s ease-in
-  >i
+  >svg
     position absolute
     left 5px
-    top 0
+    top 10px
     font-size 20px
     width 20px
   >h1

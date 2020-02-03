@@ -1,11 +1,12 @@
 <template>
   <div class="rank">
-    <Header @selectMode="selectMode" @selectDate="selectDate" />
     <List
       :list="pictureList"
       :identifier="identifier"
       @infinite="infinite"
-    />
+    >
+      <Header @selectMode="selectMode" @selectDate="selectDate" />
+    </List>
   </div>
 </template>
 

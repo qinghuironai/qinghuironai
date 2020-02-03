@@ -37,7 +37,9 @@
         @click="$router.push(item.val)"
       >
         <v-list-item-icon>
-          <v-icon color="#b9eee5">{{ item.icon }}</v-icon>
+          <svg font-size="20" class="icon" aria-hidden="true">
+            <use :xlink:href="item.icon" />
+          </svg>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>{{ item.text }}</v-list-item-title>
@@ -57,9 +59,9 @@ export default {
   data() {
     return {
       list: [
-        { icon: 'iconfont icon-shoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
-        { icon: 'iconfont icon-icon-copy', text: '我的关注', val: '/artistCollect' },
-        { icon: 'iconfont icon-lianjie-copy', text: '关于我们', val: '' }
+        { icon: '#picshoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
+        { icon: '#picicon-copy', text: '我的关注', val: '/artistCollect' },
+        { icon: '#piclianjie-copy', text: '关于我们', val: '' }
       ]
     };
   },

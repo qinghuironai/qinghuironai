@@ -7,10 +7,13 @@
           :height="illustDetail.itemHeight"
           :src="illustDetail.src"
           :lazy-src="illustDetail.mediumSrc"
-          @click="preview = true"
+          :style="{filter: illustDetail.setu ? `blur(20px)` : ''}"
+          @click="seePreview"
         >
           <v-btn icon @click.stop="$router.back()">
-            <v-icon>mdi-arrow-left</v-icon>
+            <svg font-size="20" class="icon" aria-hidden="true">
+              <use xlink:href="#picfanhui" />
+            </svg>
           </v-btn>
           <v-menu>
             <template v-slot:activator="{ on }">
@@ -21,7 +24,9 @@
                 @click.stop
                 v-on="on"
               >
-                <v-icon size="16">iconfont icon-menu-two</v-icon>
+                <svg font-size="20" class="icon" aria-hidden="true">
+                  <use xlink:href="#piccaidan" />
+                </svg>
               </v-btn>
             </template>
             <v-list>
@@ -56,12 +61,19 @@
           </div>
           <div class="work-stats">
             <a class="work-stats-a">
-              <v-icon size="16">iconfont icon-yanjing</v-icon>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#picyanjing" />
+              </svg>
               <span>{{ illustDetail.totalView }}</span>
             </a>
             <a class="work-stats-a">
-              <v-icon size="16">iconfont icon-xihuan</v-icon>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#picaixin" />
+              </svg>
               <span>{{ illustDetail.totalBookmarks }}</span>
+            </a>
+            <a class="work-stats-a">
+              <span>{{ illustDetail.createDate }}</span>
             </a>
           </div>
           <v-divider />
@@ -111,6 +123,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import dayjs from 'dayjs';
 import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
 import Loading from '@/components/loading/Loading';
@@ -126,7 +139,7 @@ export default {
   props: {
     pid: {
       required: true,
-      type: String
+      type: [String, Number]
     }
   },
   data() {
@@ -179,7 +192,9 @@ export default {
             itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
             src: IMG_PREFIX + data.imageUrls[0].original.replace('_webp', ''),
             avatarSrc: IMG_PREFIX + data.artistPreView.avatar,
-            mediumSrc: IMG_PREFIX + data.imageUrls[0].medium
+            mediumSrc: IMG_PREFIX + data.imageUrls[0].medium,
+            createDate: dayjs(data.createDate).format('YYYY-MM-DD HH:mm:ss'),
+            setu: !!((data.xrestrict === 1 || data.sanityLevel > 5))
           };
         });
     },
@@ -190,6 +205,7 @@ export default {
           illustId: this.pid
         })
         .then(res => {
+          console.log(res);
           if (!res.data.data) {
             $state.complete();
           } else {
@@ -270,6 +286,10 @@ export default {
             alert('取消关注失败');
           });
       }
+    },
+    seePreview() {
+      // if (this.illustDetail.setu) return;
+      this.preview = true;
     }
   }
 };
@@ -316,6 +336,7 @@ export default {
           font-size 12px
           margin-left 2px
           color rgba(0, 0, 0, 0.32)
+          vertical-align middle
   &-preview
     position fixed
     top 0

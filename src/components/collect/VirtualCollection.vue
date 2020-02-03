@@ -13,16 +13,13 @@
     top 0
   .top
     position fixed
-    bottom 50px
+    bottom 27.5px
     right 10px
-    width 50px
-    height 50px
+    width 30px
+    height 30px
     transform translateY(100px)
     transition all 1s
     opacity 0
-    i
-      font-size 25px
-      color pink
     &.is-active
       transform translateY(0)
       opacity 1
@@ -59,7 +56,9 @@
       :class="['top', { 'is-active': showTab }]"
       @click.stop="scrollToTop"
     >
-      <i class="iconfont icon-dingbu1" />
+      <svg font-size="30" class="icon" aria-hidden="true">
+        <use xlink:href="#picdingbu1" />
+      </svg>
     </div>
     <infinite-loading :identifier="identifier" @infinite="infinite">
       <div slot="no-more">(￣ˇ￣)俺也是有底线的</div>

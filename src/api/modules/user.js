@@ -103,6 +103,18 @@ function getFollowArtist(data) {
   });
 }
 
+// 关注画师新作
+function getNewIllust(data) {
+  return axios({
+    url: `${data.userId}/followed/latest/${data.type}`,
+    method: 'get',
+    params: {
+      page: data.page,
+      pageSize: data.pageSize || 30
+    }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -115,5 +127,6 @@ export {
   getCollectList,
   deleteCollect,
   followArtist,
-  getFollowArtist
+  getFollowArtist,
+  getNewIllust
 };
