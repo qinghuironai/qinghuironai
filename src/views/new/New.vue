@@ -25,7 +25,7 @@ import List from '@/components/virtual-list/VirtualList';
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'Collect',
+  name: 'New',
   components: {
     List
   },
@@ -38,12 +38,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'showTab'])
+    ...mapGetters(['user'])
   },
   methods: {
     infinite($state) {
       this.$api.user
-        .getCollectList({
+        .getNewIllust({
           page: this.page++,
           type: this.type,
           userId: this.user.id

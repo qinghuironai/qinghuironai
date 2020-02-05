@@ -1,124 +1,135 @@
 <template>
-  <div v-if="illustDetail" class="detail animated zoomIn">
-    <List :list="pictureList" @infinite="infinite">
-      <div class="detail-top">
-        <v-img
-          class="grey lighten-2"
-          :height="illustDetail.itemHeight"
-          :src="illustDetail.src"
-          :lazy-src="illustDetail.mediumSrc"
-          :style="{filter: illustDetail.setu ? `blur(20px)` : ''}"
-          @click="seePreview"
-        >
-          <v-btn icon @click.stop="$router.back()">
-            <svg font-size="20" class="icon" aria-hidden="true">
-              <use xlink:href="#picfanhui" />
-            </svg>
-          </v-btn>
-          <v-menu>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                icon
-                absolute
-                style="right: 0;"
-                @click.stop
-                v-on="on"
-              >
-                <svg font-size="20" class="icon" aria-hidden="true">
-                  <use xlink:href="#piccaidan" />
-                </svg>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="(item, index) in items"
-                :key="index"
-                @click="clickMenu(item.val)"
-              >
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-          <Like :like="illustDetail.isLiked" @handleLike="handleLike" />
-          <template v-slot:placeholder>
-            <v-row
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-            >
-              <v-progress-circular indeterminate color="grey lighten-5" />
-            </v-row>
-          </template>
-        </v-img>
-        <div class="detail-info">
-          <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
-          <p class="caption" v-html="illustDetail.caption" />
-          <div class="tags">
-            <span v-for="(item, index) in illustDetail.tags" :key="index" class="caption tag">
-              <a>{{ item.name }}</a>
-              <a>{{ item.translatedName }}</a>
-            </span>
-          </div>
-          <div class="work-stats">
-            <a class="work-stats-a">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#picyanjing" />
+  <div>
+    <div v-if="illustDetail" class="detail animated zoomIn">
+      <List :list="pictureList" @infinite="infinite">
+        <div class="detail-top">
+          <v-img
+            class="grey lighten-2"
+            :height="illustDetail.itemHeight"
+            :src="illustDetail.src"
+            :lazy-src="illustDetail.mediumSrc"
+            :style="{filter: illustDetail.setu ? `blur(20px)` : ''}"
+            @click="seePreview"
+          >
+            <v-btn icon @click.stop="$router.back()">
+              <svg font-size="20" class="icon" aria-hidden="true">
+                <use xlink:href="#picfanhui" />
               </svg>
-              <span>{{ illustDetail.totalView }}</span>
-            </a>
-            <a class="work-stats-a">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#picaixin" />
-              </svg>
-              <span>{{ illustDetail.totalBookmarks }}</span>
-            </a>
-            <a class="work-stats-a">
-              <span>{{ illustDetail.createDate }}</span>
-            </a>
-          </div>
-          <v-divider />
-          <div class="user">
-            <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
-              <v-avatar>
-                <v-img :src="illustDetail.avatarSrc" alt="avatar" />
-              </v-avatar>
-              <span>{{ illustDetail.artistPreView.name }}</span>
-            </router-link>
-            <v-btn color="primary" rounded @click="follow">
-              {{ illustDetail.artistPreView.isFollowed ? '已关注' : '+加关注' }}
             </v-btn>
+            <v-menu>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  icon
+                  absolute
+                  style="right: 0;"
+                  @click.stop
+                  v-on="on"
+                >
+                  <svg font-size="20" class="icon" aria-hidden="true">
+                    <use xlink:href="#piccaidan" />
+                  </svg>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in items"
+                  :key="index"
+                  @click="clickMenu(item.val)"
+                >
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            <Like :like="illustDetail.isLiked" @handleLike="handleLike" />
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular indeterminate color="grey lighten-5" />
+              </v-row>
+            </template>
+          </v-img>
+          <div class="detail-info">
+            <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
+            <p class="caption" v-html="illustDetail.caption" />
+            <div class="tags">
+              <span v-for="(item, index) in illustDetail.tags" :key="index" class="caption tag">
+                <a>{{ item.name }}</a>
+                <a>{{ item.translatedName }}</a>
+              </span>
+            </div>
+            <div class="work-stats">
+              <a class="work-stats-a">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#picyanjing" />
+                </svg>
+                <span>{{ illustDetail.totalView }}</span>
+              </a>
+              <a class="work-stats-a">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#picaixin" />
+                </svg>
+                <span>{{ illustDetail.totalBookmarks }}</span>
+              </a>
+              <a class="work-stats-a" @click="openComment">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#picliuyan" />
+                </svg>
+                <span>评论</span>
+              </a>
+              <a class="work-stats-a">
+                <span>{{ illustDetail.createDate }}</span>
+              </a>
+            </div>
+            <v-divider />
+            <div class="user">
+              <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
+                <v-avatar>
+                  <v-img :src="illustDetail.avatarSrc" alt="avatar" />
+                </v-avatar>
+                <span>{{ illustDetail.artistPreView.name }}</span>
+              </router-link>
+              <v-btn color="primary" rounded @click="follow">
+                {{ illustDetail.artistPreView.isFollowed ? '已关注' : '+加关注' }}
+              </v-btn>
+            </div>
           </div>
         </div>
+      </List>
+      <div v-if="preview" class="detail-preview">
+        <v-carousel
+          height="100vh"
+          hide-delimiter-background
+          hide-delimiters
+          show-arrows-on-hover
+        >
+          <v-carousel-item v-for="(item, i) in imgs" :key="i">
+            <v-row class="fill-height" align="center" justify="center">
+              <img width="100%" :src="item">
+            </v-row>
+          </v-carousel-item>
+        </v-carousel>
+        <v-btn
+          color="pink"
+          dark
+          small
+          fixed
+          top
+          right
+          fab
+          @click="preview = false"
+        >
+          <svg font-size="20" class="icon" aria-hidden="true">
+            <use xlink:href="#picguanbi7" />
+          </svg>
+        </v-btn>
       </div>
-    </List>
-    <div v-if="preview" class="detail-preview">
-      <v-carousel
-        height="100vh"
-        hide-delimiter-background
-        hide-delimiters
-        show-arrows-on-hover
-      >
-        <v-carousel-item v-for="(item, i) in imgs" :key="i">
-          <v-row class="fill-height" align="center" justify="center">
-            <img width="100%" :src="item">
-          </v-row>
-        </v-carousel-item>
-      </v-carousel>
-      <v-btn
-        color="pink"
-        dark
-        small
-        fixed
-        top
-        right
-        fab
-        @click="preview = false"
-      >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
     </div>
+    <Loading v-else />
+    <Comment ref="comment" :pid="pid" />
   </div>
-  <Loading v-else />
 </template>
 
 <script>
@@ -127,6 +138,7 @@ import dayjs from 'dayjs';
 import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
 import Loading from '@/components/loading/Loading';
+import Comment from './components/Comment';
 import { IMG_PREFIX } from '@/util/constants';
 
 export default {
@@ -134,7 +146,8 @@ export default {
   components: {
     List,
     Like,
-    Loading
+    Loading,
+    Comment
   },
   props: {
     pid: {
@@ -290,6 +303,9 @@ export default {
     seePreview() {
       // if (this.illustDetail.setu) return;
       this.preview = true;
+    },
+    openComment() {
+      this.$refs.comment.show();
     }
   }
 };

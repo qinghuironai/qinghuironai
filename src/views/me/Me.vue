@@ -45,7 +45,9 @@
           <v-list-item-title>{{ item.text }}</v-list-item-title>
         </v-list-item-content>
         <v-list-item-icon>
-          <v-icon color="#b9eee5">iconfont icon-right</v-icon>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#picyoujiantou" />
+          </svg>
         </v-list-item-icon>
       </v-list-item>
     </v-list>

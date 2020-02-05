@@ -36,8 +36,12 @@ function reqArtist(artistId) {
 // 获取关联画作
 function reqRelatedIllust(param) {
   return axios({
-    url: `https://api.pixivic.com/illusts/${param.illustId}/related?page=${param.page || 1}`,
-    method: 'get'
+    url: `/illusts/${param.illustId}/related`,
+    method: 'get',
+    params: {
+      page: param.page,
+      pageSize: param.pageSize || 30
+    }
   });
 }
 

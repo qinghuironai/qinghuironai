@@ -57,3 +57,4 @@ export const COLOR_LIST = [
   '#700045',
   '#690950'
 ];
+

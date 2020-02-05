@@ -33,7 +33,9 @@
                   icon
                   color="lighten-2"
                 >
-                  <v-icon>iconfont icon-home</v-icon>
+                  <svg font-size="20" class="icon" aria-hidden="true">
+                    <use xlink:href="#picHomehomepagemenu" />
+                  </svg>
                 </v-btn>
                 <v-btn
                   :href="artistDetail.twitterUrl"
@@ -41,7 +43,9 @@
                   icon
                   color="lighten-2"
                 >
-                  <v-icon>iconfont icon-ttww</v-icon>
+                  <svg font-size="20" class="icon" aria-hidden="true">
+                    <use xlink:href="#pictwttier" />
+                  </svg>
                 </v-btn>
               </div>
               <div class="friends">
