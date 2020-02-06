@@ -10,6 +10,7 @@ const pages = {
   Artist: () => import('./views/artist/Artist'),
   Search: () => import('./views/search/Search'),
   Find: () => import('./views/find/Find'),
+  Spot: () => import('./views/find/Spot.vue'),
   Me: () => import('./views/me/Me'),
   Collect: () => import('./views/me/components/Collect'),
   ArtistCollect: () => import('./views/me/components/ArtistCollect.vue'),
@@ -67,10 +68,13 @@ const router = new Router({
   {
     path: '/find',
     name: 'Find',
-    component: pages.Find,
-    meta: {
-      noCache: true
-    }
+    component: pages.Find
+  },
+  {
+    path: '/spot/:id',
+    name: 'Spot',
+    component: pages.Spot,
+    props: true
   },
   {
     path: '/me',

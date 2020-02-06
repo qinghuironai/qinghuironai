@@ -34,7 +34,7 @@
                   color="lighten-2"
                 >
                   <svg font-size="20" class="icon" aria-hidden="true">
-                    <use xlink:href="#picHomehomepagemenu" />
+                    <use xlink:href="#pichome1" />
                   </svg>
                 </v-btn>
                 <v-btn
@@ -44,7 +44,7 @@
                   color="lighten-2"
                 >
                   <svg font-size="20" class="icon" aria-hidden="true">
-                    <use xlink:href="#pictwttier" />
+                    <use xlink:href="#pictwttier1" />
                   </svg>
                 </v-btn>
               </div>

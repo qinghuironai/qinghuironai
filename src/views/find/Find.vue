@@ -1,31 +1,92 @@
 <template>
-  <div class="Find">
-    <div class="Find-blank">敬请期待</div>
+  <div
+    id="scroll-target"
+    ref="scroll"
+    class="find"
+  >
+    <v-row v-scroll:#scroll-target="onScroll" dense>
+      <v-col
+        v-for="item in list"
+        :key="item.id"
+        cols="12"
+        class="mb-2"
+        @click="goSpot(item.id)"
+      >
+        <v-card>
+          <v-img
+            :src="item.thumbnail"
+            class="white--text align-end"
+            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+            height="200px"
+          >
+            <v-card-title style="font-size: 16px;" v-text="item.title" />
+          </v-img>
+
+          <v-card-actions>
+            <div style="width: 100%;" class="pa-1 d-flex align-center justify-space-between">
+              <v-chip color="primary">{{ item.subcategoryLabel }}</v-chip>
+              <span>{{ item.publishDate }}</span>
+            </div>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+    <infinite-loading @infinite="infinite" />
   </div>
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading';
+
 export default {
   name: 'Find',
-  components: {},
+  components: {
+    InfiniteLoading
+  },
   data() {
-    return {};
+    return {
+      page: 1,
+      list: [],
+      scrollTop: 0
+    };
   },
   computed: {},
   watch: {},
-  mounted() { },
-  methods: {}
+  activated() {
+    this.$refs.scroll.scrollTop = this.scrollTop;
+  },
+  methods: {
+    infinite($state) {
+      this.$api.spot
+        .getSpotLights({
+          page: this.page++
+        })
+        .then(res => {
+          const { data: { data }} = res;
+          if (!data) {
+            $state.complete();
+          } else {
+            this.list = this.list.concat(data);
+            $state.loaded();
+          }
+        });
+    },
+    goSpot(id) {
+      this.$router.push(`/spot/${id}`);
+    },
+    onScroll(e) {
+      this.scrollTop = e.target.scrollTop;
+    }
+  }
 };
 </script>
 
 <style scoped lang="stylus">
-.Find {
-  display: flex;
-  justify-content: center;
-  height: 100vh;
-
-  &-blank {
-    align-self: center;
-  }
-}
+.find
+  width 100vw
+  min-height 100vh
+  overflow scroll
+  background #fff
+  padding 5px 15px
+  box-sizing border-box
 </style>

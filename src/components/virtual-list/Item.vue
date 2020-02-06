@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{name: 'Detail', params: {pid: column.id}}" class="item">
+  <div class="item" @click="goDetail">
     <div class="item-content" :style="column.style">
       <img
         :src="column.src"
@@ -18,7 +18,7 @@
         </svg>
       </div>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -45,10 +45,14 @@ export default {
       this.$emit('handleLike', this.column);
     },
     handleLoad() {
-      // if (!this.column.setu) {
-      //   this.opacity = 1;
-      // }
-      this.opacity = 1;
+      if (!this.column.setu) {
+        this.opacity = 1;
+      }
+    },
+    goDetail() {
+      if (!this.column.setu) {
+        this.$router.push(`/detail/${this.column.id}`);
+      }
     }
   }
 };

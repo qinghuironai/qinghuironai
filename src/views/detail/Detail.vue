@@ -207,7 +207,7 @@ export default {
             avatarSrc: IMG_PREFIX + data.artistPreView.avatar,
             mediumSrc: IMG_PREFIX + data.imageUrls[0].medium,
             createDate: dayjs(data.createDate).format('YYYY-MM-DD HH:mm:ss'),
-            setu: !!((data.xrestrict === 1 || data.sanityLevel > 5))
+            setu: !!((data.xrestrict === 1 || data.sanityLevel > 5)) && this.user.username !== 'pixivic'
           };
         });
     },
@@ -301,8 +301,9 @@ export default {
       }
     },
     seePreview() {
-      // if (this.illustDetail.setu) return;
-      this.preview = true;
+      if (!this.illustDetail.setu) {
+        this.preview = true;
+      }
     },
     openComment() {
       this.$refs.comment.show();

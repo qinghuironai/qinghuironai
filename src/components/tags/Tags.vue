@@ -53,6 +53,7 @@ export default {
       background-color #B9EEE5
       div
         font-size 16px
+        white-space nowrap
       span
         font-size 10px
 </style>
