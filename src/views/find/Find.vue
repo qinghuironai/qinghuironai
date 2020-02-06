@@ -1,82 +1,31 @@
 <template>
-  <div
-    id="scroll-target"
-    ref="scroll"
-    class="find"
-  >
-    <v-row v-scroll:#scroll-target="onScroll" dense>
-      <v-col
+  <div class="find">
+    <div class="container">
+      <a
         v-for="item in list"
         :key="item.id"
-        cols="12"
-        class="mb-2"
-        @click="goSpot(item.id)"
+        v-ripple
+        :href="item.value"
+        class="items"
       >
-        <v-card>
-          <v-img
-            :src="item.thumbnail"
-            class="white--text align-end"
-            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="200px"
-          >
-            <v-card-title style="font-size: 16px;" v-text="item.title" />
-          </v-img>
-
-          <v-card-actions>
-            <div style="width: 100%;" class="pa-1 d-flex align-center justify-space-between">
-              <v-chip color="primary">{{ item.subcategoryLabel }}</v-chip>
-              <span>{{ item.publishDate }}</span>
-            </div>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-    <infinite-loading @infinite="infinite" />
+        <img :src="item.img" alt="">
+        <span>{{ item.text }}</span>
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
   name: 'Find',
-  components: {
-    InfiniteLoading
-  },
   data() {
     return {
-      page: 1,
-      list: [],
-      scrollTop: 0
+      list: [
+        { id: 1, text: 'spotlight', value: '/spotlight', img: require('../../assets/images/spotlight.svg') },
+        { id: 2, text: '论坛', value: 'https://discuss.pixivic.com/', img: require('../../assets/images/论坛.svg') }
+      ]
     };
-  },
-  computed: {},
-  watch: {},
-  activated() {
-    this.$refs.scroll.scrollTop = this.scrollTop;
-  },
-  methods: {
-    infinite($state) {
-      this.$api.spot
-        .getSpotLights({
-          page: this.page++
-        })
-        .then(res => {
-          const { data: { data }} = res;
-          if (!data) {
-            $state.complete();
-          } else {
-            this.list = this.list.concat(data);
-            $state.loaded();
-          }
-        });
-    },
-    goSpot(id) {
-      this.$router.push(`/spot/${id}`);
-    },
-    onScroll(e) {
-      this.scrollTop = e.target.scrollTop;
-    }
   }
 };
 </script>
@@ -84,9 +33,31 @@ export default {
 <style scoped lang="stylus">
 .find
   width 100vw
-  min-height 100vh
-  overflow scroll
-  background #fff
-  padding 5px 15px
-  box-sizing border-box
+  height 100vh
+  position relative
+  z-index 2
+  padding 20px
+  background url('../../assets/images/bg.jpg') no-repeat
+  background-size cover
+  .container
+    width 100%
+    height 100%
+    padding 5px
+    box-sizing border-box
+    display flex
+    flex-wrap wrap
+    .items
+      width 33.3%
+      height 100px
+      display flex
+      flex-direction column
+      align-items center
+      img
+        width 80px
+        height 80px
+      span
+        text-align center
+        color #fff
+        display inline-block
+        margin-top -10px
 </style>

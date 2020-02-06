@@ -36,7 +36,6 @@ export const changeTab = ({
 export const handleCollectIllust = ({
   commit
 }, data) => {
-  console.log(data);
   return new Promise((resolve, reject) => {
     collectIllust(data)
       .then(res => {

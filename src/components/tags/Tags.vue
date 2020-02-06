@@ -56,4 +56,5 @@ export default {
         white-space nowrap
       span
         font-size 10px
+        white-space nowrap
 </style>

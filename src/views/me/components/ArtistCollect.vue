@@ -65,10 +65,7 @@ export default {
     }
   },
   activated() {
-    // console.log(this.$refs.list.scrollTop);
-    // this.$refs.list.scrollTop = this.scrollTop;
     this.$refs.scroll.scrollTop = this.scrollTop;
-    console.log(document.querySelector('#scroll-target').scrollTop);
   },
   methods: {
     infinite($state) {
@@ -97,7 +94,6 @@ export default {
         });
     },
     follow(val) {
-      console.log('follow');
       const data = {
         artistId: val.id,
         userId: this.user.id
@@ -105,9 +101,7 @@ export default {
       if (val.isFollowed) {
         val.isFollowed = false;
         this.$store.dispatch('handleFollowArtist', { ...data, follow: false })
-          .then(res => {
-            console.log('取消关注成功');
-          })
+          .then(res => {})
           .catch(() => {
             val.isFollowed = true;
             alert('取消关注失败');
@@ -115,9 +109,7 @@ export default {
       } else {
         val.isFollowed = true;
         this.$store.dispatch('handleFollowArtist', { ...data, follow: true })
-          .then(res => {
-            console.log('关注成功');
-          })
+          .then(res => {})
           .catch(() => {
             val.isFollowed = false;
             alert('关注失败');

@@ -122,9 +122,7 @@ export default {
       if (!flag) {
         this.$set(item, 'isLiked', true); // 先强制视图更新 防止网络延迟不动
         this.$store.dispatch('handleCollectIllust', params)
-          .then(() => {
-            console.log('收藏成功');
-          })
+          .then(() => {})
           .catch(err => {
             this.$set(item, 'isLiked', false); // 失败的话在改回去
             alert('收藏失败', err);
@@ -132,9 +130,7 @@ export default {
       } else {
         this.$set(item, 'isLiked', false);
         this.$store.dispatch('deleteCollectIllust', params)
-          .then(() => {
-            console.log('取消收藏成功');
-          })
+          .then(() => {})
           .catch(err => {
             this.$set(item, 'isLiked', true);
             alert('取消收藏失败', err);

@@ -129,7 +129,7 @@ export default {
   overflow hidden
   padding 50px
   background-color #eee
-  background url('../../assets/images/bg.png') no-repeat
+  background url('../../assets/images/bg.jpg') no-repeat
   background-size cover
   .code
     position relative

@@ -24,7 +24,7 @@ export const modeData = [
 
 export const color = ['rgb(47, 48, 53)', 'rgb(70, 105, 164)', 'rgb(189, 172, 166)', 'rgb(63, 41, 32)', 'rgb(49, 46, 44)', 'rgb(51, 62, 79)', 'rgb(208, 185, 177)', 'rgb(168, 112, 76)'];
 
-export const IMG_PREFIX = 'https://test.img.cheerfun.dev/get/';
+export const IMG_PREFIX = 'https://bigimg.cheerfun.dev/get/';
 
 export const COLOR_LIST = [
   '#5A0514',

@@ -218,7 +218,6 @@ export default {
           illustId: this.pid
         })
         .then(res => {
-          console.log(res);
           if (!res.data.data) {
             $state.complete();
           } else {
@@ -251,9 +250,7 @@ export default {
       if (!this.illustDetail.isLiked) {
         this.illustDetail.isLiked = true;
         this.$store.dispatch('handleCollectIllust', params)
-          .then(() => {
-            console.log('收藏成功');
-          })
+          .then(() => {})
           .catch(err => {
             this.illustDetail.isLiked = false;
             alert('收藏失败', err);
@@ -261,9 +258,7 @@ export default {
       } else {
         this.illustDetail.isLiked = false;
         this.$store.dispatch('deleteCollectIllust', params)
-          .then(() => {
-            console.log('取消收藏成功');
-          })
+          .then(() => {})
           .catch(err => {
             this.illustDetail.isLiked = true;
             alert('取消收藏失败', err);
@@ -281,9 +276,7 @@ export default {
       if (!this.illustDetail.artistPreView.isFollowed) {
         this.illustDetail.artistPreView.isFollowed = true;
         this.$store.dispatch('handleFollowArtist', { ...data, follow: true })
-          .then(res => {
-            console.log('关注成功');
-          })
+          .then(res => {})
           .catch(() => {
             this.illustDetail.artistPreView.isFollowed = false;
             alert('关注失败');
@@ -291,9 +284,7 @@ export default {
       } else {
         this.illustDetail.artistPreView.isFollowed = false;
         this.$store.dispatch('handleFollowArtist', { ...data, follow: false })
-          .then(res => {
-            console.log('取消关注成功');
-          })
+          .then(res => {})
           .catch(() => {
             this.illustDetail.artistPreView.isFollowed = true;
             alert('取消关注失败');

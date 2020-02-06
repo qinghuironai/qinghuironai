@@ -188,9 +188,7 @@ export default {
       if (!this.artistDetail.isFollowed) {
         this.artistDetail.isFollowed = true;
         this.$store.dispatch('handleFollowArtist', { ...data, follow: true })
-          .then(res => {
-            console.log('关注成功');
-          })
+          .then(res => {})
           .catch(() => {
             this.artistDetail.isFollowed = false;
             alert('关注失败');
@@ -198,9 +196,7 @@ export default {
       } else {
         this.artistDetail.isFollowed = false;
         this.$store.dispatch('handleFollowArtist', { ...data, follow: false })
-          .then(res => {
-            console.log('取消关注成功');
-          })
+          .then(res => {})
           .catch(() => {
             this.artistDetail.isFollowed = true;
             alert('取消关注失败');

@@ -19,10 +19,6 @@
               </router-link>
               <router-link to="" class="tab">
                 <span>0</span>
-                <p>关注</p>
-              </router-link>
-              <router-link to="" class="tab">
-                <span>0</span>
                 <p>粉丝</p>
               </router-link>
             </div>
@@ -63,7 +59,7 @@ export default {
       list: [
         { icon: '#picshoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
         { icon: '#picicon-copy', text: '我的关注', val: '/artistCollect' },
-        { icon: '#piclianjie-copy', text: '关于我们', val: '' }
+        { icon: '#piclianjie-copy', text: '关于我们', val: '/links' }
       ]
     };
   },

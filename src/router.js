@@ -10,10 +10,12 @@ const pages = {
   Artist: () => import('./views/artist/Artist'),
   Search: () => import('./views/search/Search'),
   Find: () => import('./views/find/Find'),
+  SpotLight: () => import('./views/find/SoptLight.vue'),
   Spot: () => import('./views/find/Spot.vue'),
   Me: () => import('./views/me/Me'),
   Collect: () => import('./views/me/components/Collect'),
   ArtistCollect: () => import('./views/me/components/ArtistCollect.vue'),
+  Links: () => import('./views/me/components/Links'),
   New: () => import('./views/new/New.vue'),
   Login: () => import('./views/login/Login'),
   Register: () => import('./views/register/Register'),
@@ -25,7 +27,6 @@ Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err);
 };
 
-console.log(process.env);
 const router = new Router({
   mode: 'history',
   base: process.env.VUE_APP_PREFIX,
@@ -71,6 +72,11 @@ const router = new Router({
     component: pages.Find
   },
   {
+    path: '/spotlight',
+    name: 'SpotLight',
+    component: pages.SpotLight
+  },
+  {
     path: '/spot/:id',
     name: 'Spot',
     component: pages.Spot,
@@ -90,6 +96,11 @@ const router = new Router({
     path: '/artistCollect',
     name: 'ArtistCollect',
     component: pages.ArtistCollect
+  },
+  {
+    path: '/links',
+    name: 'Links',
+    component: pages.Links
   },
   {
     path: '/new',
@@ -125,7 +136,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const isLogin = !!cookie.get('jwt');
-  console.log('isLogin', isLogin);
   const needLogin = to.path === '/me';
   if (!needLogin) {
     // 不需要登录的页面直接放行
