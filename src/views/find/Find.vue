@@ -57,7 +57,7 @@ export default {
         height 80px
       span
         text-align center
-        color #fff
+        color #000
         display inline-block
         margin-top -10px
 </style>

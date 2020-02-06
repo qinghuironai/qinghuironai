@@ -136,7 +136,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const isLogin = !!cookie.get('jwt');
-  const needLogin = to.path === '/me';
+  const needLogin = to.path === '/me' || to.path === '/new';
   if (!needLogin) {
     // 不需要登录的页面直接放行
     next();

@@ -300,7 +300,11 @@ export default {
       }
     },
     openComment() {
-      this.$refs.comment.show();
+      if (this.user.id) {
+        this.$refs.comment.show();
+      } else {
+        this.$router.push('/login');
+      }
     },
     searchByTag(tag) {
       this.$router.push({
