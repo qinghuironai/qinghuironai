@@ -47,17 +47,16 @@ export default {
     display flex
     flex-wrap wrap
     .items
-      width 33.3%
+      width 25%
       height 100px
       display flex
       flex-direction column
       align-items center
       img
-        width 80px
-        height 80px
+        width 50px
+        height 50px
       span
         text-align center
         color #000
         display inline-block
-        margin-top -10px
 </style>
