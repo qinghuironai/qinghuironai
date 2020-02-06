@@ -55,7 +55,12 @@
             <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
             <p class="caption" v-html="illustDetail.caption" />
             <div class="tags">
-              <span v-for="(item, index) in illustDetail.tags" :key="index" class="caption tag">
+              <span
+                v-for="(item, index) in illustDetail.tags"
+                :key="index"
+                class="caption tag"
+                @click="searchByTag(item.name)"
+              >
                 <a>{{ item.name }}</a>
                 <a>{{ item.translatedName }}</a>
               </span>
@@ -241,8 +246,6 @@ export default {
       if (!this.user.id) {
         return alert('请先登录~');
       }
-      // 注意这里有两个List列表 一个排行 一个相关作品 都会触发List里面的watch
-      // 而这个列表不一定有当前作品 List需要watch里面判断下
       const params = {
         userId: this.user.id,
         illustId: this.illustDetail.id
@@ -298,6 +301,14 @@ export default {
     },
     openComment() {
       this.$refs.comment.show();
+    },
+    searchByTag(tag) {
+      this.$router.push({
+        name: 'Search',
+        query: {
+          tag
+        }
+      });
     }
   }
 };
@@ -328,6 +339,7 @@ export default {
           color rgba(0, 0, 0, 0.88)
     .tags
       .tag
+        user-select none
         a:first-child
           color $primary
           margin-right 4px
@@ -338,6 +350,7 @@ export default {
           margin-right 8px
     .work-stats
       margin-top 10px
+      user-select none
       &-a
         margin-right 10px
         span

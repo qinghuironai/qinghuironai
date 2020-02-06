@@ -262,6 +262,13 @@ export default {
       this.getKeyword();
     }
   },
+  mounted() {
+    const { tag } = this.$route.query;
+    if (tag) {
+      this.value = tag;
+      this.enter(tag);
+    }
+  },
   methods: {
     getKeyword: debounce(function() {
       this.$api.search.getKeyword(this.value)
