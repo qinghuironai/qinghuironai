@@ -1,86 +1,215 @@
 <template>
-  <transition enter-active-class="animated rollIn"
-              leave-active-class="animated rollOut">
+  <transition enter-active-class="animated zoomIn">
     <div class="search">
       <div class="search-header">
-        <i class="iconfont icon-icon-test"
-           @click="$router.back()"></i>
+        <svg
+          font-size="20"
+          class="icon"
+          aria-hidden="true"
+          @click="$router.back()"
+        >
+          <use xlink:href="#picfanhui1" />
+        </svg>
         <div class="input">
-          <input v-model="value"
-                 ref="input"
-                 placeholder="(●'◡'●)ﾉ關鍵字の輸入"
-                 @keyup.enter="enter(value)"
-                 @focus="focus" />
-          <i class="iconfont icon-xiangji1">
-          </i>
+          <input
+            ref="input"
+            v-model="value"
+            placeholder="(●'◡'●)ﾉ關鍵字の輸入"
+            @keyup.enter="enter(value)"
+            @focus="focus"
+          >
+          <!-- <i class="iconfont icon-xiangji1" /> -->
+          <svg font-size="20" class="icon" aria-hidden="true">
+            <use xlink:href="#picxiangji1-copy" />
+          </svg>
           <div class="save">
-            <input type="file"
-                   id="uploads"
-                   accept="image/png, image/jpeg, image/gif, image/jpg"
-                   @change="uploadImg($event)">
+            <input
+              id="uploads"
+              type="file"
+              accept="image/png, image/jpeg, image/gif, image/jpg"
+              @change="uploadImg($event)"
+            >
           </div>
         </div>
-        <i class="iconfont icon-xuanxiang- menu"
-           v-if="!isSearch"
-           @click="showOptions"></i>
+        <svg
+          font-size="20"
+          class="icon"
+          aria-hidden="true"
+          @click="dialog = true"
+        >
+          <use xlink:href="#picshezhi" />
+        </svg>
       </div>
-      <div class="search-suggest"
-           v-if="isSearch">
-        <div class="suggest-item"
-             v-for="(item, index) in keywords"
-             :key="index">
-          <div class="tag"
-               @click="enter(item)">{{item}}</div>
-          <i class="iconfont icon-jiantou-copy-copy-copy"
-             @click="enter(item)"></i>
+      <div v-if="isSearch" class="search-suggest">
+        <div
+          v-for="(item, index) in keywords"
+          :key="index"
+          class="suggest-item"
+        >
+          <div class="tag" @click="enter(item)">
+            {{ item }}
+          </div>
         </div>
-        <div v-show="!keywords.length && this.value"
-             class="suggest-no">(●'◡'●)ﾉ</div>
+        <div v-show="!keywords.length && this.value" class="suggest-no">
+          (●'◡'●)ﾉ
+        </div>
       </div>
-      <div class="search-content"
-           v-else>
-        <!-- dom长列表优化版本 recycle-list 暂未实现 -->
-        <Scroll :data="pictureList"
-                :options="options"
-                :loading="loading"
-                :noMore="noMore"
-                ref="scroll"
-                @pulling-up="getMoreData">
-          <Tags v-for="(item, index) in [tags, exclusive]"
-                :key="index"
-                :data="item"
-                @handleClick="clickTag" />
-        </Scroll>
+      <div v-else class="search-content">
+        <List
+          :list="pictureList"
+          :identifier="identifier"
+          @infinite="infinite"
+        >
+          <Tags :data="[...tags, ...exclusive]" @handleClick="clickTag" />
+        </List>
       </div>
-      <div v-show="value && isSearch"
-           class="search-btn">
-        <cube-button :light="true"
-                     @click="translateKeyword">翻译并搜索</cube-button>
-        <cube-button :light="true"
-                     @click="searchType('artist')">用户搜索</cube-button>
-        <cube-button :light="true"
-                     @click="searchType('illust')">画作搜索</cube-button>
+      <div v-show="value && isSearch" class="search-btn">
+        <v-btn class="mr-2" @click="translateKeyword">
+          翻译并搜索
+        </v-btn>
+        <v-btn class="mr-2" @click="searchOne('artist')">
+          用户搜索
+        </v-btn>
+        <v-btn @click="searchOne('illust')">
+          画作搜索
+        </v-btn>
       </div>
-      <search-options ref="options"
-                      @searchFor="searchFor"></search-options>
+      <Loading v-if="loading" />
+      <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <v-card>
+          <v-toolbar dark color="primary">
+            <v-btn icon dark @click="dialog = false">
+              <svg font-size="20" class="icon" aria-hidden="true">
+                <use xlink:href="#picfanhui1" />
+              </svg>
+            </v-btn>
+            <v-toolbar-title>显示选项</v-toolbar-title>
+            <v-spacer />
+          </v-toolbar>
+          <v-list three-line subheader>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>画作类型</v-list-item-title>
+                <v-menu>
+                  <template v-slot:activator="{ on }">
+                    <v-list-item-subtitle v-on="on">{{ optionsParams.illustType }}</v-list-item-subtitle>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      v-for="(item, index) in type"
+                      :key="index"
+                      @click="illustType = item.value"
+                    >
+                      <v-list-item-title>{{ item.text }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>搜索类型</v-list-item-title>
+                <v-menu>
+                  <template v-slot:activator="{ on }">
+                    <v-list-item-subtitle v-on="on">{{ optionsParams.searchType }}</v-list-item-subtitle>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      v-for="(item, index) in searchTypes"
+                      :key="index"
+                      @click="searchType = item.value"
+                    >
+                      <v-list-item-title>{{ item.text }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>发布时间</v-list-item-title>
+                <v-bottom-sheet v-model="showDate">
+                  <template v-slot:activator="{ on }">
+                    <v-list-item-subtitle v-on="on">{{ optionsParams.beginDate + ' - ' + optionsParams.endDate }}</v-list-item-subtitle>
+                  </template>
+                  <v-sheet class="text-center">
+                    <v-date-picker
+                      v-model="date"
+                      full-width
+                      no-title
+                      color="#b9eee5"
+                      locale="zh-cn"
+                      multiple
+                      @input="selectDate"
+                    />
+                  </v-sheet>
+                </v-bottom-sheet>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>最小宽度</v-list-item-title>
+                <v-text-field
+                  v-model="minWidth"
+                  class="mt-0 pt-0"
+                  hide-details
+                  single-line
+                  type="number"
+                />
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>最小高度</v-list-item-title>
+                <v-text-field
+                  v-model="minHeight"
+                  class="mt-0 pt-0"
+                  hide-details
+                  single-line
+                  type="number"
+                />
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item style="display: 'none';">
+              <v-list-item-content>
+                <v-list-item-title>其它</v-list-item-title>
+                <v-checkbox
+                  v-model="xRestrict"
+                  label="xRestrict"
+                  :false-value="0"
+                  :true-value="1"
+                />
+                <v-text-field
+                  v-model="maxSanityLevel"
+                  class="mt-0 pt-0"
+                  hide-details
+                  single-line
+                  type="number"
+                  placeholder="maxSanityLevel"
+                />
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-dialog>
     </div>
   </transition>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
-import searchOptions from './options/Options'
-import Tags from '@/components/tags/Tags'
-import Scroll from '@/components/scroll/Scroll'
+import debounce from 'lodash/debounce';
+import Tags from '@/components/tags/Tags';
+import List from '@/components/virtual-list/VirtualList';
+import Loading from '@/components/loading/Loading';
 
 export default {
   name: 'Search',
   components: {
-    searchOptions,
     Tags,
-    Scroll
+    List,
+    Loading
   },
-  data () {
+  data() {
     return {
       value: '',
       isSearch: true,
@@ -89,218 +218,201 @@ export default {
       page: 1,
       tags: [],
       exclusive: [],
-      optionsParams: {}, // 设置的筛选条件
       loading: false,
-      noMore: false
-    }
+      identifier: +new Date(),
+      isSearchByImg: false,
+      dialog: false,
+      type: [{ text: '插画', value: 'illust' }, { text: '漫画', value: 'manga' }],
+      searchTypes: [{ text: '原始', value: 'original' }, { text: '自动翻译', value: 'autoTranslate' }],
+      date: [],
+      showDate: false,
+      illustType: 'illust',
+      searchType: 'original',
+      minWidth: 0, // 最小宽度
+      minHeight: 0, // 最小高度
+      beginDate: null, // 画作发布日期限制
+      endDate: null, // 画作发布日期限制
+      xRestrict: 0,
+      maxSanityLevel: 6
+    };
   },
   computed: {
-    options () {
-      return {
-        pullUpLoad: {
-          threshold: 0,
-          txt: { more: '上拉加载更多', noMore: '(￣ˇ￣)俺也是有底线的' },
-          visible: false
-        },
-        scrollbar: false,
-        probeType: 2
-      }
+    optionsParams() {
+      const data = {
+        illustType: this.illustType,
+        searchType: this.searchType,
+        minWidth: 0,
+        minHeight: 0,
+        beginDate: this.date[0] || '',
+        endDate: this.date[1] || '',
+        xRestrict: this.xRestrict, // 0关 1开
+        maxSanityLevel: this.maxSanityLevel // 16禁
+      };
+      Object.keys(data).forEach(item => {
+        if (!data[item]) { delete data[item]; }
+      });
+      return data;
     },
-    param () {
-      return {
-        keyword: this.value,
-        page: this.page,
-        ...this.optionsParams
-        // xRestrict: 1,
-        // maxSanityLevel: 10
-      }
+    allTags() {
+      return [...this.tags, ...this.exclusive];
+    }
+  },
+  watch: {
+    value() {
+      this.getKeyword();
+    }
+  },
+  mounted() {
+    const { tag } = this.$route.query;
+    if (tag) {
+      this.value = tag;
+      this.enter(tag);
     }
   },
   methods: {
-    getKeyword: debounce(function () {
+    getKeyword: debounce(function() {
       this.$api.search.getKeyword(this.value)
-        .then(({ data: { data } }) => {
-          this.keywords = data.keywordList || []
-        })
+        .then(({ data: { data }}) => {
+          this.keywords = data.keywordList || [];
+        });
     }, 500),
-    enter (val) {
-      if (!this.value) return
-      this.value = val
-      this.$refs.input.blur()
-      this.isSearch = false
-      this.getData()
-      this.getTags(val)
-      this.getExclusive(val)
+    enter(val) {
+      if (!this.value) return;
+      this.isSearchByImg = false;
+      this.value = val;
+      this.$refs.input.blur();
+      this.isSearch = false;
+
+      this.page = 1;
+      this.pictureList = [];
+      this.identifier += 1;
+
+      this.getTags(val);
+      this.getExclusive(val);
     },
-    getData () {
-      this.loading = true
-      this.page = 1
-      this.pictureList = []
-      this.noMore = false
-      this.$api.search
-        .getSearch(this.param)
-        .then(res => {
-          if (!res.data.data.illustrations.length) {
-            this.noMore = true
-          } else {
-            this.pictureList = res.data.data.illustrations
-          }
-          this.loading = false
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    },
-    getMoreData () {
-      this.page++
-      this.$api.search
-        .getSearch(this.param)
-        .then(res => {
-          if (!res.data.data.illustrations.length) {
-            this.noMore = true
-          } else {
-            this.pictureList = this.pictureList.concat(res.data.data.illustrations)
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    },
-    getTags (param) {
+    getTags(param) {
       this.$api.search
         .getTags(param)
         .then(res => {
-          this.tags = res.data.data
-        })
+          this.tags = res.data.data || [];
+        });
     },
-    getExclusive (param) {
+    getExclusive(param) {
       this.$api.search
         .getExclusive(param)
         .then(res => {
-          this.exclusive = res.data.data
-        })
+          this.exclusive = res.data.data || [];
+        });
     },
-    focus () {
-      this.isSearch = true
+    focus() {
+      this.isSearch = true;
     },
-    showOptions () {
-      this.$refs.options.show()
-    },
-    translateKeyword () {
+    translateKeyword() {
       this.$api.search
         .getTranslations(this.value)
         .then(res => {
-          this.enter(res.data.data.keyword)
-        })
+          this.enter(res.data.data.keyword);
+        });
     },
-    searchFor (options) {
-      this.optionsParams = options
-      this.getData()
+    clickTag(val) {
+      this.value = val.keyword;
+      this.tags = this.exclusive = [];
+      this.getTags(val.keyword);
+      this.getExclusive(val.keyword);
+      this.page = 1;
+      this.pictureList = [];
+      this.identifier += 1;
     },
-    clickTag (val) {
-      this.value = val.keyword
-      this.tags = this.exclusive = []
-      this.getTags(val.keyword)
-      this.getExclusive(val.keyword)
-      this.getData()
-    },
-    async uploadImg (e) {
-      const file = e.target.files[0]
+    async uploadImg(e) {
+      const file = e.target.files[0];
       if (!/\.(jpg|jpeg|png|webp|GIF|JPG|PNG)$/.test(e.target.value)) {
-        this.$createDialog({
-          type: 'alert',
-          title: '请选择正确图片格式'
-        }).show()
-        return false
+        alert('请选择正确图片格式');
+        return false;
       }
       if (file.size > 1 * 1024 * 1024) {
-        this.$createDialog({
-          type: 'alert',
-          title: '图片大小不能超过1M'
-        }).show()
-        return false
+        alert('图片大小不能超过1M');
+        return false;
       }
-      this.isSearch = false
-      this.loading = true
-      this.pictureList = [] // 清空下 不然会接着之前搜索的
-      this.noMore = true
-      this.tags = this.exclusive = []
-      let formData = new FormData()
-      formData.append('file', e.target.files[0])
-      const result = await this.$api.search.uploadImg(formData)
-      const res = await this.$api.search.searchByImg(result.data.data)
-      this.pictureList = res.data.data || []
-      this.loading = false
+      this.isSearchByImg = true;
+      this.loading = true;
+      this.isSearch = false;
+      this.page = 1;
+      this.pictureList = [];
+      this.tags = this.exclusive = [];
+      const formData = new FormData();
+      formData.append('file', e.target.files[0]);
+      const result = await this.$api.search.uploadImg(formData);
+      const res = await this.$api.search.searchByImg(result.data.data);
+      this.pictureList = res.data.data || [];
+      this.loading = false;
     },
-    searchType (type) {
+    searchOne(type) {
       const param = {
         type,
         id: this.value
-      }
+      };
       this.$api.search
         .getExists(param)
         .then(res => {
           if (res.data.data) {
             if (type === 'artist') {
-              this.$router.push(`/artist/${this.value}`)
+              this.$router.push(`/artist/${this.value}`);
             } else if (type === 'illust') {
-              this.$router.push(`/detail/${this.value}`)
+              this.$router.push(`/detail/${this.value}`);
             }
           } else {
-            this.$createDialog({
-              type: 'alert',
-              title: '不存在',
-              icon: 'cubeic-alert'
-            }).show()
+            alert('不存在');
+          }
+        });
+    },
+    infinite($state) {
+      if (this.isSearchByImg) {
+        return $state.complete();
+      }
+      this.$api.search
+        .getSearch({
+          ...this.optionsParams,
+          page: this.page++,
+          keyword: this.value
+        })
+        .then(res => {
+          const data = res.data.data.illustrations;
+          if (!data.length) {
+            $state.complete();
+          } else {
+            this.pictureList = this.pictureList.concat(data);
+            $state.loaded();
           }
         })
-    }
-  },
-  activated () {
-    // ?
-    this.$refs.scroll && this.$refs.scroll.refresh()
-  },
-  beforeRouteLeave (to, from, next) {
-    if (to.name === 'Detail' || to.name === 'Artist') {
-      // 去详情和作者页面 (前进) 不需销毁
-      next()
-    } else {
-      // 返回排行页 清除缓存并销毁该组件 (后退)
-      let cache = this.$vnode.parent.componentInstance.cache
-      let keys = this.$vnode.parent.componentInstance.keys
-      delete cache['/search']
-      let index = keys.indexOf('/search')
-      keys.splice(index, 1)
-      this.$destroy()
-      next()
-    }
-  },
-  watch: {
-    value () {
-      this.getKeyword()
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    selectDate(val) {
+      if (val.length > 2) {
+        this.date.shift();
+      }
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scope>
 @import '~@/style/color.styl'
 .search
-  position fixed
-  top 0
-  right 0
-  bottom 0
-  left 0
-  background-color #ffffff
   z-index 100
   font-size 16px
+  background #fff
+  // overflow scroll
+  width 100%
+  height 100vh
   .search-header
     display flex
     align-items center
     justify-content space-between
     padding 12px 16px 16px
     box-sizing border-box
-    >i
+    svg
       flex-basis 40px
       position relative
       &:after
@@ -328,7 +440,7 @@ export default {
         border-radius 5px
         background-color rgb(245, 245, 245)
         color rgb(31, 31, 31)
-      >i
+      >svg
         position absolute
         top 12px
         right 5px
@@ -374,6 +486,7 @@ export default {
       justify-content space-between
       box-sizing border-box
       .tag
+        width 100%
         color #adadad
         font-size 16px
       i
@@ -391,14 +504,17 @@ export default {
       color $primary
       font-size 20px
   .search-content
-    width 100%
-    position absolute
-    top 70px
-    bottom 0
-    left 0
-    // 要在这里设置样式 组件内无效
-    .scroll
-      .horizontal-scroll
-        .cube-scroll-content
-          display inline-block
+   // width 100%
+    // height 100vh
+    //overflow scroll
+    // width 100%
+    // position absolute
+    // top 70px
+    // bottom 0
+    // left 0
+    // // 要在这里设置样式 组件内无效
+    // .scroll
+    // .horizontal-scroll
+    // .cube-scroll-content
+    // display inline-block
 </style>

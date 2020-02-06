@@ -1,8 +1,7 @@
 <template>
   <div class="found">
     <h2>404</h2>
-    <i class="iconfont icon-icon-test"
-       @click="$router.back()"></i>
+    <i class="iconfont icon-icon-test" @click="$router.back()" />
   </div>
 </template>
 
@@ -10,10 +9,10 @@
 export default {
   name: 'NotFound',
   components: {},
-  data () {
-    return {}
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

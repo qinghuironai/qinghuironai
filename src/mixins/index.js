@@ -1,9 +1,9 @@
 export default {
-  data () {
-    return {
-      PREFIX: 'https://test.img.cheerfun.dev/get/'
-    }
-  }
+  // data () {
+  //   return {
+  //     PREFIX: 'https://test.img.cheerfun.dev/get/'
+  //   }
+  // }
   // beforeRouteLeave: function (to, from, next) {
   //   if (from && from.meta.rank && to.meta.rank && from.meta.rank > to.meta.rank) { // 此处判断是如果返回上一层，你可以根据自己的业务更改此处的判断逻辑，酌情决定是否摧毁本层缓存。
   //     if (this.$vnode && this.$vnode.data.keepAlive) {

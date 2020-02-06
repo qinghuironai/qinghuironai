@@ -1,123 +1,74 @@
 <template>
   <div class="rank">
-    <Scroll ref="scroll"
-            :data="pictureList"
-            :options="options"
-            :loading="loading"
-            :noMore="noMore"
-            @scroll="onScroll"
-            @pulling-up="getMoreData">
-      <Header @selectMode="selectMode"
-              @selectDate="selectDate" />
-    </Scroll>
+    <List
+      :list="pictureList"
+      :identifier="identifier"
+      @infinite="infinite"
+    >
+      <Header @selectMode="selectMode" @selectDate="selectDate" />
+    </List>
   </div>
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import Scroll from '@/components/scroll/Scroll'
-import Header from './header/Header'
+import dayjs from 'dayjs';
+import List from '@/components/virtual-list/VirtualList';
+import Header from './header/Header';
 
 export default {
   name: 'DailyRank',
   components: {
-    Scroll,
+    List,
     Header
   },
-  data () {
+  data() {
     return {
-      param: {
-        page: 1,
-        mode: '',
-        date: null
-      },
+      page: 1,
+      mode: 'day',
+      date: null,
       pictureList: [],
-      noMore: false,
-      loading: false
-    }
+      identifier: +new Date()
+    };
   },
-  computed: {
-    options () {
-      return {
-        pullUpLoad: {
-          threshold: 0,
-          txt: { more: '上拉加载更多', noMore: '(￣ˇ￣)俺也是有底线的' },
-          visible: false
-        },
-        scrollbar: false,
-        probeType: 3
-      }
-    }
-  },
-  mounted () {
-    this.param.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD')
-    this.param.mode = 'day'
-    this.getData()
+  mounted() {
+    this.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD');
   },
   methods: {
-    getData () {
-      this.loading = true
-      this.param.page = 1
-      this.pictureList = [] // 不清空会追加
-      this.noMore = false
+    infinite($state) {
       this.$api.rank
-        .getRank(this.param)
+        .getRank({
+          page: this.page++,
+          date: this.date,
+          mode: this.mode
+        })
         .then(res => {
           if (!res.data.data.data.length) {
-            this.noMore = true
+            $state.complete();
           } else {
-            this.pictureList = res.data.data.data
+            this.pictureList = this.pictureList.concat(res.data.data.data);
+            $state.loaded();
           }
-          this.loading = false
-        })
-        .catch(err => {
-          console.error(err)
-        })
+        });
     },
-    getMoreData () {
-      this.param.page++
-      this.$api.rank
-        .getRank(this.param)
-        .then(res => {
-          if (!res.data.data.data.length) {
-            this.noMore = true
-          } else {
-            // push视图不更新的原因： watch新值和旧值都是指向的还是同一个数组 val和old会相等
-            // this.pictureList.push(...res.data.data.data)
-            this.pictureList = this.pictureList.concat(res.data.data.data)
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
+    resetData() {
+      this.page = 1;
+      this.pictureList = [];
+      this.identifier += 1;
     },
-    selectDate (date) {
-      this.param.date = dayjs(date).format('YYYY-MM-DD')
-      this.getData()
+    selectDate(date) {
+      this.date = date;
+      this.resetData();
     },
-    selectMode (selectedVal) {
-      this.param.mode = selectedVal[1]
-      this.getData()
-    },
-    onScroll (pos, direction) {
-      if (direction === 1) {
-        // 上滑
-        this.$store.dispatch('changeTab', false)
-      } else if (direction === -1) {
-        // 下滑
-        this.$store.dispatch('changeTab', true)
-      }
+    selectMode(selectedVal) {
+      this.mode = selectedVal;
+      this.resetData();
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>
 .rank
-  position fixed
-  top 0
-  right 0
-  bottom 0
-  left 0
   font-size 16px
+  position relative
 </style>

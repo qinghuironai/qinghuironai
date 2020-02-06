@@ -1,10 +1,12 @@
 <template>
-  <div class="header"
-       ref="header"
-       :style="{background: `${background}`}">
-    <i class="iconfont icon-fanhui"
-       @click="handleClick"></i>
-    <h1>{{title}}</h1>
+  <div
+    class="header"
+    :style="{background: `${background}`, opacity: show ? 1 : 0}"
+  >
+    <svg font-size="20" class="icon" aria-hidden="true" @click="handleClick">
+      <use xlink:href="#picfanhui1" />
+    </svg>
+    <h1>{{ title }}</h1>
   </div>
 </template>
 
@@ -17,15 +19,20 @@ export default {
     },
     background: {
       type: String,
-      default: ''
+      default: '#0096fa'
+    },
+    show: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
-    handleClick () {
-      this.$emit('handleClick')
+    handleClick() {
+      this.$router.back();
+      this.$emit('handleClick');
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scope>
@@ -40,10 +47,12 @@ export default {
   line-height 40px
   box-sizing border-box
   color #fff
-  >i
+  opacity 1
+  transition opacity .3s ease-in
+  >svg
     position absolute
     left 5px
-    top 0
+    top 10px
     font-size 20px
     width 20px
   >h1

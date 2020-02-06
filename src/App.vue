@@ -1,86 +1,107 @@
 <template>
-  <div id="app">
-    <keep-alive :include="cachedViews"
-                :max="10">
+  <v-app id="app">
+    <!-- <keep-alive :include="cachedViews">
       <router-view :key="key" />
-    </keep-alive>
-    <cube-tab-bar v-model="selectedLabelSlots"
-                  class="tabs"
-                  :class="['tabs', {'hide': !showTab}]"
-                  :inline="false"
-                  @change="changeHandler">
-      <cube-tab v-for="(item, index) in tabs"
-                :label="item.label"
-                :value="item.value"
-                :key="index">
-        <i slot="icon"
-           :class="item.icon"></i>
-      </cube-tab>
-    </cube-tab-bar>
-  </div>
+    </keep-alive> -->
+    <navigation>
+      <router-view />
+    </navigation>
+    <div :class="['tabs', {'show': showTab}]">
+      <router-link
+        v-for="item in tabs"
+        :key="item.value"
+        :to="item.value"
+        class="tabs-item"
+        @click.native="clickTab"
+      >
+        <img
+          :src="active === item.value ? item.activeSrc : item.src"
+          :style="{transform: active === item.value ? 'scale(1.1)' : ''}"
+          alt=""
+        >
+      </router-link>
+    </div>
+  </v-app>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
 export default {
-  data () {
+  data() {
     return {
-      selectedLabelSlots: '/dailyRank',
+      active: '/dailyRank',
       tabs: [{
-        label: '排名',
         value: '/dailyRank',
-        icon: 'iconfont icon-paiming'
+        src: require('../src/assets/images/pixivic.svg'),
+        activeSrc: require('../src/assets/images/pixivic-active.svg')
       }, {
-        label: '发现',
         value: '/find',
-        icon: 'iconfont icon-faxian'
+        src: require('../src/assets/images/find.svg'),
+        activeSrc: require('../src/assets/images/find-active.svg')
       }, {
-        label: '我的',
+        value: '/new',
+        src: require('../src/assets/images/new.svg'),
+        activeSrc: require('../src/assets/images/new-active.svg')
+      }, {
         value: '/me',
-        icon: 'iconfont icon-xiaolian'
+        src: require('../src/assets/images/me.svg'),
+        activeSrc: require('../src/assets/images/me-active.svg')
       }]
-    }
+    };
   },
   computed: {
     ...mapGetters([
       'cachedViews',
-      'showTab'
+      'showTab',
+      'user'
     ]),
-    key () {
-      return this.$route.fullPath
-    }
-  },
-  methods: {
-    changeHandler (value) {
-      this.$router.push(value)
+    key() {
+      return this.$route.path;
     }
   },
   watch: {
-    $route (val) {
-      this.selectedLabelSlots = val.path
-      this.$store.dispatch('addCachedView', val)
+    $route(val) {
+      this.active = val.path;
+      this.$store.dispatch('addCachedView', val);
+    }
+  },
+  methods: {
+    clickTab() {
+      // console.log(this.$vnode.componentInstance);
+      // this.$navigation.on('reset', () => {});
     }
   }
-}
+};
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scope>
+@import '~@/style/color.styl'
 .tabs
+  width 70%
+  max-width 300px
+  height 55px
+  background #ffffff
+  border-radius 25px
   position fixed
+  bottom 15px
   left 0
   right 0
-  bottom 0
-  background #ffffff
-  height 60px
-  z-index 2
+  margin auto
+  z-index 100
+  display flex
+  align-items center
+  transform translateY(80px)
+  opacity 0
+  transition all .3s ease
+  &-item
+    flex 1
+    text-align center
+    img
+      width 25px
+      height 25px
+      vertical-align middle
+      transition all .3s
+.show
   transform translateY(0)
-  transition transform .3s
-  .cube-tab
-    >i
-      font-size 18px
-    >div
-      font-size 16px
-      margin-top 5px
-.hide
-  transform translateY(60px)
+  opacity 1
 </style>

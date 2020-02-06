@@ -20,4 +20,41 @@ export const modeData = [
       { text: '新秀周排行', value: 'week_rookie_manga' }
     ]
   }
-]
+];
+
+export const color = ['rgb(47, 48, 53)', 'rgb(70, 105, 164)', 'rgb(189, 172, 166)', 'rgb(63, 41, 32)', 'rgb(49, 46, 44)', 'rgb(51, 62, 79)', 'rgb(208, 185, 177)', 'rgb(168, 112, 76)'];
+
+export const IMG_PREFIX = 'https://bigimg.cheerfun.dev/get/';
+
+export const COLOR_LIST = [
+  '#5A0514',
+  '#255273',
+
+  '#1A2E40',
+  '#011C26',
+  '#BF8C80',
+  '#8C6C6C',
+
+  '#5B5778',
+  '#A3A2B0',
+
+  '#594251',
+  '#3F4D59',
+  '#728C85',
+  '#CAD9A9',
+
+  '#024059',
+  '#012E40',
+  '#025E73',
+  '#78B2BF',
+  '#037F8C',
+
+  '#70596C',
+  '#B08CAA',
+  '#D7ABCF',
+  '#430633',
+  '#2E0423',
+  '#700045',
+  '#690950'
+];
+

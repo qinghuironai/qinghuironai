@@ -1,39 +1,62 @@
-<!--
- * @Author: Dongzy
- * @since: 2020-01-01 11:17:00
- * @lastTime     : 2020-01-01 12:05:15
- * @LastAuthor   : Dongzy
- * @文件相对于项目的路径: \code\pixivic-mobile\src\views\Find\Find.vue
- * @message:
- -->
 <template>
-  <div class="Find">
-    <div class="Find-blank">敬请期待</div>
+  <div class="find">
+    <div class="container">
+      <a
+        v-for="item in list"
+        :key="item.id"
+        v-ripple
+        :href="item.value"
+        class="items"
+      >
+        <img :src="item.img" alt="">
+        <span>{{ item.text }}</span>
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'Find',
-  data () {
-    return {}
-  },
-  computed: {},
-  components: {},
-  watch: {},
-  methods: {},
-  mounted () { }
-}
+  data() {
+    return {
+      list: [
+        { id: 1, text: 'spotlight', value: '/spotlight', img: require('../../assets/images/spotlight.svg') },
+        { id: 2, text: '论坛', value: 'https://discuss.pixivic.com/', img: require('../../assets/images/论坛.svg') }
+      ]
+    };
+  }
+};
 </script>
 
 <style scoped lang="stylus">
-.Find {
-  display: flex;
-  justify-content: center;
-  height: 100vh;
-
-  &-blank {
-    align-self: center;
-  }
-}
+.find
+  width 100vw
+  height 100vh
+  position relative
+  z-index 2
+  padding 20px
+  background url('../../assets/images/bg.jpg') no-repeat
+  background-size cover
+  .container
+    width 100%
+    height 100%
+    padding 5px
+    box-sizing border-box
+    display flex
+    flex-wrap wrap
+    .items
+      width 25%
+      height 100px
+      display flex
+      flex-direction column
+      align-items center
+      img
+        width 50px
+        height 50px
+      span
+        text-align center
+        color #000
+        display inline-block
 </style>
