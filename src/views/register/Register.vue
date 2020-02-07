@@ -241,13 +241,15 @@ export default {
 
 <style lang="stylus" scoped>
 .register
+  position relative
   width 100vw
-  height 100vh
+  min-height 100vh
   overflow hidden
   padding 50px
   background-color #eee
   background url('../../assets/images/bg.jpg') no-repeat
   background-size cover
+  z-index 101
   .code
     position relative
     img
