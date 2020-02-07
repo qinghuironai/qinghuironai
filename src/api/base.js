@@ -41,7 +41,7 @@ instance.interceptors.response.use(
     if (response.status === 401) {
       // 登录过期
       cookie.remove('jwt');
-      localStorage.remove('user');
+      localStorage.removeItem('user');
       router.push('/login');
     }
     return response;

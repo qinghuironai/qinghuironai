@@ -30,7 +30,7 @@
       <v-list-item
         v-for="item in list"
         :key="item.val"
-        @click="$router.push(item.val)"
+        @click="clickItem(item.val)"
       >
         <v-list-item-icon>
           <svg font-size="20" class="icon" aria-hidden="true">
@@ -47,11 +47,39 @@
         </v-list-item-icon>
       </v-list-item>
     </v-list>
+
+    <v-dialog
+      v-model="dialog"
+      max-width="80%"
+    >
+      <v-card>
+        <v-card-title class="headline">确认退出吗?</v-card-title>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            取消
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="logout"
+          >
+            确认
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import Cookie from 'js-cookie';
+
 export default {
   name: 'Me',
   data() {
@@ -59,14 +87,31 @@ export default {
       list: [
         { icon: '#picshoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
         { icon: '#picicon-copy', text: '我的关注', val: '/artistCollect' },
-        { icon: '#piclianjie-copy', text: '关于我们', val: '/links' }
-      ]
+        { icon: '#piclianjie-copy', text: '关于我们', val: '/links' },
+        { icon: '#piclog_out', text: '退出登录', val: 'logout' }
+      ],
+      dialog: false
     };
   },
   computed: {
     ...mapGetters([
       'user'
     ])
+  },
+  methods: {
+    logout() {
+      this.dialog = true;
+      Cookie.remove('jwt');
+      localStorage.removeItem('user');
+      this.$router.push('/');
+    },
+    clickItem(val) {
+      if (val === 'logout') {
+        this.dialog = true;
+        return;
+      }
+      this.$router.push(val);
+    }
   }
 };
 </script>
@@ -104,5 +149,13 @@ export default {
               flex 1
               p
                 color #5e5e5e
+  .btn
+    margin-left 50%
+    margin-top 50px
+    transform translateX(-50%)
+    span
+      display inline-block
+      margin-left 5px
+      vertical-align middle
 </style>
 
