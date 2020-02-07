@@ -66,7 +66,7 @@ export default {
       loading: false,
       nameRules: [
         v => !!v || '请填写用户名',
-        v => (v.length >= 4 && v.length <= 10) || '用户名在4-10位'
+        v => v.length >= 4 || '用户名或邮箱4位以上'
       ],
       passwordRules: [
         v => !!v || '请填写密码'
@@ -124,13 +124,15 @@ export default {
 
 <style lang="stylus" scoped>
 .login
+  position relative
   width 100vw
-  height 100vh
+  min-height 100vh
   overflow hidden
   padding 50px
   background-color #eee
   background url('../../assets/images/bg.jpg') no-repeat
   background-size cover
+  z-index 101
   .code
     position relative
     img
