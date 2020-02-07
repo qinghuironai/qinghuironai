@@ -170,7 +170,7 @@
                 />
               </v-list-item-content>
             </v-list-item>
-            <v-list-item style="display: 'none';">
+            <v-list-item v-if="user.username === 'pixivic'">
               <v-list-item-content>
                 <v-list-item-title>其它</v-list-item-title>
                 <v-checkbox
@@ -197,6 +197,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import debounce from 'lodash/debounce';
 import Tags from '@/components/tags/Tags';
 import List from '@/components/virtual-list/VirtualList';
@@ -233,7 +234,7 @@ export default {
       beginDate: null, // 画作发布日期限制
       endDate: null, // 画作发布日期限制
       xRestrict: 0,
-      maxSanityLevel: 6
+      maxSanityLevel: 5
     };
   },
   computed: {
@@ -255,7 +256,8 @@ export default {
     },
     allTags() {
       return [...this.tags, ...this.exclusive];
-    }
+    },
+    ...mapGetters(['user'])
   },
   watch: {
     value() {
