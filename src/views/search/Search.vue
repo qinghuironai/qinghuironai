@@ -19,7 +19,7 @@
             @focus="focus"
           >
           <!-- <i class="iconfont icon-xiangji1" /> -->
-          <svg font-size="20" class="icon" aria-hidden="true">
+          <svg font-size="30" class="icon" aria-hidden="true">
             <use xlink:href="#picxiangji1-copy" />
           </svg>
           <div class="save">
@@ -75,7 +75,12 @@
         </v-btn>
       </div>
       <Loading v-if="loading" />
-      <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-dialog
+        v-model="dialog"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+      >
         <v-card>
           <v-toolbar dark color="primary">
             <v-btn icon dark @click="dialog = false">
@@ -345,7 +350,12 @@ export default {
       formData.append('file', e.target.files[0]);
       const result = await this.$api.search.uploadImg(formData);
       const res = await this.$api.search.searchByImg(result.data.data);
-      this.pictureList = res.data.data || [];
+      if (res.status === 200) {
+        const { data: { data }} = res;
+        this.pictureList = data || [];
+        // this.getTags(data[0].title);
+        // this.getExclusive(data[0].title);
+      }
       this.loading = false;
     },
     searchOne(type) {
@@ -369,7 +379,9 @@ export default {
     },
     infinite($state) {
       if (this.isSearchByImg) {
-        return $state.complete();
+        $state.loaded();
+        $state.complete();
+        return;
       }
       this.$api.search
         .getSearch({
@@ -438,13 +450,13 @@ export default {
         // font-size 16px
         box-sizing border-box
         height 40px
-        padding 0 25px 0 9px
+        padding 0 32px 0 9px
         border-radius 5px
         background-color rgb(245, 245, 245)
         color rgb(31, 31, 31)
       >svg
         position absolute
-        top 12px
+        top 5px
         right 5px
         &:after
           content ''

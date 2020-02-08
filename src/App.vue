@@ -7,19 +7,18 @@
       <router-view />
     </navigation>
     <div :class="['tabs', {'show': showTab}]">
-      <router-link
+      <div
         v-for="item in tabs"
         :key="item.value"
-        :to="item.value"
         class="tabs-item"
-        @click.native="clickTab"
+        @click.stop="clickTab(item.value)"
       >
         <img
           :src="active === item.value ? item.activeSrc : item.src"
           :style="{transform: active === item.value ? 'scale(1.1)' : ''}"
           alt=""
         >
-      </router-link>
+      </div>
     </div>
   </v-app>
 </template>
@@ -66,9 +65,10 @@ export default {
     }
   },
   methods: {
-    clickTab() {
+    clickTab(val) {
       // console.log(this.$vnode.componentInstance);
       // this.$navigation.on('reset', () => {});
+      this.$router.push(val);
     }
   }
 };

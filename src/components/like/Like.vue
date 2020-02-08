@@ -1,6 +1,6 @@
 <template>
   <div :class="['like', {'is-like': like}]" @click.stop.prevent="handleLike">
-    <svg id="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
+    <svg id="heart-svg" :style="{width: width + 'px'}" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
       <g id="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
         <path
           id="heart"
@@ -55,6 +55,10 @@ export default {
     like: {
       type: Boolean,
       default: false
+    },
+    width: {
+      type: Number,
+      default: 50
     }
   },
   methods: {

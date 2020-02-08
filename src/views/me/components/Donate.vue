@@ -20,7 +20,7 @@
               <th>金额</th>
               <th>时间</th>
             </tr>
-            <tr v-for="item in donate" :key="item.id">
+            <tr v-for="(item, index) in donate" :key="index">
               <td>{{ item.postscript || '*' }}</td>
               <td>￥{{ item.sum }}</td>
               <td>{{ item.time }}</td>

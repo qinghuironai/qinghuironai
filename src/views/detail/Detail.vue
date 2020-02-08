@@ -3,60 +3,55 @@
     <div v-if="illustDetail" class="detail animated zoomIn">
       <List :list="pictureList" @infinite="infinite">
         <div class="detail-top">
-          <v-img
-            class="grey lighten-2"
-            :height="illustDetail.itemHeight"
-            :src="illustDetail.src"
-            :lazy-src="illustDetail.mediumSrc"
-            :style="{filter: illustDetail.setu ? `blur(25px)` : ''}"
-            @click="seePreview"
-          >
-            <Like :like="illustDetail.isLiked" @handleLike="handleLike" />
-            <template v-slot:placeholder>
-              <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center"
-              >
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-row>
-            </template>
-          </v-img>
-          <v-btn
-            absolute
-            top
-            style="left: 0;top: 0;"
-            icon
-            @click.stop="$router.back()"
-          >
-            <svg font-size="20" class="icon" aria-hidden="true">
-              <use xlink:href="#picfanhui" />
-            </svg>
-          </v-btn>
-          <v-menu>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                icon
-                absolute
-                style="right: 0;top: 0;"
-                @click.stop
-                v-on="on"
-              >
-                <svg font-size="20" class="icon" aria-hidden="true">
-                  <use xlink:href="#piccaidan" />
-                </svg>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="(item, index) in items"
-                :key="index"
-                @click="clickMenu(item.val)"
-              >
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+          <div class="detail-img">
+            <img
+              :height="illustDetail.itemHeight"
+              :src="illustDetail.src"
+              :style="imgStyle"
+              @load="opacity = 1"
+              @click="seePreview"
+            >
+            <Like
+              :width="80"
+              :like="illustDetail.isLiked"
+              @handleLike="handleLike"
+            />
+            <v-btn
+              absolute
+              top
+              style="left: 0;top: 0;"
+              icon
+              @click.stop="$router.back()"
+            >
+              <svg font-size="20" class="icon" aria-hidden="true">
+                <use xlink:href="#picfanhui" />
+              </svg>
+            </v-btn>
+            <v-menu>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  icon
+                  absolute
+                  style="right: 0;top: 0;"
+                  @click.stop
+                  v-on="on"
+                >
+                  <svg font-size="20" class="icon" aria-hidden="true">
+                    <use xlink:href="#piccaidan" />
+                  </svg>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in items"
+                  :key="index"
+                  @click="clickMenu(item.val)"
+                >
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
           <div class="detail-info">
             <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
             <p class="caption" v-html="illustDetail.caption" />
@@ -84,17 +79,15 @@
                 </svg>
                 <span>{{ illustDetail.totalBookmarks }}</span>
               </a>
-              <a class="work-stats-a" @click="openComment">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#picliuyan" />
-                </svg>
-                <span>评论</span>
-              </a>
               <a class="work-stats-a">
                 <span>{{ illustDetail.createDate }}</span>
               </a>
+              <a class="work-stats-a stats-comment" @click="openComment">
+                <svg font-size="30" class="icon" aria-hidden="true">
+                  <use xlink:href="#picpinglun" />
+                </svg>
+              </a>
             </div>
-            <v-divider />
             <div class="user">
               <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
                 <v-avatar>
@@ -106,6 +99,10 @@
                 {{ illustDetail.artistPreView.isFollowed ? '已关注' : '+加关注' }}
               </v-btn>
             </div>
+            <v-divider />
+            <div class="title">
+              <h2>相关作品</h2>
+            </div>
           </div>
         </div>
       </List>
@@ -116,7 +113,7 @@
           hide-delimiters
           show-arrows-on-hover
         >
-          <v-carousel-item v-for="(item, i) in imgs" :key="i">
+          <v-carousel-item v-for="(item, i) in illustDetail.imgs" :key="i">
             <v-row class="fill-height" align="center" justify="center">
               <img width="100%" :src="item">
             </v-row>
@@ -176,15 +173,17 @@ export default {
         { val: 'pixiv', title: '跳转pixiv' },
         { val: 'origin', title: '跳转图片链接' }
       ],
-      like: false
+      like: false,
+      opacity: 0
     };
   },
   computed: {
     ...mapGetters(['user', 'likeStatus', 'followStatus']),
-    imgs() {
-      return this.illustDetail.imageUrls.reduce((pre, cur) => {
-        return pre.concat(`${IMG_PREFIX + cur.original}`);
-      }, []);
+    imgStyle() {
+      return {
+        filter: this.illustDetail.setu ? `blur(25px)` : '',
+        opacity: this.opacity
+      };
     }
   },
   watch: {
@@ -215,9 +214,11 @@ export default {
             itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
             src: IMG_PREFIX + data.imageUrls[0].original.replace('_webp', ''),
             avatarSrc: IMG_PREFIX + data.artistPreView.avatar,
-            mediumSrc: IMG_PREFIX + data.imageUrls[0].medium,
-            createDate: dayjs(data.createDate).format('YYYY-MM-DD HH:mm:ss'),
-            setu: !!((data.xrestrict === 1 || data.sanityLevel > 5)) && this.user.username !== 'pixivic'
+            createDate: dayjs(data.createDate).format('YYYY-MM-DD'),
+            setu: !!((data.xrestrict === 1 || data.sanityLevel > 5)) && this.user.username !== 'pixivic',
+            imgs: data.imageUrls.reduce((pre, cur) => {
+              return pre.concat(`${IMG_PREFIX + cur.original}`);
+            }, [])
           };
         });
     },
@@ -304,6 +305,7 @@ export default {
     seePreview() {
       if (!this.illustDetail.setu) {
         this.preview = true;
+        this.$store.dispatch('changeTab', false);
       }
     },
     openComment() {
@@ -332,9 +334,19 @@ export default {
   background-color #fff
   z-index 3
   font-size 16px
+  &-img
+    position relative
+    margin 0 -8px
+    box-sizing border-box
+    background-color grey
+    overflow hidden
+    img
+      width 100%
+      transition opacity .3s
+      vertical-align bottom
+      object-fit cover
   &-info
-    // padding 5px 10px
-    // width 100vw
+    padding 8px
     overflow hidden
     >.caption
       word-wrap break-word
@@ -342,7 +354,7 @@ export default {
     .user
       display flex
       align-items center
-      margin 10px 0
+      margin 14px 0
       a
         flex 1
         span
@@ -360,8 +372,9 @@ export default {
           color #adadad
           margin-right 8px
     .work-stats
-      margin-top 10px
+      margin 10px 0 15px
       user-select none
+      position relative
       &-a
         margin-right 10px
         span
@@ -369,6 +382,14 @@ export default {
           margin-left 2px
           color rgba(0, 0, 0, 0.32)
           vertical-align middle
+      .stats-comment
+        position absolute
+        right 0
+    .title
+      margin-top 12px
+      h2
+        font-size 18px
+        color #333
   &-preview
     position fixed
     top 0

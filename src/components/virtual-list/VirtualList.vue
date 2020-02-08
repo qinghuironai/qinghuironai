@@ -1,5 +1,5 @@
 <template>
-  <div ref="list" class="list">
+  <div class="list">
     <VirtualCollection
       :cell-size-and-position-getter="cellSizeAndPositionGetter"
       :collection="list"
@@ -50,7 +50,7 @@ export default {
       headerHeight: 0,
       columnHeight: [],
       column: 0,
-      width: getClient().width - 16,
+      width: getClient().width,
       height: getClient().height
     };
   },
@@ -138,7 +138,7 @@ export default {
       }
     },
     waterFall() {
-      this.width = getClient().width - 16;
+      this.width = getClient().width;
       this.height = getClient().height;
       this.column = Math.ceil(this.width / columnWidth);
       this.columnHeight = new Array(this.column).fill(0);
@@ -148,7 +148,7 @@ export default {
       for (let i = 0; i < list.length; i++) {
         const tmp = list[i];
         const per = tmp.height / tmp.width;
-        const width = Math.floor(this.width / this.column);
+        const width = Math.floor((this.width - 16) / this.column);
         const height = Math.min(width * per, 400);
         // 找出最小列
         let minHeight = this.columnHeight[0];

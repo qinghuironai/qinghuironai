@@ -1,6 +1,5 @@
 <template>
-  <v-app-bar color="white" dense flat>
-    <!-- <v-app-bar-nav-icon /> -->
+  <div class="rank-header">
     <v-btn icon>
       <router-link to="/search">
         <svg font-size="20" class="icon" aria-hidden="true">
@@ -8,15 +7,14 @@
         </svg>
       </router-link>
     </v-btn>
-    <v-spacer />
     <v-bottom-sheet v-model="showMode">
       <template v-slot:activator="{ on }">
         <v-btn text v-on="on">
-          {{ modeText }}
+          <span class="mode">{{ modeText }}</span>
         </v-btn>
       </template>
       <v-sheet class="text-center" height="200px">
-        <v-tabs light :centered="true" :grow="true">
+        <v-tabs light centered grow>
           <v-tabs-slider />
           <v-tab v-for="(item, index) in tabs" :key="index">
             {{ item.text }}
@@ -33,14 +31,15 @@
                   primary
                   :color="val.value === modeVal ? 'primary' : ''"
                   @click="selectMode(val)"
-                >{{ val.text }}</v-btn>
+                >
+                  {{ val.text }}
+                </v-btn>
               </v-card-text>
             </v-card>
           </v-tab-item>
         </v-tabs>
       </v-sheet>
     </v-bottom-sheet>
-    <v-spacer />
     <v-bottom-sheet v-model="showDate">
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
@@ -61,7 +60,7 @@
         />
       </v-sheet>
     </v-bottom-sheet>
-  </v-app-bar>
+  </div>
 </template>
 
 <script>
@@ -74,7 +73,6 @@ export default {
       modeText: '日排行',
       modeVal: 'day',
       tabs: modeData,
-      menu: false,
       showMode: false,
       showDate: false,
       date: null,
@@ -100,4 +98,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.rank-header
+  position relative
+  background-color #ffffff
+  height 48px
+  display flex
+  align-items center
+  justify-content space-between
+  .mode
+    position relative
+    font-size 18px
 </style>

@@ -18,7 +18,7 @@
         <a href="https://www.oysterqaq.com/">
           <img src="../../../assets/images/OysterQAQ.jpg" alt="">
         </a>
-        <a href="https://kimliy.github.io/">
+        <a href="https://github.com/kimliy">
           <img src="../../../assets/images/kimliy.jpg" alt="">
         </a>
         <a href="https://www.ariussss.com/">
@@ -27,10 +27,13 @@
         <a href="https://dongzheyu.github.io/">
           <img src="../../../assets/images/tiger.jpg" alt="">
         </a>
+        <a href="https://github.com/goblinM">
+          <img src="../../../assets/images/mmx.jpg" alt="">
+        </a>
       </ul>
       <h4>新增功能</h4>
       <ul>
-        <li>用户系统 画作收藏 画作评论 画师关注 搜索条件 画师新作 spotlight等 </li>
+        <li>用户系统 画作收藏 画作评论 画师关注 搜索条件 以图搜图 画师新作 spotlight等 </li>
       </ul>
       <h4>浏览器的使用</h4>
       <ul>

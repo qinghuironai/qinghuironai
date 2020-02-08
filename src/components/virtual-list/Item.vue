@@ -12,7 +12,6 @@
       </div>
       <Like :like="column.isLiked" @handleLike="handleLike" />
       <div v-if="column.setu" class="setu-filter">
-        <!-- <img width="100%" src="../../assets/images/error.svg"> -->
         <svg font-size="50" class="icon" aria-hidden="true">
           <use xlink:href="#picsuo2" />
         </svg>
@@ -71,15 +70,13 @@ export default {
     position relative
     width 100%
     height 100%
-    border-radius 5px
+    border-radius 8px
     img
       width 100%
       height 100%
       transition opacity .3s
       object-fit cover
       border-radius 5px
-      // &:hover
-      //   transform scale(1.4)
   .count
     position absolute
     display inline-block

@@ -1,16 +1,11 @@
 <template>
   <div>
-    <Header :title="type" :show="showTab" />
     <List
       :list="pictureList"
       :identifier="identifier"
       @infinite="infinite"
     >
-      <v-tabs
-        centered
-        grow
-        style="paddingTop: 40px"
-      >
+      <v-tabs centered grow>
         <v-tab @click="getList('illust')">
           插画
         </v-tab>
@@ -24,14 +19,12 @@
 
 <script>
 import List from '@/components/virtual-list/VirtualList';
-import Header from '@/components/header/Header';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'Collect',
   components: {
-    List,
-    Header
+    List
   },
   data() {
     return {
@@ -42,7 +35,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'showTab'])
+    ...mapGetters(['user'])
   },
   methods: {
     infinite($state) {

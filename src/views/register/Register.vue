@@ -109,9 +109,13 @@ export default {
       required,
       maxLength: maxLength(10),
       minLength: minLength(4),
+      isValid(value) {
+        const patrn = /[`~!@#$%^&*()\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/im;
+        return !patrn.test(value);
+      },
       isUnique: debounceAsyncValidator(function(value, debounce) {
         if (!value) return true;
-        if (!this.$v.username.required || !this.$v.username.minLength || !this.$v.username.maxLength) return true;
+        if (!this.$v.username.required || !this.$v.username.minLength || !this.$v.username.maxLength || !this.$v.username.isValid) return true;
         return debounce()
           .then(() => this.$api.user.checkUser(value))
           .then(res => {
@@ -166,6 +170,7 @@ export default {
       const errors = [];
       if (!this.$v.username.$dirty) return errors;
       !this.$v.username.required && errors.push('请输入用户名');
+      !this.$v.username.isValid && errors.push('用户名不能包含特殊字符');
       (!this.$v.username.minLength || !this.$v.username.maxLength) && errors.push('用户名4-10位');
       !this.$v.username.isUnique && errors.push('用户名已被注册');
       return errors;

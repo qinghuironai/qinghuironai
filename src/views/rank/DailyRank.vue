@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       page: 1,
-      mode: 'day',
+      mode: null,
       date: null,
       pictureList: [],
       identifier: +new Date()
@@ -32,6 +32,7 @@ export default {
   },
   mounted() {
     this.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD');
+    this.mode = 'day';
   },
   methods: {
     infinite($state) {
@@ -69,6 +70,6 @@ export default {
 
 <style lang="stylus" scoped>
 .rank
-  font-size 16px
   position relative
+  font-size 16px
 </style>
