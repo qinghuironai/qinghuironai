@@ -8,38 +8,9 @@
             :height="illustDetail.itemHeight"
             :src="illustDetail.src"
             :lazy-src="illustDetail.mediumSrc"
-            :style="{filter: illustDetail.setu ? `blur(20px)` : ''}"
+            :style="{filter: illustDetail.setu ? `blur(25px)` : ''}"
             @click="seePreview"
           >
-            <v-btn icon @click.stop="$router.back()">
-              <svg font-size="20" class="icon" aria-hidden="true">
-                <use xlink:href="#picfanhui" />
-              </svg>
-            </v-btn>
-            <v-menu>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  icon
-                  absolute
-                  style="right: 0;"
-                  @click.stop
-                  v-on="on"
-                >
-                  <svg font-size="20" class="icon" aria-hidden="true">
-                    <use xlink:href="#piccaidan" />
-                  </svg>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(item, index) in items"
-                  :key="index"
-                  @click="clickMenu(item.val)"
-                >
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
             <Like :like="illustDetail.isLiked" @handleLike="handleLike" />
             <template v-slot:placeholder>
               <v-row
@@ -51,6 +22,41 @@
               </v-row>
             </template>
           </v-img>
+          <v-btn
+            absolute
+            top
+            style="left: 0;top: 0;"
+            icon
+            @click.stop="$router.back()"
+          >
+            <svg font-size="20" class="icon" aria-hidden="true">
+              <use xlink:href="#picfanhui" />
+            </svg>
+          </v-btn>
+          <v-menu>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                absolute
+                style="right: 0;top: 0;"
+                @click.stop
+                v-on="on"
+              >
+                <svg font-size="20" class="icon" aria-hidden="true">
+                  <use xlink:href="#piccaidan" />
+                </svg>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in items"
+                :key="index"
+                @click="clickMenu(item.val)"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
           <div class="detail-info">
             <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
             <p class="caption" v-html="illustDetail.caption" />

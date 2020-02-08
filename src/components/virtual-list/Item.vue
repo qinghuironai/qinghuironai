@@ -50,9 +50,7 @@ export default {
       }
     },
     goDetail() {
-      if (!this.column.setu) {
-        this.$router.push(`/detail/${this.column.id}`);
-      }
+      this.$router.push(`/detail/${this.column.id}`);
     }
   }
 };

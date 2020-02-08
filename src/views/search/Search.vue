@@ -234,7 +234,7 @@ export default {
       beginDate: null, // 画作发布日期限制
       endDate: null, // 画作发布日期限制
       xRestrict: 0,
-      maxSanityLevel: 5
+      maxSanityLevel: 6
     };
   },
   computed: {
