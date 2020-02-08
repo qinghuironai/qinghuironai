@@ -173,9 +173,8 @@ export default {
       page: 1,
       preview: false,
       items: [
-        { val: 'origin', title: '跳转原图链接' },
-        { val: 'share', title: '分享' },
-        { val: 'more', title: '更多' }
+        { val: 'pixiv', title: '跳转pixiv' },
+        { val: 'origin', title: '跳转图片链接' }
       ],
       like: false
     };
@@ -242,10 +241,12 @@ export default {
     },
     clickMenu(id) {
       switch (id) {
-        case 'origin': {
+        case 'pixiv':
           window.open(`https://www.pixiv.net/artworks/${this.pid}`);
           break;
-        }
+        case 'origin':
+          window.open(this.illustDetail.src);
+          break;
       }
     },
     handleLike() {
