@@ -15,10 +15,10 @@ import Navigation from 'vue-navigation';
 Vue.use(Vuetify);
 Vue.use(Navigation, { router, store });
 
-// import VConsole from 'vconsole'
+// import VConsole from 'vconsole';
 
 // eslint-disable-next-line no-new
-// new VConsole()
+// new VConsole();
 Vue.config.productionTip = false;
 Vue.use(animated);
 Vue.mixin(Mixin);

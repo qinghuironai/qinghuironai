@@ -5,15 +5,18 @@
   box-sizing border-box
   padding-left 8px
   padding-right 8px
+  height 100vh
   // &::-webkit-scrollbar
   //   display none /* Chrome Safari */
   &-container
     position relative
     background #fff
     box-sizing border-box
-  .cell-container
-    position absolute
-    top 0
+    .water-content
+      position relative
+      .cell-container
+        position absolute
+        top 0
   .top
     position fixed
     bottom 27.5px
@@ -39,15 +42,17 @@
     :style="outerStyle"
     @scroll.passive="onScroll"
   >
-    <div class="vue-virtual-collection-container" :style="containerStyle">
+    <div class="vue-virtual-collection-container">
       <slot />
-      <div
-        v-for="item in displayItems"
-        :key="item.id"
-        class="cell-container"
-        :style="getComputedStyle(item)"
-      >
-        <slot name="cell" :data="item" />
+      <div ref="watercontent" class="water-content" :style="contentStyle">
+        <div
+          v-for="item in displayItems"
+          :key="item.id"
+          class="cell-container"
+          :style="getComputedStyle(item)"
+        >
+          <slot name="cell" :data="item" />
+        </div>
       </div>
     </div>
     <div :class="['top', { 'is-active': showTab }]" @click.stop="scrollToTop">
@@ -114,23 +119,23 @@ export default {
       totalHeight: 0,
       totalWidth: 0,
       displayItems: [],
-      scrollY: 0
+      scrollY: 0,
+      contentTop: 0
     };
   },
   computed: {
     ...mapGetters([
       'showTab'
     ]),
-    containerStyle() {
-      return {
-        height: this.totalHeight + 'px',
-        width: '100%'
-      };
-    },
     outerStyle() {
       return {
-        height: this.height + 'px',
+        // height: this.height + 'px',
         width: this.width + 'px'
+      };
+    },
+    contentStyle() {
+      return {
+        height: `${this.totalHeight}px`
       };
     }
   },
@@ -145,16 +150,13 @@ export default {
       this.onCollectionChanged();
     },
     identifier() {
-      if (this.$slots.default) {
-        this.$nextTick(() => {
-          this.totalHeight = parseInt(this.$slots.default[0].elm.offsetHeight);
-        });
-      } else {
-        this.totalHeight = 40;
-      }
+      this.totalHeight = 0;
     }
   },
   created() {
+    this.$nextTick(() => {
+      this.contentTop = this.$refs.watercontent.offsetTop;
+    });
     this.groupManagers = [];
     this.onCollectionChanged();
   },
@@ -237,7 +239,7 @@ export default {
           height: this.height,
           width: this.width,
           x: scrollLeft,
-          y: scrollTop
+          y: scrollTop - this.contentTop
         });
 
         indices.forEach(itemIndex => {

@@ -25,7 +25,6 @@ import { IMG_PREFIX } from '@/util/constants';
 import { randomColor } from '@/util';
 import { getClient } from '@/util/dom';
 const columnWidth = 200; // 屏幕小于200则1列
-const HEAD_HEIGHT = 40;
 
 export default {
   components: {
@@ -47,7 +46,6 @@ export default {
   data() {
     return {
       scrollY: 0,
-      headerHeight: 0,
       columnHeight: [],
       column: 0,
       width: getClient().width,
@@ -87,11 +85,6 @@ export default {
   },
   mounted() {
     this.waterFall();
-    if (this.$slots.default) {
-      this.headerHeight = parseInt(this.$slots.default[0].elm.offsetHeight);
-    } else {
-      this.headerHeight = HEAD_HEIGHT;
-    }
     window.addEventListener('resize', throttle(this.waterFall));
   },
   destroyed() {
@@ -106,7 +99,7 @@ export default {
         width: item.width,
         height: item.height,
         x: item.x,
-        y: item.y + this.headerHeight
+        y: item.y
       };
     },
     handleLike(data) {
@@ -149,7 +142,7 @@ export default {
         const tmp = list[i];
         const per = tmp.height / tmp.width;
         const width = Math.floor((this.width - 16) / this.column);
-        const height = Math.min(width * per, 400);
+        const height = Math.max(Math.min(width * per, 400), 100);
         // 找出最小列
         let minHeight = this.columnHeight[0];
         let index = 0;

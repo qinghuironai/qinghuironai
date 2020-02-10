@@ -35,7 +35,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'showTab'])
   },
   methods: {
     infinite($state) {
