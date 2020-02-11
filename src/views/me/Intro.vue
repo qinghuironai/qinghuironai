@@ -1,7 +1,7 @@
 <template>
   <div class="intro">
     <div class="infos">
-      <img src="../../../assets/images/girl.gif"><h2>用前の须知</h2>
+      <img src="../../assets/images/girl.gif"><h2>用前の须知</h2>
       <p>以下是一些值得仔细阅览的使用说明</p>
     </div>
     <div class="version">
@@ -16,19 +16,19 @@
       <ul>
         <li>Pixivic的开发与运维离不开</li> <br>
         <a href="https://www.oysterqaq.com/">
-          <img src="../../../assets/images/OysterQAQ.jpg" alt="">
+          <img src="../../assets/images/OysterQAQ.jpg" alt="">
         </a>
         <a href="https://github.com/kimliy">
-          <img src="../../../assets/images/kimliy.jpg" alt="">
+          <img src="../../assets/images/kimliy.jpg" alt="">
         </a>
         <a href="https://www.ariussss.com/">
-          <img src="../../../assets/images/Arius.jpg" alt="">
+          <img src="../../assets/images/Arius.jpg" alt="">
         </a>
         <a href="https://dongzheyu.github.io/">
-          <img src="../../../assets/images/tiger.jpg" alt="">
+          <img src="../../assets/images/tiger.jpg" alt="">
         </a>
         <a href="https://github.com/goblinM">
-          <img src="../../../assets/images/mmx.jpg" alt="">
+          <img src="../../assets/images/mmx.jpg" alt="">
         </a>
       </ul>
       <h4>新增功能</h4>

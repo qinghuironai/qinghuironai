@@ -327,7 +327,7 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~@/style/color.styl'
+@import '~@/assets/style/color.styl'
 .detail
   background-size contain
   width 100%

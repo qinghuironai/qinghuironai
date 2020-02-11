@@ -57,7 +57,7 @@ export default {
     >svg
       position absolute
       left 5px
-      top 10px
+      top 15px
       font-size 20px
       width 20px
     >h1

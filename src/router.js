@@ -10,15 +10,17 @@ const pages = {
   Artist: () => import('./views/artist/Artist'),
   Search: () => import('./views/search/Search'),
   Find: () => import('./views/find/Find'),
-  SpotLight: () => import('./views/find/SoptLight.vue'),
+  SpotLight: () => import('./views/find/SoptLight'),
   Spot: () => import('./views/find/Spot.vue'),
   Me: () => import('./views/me/Me'),
-  Collect: () => import('./views/me/components/Collect'),
-  ArtistCollect: () => import('./views/me/components/ArtistCollect.vue'),
-  Links: () => import('./views/me/components/Links'),
+  Collect: () => import('./views/me/Collect'),
+  ArtistCollect: () => import('./views/me/ArtistCollect'),
+  Links: () => import('./views/me/Links'),
   New: () => import('./views/new/New.vue'),
+  Setting: () => import('./views/me/Setting'),
   Login: () => import('./views/login/Login'),
   Register: () => import('./views/register/Register'),
+  ResetPassword: () => import('./views/reset/ResetPassword'),
   NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -108,6 +110,11 @@ const router = new Router({
     component: pages.New
   },
   {
+    path: '/setting',
+    name: 'Setting',
+    component: pages.Setting
+  },
+  {
     path: '/login',
     name: 'Login',
     component: pages.Login,
@@ -122,6 +129,12 @@ const router = new Router({
     meta: {
       noCache: true
     }
+  },
+  {
+    path: '/resetPassword',
+    name: 'ResetPassword',
+    component: pages.ResetPassword,
+    props: true
   },
   {
     path: '*',

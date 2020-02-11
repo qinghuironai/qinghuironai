@@ -1,11 +1,7 @@
 <template>
   <div class="me">
     <div class="me-header">
-      <v-card
-        class="header-box"
-        width="95%"
-        outlined
-      >
+      <v-card class="header-box" width="95%" outlined>
         <div class="link">
           <v-avatar class="user-avatar" size="80">
             <v-img :src="user.avatar" alt="Avatar" />
@@ -48,10 +44,7 @@
       </v-list-item>
     </v-list>
 
-    <v-dialog
-      v-model="dialog"
-      max-width="80%"
-    >
+    <v-dialog v-model="dialog" width="100%">
       <v-card>
         <v-card-title class="headline">确认退出吗?</v-card-title>
         <v-card-actions>
@@ -88,6 +81,7 @@ export default {
         { icon: '#picshoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
         { icon: '#picicon-copy', text: '我的关注', val: '/artistCollect' },
         { icon: '#piclianjie-copy', text: '关于我们', val: '/links' },
+        { icon: '#picshezhi', text: '用户设置', val: '/setting' },
         { icon: '#piclog_out', text: '退出登录', val: 'logout' }
       ],
       dialog: false

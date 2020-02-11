@@ -35,10 +35,9 @@ function resetPasswordEmail(email) {
 // 用户重置密码
 function resetPassword(data) {
   return axios({
-    // url: `/users/password?password=${data.password}&vid=${data.vid}&value=${data.value}`,
-    url: `/users/password`,
+    url: `/users/password?vid=${data.vid}&value=${data.value}`,
     method: 'put',
-    data
+    data: { password: data.password }
   });
 }
 
@@ -115,6 +114,14 @@ function getNewIllust(data) {
   });
 }
 
+// 获取用户是否验证邮箱
+function getEmailIsCheck(userId) {
+  return axios({
+    url: `/${userId}/email/isCheck`,
+    method: 'get'
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -128,5 +135,6 @@ export {
   deleteCollect,
   followArtist,
   getFollowArtist,
-  getNewIllust
+  getNewIllust,
+  getEmailIsCheck
 };

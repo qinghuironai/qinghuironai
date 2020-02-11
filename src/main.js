@@ -5,8 +5,7 @@ import router from './router';
 import store from './store/';
 import api from './api';
 import util from './util';
-import Mixin from './mixins';
-import './style/index.styl';
+import './assets/style/index.styl';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css';
@@ -16,12 +15,9 @@ Vue.use(Vuetify);
 Vue.use(Navigation, { router, store });
 
 // import VConsole from 'vconsole';
-
-// eslint-disable-next-line no-new
 // new VConsole();
 Vue.config.productionTip = false;
 Vue.use(animated);
-Vue.mixin(Mixin);
 Vue.prototype.$api = api;
 Vue.prototype.$util = util;
 

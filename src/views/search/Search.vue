@@ -412,7 +412,7 @@ export default {
 </script>
 
 <style lang="stylus" scope>
-@import '~@/style/color.styl'
+@import '~@/assets/style/color.styl'
 .search
   z-index 100
   font-size 16px

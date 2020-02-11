@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style lang="stylus" scope>
-@import '~@/style/global.styl'
+@import '~@/assets/style/global.styl'
 .item
   box-sizing border-box
   position absolute
