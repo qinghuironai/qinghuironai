@@ -21,6 +21,7 @@ const pages = {
   Login: () => import('./views/login/Login'),
   Register: () => import('./views/register/Register'),
   ResetPassword: () => import('./views/reset/ResetPassword'),
+  EmailCheck: () => import('./views/reset/EmailCheck'),
   NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -133,8 +134,12 @@ const router = new Router({
   {
     path: '/resetPassword',
     name: 'ResetPassword',
-    component: pages.ResetPassword,
-    props: true
+    component: pages.ResetPassword
+  },
+  {
+    path: '/emailCheck',
+    name: 'EmailCheck',
+    component: pages.EmailCheck
   },
   {
     path: '*',

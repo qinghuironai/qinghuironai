@@ -133,7 +133,12 @@ export default {
     waterFall() {
       this.width = getClient().width;
       this.height = getClient().height;
-      this.column = Math.ceil(this.width / columnWidth);
+      const column = parseInt(localStorage.getItem('waterfull-column'));
+      if (column) {
+        this.column = column;
+      } else {
+        this.column = Math.ceil(this.width / columnWidth);
+      }
       this.columnHeight = new Array(this.column).fill(0);
       this.handleList(this.list);
     },

@@ -3,12 +3,15 @@
     <Header title="设置" />
     <v-list class="setting-lists">
       <v-list-item
-        v-for="item in list"
+        v-for="item in lists"
         :key="item.val"
         @click="clickItem(item.val)"
       >
         <v-list-item-content>
-          <v-list-item-title>{{ item.text }}</v-list-item-title>
+          <v-list-item-title>
+            {{ item.text }}
+            <span v-if="item.show" style="float: right;">{{ item.show }}</span>
+          </v-list-item-title>
         </v-list-item-content>
         <v-list-item-icon>
           <svg class="icon" aria-hidden="true">
@@ -17,6 +20,24 @@
         </v-list-item-icon>
       </v-list-item>
     </v-list>
+
+    <v-bottom-sheet v-model="sheet">
+      <v-sheet class="text-center">
+        <v-list>
+          <v-list-item
+            v-for="item in columns"
+            :key="item"
+            @click="selectColumn(item)"
+          >
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ item }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-sheet>
+    </v-bottom-sheet>
   </div>
 </template>
 
@@ -29,27 +50,64 @@ export default {
   components: {
     Header
   },
+  data() {
+    return {
+      dialog: false,
+      sheet: false,
+      columns: ['自动', 1, 2, 3, 4],
+      lists: {
+        email: { text: '邮箱验证', val: 'email', show: '未验证' },
+        waterfull: { text: '瀑布流列数', val: 'waterfull', show: '自动' }
+      }
+    };
+  },
   computed: {
     ...mapGetters(['user'])
   },
-  data() {
-    return {
-      list: [
-        { text: '邮箱验证', val: 'email' }
-      ],
-      dialog: false
-    };
+  mounted() {
+    this.$api.user.getEmailIsCheck(this.user.id)
+      .then(res => {
+        console.log(res);
+        if (!res.data.data) {
+          this.lists.email.show = '未验证';
+        } else {
+          this.lists.email.show = '已验证';
+        }
+      });
+
+    const column = parseInt(localStorage.getItem('waterfull-column'));
+    if (column) {
+      this.lists.waterfull.show = column;
+    } else {
+      this.lists.waterfull.show = '自动';
+    }
   },
   methods: {
     clickItem(val) {
+      console.log(val);
       switch (val) {
         case 'email':
-          this.$api.user.getEmailIsCheck(this.user.id)
-            .then(res => {
-              console.log(res);
-            });
+          if (this.lists.email.show === '未验证') {
+            this.$api.user.vertifyEmail(this.user.email)
+              .then(res => {
+                console.log(res);
+                alert(res.data.message);
+              });
+          }
+          break;
+        case 'waterfull':
+          this.sheet = true;
           break;
       }
+    },
+    selectColumn(val) {
+      this.lists.waterfull.show = val;
+      if (val === '自动') {
+        localStorage.removeItem('waterfull-column');
+      } else {
+        localStorage.setItem('waterfull-column', val);
+      }
+      this.sheet = false;
     }
   }
 };

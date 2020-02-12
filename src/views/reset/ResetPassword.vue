@@ -45,8 +45,6 @@
 export default {
   data() {
     return {
-      vid: '',
-      value: '',
       valid: false,
       show: false,
       show2: false,
@@ -61,20 +59,12 @@ export default {
       ]
     };
   },
-  mounted() {
-    const query = this.$route.query;
-    this.vid = query.vid;
-    this.value = query.value;
-  },
   methods: {
     resetPassword() {
-      const data = {
-        password: this.password,
-        value: this.value,
-        vid: this.vid
-      };
-      this.$api.user
-        .resetPassword(data)
+      let data = this.$route.query;
+      delete data.VNK;
+      data = { ...data, password: this.password };
+      this.$api.user.resetPassword(data)
         .then(res => {
           if (res.status === 200) {
             alert('重置成功，点击返回登录页面');

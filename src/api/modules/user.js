@@ -117,8 +117,25 @@ function getNewIllust(data) {
 // 获取用户是否验证邮箱
 function getEmailIsCheck(userId) {
   return axios({
-    url: `/${userId}/email/isCheck`,
+    url: `/users/${userId}/email/isCheck`,
     method: 'get'
+  });
+}
+
+// 用户发送邮箱验证邮件
+function vertifyEmail(email) {
+  return axios({
+    url: `/users/emails/${email}/checkEmail`,
+    method: 'get'
+  });
+}
+
+// 用户设置邮箱(会返回新的token)
+function setEmail(params) {
+  return axios({
+    url: `${params.userId}/email`,
+    method: 'put',
+    params
   });
 }
 
@@ -136,5 +153,7 @@ export {
   followArtist,
   getFollowArtist,
   getNewIllust,
-  getEmailIsCheck
+  getEmailIsCheck,
+  vertifyEmail,
+  setEmail
 };
