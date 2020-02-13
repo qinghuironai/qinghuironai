@@ -57,7 +57,8 @@ export default {
       columns: ['自动', 1, 2, 3, 4],
       lists: {
         email: { text: '邮箱验证', val: 'email', show: '未验证' },
-        waterfull: { text: '瀑布流列数', val: 'waterfull', show: '自动' }
+        waterfull: { text: '瀑布流列数', val: 'waterfull', show: '自动' },
+        avatar: { text: '更新头像', val: 'avatar' }
       }
     };
   },
@@ -94,6 +95,9 @@ export default {
           break;
         case 'waterfull':
           this.sheet = true;
+          break;
+        case 'avatar':
+          this.$router.push(`/${val}`);
           break;
       }
     },

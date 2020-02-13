@@ -18,6 +18,7 @@ const pages = {
   Links: () => import('./views/find/Links'),
   New: () => import('./views/new/New.vue'),
   Setting: () => import('./views/me/Setting'),
+  Avatar: () => import('./views/me/Avatar'),
   Login: () => import('./views/login/Login'),
   Register: () => import('./views/register/Register'),
   ResetPassword: () => import('./views/reset/ResetPassword'),
@@ -114,6 +115,11 @@ const router = new Router({
     path: '/setting',
     name: 'Setting',
     component: pages.Setting
+  },
+  {
+    path: '/avatar',
+    name: 'Avatar',
+    component: pages.Avatar
   },
   {
     path: '/login',

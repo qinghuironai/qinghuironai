@@ -46,11 +46,12 @@ function getTranslations(param) {
 }
 
 // 图片上传
-function uploadImg(data, isTemp = true) {
+function uploadImg(data, params) {
   return axios({
-    url: `https://pic.pixivic.com/upload?isTemp=${isTemp}`,
+    url: `https://pic.pixivic.com/upload?isTemp=${!params}`,
     method: 'post',
-    data
+    data,
+    params
   });
 }
 
