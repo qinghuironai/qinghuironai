@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import { mapGetters } from 'vuex';
 import VirtualCollection from '@/components/collect/VirtualCollection';
 import throttle from 'lodash/throttle';
@@ -168,6 +169,13 @@ export default {
         tmp['style'] = {
           backgroundColor: randomColor()
         };
+        tmp['itemHeight'] = parseInt(per * this.width);
+        tmp['avatarSrc'] = IMG_PREFIX + tmp.artistPreView.avatar;
+        tmp['createDate'] = dayjs(tmp.createDate).format('YYYY-MM-DD');
+        tmp['imgs'] = tmp.imageUrls.reduce((pre, cur) => {
+          return pre.concat(`${IMG_PREFIX + cur.original}`);
+        }, []);
+        tmp['originalSrc'] = IMG_PREFIX + tmp.imageUrls[0].original.replace('_webp', '');
       }
     }
   }

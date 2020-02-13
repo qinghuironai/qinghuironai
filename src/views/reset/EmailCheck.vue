@@ -14,7 +14,12 @@ export default {
       delete query.VNK;
       this.$api.user.setEmail(query)
         .then(res => {
-          console.log(res);
+          if (res.status === 200) {
+            alert(res.data.message);
+            window.location.href = 'https://m.pixivic.com';
+          } else {
+            alert(res.data.message);
+          }
         });
     }
   }

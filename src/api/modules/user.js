@@ -133,7 +133,7 @@ function vertifyEmail(email) {
 // 用户设置邮箱(会返回新的token)
 function setEmail(params) {
   return axios({
-    url: `${params.userId}/email`,
+    url: `/users/${params.userId}/email`,
     method: 'put',
     params
   });

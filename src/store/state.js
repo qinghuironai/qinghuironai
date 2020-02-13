@@ -3,7 +3,8 @@ const state = {
   cachedViews: [],
   showTab: true,
   likeStatus: null, // 点赞画作状态
-  followStatus: null // 画师关注状态
+  followStatus: null, // 画师关注状态
+  detail: null
 };
 
 export default state;

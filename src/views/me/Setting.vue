@@ -67,7 +67,6 @@ export default {
   mounted() {
     this.$api.user.getEmailIsCheck(this.user.id)
       .then(res => {
-        console.log(res);
         if (!res.data.data) {
           this.lists.email.show = '未验证';
         } else {
@@ -84,13 +83,11 @@ export default {
   },
   methods: {
     clickItem(val) {
-      console.log(val);
       switch (val) {
         case 'email':
           if (this.lists.email.show === '未验证') {
             this.$api.user.vertifyEmail(this.user.email)
               .then(res => {
-                console.log(res);
                 alert(res.data.message);
               });
           }

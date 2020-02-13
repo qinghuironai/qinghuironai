@@ -49,6 +49,7 @@ export default {
       }
     },
     goDetail() {
+      this.$store.dispatch('setDetail', this.column);
       this.$router.push(`/detail/${this.column.id}`);
     }
   }
