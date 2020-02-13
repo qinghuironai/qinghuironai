@@ -49,6 +49,7 @@ export default {
       }
     },
     goDetail() {
+      this.$store.dispatch('setDetail', this.column);
       this.$router.push(`/detail/${this.column.id}`);
     }
   }
@@ -56,7 +57,7 @@ export default {
 </script>
 
 <style lang="stylus" scope>
-@import '~@/style/global.styl'
+@import '~@/assets/style/global.styl'
 .item
   box-sizing border-box
   position absolute

@@ -6,7 +6,7 @@
           <div class="detail-img">
             <img
               :height="illustDetail.itemHeight"
-              :src="illustDetail.src"
+              :src="illustDetail.originalSrc"
               :style="imgStyle"
               @load="opacity = 1"
               @click="seePreview"
@@ -135,7 +135,6 @@
         </v-btn>
       </div>
     </div>
-    <Loading v-else />
     <Comment ref="comment" :pid="pid" />
   </div>
 </template>
@@ -145,7 +144,6 @@ import { mapGetters } from 'vuex';
 import dayjs from 'dayjs';
 import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
-import Loading from '@/components/loading/Loading';
 import Comment from './components/Comment';
 import { IMG_PREFIX } from '@/util/constants';
 
@@ -154,7 +152,6 @@ export default {
   components: {
     List,
     Like,
-    Loading,
     Comment
   },
   props: {
@@ -178,7 +175,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'likeStatus', 'followStatus']),
+    ...mapGetters(['user', 'likeStatus', 'followStatus', 'detail']),
     imgStyle() {
       return {
         filter: this.illustDetail.setu ? `blur(25px)` : '',
@@ -201,7 +198,11 @@ export default {
     }
   },
   mounted() {
-    this.getIllustDetail();
+    if (this.detail) {
+      this.illustDetail = JSON.parse(JSON.stringify(this.detail));
+    } else {
+      this.getIllustDetail();
+    }
   },
   methods: {
     getIllustDetail() {
@@ -212,7 +213,7 @@ export default {
           this.illustDetail = {
             ...data,
             itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
-            src: IMG_PREFIX + data.imageUrls[0].original.replace('_webp', ''),
+            originalSrc: IMG_PREFIX + data.imageUrls[0].original.replace('_webp', ''),
             avatarSrc: IMG_PREFIX + data.artistPreView.avatar,
             createDate: dayjs(data.createDate).format('YYYY-MM-DD'),
             setu: !!((data.xrestrict === 1 || data.sanityLevel > 5)) && this.user.username !== 'pixivic',
@@ -327,7 +328,7 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~@/style/color.styl'
+@import '~@/assets/style/color.styl'
 .detail
   background-size contain
   width 100%

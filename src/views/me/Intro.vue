@@ -1,7 +1,7 @@
 <template>
   <div class="intro">
     <div class="infos">
-      <img src="../../../assets/images/girl.gif"><h2>用前の须知</h2>
+      <img src="../../assets/images/girl.gif"><h2>用前の须知</h2>
       <p>以下是一些值得仔细阅览的使用说明</p>
     </div>
     <div class="version">
@@ -15,20 +15,8 @@
       <h4>感谢</h4>
       <ul>
         <li>Pixivic的开发与运维离不开</li> <br>
-        <a href="https://www.oysterqaq.com/">
-          <img src="../../../assets/images/OysterQAQ.jpg" alt="">
-        </a>
-        <a href="https://github.com/kimliy">
-          <img src="../../../assets/images/kimliy.jpg" alt="">
-        </a>
-        <a href="https://www.ariussss.com/">
-          <img src="../../../assets/images/Arius.jpg" alt="">
-        </a>
-        <a href="https://dongzheyu.github.io/">
-          <img src="../../../assets/images/tiger.jpg" alt="">
-        </a>
-        <a href="https://github.com/goblinM">
-          <img src="../../../assets/images/mmx.jpg" alt="">
+        <a v-for="(item, index) in people" :key="index" :href="item.href">
+          <img :src="item.src" alt="">
         </a>
       </ul>
       <h4>新增功能</h4>
@@ -61,7 +49,17 @@
 
 <script>
 export default {
-
+  data() {
+    return {
+      people: [
+        { href: 'https://www.oysterqaq.com/', src: require('../../assets/images/OysterQAQ.jpg') },
+        { href: 'https://github.com/kimliy', src: require('../../assets/images/kimliy.jpg') },
+        { href: 'https://www.ariussss.com/', src: require('../../assets/images/Arius.jpg') },
+        { href: 'https://dongzheyu.github.io/', src: require('../../assets/images/tiger.jpg') },
+        { href: 'https://github.com/goblinM', src: require('../../assets/images/mmx.jpg') }
+      ]
+    };
+  }
 };
 </script>
 

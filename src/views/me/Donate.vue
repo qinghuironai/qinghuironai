@@ -1,15 +1,15 @@
 <template>
   <div class="donate">
     <div class="infos">
-      <img src="../../../assets/images/girl.gif"><h2>捐助の墙</h2>
+      <img src="../../assets/images/girl.gif"><h2>捐助の墙</h2>
       <p>捐助二维码与捐助记录</p>
     </div>
     <div class="version">
       <h4>捐助渠道</h4>
       <ul>
         <li> 维护不易，且行且珍惜，捐助的朋友们烦请留下昵称（支付宝 & 微信）</li>
-        <img src="../../../assets/images/wechat.jpg" alt="">
-        <img src="../../../assets/images/alipay.jpg" alt="">
+        <img src="../../assets/images/wechat.jpg" alt="">
+        <img src="../../assets/images/alipay.jpg" alt="">
       </ul>
       <h4>贡献者List</h4>
       <ul>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import donate from '../../../static/resources/donate.json';
+import donate from '../../static/resources/donate.json';
 
 export default {
   data() {

@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import { mapGetters } from 'vuex';
 import VirtualCollection from '@/components/collect/VirtualCollection';
 import throttle from 'lodash/throttle';
@@ -133,7 +134,12 @@ export default {
     waterFall() {
       this.width = getClient().width;
       this.height = getClient().height;
-      this.column = Math.ceil(this.width / columnWidth);
+      const column = parseInt(localStorage.getItem('waterfull-column'));
+      if (column) {
+        this.column = column;
+      } else {
+        this.column = Math.ceil(this.width / columnWidth);
+      }
       this.columnHeight = new Array(this.column).fill(0);
       this.handleList(this.list);
     },
@@ -163,6 +169,13 @@ export default {
         tmp['style'] = {
           backgroundColor: randomColor()
         };
+        tmp['itemHeight'] = parseInt(per * this.width);
+        tmp['avatarSrc'] = IMG_PREFIX + tmp.artistPreView.avatar;
+        tmp['createDate'] = dayjs(tmp.createDate).format('YYYY-MM-DD');
+        tmp['imgs'] = tmp.imageUrls.reduce((pre, cur) => {
+          return pre.concat(`${IMG_PREFIX + cur.original}`);
+        }, []);
+        tmp['originalSrc'] = IMG_PREFIX + tmp.imageUrls[0].original.replace('_webp', '');
       }
     }
   }

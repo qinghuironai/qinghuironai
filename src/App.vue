@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="stylus" scope>
-@import '~@/style/color.styl'
+@import '~@/assets/style/color.styl'
 .tabs
   width 70%
   max-width 300px

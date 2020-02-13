@@ -206,7 +206,7 @@ export default {
 </script>
 
 <style lang="stylus" scope>
-@import '~@/style/color.styl'
+@import '~@/assets/style/color.styl'
 .artist-container
   width 100%
   height 100%
