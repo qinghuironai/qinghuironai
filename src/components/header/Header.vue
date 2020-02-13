@@ -1,9 +1,6 @@
 <template>
   <div class="header">
-    <div
-      class="header-container"
-      :style="{background: `${background}`, top: show ? 0 : '-50px'}"
-    >
+    <div class="header-container" :style="{background}">
       <svg font-size="20" class="icon" aria-hidden="true" @click="handleClick">
         <use xlink:href="#picfanhui1" />
       </svg>
@@ -22,10 +19,6 @@ export default {
     background: {
       type: String,
       default: 'rgba(255, 255, 255, 0.95)'
-    },
-    show: {
-      type: Boolean,
-      default: true
     }
   },
   methods: {
@@ -39,8 +32,7 @@ export default {
 
 <style lang="stylus" scope>
 .header
-  position sticky
-  top 0
+  position relative
   z-index 102
   .header-container
     position relative
