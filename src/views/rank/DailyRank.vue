@@ -1,6 +1,10 @@
 <template>
   <div class="rank">
     <List
+      v-touch="{
+        left: () => swipe('Left'),
+        right: () => swipe('Right')
+      }"
       :list="pictureList"
       :identifier="identifier"
       @infinite="infinite"
@@ -26,12 +30,13 @@ export default {
       page: 1,
       mode: null,
       date: null,
+      maxDate: null,
       pictureList: [],
       identifier: +new Date()
     };
   },
   mounted() {
-    this.date = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD');
+    this.date = this.maxDate = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD');
     this.mode = 'day';
   },
   methods: {
@@ -63,6 +68,16 @@ export default {
     selectMode(selectedVal) {
       this.mode = selectedVal;
       this.resetData();
+    },
+    swipe(direction) {
+      if (direction === 'Left') {
+        if (this.date === this.maxDate) return;
+        this.date = dayjs(this.date).add(1, 'day').format('YYYY-MM-DD');
+      } else if (direction === 'Right') {
+        this.date = dayjs(this.date).subtract(1, 'day').format('YYYY-MM-DD');
+      }
+      this.resetData();
+      this.$store.dispatch('changeTab', true);
     }
   }
 };
