@@ -8,7 +8,9 @@
         :href="item.value"
         class="items"
       >
-        <img :src="item.img" alt="">
+        <svg font-size="40" class="icon" aria-hidden="true">
+          <use :xlink:href="item.icon" />
+        </svg>
         <span>{{ item.text }}</span>
       </a>
     </div>
@@ -22,8 +24,9 @@ export default {
   data() {
     return {
       list: [
-        { id: 1, text: 'spotlight', value: '/spotlight', img: require('../../assets/images/spotlight.svg') },
-        { id: 2, text: '论坛', value: 'https://discuss.pixivic.com/', img: require('../../assets/images/论坛.svg') }
+        { id: 1, text: 'spotlight', value: '/spotlight', icon: '#picxiangce' },
+        { id: 2, text: '论坛', value: 'https://discuss.pixivic.com/', icon: '#picluntan1' },
+        { id: 3, text: '关于我们', value: '/links', icon: '#picyonghuxuzhi-' }
       ]
     };
   }
@@ -52,11 +55,10 @@ export default {
       display flex
       flex-direction column
       align-items center
-      img
-        width 50px
-        height 50px
+      justify-content center
       span
         text-align center
         color #000
         display inline-block
+        margin-top 2px
 </style>

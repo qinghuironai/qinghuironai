@@ -44,6 +44,9 @@
         <li> <a href="https://m.pixivic.com">点击此行返回主页，觉得站点好用的话请收藏噢(`・ω・´) </a></li>
       </ul>
     </div>
+    <div class="reserved">
+      ©2019-2020 m.pixivic.com All Right Reserved. 桂ICP备17012945号-3
+    </div>
   </div>
 </template>
 
@@ -115,5 +118,10 @@ export default {
       position absolute
       left 7px
       top 14px
+.reserved
+  font-size 14px
+  color #8c8c8c
+  margin-top 10px
+  text-align center
 </style>
 
