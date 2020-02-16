@@ -9,10 +9,10 @@ import './assets/style/index.styl';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css';
-import Navigation from 'vue-navigation';
+import VuePageStack from 'vue-page-stack';
 
 Vue.use(Vuetify);
-Vue.use(Navigation, { router, store });
+Vue.use(VuePageStack, { router, keyName: 'VNK' });
 
 // import VConsole from 'vconsole';
 // new VConsole();

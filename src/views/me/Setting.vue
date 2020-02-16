@@ -44,6 +44,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import Header from '@/components/header/Header';
+import { QQ_LINK } from '@/util/constants';
 
 export default {
   name: 'Setting',
@@ -57,6 +58,7 @@ export default {
       columns: ['自动', 1, 2, 3, 4],
       lists: {
         email: { text: '邮箱验证', val: 'email', show: '未验证' },
+        qq: { text: '绑定QQ', val: 'qq', show: '未绑定' },
         waterfull: { text: '瀑布流列数', val: 'waterfull', show: '自动' },
         avatar: { text: '更新头像', val: 'avatar' }
       }
@@ -72,6 +74,14 @@ export default {
           this.lists.email.show = '未验证';
         } else {
           this.lists.email.show = '已验证';
+        }
+      });
+    this.$api.user.checkQQ(this.user.id)
+      .then(res => {
+        if (!res.data.data) {
+          this.lists.qq.show = '未绑定';
+        } else {
+          this.lists.qq.show = '已绑定';
         }
       });
 
@@ -98,6 +108,11 @@ export default {
           break;
         case 'avatar':
           this.$router.push(`/${val}`);
+          break;
+        case 'qq':
+          if (this.lists.qq.show === '未绑定') {
+            window.location.href = QQ_LINK;
+          }
           break;
       }
     },

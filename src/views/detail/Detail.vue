@@ -247,7 +247,7 @@ export default {
           window.open(`https://www.pixiv.net/artworks/${this.pid}`);
           break;
         case 'origin':
-          window.open(this.illustDetail.src);
+          window.open(this.illustDetail.originalSrc);
           break;
       }
     },

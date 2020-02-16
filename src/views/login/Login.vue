@@ -51,6 +51,11 @@
           </v-col>
         </v-row>
         <div class="forget" @click="dialog = true">忘记密码?</div>
+        <div class="qqlogin">
+          <svg font-size="30" class="icon" aria-hidden="true" @click="loginByQQ">
+            <use xlink:href="#picQQ" />
+          </svg>
+        </div>
       </v-container>
     </v-form>
     <v-overlay :value="loading">
@@ -82,6 +87,7 @@
 </template>
 
 <script>
+import { QQ_LINK } from '@/util/constants';
 
 export default {
   name: 'Login',
@@ -169,6 +175,9 @@ export default {
             }
           });
       }
+    },
+    loginByQQ() {
+      window.location.href = QQ_LINK;
     }
   }
 };
@@ -198,4 +207,7 @@ export default {
   .forget
     color #333
     text-align right
+  .qqlogin
+    margin-top 10px
+    text-align center
 </style>

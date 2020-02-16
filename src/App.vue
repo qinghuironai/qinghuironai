@@ -1,11 +1,8 @@
 <template>
   <v-app id="app">
-    <!-- <keep-alive :include="cachedViews">
+    <vue-page-stack>
       <router-view :key="key" />
-    </keep-alive> -->
-    <navigation>
-      <router-view />
-    </navigation>
+    </vue-page-stack>
     <div :class="['tabs', {'show': showTab}]">
       <div
         v-for="item in tabs"
@@ -61,13 +58,10 @@ export default {
   watch: {
     $route(val) {
       this.active = val.path;
-      this.$store.dispatch('addCachedView', val);
     }
   },
   methods: {
     clickTab(val) {
-      // console.log(this.$vnode.componentInstance);
-      // this.$navigation.on('reset', () => {});
       this.$router.push(val);
     }
   }
