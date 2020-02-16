@@ -139,6 +139,32 @@ function setEmail(params) {
   });
 }
 
+// qq登录
+function qqLogin(params) {
+  return axios({
+    url: `/users/tokenWithQQ`,
+    method: 'get',
+    params
+  });
+}
+
+// 用户绑定qq
+function qqAccess(params) {
+  return axios({
+    url: `/users/${params.userId}/qqAccessToken`,
+    method: 'put',
+    params: { qqAccessToken: params.qqAccessToken }
+  });
+}
+
+// 检查是否绑定qq
+function checkQQ(userId) {
+  return axios({
+    url: `/users/${userId}/isBindQQ`,
+    method: 'get'
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -155,5 +181,8 @@ export {
   getNewIllust,
   getEmailIsCheck,
   vertifyEmail,
-  setEmail
+  setEmail,
+  qqLogin,
+  qqAccess,
+  checkQQ
 };

@@ -20,16 +20,17 @@ const pages = {
   Setting: () => import('./views/me/Setting'),
   Avatar: () => import('./views/me/Avatar'),
   Login: () => import('./views/login/Login'),
+  QQauth: () => import('./views/login/qqauth'),
   Register: () => import('./views/register/Register'),
   ResetPassword: () => import('./views/reset/ResetPassword'),
   EmailCheck: () => import('./views/reset/EmailCheck'),
   NotFound: () => import('./views/not-found/NotFound')
 };
 
-const originalPush = Router.prototype.push;
-Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err);
-};
+// const originalPush = Router.prototype.push;
+// Router.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err);
+// };
 
 const router = new Router({
   mode: 'history',
@@ -124,18 +125,17 @@ const router = new Router({
   {
     path: '/login',
     name: 'Login',
-    component: pages.Login,
-    meta: {
-      noCache: true
-    }
+    component: pages.Login
+  },
+  {
+    path: '/qqauth',
+    name: 'QQauth',
+    component: pages.QQauth
   },
   {
     path: '/register',
     name: 'Register',
-    component: pages.Register,
-    meta: {
-      noCache: true
-    }
+    component: pages.Register
   },
   {
     path: '/resetPassword',
@@ -150,10 +150,7 @@ const router = new Router({
   {
     path: '*',
     name: 'NotFound',
-    component: pages.NotFound,
-    meta: {
-      noCache: false
-    }
+    component: pages.NotFound
   }
   ]
 });
