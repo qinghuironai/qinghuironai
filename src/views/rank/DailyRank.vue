@@ -38,6 +38,10 @@ export default {
   mounted() {
     this.date = this.maxDate = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD');
     this.mode = 'day';
+    const flag = JSON.parse(localStorage.getItem('pixivic_alert'));
+    if (flag) {
+      alert('图片域名更新，如果有使用图片加速的同学请前往论坛获取最新规则，有问题请qq群: 726504516，点击确认关闭');
+    }
   },
   methods: {
     infinite($state) {
