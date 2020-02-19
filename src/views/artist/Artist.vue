@@ -81,7 +81,7 @@
 import { mapGetters } from 'vuex';
 import List from '@/components/virtual-list/VirtualList';
 import Loading from '@/components/loading/Loading';
-import { IMG_PREFIX } from '@/util/constants';
+import { replaceBigImg } from '@/util';
 
 export default {
   name: 'Artist',
@@ -128,7 +128,7 @@ export default {
           const { data: { data }} = res;
           this.artistDetail = {
             ...data,
-            avatarSrc: IMG_PREFIX + data.avatar
+            avatarSrc: replaceBigImg(data.avatar)
           };
         });
     },
