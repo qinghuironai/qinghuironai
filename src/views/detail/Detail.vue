@@ -145,7 +145,7 @@ import dayjs from 'dayjs';
 import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
 import Comment from './components/Comment';
-import { IMG_PREFIX } from '@/util/constants';
+import { replaceBigImg } from '@/util';
 
 export default {
   name: 'Detail',
@@ -213,12 +213,12 @@ export default {
           this.illustDetail = {
             ...data,
             itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
-            originalSrc: IMG_PREFIX + data.imageUrls[0].original.replace('_webp', ''),
-            avatarSrc: IMG_PREFIX + data.artistPreView.avatar,
+            originalSrc: replaceBigImg(data.imageUrls[0].original),
+            avatarSrc: replaceBigImg(data.artistPreView.avatar),
             createDate: dayjs(data.createDate).format('YYYY-MM-DD'),
             setu: !!((data.xrestrict === 1 || data.sanityLevel > 5)) && this.user.username !== 'pixivic',
             imgs: data.imageUrls.reduce((pre, cur) => {
-              return pre.concat(`${IMG_PREFIX + cur.original}`);
+              return pre.concat(replaceBigImg(cur.original));
             }, [])
           };
         });

@@ -78,3 +78,11 @@ export function debounceAsyncValidator(validator, delay) {
     return validator.call(this, value, debounce);
   };
 }
+
+export function replaceBigImg(url) {
+  return url.replace('_webp', '').replace('i.pximg.net', 'original.img.cheerfun.dev');
+}
+
+export function replaceSmallImg(url) {
+  return url.replace('i.pximg.net', 'img.cheerfun.dev:233');
+}
