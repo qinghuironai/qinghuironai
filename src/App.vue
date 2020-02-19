@@ -60,13 +60,6 @@ export default {
       this.active = val.path;
     }
   },
-  mounted() {
-    localStorage.setItem('pixivic_alert', true);
-    const date = new Date().getDate();
-    if (date === 23) {
-      localStorage.removeItem('pixivic_alert');
-    }
-  },
   methods: {
     clickTab(val) {
       this.$router.push(val);
