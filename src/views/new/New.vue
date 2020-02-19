@@ -5,10 +5,7 @@
       :identifier="identifier"
       @infinite="infinite"
     >
-      <v-tabs
-        centered
-        grow
-      >
+      <v-tabs centered grow>
         <v-tab @click="getList('illust')">
           插画
         </v-tab>
@@ -38,7 +35,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'showTab'])
   },
   methods: {
     infinite($state) {
@@ -49,10 +46,11 @@ export default {
           userId: this.user.id
         })
         .then(res => {
-          if (!res.data.data) {
+          const { data: { data }} = res;
+          if (!data) {
             $state.complete();
           } else {
-            this.pictureList = this.pictureList.concat(res.data.data);
+            this.pictureList = this.pictureList.concat(data);
             $state.loaded();
           }
         });

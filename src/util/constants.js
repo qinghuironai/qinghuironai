@@ -58,3 +58,4 @@ export const COLOR_LIST = [
   '#690950'
 ];
 
+export const QQ_LINK = 'https://graph.qq.com/oauth2.0/authorize?response_type=token&client_id=101727536&redirect_uri=https://pixivic.com/qqauth';

@@ -1,10 +1,18 @@
 <template>
   <div class="login">
-    <v-btn color="primary" absolute top right @click="$router.push('/register')">注册</v-btn>
+    <v-btn
+      color="primary"
+      absolute
+      top
+      right
+      @click="$router.push('/register')"
+    >
+      注册
+    </v-btn>
     <v-form v-model="valid">
       <v-container>
-        <v-row>
-          <v-col cols="12" md="4">
+        <v-row class="row">
+          <v-col cols="12">
             <v-text-field
               v-model="username"
               :rules="nameRules"
@@ -12,7 +20,7 @@
               required
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12">
             <v-text-field
               v-model="password"
               :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -23,7 +31,7 @@
               @click:append="show = !show"
             />
           </v-col>
-          <v-col cols="12" md="4" class="code">
+          <v-col cols="12" class="code">
             <v-text-field
               v-model="value"
               label="验证码"
@@ -32,7 +40,7 @@
             />
             <img :src="`data:image/bmp;base64,${imageBase64}`" @click.stop="getCode">
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12">
             <v-btn
               color="primary"
               width="100%"
@@ -42,15 +50,44 @@
             </v-btn>
           </v-col>
         </v-row>
+        <div class="forget" @click="dialog = true">忘记密码?</div>
+        <div class="qqlogin">
+          <svg font-size="30" class="icon" aria-hidden="true" @click="loginByQQ">
+            <use xlink:href="#picQQ" />
+          </svg>
+        </div>
       </v-container>
     </v-form>
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="64" />
     </v-overlay>
+    <v-dialog v-model="dialog" width="100%">
+      <v-card>
+        <v-card-title>
+          <span class="headline">验证你的邮箱</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form v-model="valid2">
+            <v-text-field
+              v-model="email"
+              placeholder="输入你的邮箱"
+              :rules="emailRules"
+              required
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="blue darken-1" text @click="dialog = false">取消</v-btn>
+          <v-btn color="blue darken-1" text @click="forget">确认</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import { QQ_LINK } from '@/util/constants';
 
 export default {
   name: 'Login',
@@ -64,6 +101,9 @@ export default {
       vid: '',
       value: '',
       loading: false,
+      dialog: false,
+      email: '',
+      valid2: false,
       nameRules: [
         v => !!v || '请填写用户名',
         v => v.length >= 4 || '用户名或邮箱4位以上'
@@ -73,6 +113,10 @@ export default {
       ],
       codeRules: [
         v => !!v || '请填写验证码'
+      ],
+      emailRules: [
+        v => !!v || '请输入邮箱',
+        v => /.+@.+/.test(v) || '请输入合法邮箱'
       ]
     };
   },
@@ -117,6 +161,23 @@ export default {
             this.getCode();
           });
       }
+    },
+    forget() {
+      if (this.valid2) {
+        this.$api.user
+          .resetPasswordEmail(this.email)
+          .then(res => {
+            if (res.status === 200) {
+              alert('请注意查收邮箱来重置你的密码');
+              this.dialog = false;
+            } else {
+              alert(res.data.message);
+            }
+          });
+      }
+    },
+    loginByQQ() {
+      window.location.href = QQ_LINK;
     }
   }
 };
@@ -129,16 +190,24 @@ export default {
   min-height 100vh
   overflow hidden
   padding 50px
+  box-sizing border-box
   background-color #eee
-  background url('../../assets/images/bg.jpg') no-repeat
+  //background url('../../assets/images/bg.jpg') no-repeat
   background-size cover
   z-index 101
-  .code
-    position relative
-    img
-      position absolute
-      top 20px
-      right 10px
-      width 60px
-      height 30px
+  .row
+    .code
+      position relative
+      img
+        position absolute
+        top 20px
+        right 10px
+        width 60px
+        height 30px
+  .forget
+    color #333
+    text-align right
+  .qqlogin
+    margin-top 10px
+    text-align center
 </style>

@@ -1,12 +1,11 @@
 <template>
-  <div
-    class="header"
-    :style="{background: `${background}`, opacity: show ? 1 : 0}"
-  >
-    <svg font-size="20" class="icon" aria-hidden="true" @click="handleClick">
-      <use xlink:href="#picfanhui1" />
-    </svg>
-    <h1>{{ title }}</h1>
+  <div class="header">
+    <div class="header-container" :style="{background}">
+      <svg font-size="20" class="icon" aria-hidden="true" @click="handleClick">
+        <use xlink:href="#picfanhui1" />
+      </svg>
+      <h1>{{ title }}</h1>
+    </div>
   </div>
 </template>
 
@@ -19,11 +18,7 @@ export default {
     },
     background: {
       type: String,
-      default: '#0096fa'
-    },
-    show: {
-      type: Boolean,
-      default: true
+      default: 'rgba(255, 255, 255, 0.95)'
     }
   },
   methods: {
@@ -37,26 +32,28 @@ export default {
 
 <style lang="stylus" scope>
 .header
-  position fixed
-  padding 5px 10px
-  padding-top 0
-  height 40px
-  width 100%
-  z-index 100
-  display flex
-  line-height 40px
-  box-sizing border-box
-  color #fff
-  opacity 1
-  transition opacity .3s ease-in
-  >svg
-    position absolute
-    left 5px
-    top 10px
-    font-size 20px
-    width 20px
-  >h1
-    font-size 18px
-    font-weight 700
-    margin 0 auto
+  position relative
+  z-index 102
+  .header-container
+    position relative
+    top 0
+    padding 5px 10px
+    height 50px
+    width 100%
+    display flex
+    line-height 40px
+    box-sizing border-box
+    color #333
+    font-size 16px
+    transition top .2s
+    >svg
+      position absolute
+      left 5px
+      top 15px
+      font-size 20px
+      width 20px
+    >h1
+      font-size 18px
+      font-weight 700
+      margin 0 auto
 </style>

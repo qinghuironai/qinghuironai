@@ -1,7 +1,7 @@
 <template>
   <div class="intro">
     <div class="infos">
-      <img src="../../../assets/images/girl.gif"><h2>用前の须知</h2>
+      <img src="../../assets/images/girl.gif"><h2>用前の须知</h2>
       <p>以下是一些值得仔细阅览的使用说明</p>
     </div>
     <div class="version">
@@ -15,22 +15,13 @@
       <h4>感谢</h4>
       <ul>
         <li>Pixivic的开发与运维离不开</li> <br>
-        <a href="https://www.oysterqaq.com/">
-          <img src="../../../assets/images/OysterQAQ.jpg" alt="">
-        </a>
-        <a href="https://kimliy.github.io/">
-          <img src="../../../assets/images/kimliy.jpg" alt="">
-        </a>
-        <a href="https://www.ariussss.com/">
-          <img src="../../../assets/images/Arius.jpg" alt="">
-        </a>
-        <a href="https://dongzheyu.github.io/">
-          <img src="../../../assets/images/tiger.jpg" alt="">
+        <a v-for="(item, index) in people" :key="index" :href="item.href">
+          <img :src="item.src" alt="">
         </a>
       </ul>
       <h4>新增功能</h4>
       <ul>
-        <li>用户系统 画作收藏 画作评论 画师关注 搜索条件 画师新作 spotlight等 </li>
+        <li>用户系统 画作收藏 画作评论 画师关注 搜索条件 以图搜图 画师新作 spotlight等 </li>
       </ul>
       <h4>浏览器的使用</h4>
       <ul>
@@ -53,12 +44,25 @@
         <li> <a href="https://m.pixivic.com">点击此行返回主页，觉得站点好用的话请收藏噢(`・ω・´) </a></li>
       </ul>
     </div>
+    <div class="reserved">
+      ©2019-2020 m.pixivic.com All Right Reserved. 桂ICP备17012945号-3
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-
+  data() {
+    return {
+      people: [
+        { href: 'https://www.oysterqaq.com/', src: require('../../assets/images/OysterQAQ.jpg') },
+        { href: 'https://github.com/kimliy', src: require('../../assets/images/kimliy.jpg') },
+        { href: 'https://www.ariussss.com/', src: require('../../assets/images/Arius.jpg') },
+        { href: 'https://dongzheyu.github.io/', src: require('../../assets/images/tiger.jpg') },
+        { href: 'https://github.com/goblinM', src: require('../../assets/images/mmx.jpg') }
+      ]
+    };
+  }
 };
 </script>
 
@@ -114,5 +118,10 @@ export default {
       position absolute
       left 7px
       top 14px
+.reserved
+  font-size 14px
+  color #8c8c8c
+  margin-top 10px
+  text-align center
 </style>
 

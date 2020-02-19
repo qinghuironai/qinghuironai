@@ -1,25 +1,21 @@
 <template>
   <v-app id="app">
-    <!-- <keep-alive :include="cachedViews">
+    <vue-page-stack>
       <router-view :key="key" />
-    </keep-alive> -->
-    <navigation>
-      <router-view />
-    </navigation>
+    </vue-page-stack>
     <div :class="['tabs', {'show': showTab}]">
-      <router-link
+      <div
         v-for="item in tabs"
         :key="item.value"
-        :to="item.value"
         class="tabs-item"
-        @click.native="clickTab"
+        @click.stop="clickTab(item.value)"
       >
         <img
           :src="active === item.value ? item.activeSrc : item.src"
           :style="{transform: active === item.value ? 'scale(1.1)' : ''}"
           alt=""
         >
-      </router-link>
+      </div>
     </div>
   </v-app>
 </template>
@@ -62,20 +58,18 @@ export default {
   watch: {
     $route(val) {
       this.active = val.path;
-      this.$store.dispatch('addCachedView', val);
     }
   },
   methods: {
-    clickTab() {
-      // console.log(this.$vnode.componentInstance);
-      // this.$navigation.on('reset', () => {});
+    clickTab(val) {
+      this.$router.push(val);
     }
   }
 };
 </script>
 
 <style lang="stylus" scope>
-@import '~@/style/color.styl'
+@import '~@/assets/style/color.styl'
 .tabs
   width 70%
   max-width 300px

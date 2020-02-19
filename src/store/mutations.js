@@ -28,6 +28,9 @@ const mutations = {
   },
   [types.SET_FOLLOW_STATUS](state, data) {
     state.followStatus = data;
+  },
+  [types.SET_DETAIL](state, data) {
+    state.detail = data;
   }
 };
 

@@ -10,22 +10,27 @@ const pages = {
   Artist: () => import('./views/artist/Artist'),
   Search: () => import('./views/search/Search'),
   Find: () => import('./views/find/Find'),
-  SpotLight: () => import('./views/find/SoptLight.vue'),
+  SpotLight: () => import('./views/find/SoptLight'),
   Spot: () => import('./views/find/Spot.vue'),
   Me: () => import('./views/me/Me'),
-  Collect: () => import('./views/me/components/Collect'),
-  ArtistCollect: () => import('./views/me/components/ArtistCollect.vue'),
-  Links: () => import('./views/me/components/Links'),
+  Collect: () => import('./views/me/Collect'),
+  ArtistCollect: () => import('./views/me/ArtistCollect'),
+  Links: () => import('./views/find/Links'),
   New: () => import('./views/new/New.vue'),
+  Setting: () => import('./views/me/Setting'),
+  Avatar: () => import('./views/me/Avatar'),
   Login: () => import('./views/login/Login'),
+  QQauth: () => import('./views/login/qqauth'),
   Register: () => import('./views/register/Register'),
+  ResetPassword: () => import('./views/reset/ResetPassword'),
+  EmailCheck: () => import('./views/reset/EmailCheck'),
   NotFound: () => import('./views/not-found/NotFound')
 };
 
-const originalPush = Router.prototype.push;
-Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err);
-};
+// const originalPush = Router.prototype.push;
+// Router.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err);
+// };
 
 const router = new Router({
   mode: 'history',
@@ -108,28 +113,44 @@ const router = new Router({
     component: pages.New
   },
   {
+    path: '/setting',
+    name: 'Setting',
+    component: pages.Setting
+  },
+  {
+    path: '/avatar',
+    name: 'Avatar',
+    component: pages.Avatar
+  },
+  {
     path: '/login',
     name: 'Login',
-    component: pages.Login,
-    meta: {
-      noCache: true
-    }
+    component: pages.Login
+  },
+  {
+    path: '/qqauth',
+    name: 'QQauth',
+    component: pages.QQauth
   },
   {
     path: '/register',
     name: 'Register',
-    component: pages.Register,
-    meta: {
-      noCache: true
-    }
+    component: pages.Register
+  },
+  {
+    path: '/resetPassword',
+    name: 'ResetPassword',
+    component: pages.ResetPassword
+  },
+  {
+    path: '/emailCheck',
+    name: 'EmailCheck',
+    component: pages.EmailCheck
   },
   {
     path: '*',
     name: 'NotFound',
-    component: pages.NotFound,
-    meta: {
-      noCache: false
-    }
+    component: pages.NotFound
   }
   ]
 });

@@ -4,7 +4,6 @@
     ref="scroll"
     class="artist-collect"
   >
-    <Header title="我的关注" />
     <v-list
       v-scroll:#scroll-target="onScroll"
       subheader
@@ -27,7 +26,15 @@
           {{ item.isFollowed ? '关注中' : '+关注' }}
         </v-btn>
       </v-list-item>
-      <infinite-loading @infinite="infinite" />
+      <infinite-loading @infinite="infinite">
+        <div slot="no-more" />
+        <div slot="no-results" style="marginTop: 50px;">
+          <svg font-size="160" class="icon" aria-hidden="true">
+            <use xlink:href="#pickongtai1" />
+          </svg>
+          <p style="color: #E3F2FA; font-size: 20px;">没有内容</p>
+        </div>
+      </infinite-loading>
     </v-list>
   </div>
 </template>
@@ -36,13 +43,11 @@
 import { mapGetters } from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import { IMG_PREFIX } from '@/util/constants';
-import Header from '@/components/header/Header';
 
 export default {
   name: 'ArtistCollect',
   components: {
-    InfiniteLoading,
-    Header
+    InfiniteLoading
   },
   data() {
     return {
@@ -80,7 +85,6 @@ export default {
             $state.complete();
           } else {
             for (const item of data) {
-              // item.avatar = IMG_PREFIX + item.avatar;
               const data = {
                 ...item,
                 avatar: IMG_PREFIX + item.avatar,
@@ -130,5 +134,5 @@ export default {
   overflow scroll
   background #fff
   .list
-    padding-top 40px
+    padding-bottom 40px
 </style>

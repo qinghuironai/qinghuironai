@@ -112,7 +112,7 @@ export default {
       showComment: false,
       value: '',
       commentList: [],
-      placeholder: '',
+      placeholder: '添加评论...',
       replyParam: {}
     };
   },

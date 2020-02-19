@@ -29,6 +29,7 @@ export default {
         .getSpotLightsIllust(this.id)
         .then(res => {
           this.pictureList = this.pictureList.concat(res.data.data) || [];
+          $state.loaded();
           $state.complete();
         });
     }

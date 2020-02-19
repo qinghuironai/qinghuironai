@@ -2,7 +2,6 @@
   <transition enter-active-class="animated zoomIn">
     <div class="artist-container">
       <div v-if="artistDetail" class="artists">
-        <Header title="画师详情" :show="showTab" />
         <List
           :list="pictureList"
           :identifier="identifier"
@@ -80,15 +79,13 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Header from '@/components/header/Header';
 import List from '@/components/virtual-list/VirtualList';
 import Loading from '@/components/loading/Loading';
-import { IMG_PREFIX } from '@/util/constants';
+import { replaceBigImg } from '@/util';
 
 export default {
   name: 'Artist',
   components: {
-    Header,
     List,
     Loading
   },
@@ -110,7 +107,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'followStatus', 'showTab'])
+    ...mapGetters(['user', 'followStatus'])
   },
   watch: {
     followStatus(val) {
@@ -128,9 +125,10 @@ export default {
       this.$api.detail
         .reqArtist(this.artistId)
         .then(res => {
+          const { data: { data }} = res;
           this.artistDetail = {
-            ...res.data.data,
-            avatarSrc: IMG_PREFIX + res.data.data.avatar
+            ...data,
+            avatarSrc: replaceBigImg(data.avatar)
           };
         });
     },
@@ -208,7 +206,7 @@ export default {
 </script>
 
 <style lang="stylus" scope>
-@import '~@/style/color.styl'
+@import '~@/assets/style/color.styl'
 .artist-container
   width 100%
   height 100%

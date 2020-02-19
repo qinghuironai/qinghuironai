@@ -1,5 +1,5 @@
 <template>
-  <div ref="list" class="list">
+  <div class="list">
     <VirtualCollection
       :cell-size-and-position-getter="cellSizeAndPositionGetter"
       :collection="list"
@@ -17,15 +17,14 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import { mapGetters } from 'vuex';
 import VirtualCollection from '@/components/collect/VirtualCollection';
 import throttle from 'lodash/throttle';
 import Item from './Item';
-import { IMG_PREFIX } from '@/util/constants';
-import { randomColor } from '@/util';
+import { randomColor, replaceBigImg, replaceSmallImg } from '@/util';
 import { getClient } from '@/util/dom';
 const columnWidth = 200; // 屏幕小于200则1列
-const HEAD_HEIGHT = 40;
 
 export default {
   components: {
@@ -47,10 +46,9 @@ export default {
   data() {
     return {
       scrollY: 0,
-      headerHeight: 0,
       columnHeight: [],
       column: 0,
-      width: getClient().width - 16,
+      width: getClient().width,
       height: getClient().height
     };
   },
@@ -87,11 +85,6 @@ export default {
   },
   mounted() {
     this.waterFall();
-    if (this.$slots.default) {
-      this.headerHeight = parseInt(this.$slots.default[0].elm.offsetHeight);
-    } else {
-      this.headerHeight = HEAD_HEIGHT;
-    }
     window.addEventListener('resize', throttle(this.waterFall));
   },
   destroyed() {
@@ -106,7 +99,7 @@ export default {
         width: item.width,
         height: item.height,
         x: item.x,
-        y: item.y + this.headerHeight
+        y: item.y
       };
     },
     handleLike(data) {
@@ -138,9 +131,14 @@ export default {
       }
     },
     waterFall() {
-      this.width = getClient().width - 16;
+      this.width = getClient().width;
       this.height = getClient().height;
-      this.column = Math.ceil(this.width / columnWidth);
+      const column = parseInt(localStorage.getItem('waterfull-column'));
+      if (column) {
+        this.column = column;
+      } else {
+        this.column = Math.ceil(this.width / columnWidth);
+      }
       this.columnHeight = new Array(this.column).fill(0);
       this.handleList(this.list);
     },
@@ -148,8 +146,8 @@ export default {
       for (let i = 0; i < list.length; i++) {
         const tmp = list[i];
         const per = tmp.height / tmp.width;
-        const width = Math.floor(this.width / this.column);
-        const height = Math.min(width * per, 400);
+        const width = Math.floor((this.width - 16) / this.column);
+        const height = Math.max(Math.min(width * per, 400), 100);
         // 找出最小列
         let minHeight = this.columnHeight[0];
         let index = 0;
@@ -165,11 +163,18 @@ export default {
 
         tmp['height'] = height;
         tmp['width'] = width;
-        tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`;
-        tmp['setu'] = !!((tmp.xrestrict === 1 || tmp.sanityLevel > 6)) && this.user.username !== 'pixivic';
+        tmp['src'] = replaceSmallImg(tmp.imageUrls[0].medium);
+        tmp['setu'] = !!((tmp.xrestrict === 1 || tmp.sanityLevel > 5)) && this.user.username !== 'pixivic';
         tmp['style'] = {
           backgroundColor: randomColor()
         };
+        tmp['itemHeight'] = parseInt(per * this.width);
+        tmp['avatarSrc'] = replaceBigImg(tmp.artistPreView.avatar);
+        tmp['createDate'] = dayjs(tmp.createDate).format('YYYY-MM-DD');
+        tmp['imgs'] = tmp.imageUrls.reduce((pre, cur) => {
+          return pre.concat(replaceBigImg(cur.original));
+        }, []);
+        tmp['originalSrc'] = replaceBigImg(tmp.imageUrls[0].original);
       }
     }
   }

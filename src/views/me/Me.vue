@@ -1,14 +1,10 @@
 <template>
   <div class="me">
     <div class="me-header">
-      <v-card
-        class="header-box"
-        width="95%"
-        outlined
-      >
+      <v-card class="header-box" width="95%" outlined>
         <div class="link">
-          <v-avatar class="user-avatar" size="80">
-            <v-img :src="user.avatar" alt="Avatar" />
+          <v-avatar class="user-avatar" size="80" @click="$router.push('/avatar')">
+            <img :src="`https://pic.pixivic.com/${user.id}.png?t=${new Date().getTime()}`" alt="Avatar">
           </v-avatar>
           <div class="user-info">
             <p class="font-weight-bold text-no-wrap text-truncate">{{ user.username }}</p>
@@ -48,10 +44,7 @@
       </v-list-item>
     </v-list>
 
-    <v-dialog
-      v-model="dialog"
-      max-width="80%"
-    >
+    <v-dialog v-model="dialog" width="100%">
       <v-card>
         <v-card-title class="headline">确认退出吗?</v-card-title>
         <v-card-actions>
@@ -87,7 +80,7 @@ export default {
       list: [
         { icon: '#picshoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
         { icon: '#picicon-copy', text: '我的关注', val: '/artistCollect' },
-        { icon: '#piclianjie-copy', text: '关于我们', val: '/links' },
+        { icon: '#picshezhi', text: '用户设置', val: '/setting' },
         { icon: '#piclog_out', text: '退出登录', val: 'logout' }
       ],
       dialog: false
@@ -123,12 +116,19 @@ export default {
   position relative
   background-color #fff
   &-header
+    height 200px
     overflow hidden
-    background url('../../assets/images/header.png') no-repeat
+    background url('../../assets/images/girl.jpg') no-repeat
     background-size 100%
+    background-position 0 -100px
+    border-bottom-right-radius 70% 60%
+    border-bottom-left-radius 70% 60%
     // 937 283
     .header-box
-      margin 60px auto 10px
+      position absolute
+      left 50%
+      top 100px
+      transform translateX(-50%)
       border-radius 20px
       .link
         position relative
@@ -149,6 +149,8 @@ export default {
               flex 1
               p
                 color #5e5e5e
+  &-lists
+    margin-top 30px
   .btn
     margin-left 50%
     margin-top 50px

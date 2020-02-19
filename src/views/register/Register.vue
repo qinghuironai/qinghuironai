@@ -1,10 +1,18 @@
 <template>
   <div class="register">
-    <v-btn color="primary" absolute top right @click="$router.push('/login')">登录</v-btn>
+    <v-btn
+      color="primary"
+      absolute
+      top
+      right
+      @click="$router.push('/login')"
+    >
+      登录
+    </v-btn>
     <v-form>
       <v-container>
         <v-row>
-          <v-col cols="12" md="4">
+          <v-col cols="12">
             <v-text-field
               v-model="username"
               :error-messages="nameErrors"
@@ -13,7 +21,7 @@
               @blur="$v.username.$touch()"
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12">
             <v-text-field
               v-model="email"
               :error-messages="emailErrors"
@@ -22,7 +30,7 @@
               @blur="$v.email.$touch()"
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12">
             <v-text-field
               v-model="password"
               :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -35,7 +43,7 @@
               @blur="$v.password.$touch()"
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12">
             <v-text-field
               v-model="confirmPassword"
               :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -48,7 +56,7 @@
               @blur="$v.confirmPassword.$touch()"
             />
           </v-col>
-          <v-col cols="12" md="4" class="code">
+          <v-col cols="12" class="code">
             <v-text-field
               v-model="value"
               label="验证码"
@@ -59,7 +67,7 @@
             />
             <img :src="`data:image/bmp;base64,${imageBase64}`" @click.stop="getCode">
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12">
             <v-btn
               color="primary"
               width="100%"
@@ -98,32 +106,24 @@ export default {
             return Boolean(res.status === 404);
           });
       }, 500)
-      // async isUnique(value) {
-      //   if (!value) return true;
-      //   if (!this.$v.email.required || !this.$v.email.email) return true;
-      //   const res = await this.$api.user.checkEmail(value);
-      //   return Boolean(res.status === 404);
-      // }
     },
     username: {
       required,
       maxLength: maxLength(10),
       minLength: minLength(4),
+      isValid(value) {
+        const patrn = /[`~!@#$%^&*()\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/im;
+        return !patrn.test(value);
+      },
       isUnique: debounceAsyncValidator(function(value, debounce) {
         if (!value) return true;
-        if (!this.$v.username.required || !this.$v.username.minLength || !this.$v.username.maxLength) return true;
+        if (!this.$v.username.required || !this.$v.username.minLength || !this.$v.username.maxLength || !this.$v.username.isValid) return true;
         return debounce()
           .then(() => this.$api.user.checkUser(value))
           .then(res => {
             return Boolean(res.status === 404);
           });
       }, 500)
-      // async isUnique(value) {
-      //   if (!value) return true;
-      //   if (!this.$v.username.required || !this.$v.username.minLength || !this.$v.username.maxLength) return true;
-      //   const res = await this.$api.user.checkUser(value);
-      //   return Boolean(res.status === 404);
-      // }
     },
     password: {
       required,
@@ -166,6 +166,7 @@ export default {
       const errors = [];
       if (!this.$v.username.$dirty) return errors;
       !this.$v.username.required && errors.push('请输入用户名');
+      !this.$v.username.isValid && errors.push('用户名不能包含特殊字符');
       (!this.$v.username.minLength || !this.$v.username.maxLength) && errors.push('用户名4-10位');
       !this.$v.username.isUnique && errors.push('用户名已被注册');
       return errors;
@@ -247,9 +248,10 @@ export default {
   overflow hidden
   padding 50px
   background-color #eee
-  background url('../../assets/images/bg.jpg') no-repeat
+  //background url('../../assets/images/bg.jpg') no-repeat
   background-size cover
   z-index 101
+  box-sizing border-box
   .code
     position relative
     img

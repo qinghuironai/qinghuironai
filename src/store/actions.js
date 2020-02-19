@@ -103,3 +103,9 @@ export const handleFollowArtist = ({
       });
   });
 };
+
+export const setDetail = ({
+  commit
+}, data) => {
+  commit(types.SET_DETAIL, data);
+};

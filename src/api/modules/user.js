@@ -35,10 +35,9 @@ function resetPasswordEmail(email) {
 // 用户重置密码
 function resetPassword(data) {
   return axios({
-    // url: `/users/password?password=${data.password}&vid=${data.vid}&value=${data.value}`,
-    url: `/users/password`,
+    url: `/users/password?vid=${data.vid}&value=${data.value}`,
     method: 'put',
-    data
+    data: { password: data.password }
   });
 }
 
@@ -115,6 +114,57 @@ function getNewIllust(data) {
   });
 }
 
+// 获取用户是否验证邮箱
+function getEmailIsCheck(userId) {
+  return axios({
+    url: `/users/${userId}/email/isCheck`,
+    method: 'get'
+  });
+}
+
+// 用户发送邮箱验证邮件
+function vertifyEmail(email) {
+  return axios({
+    url: `/users/emails/${email}/checkEmail`,
+    method: 'get'
+  });
+}
+
+// 用户设置邮箱(会返回新的token)
+function setEmail(params) {
+  return axios({
+    url: `/users/${params.userId}/email`,
+    method: 'put',
+    params
+  });
+}
+
+// qq登录
+function qqLogin(params) {
+  return axios({
+    url: `/users/tokenWithQQ`,
+    method: 'get',
+    params
+  });
+}
+
+// 用户绑定qq
+function qqAccess(params) {
+  return axios({
+    url: `/users/${params.userId}/qqAccessToken`,
+    method: 'put',
+    params: { qqAccessToken: params.qqAccessToken }
+  });
+}
+
+// 检查是否绑定qq
+function checkQQ(userId) {
+  return axios({
+    url: `/users/${userId}/isBindQQ`,
+    method: 'get'
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -128,5 +178,11 @@ export {
   deleteCollect,
   followArtist,
   getFollowArtist,
-  getNewIllust
+  getNewIllust,
+  getEmailIsCheck,
+  vertifyEmail,
+  setEmail,
+  qqLogin,
+  qqAccess,
+  checkQQ
 };
