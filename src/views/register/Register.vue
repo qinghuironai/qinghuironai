@@ -5,7 +5,7 @@
       absolute
       top
       right
-      @click="$router.push('/login')"
+      @click="goLogin"
     >
       登录
     </v-btn>
@@ -92,7 +92,7 @@ import { debounceAsyncValidator } from '@/util';
 import Alert from '@/components/alert';
 
 export default {
-  name: 'Login',
+  name: 'Register',
   mixins: [validationMixin],
   validations: {
     email: {
@@ -197,6 +197,14 @@ export default {
     this.getCode();
   },
   methods: {
+    goLogin() {
+      this.$router.push({
+        name: 'Login',
+        query: {
+          return_to: this.$route.query.return_to
+        }
+      });
+    },
     getCode() {
       this.$api.user.verificationCode()
         .then(res => {
@@ -223,17 +231,18 @@ export default {
             if (res.status === 200) {
               localStorage.setItem('user', JSON.stringify(res.data.data));
               this.$store.dispatch('setUser', res.data.data);
-              this.$router.push('/me');
+              const url = this.$route.query.return_to;
+              window.location.href = url || `https://m.pixivic.com/me`;
             } else {
               Alert({
                 content: res.data.message
               });
+              this.loading = false;
+              this.getCode();
             }
           })
           .catch(err => {
             console.error(err);
-          })
-          .finally(() => {
             this.loading = false;
             this.getCode();
           });

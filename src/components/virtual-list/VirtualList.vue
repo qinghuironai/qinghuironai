@@ -105,9 +105,13 @@ export default {
     },
     handleLike(data) {
       if (!this.user.id) {
-        return Alert({
-          content: '请先登录~'
+        this.$router.push({
+          name: 'Login',
+          query: {
+            return_to: window.location.href
+          }
         });
+        return;
       }
       const item = this.listMap.get(data.id);
       const flag = item.isLiked;

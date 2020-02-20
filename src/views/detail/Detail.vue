@@ -254,9 +254,13 @@ export default {
     },
     handleLike() {
       if (!this.user.id) {
-        return Alert({
-          content: '请先登录~'
+        this.$router.push({
+          name: 'Login',
+          query: {
+            return_to: window.location.href
+          }
         });
+        return;
       }
       const params = {
         userId: this.user.id,
@@ -286,9 +290,13 @@ export default {
     },
     follow() {
       if (!this.user.id) {
-        return Alert({
-          content: '请先登录~'
+        this.$router.push({
+          name: 'Login',
+          query: {
+            return_to: window.location.href
+          }
         });
+        return;
       }
       const data = {
         artistId: this.illustDetail.artistPreView.id,
