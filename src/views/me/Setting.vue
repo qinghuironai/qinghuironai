@@ -2,15 +2,49 @@
   <div class="setting">
     <Header title="设置" />
     <v-list class="setting-lists">
-      <v-list-item
-        v-for="item in lists"
-        :key="item.val"
-        @click="clickItem(item.val)"
-      >
+      <v-list-item @click="clickItem('email')">
         <v-list-item-content>
           <v-list-item-title>
-            {{ item.text }}
-            <span v-if="item.show" style="float: right;">{{ item.show }}</span>
+            邮箱验证
+            <span style="float: right;">{{ isCheckEmail ? '已验证' : '未验证' }}</span>
+          </v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-icon>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#picyoujiantou" />
+          </svg>
+        </v-list-item-icon>
+      </v-list-item>
+      <v-list-item @click="clickItem('qq')">
+        <v-list-item-content>
+          <v-list-item-title>
+            绑定QQ
+            <span style="float: right;">{{ isConnectQQ ? '已绑定' : '未绑定' }}</span>
+          </v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-icon>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#picyoujiantou" />
+          </svg>
+        </v-list-item-icon>
+      </v-list-item>
+      <v-list-item @click="sheet = true">
+        <v-list-item-content>
+          <v-list-item-title>
+            瀑布流列数
+            <span style="float: right;">{{ column }}</span>
+          </v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-icon>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#picyoujiantou" />
+          </svg>
+        </v-list-item-icon>
+      </v-list-item>
+      <v-list-item @click="$router.push(`/avatar`)">
+        <v-list-item-content>
+          <v-list-item-title>
+            更新头像
           </v-list-item-title>
         </v-list-item-content>
         <v-list-item-icon>
@@ -54,15 +88,11 @@ export default {
   },
   data() {
     return {
-      dialog: false,
       sheet: false,
       columns: ['自动', 1, 2, 3, 4],
-      lists: {
-        email: { text: '邮箱验证', val: 'email', show: '未验证' },
-        qq: { text: '绑定QQ', val: 'qq', show: '未绑定' },
-        waterfull: { text: '瀑布流列数', val: 'waterfull', show: '自动' },
-        avatar: { text: '更新头像', val: 'avatar' }
-      }
+      isCheckEmail: false,
+      isConnectQQ: false,
+      column: 1
     };
   },
   computed: {
@@ -71,33 +101,21 @@ export default {
   mounted() {
     this.$api.user.getEmailIsCheck(this.user.id)
       .then(res => {
-        if (!res.data.data) {
-          this.lists.email.show = '未验证';
-        } else {
-          this.lists.email.show = '已验证';
-        }
+        this.isCheckEmail = res.data.data;
       });
     this.$api.user.checkQQ(this.user.id)
       .then(res => {
-        if (!res.data.data) {
-          this.lists.qq.show = '未绑定';
-        } else {
-          this.lists.qq.show = '已绑定';
-        }
+        this.isConnectQQ = res.data.data;
       });
 
     const column = parseInt(localStorage.getItem('waterfull-column'));
-    if (column) {
-      this.lists.waterfull.show = column;
-    } else {
-      this.lists.waterfull.show = '自动';
-    }
+    this.column = column || '自动';
   },
   methods: {
     clickItem(val) {
       switch (val) {
         case 'email':
-          if (this.lists.email.show === '未验证') {
+          if (!this.isCheckEmail) {
             this.$api.user.vertifyEmail(this.user.email)
               .then(res => {
                 Alert({
@@ -106,21 +124,15 @@ export default {
               });
           }
           break;
-        case 'waterfull':
-          this.sheet = true;
-          break;
-        case 'avatar':
-          this.$router.push(`/${val}`);
-          break;
         case 'qq':
-          if (this.lists.qq.show === '未绑定') {
+          if (!this.isConnectQQ) {
             window.location.href = QQ_LINK;
           }
           break;
       }
     },
     selectColumn(val) {
-      this.lists.waterfull.show = val;
+      this.column = val;
       if (val === '自动') {
         localStorage.removeItem('waterfull-column');
       } else {
