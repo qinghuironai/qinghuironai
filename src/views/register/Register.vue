@@ -89,6 +89,7 @@
 import { validationMixin } from 'vuelidate';
 import { required, maxLength, minLength, email, sameAs } from 'vuelidate/lib/validators';
 import { debounceAsyncValidator } from '@/util';
+import Alert from '@/components/alert';
 
 export default {
   name: 'Login',
@@ -224,7 +225,9 @@ export default {
               this.$store.dispatch('setUser', res.data.data);
               this.$router.push('/me');
             } else {
-              alert(res.data.message);
+              Alert({
+                content: res.data.message
+              });
             }
           })
           .catch(err => {

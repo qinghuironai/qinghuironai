@@ -59,6 +59,7 @@
 import { mapGetters } from 'vuex';
 import { VueCropper } from 'vue-cropper';
 import Header from '@/components/header/Header';
+import Alert from '@/components/alert';
 
 export default {
   name: 'Avatar',
@@ -84,11 +85,15 @@ export default {
     uploadImg(e, num) {
       const file = e.target.files[0];
       if (!/\.(jpg|jpeg|png|webp|GIF|JPG|PNG)$/.test(e.target.value)) {
-        alert('请选择正确的图片格式');
+        Alert({
+          content: '请选择正确的图片格式'
+        });
         return false;
       }
       if (file.size > 5 * 1024 * 1024) {
-        alert('图片大小不能超过5m');
+        Alert({
+          content: '图片大小不能超过5m'
+        });
         return false;
       }
       const reader = new FileReader();
@@ -117,7 +122,9 @@ export default {
           this.dialog = false;
           this.$router.back();
         } else {
-          alert('更新失败，请重试');
+          Alert({
+            content: '更新失败，请重试'
+          });
         }
         this.loading = false;
       });

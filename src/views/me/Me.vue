@@ -43,35 +43,13 @@
         </v-list-item-icon>
       </v-list-item>
     </v-list>
-
-    <v-dialog v-model="dialog" width="100%">
-      <v-card>
-        <v-card-title class="headline">确认退出吗?</v-card-title>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            取消
-          </v-btn>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="logout"
-          >
-            确认
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import Cookie from 'js-cookie';
+import Confirm from '@/components/confirm';
 
 export default {
   name: 'Me',
@@ -82,8 +60,7 @@ export default {
         { icon: '#picicon-copy', text: '我的关注', val: '/artistCollect' },
         { icon: '#picshezhi', text: '用户设置', val: '/setting' },
         { icon: '#piclog_out', text: '退出登录', val: 'logout' }
-      ],
-      dialog: false
+      ]
     };
   },
   computed: {
@@ -92,15 +69,16 @@ export default {
     ])
   },
   methods: {
-    logout() {
-      this.dialog = true;
-      Cookie.remove('jwt');
-      localStorage.removeItem('user');
-      this.$router.push('/');
-    },
-    clickItem(val) {
+    async clickItem(val) {
       if (val === 'logout') {
-        this.dialog = true;
+        const res = await Confirm({
+          title: '确认退出吗?'
+        });
+        if (res === 'submit') {
+          Cookie.remove('jwt');
+          localStorage.removeItem('user');
+          this.$router.push('/');
+        }
         return;
       }
       this.$router.push(val);

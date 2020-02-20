@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import Alert from '@/components/alert';
+
 export default {
   methods: {
     checkEmail() {
@@ -15,10 +17,14 @@ export default {
       this.$api.user.setEmail(query)
         .then(res => {
           if (res.status === 200) {
-            alert(res.data.message);
+            Alert({
+              content: res.data.message
+            });
             window.location.href = 'https://m.pixivic.com';
           } else {
-            alert(res.data.message);
+            Alert({
+              content: res.data.message
+            });
           }
         });
     }

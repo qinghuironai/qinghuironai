@@ -45,6 +45,7 @@
 import { mapGetters } from 'vuex';
 import Header from '@/components/header/Header';
 import { QQ_LINK } from '@/util/constants';
+import Alert from '@/components/alert';
 
 export default {
   name: 'Setting',
@@ -99,7 +100,9 @@ export default {
           if (this.lists.email.show === '未验证') {
             this.$api.user.vertifyEmail(this.user.email)
               .then(res => {
-                alert(res.data.message);
+                Alert({
+                  content: res.data.message
+                });
               });
           }
           break;

@@ -88,6 +88,7 @@
 
 <script>
 import { QQ_LINK } from '@/util/constants';
+import Alert from '@/components/alert';
 
 export default {
   name: 'Login',
@@ -150,7 +151,9 @@ export default {
               this.$store.dispatch('setUser', res.data.data);
               this.$router.push('/me');
             } else {
-              alert(res.data.message);
+              Alert({
+                content: res.data.message
+              });
             }
           })
           .catch(err => {
@@ -168,10 +171,14 @@ export default {
           .resetPasswordEmail(this.email)
           .then(res => {
             if (res.status === 200) {
-              alert('请注意查收邮箱来重置你的密码');
+              Alert({
+                content: '请注意查收邮箱来重置你的密码'
+              });
               this.dialog = false;
             } else {
-              alert(res.data.message);
+              Alert({
+                content: res.data.message
+              });
             }
           });
       }

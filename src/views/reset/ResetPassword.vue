@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import Alert from '@/components/alert';
+
 export default {
   data() {
     return {
@@ -67,10 +69,14 @@ export default {
       this.$api.user.resetPassword(data)
         .then(res => {
           if (res.status === 200) {
-            alert('重置成功，点击返回登录页面');
+            Alert({
+              content: '重置成功，点击返回登录页面'
+            });
             window.location.href = 'https://m.pixivic.com/login';
           } else {
-            alert(res.data.message);
+            Alert({
+              content: res.data.message
+            });
           }
         });
     }
