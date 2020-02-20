@@ -10,6 +10,7 @@
 <script>
 import Cookie from 'js-cookie';
 import { mapGetters } from 'vuex';
+import Alert from '@/components/alert';
 
 export default {
   data() {
@@ -43,7 +44,9 @@ export default {
             this.$store.dispatch('setUser', res.data.data);
             this.$router.push('/me');
           } else {
-            alert(res.data.message);
+            Alert({
+              content: res.data.message
+            });
             this.$router.push('/login');
           }
         });
