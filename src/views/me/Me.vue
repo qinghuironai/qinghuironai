@@ -77,7 +77,7 @@ export default {
         if (res === 'submit') {
           Cookie.remove('jwt');
           localStorage.removeItem('user');
-          this.$router.push('/');
+          window.location.href = 'https://m.pixivic.com';
         }
         return;
       }
