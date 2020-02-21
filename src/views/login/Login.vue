@@ -5,7 +5,7 @@
       absolute
       top
       right
-      @click="$router.push('/register')"
+      @click="goRegister"
     >
       注册
     </v-btn>
@@ -88,6 +88,7 @@
 
 <script>
 import { QQ_LINK } from '@/util/constants';
+import Alert from '@/components/alert';
 
 export default {
   name: 'Login',
@@ -124,6 +125,14 @@ export default {
     this.getCode();
   },
   methods: {
+    goRegister() {
+      this.$router.push({
+        name: 'Register',
+        query: {
+          return_to: this.$route.query.return_to
+        }
+      });
+    },
     getCode() {
       this.$api.user.verificationCode()
         .then(res => {
@@ -148,15 +157,19 @@ export default {
             if (res.status === 200) {
               localStorage.setItem('user', JSON.stringify(res.data.data));
               this.$store.dispatch('setUser', res.data.data);
-              this.$router.push('/me');
+              // this.$router.push('/me');
+              const url = this.$route.query.return_to;
+              window.location.href = url || `https://m.pixivic.com/me`;
             } else {
-              alert(res.data.message);
+              Alert({
+                content: res.data.message
+              });
+              this.loading = false;
+              this.getCode();
             }
           })
           .catch(err => {
             console.error(err);
-          })
-          .finally(() => {
             this.loading = false;
             this.getCode();
           });
@@ -168,10 +181,14 @@ export default {
           .resetPasswordEmail(this.email)
           .then(res => {
             if (res.status === 200) {
-              alert('请注意查收邮箱来重置你的密码');
+              Alert({
+                content: '请注意查收邮箱来重置你的密码'
+              });
               this.dialog = false;
             } else {
-              alert(res.data.message);
+              Alert({
+                content: res.data.message
+              });
             }
           });
       }

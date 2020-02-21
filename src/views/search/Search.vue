@@ -207,6 +207,7 @@ import debounce from 'lodash/debounce';
 import Tags from '@/components/tags/Tags';
 import List from '@/components/virtual-list/VirtualList';
 import Loading from '@/components/loading/Loading';
+import Alert from '@/components/alert';
 
 export default {
   name: 'Search',
@@ -333,11 +334,15 @@ export default {
     async uploadImg(e) {
       const file = e.target.files[0];
       if (!/\.(jpg|jpeg|png|webp|GIF|JPG|PNG)$/.test(e.target.value)) {
-        alert('请选择正确图片格式');
+        Alert({
+          content: '请选择正确图片格式'
+        });
         return false;
       }
       if (file.size > 1 * 1024 * 1024) {
-        alert('图片大小不能超过1M');
+        Alert({
+          content: '图片大小不能超过1M'
+        });
         return false;
       }
       this.isSearchByImg = true;

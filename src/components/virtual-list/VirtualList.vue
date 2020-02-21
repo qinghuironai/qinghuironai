@@ -20,6 +20,7 @@
 import dayjs from 'dayjs';
 import { mapGetters } from 'vuex';
 import VirtualCollection from '@/components/collect/VirtualCollection';
+import Alert from '@/components/alert';
 import throttle from 'lodash/throttle';
 import Item from './Item';
 import { randomColor, replaceBigImg, replaceSmallImg } from '@/util';
@@ -104,7 +105,13 @@ export default {
     },
     handleLike(data) {
       if (!this.user.id) {
-        return alert('请先登录~');
+        this.$router.push({
+          name: 'Login',
+          query: {
+            return_to: window.location.href
+          }
+        });
+        return;
       }
       const item = this.listMap.get(data.id);
       const flag = item.isLiked;
@@ -116,17 +123,21 @@ export default {
         this.$set(item, 'isLiked', true); // 先强制视图更新 防止网络延迟不动
         this.$store.dispatch('handleCollectIllust', params)
           .then(() => {})
-          .catch(err => {
+          .catch(() => {
             this.$set(item, 'isLiked', false); // 失败的话在改回去
-            alert('收藏失败', err);
+            Alert({
+              content: '收藏失败'
+            });
           });
       } else {
         this.$set(item, 'isLiked', false);
         this.$store.dispatch('deleteCollectIllust', params)
           .then(() => {})
-          .catch(err => {
+          .catch(() => {
             this.$set(item, 'isLiked', true);
-            alert('取消收藏失败', err);
+            Alert({
+              content: '取消收藏失败'
+            });
           });
       }
     },

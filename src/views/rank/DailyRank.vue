@@ -18,6 +18,7 @@
 import dayjs from 'dayjs';
 import List from '@/components/virtual-list/VirtualList';
 import Header from './header/Header';
+import Alert from '@/components/alert';
 
 export default {
   name: 'DailyRank',
@@ -40,7 +41,9 @@ export default {
     this.mode = 'day';
     const flag = localStorage.getItem('pixivic_alert');
     if (!flag) {
-      alert('图片域名更新，如果有使用图片加速的同学请前往论坛获取最新规则，有问题请qq群: 726504516，点击确认关闭');
+      Alert({
+        content: '图片域名更新，如果有使用图片加速的同学请前往论坛获取最新规则，有问题请qq群: 726504516，点击确认关闭'
+      });
       localStorage.setItem('pixivic_alert', true);
     }
   },

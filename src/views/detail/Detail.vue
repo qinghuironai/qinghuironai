@@ -145,6 +145,7 @@ import dayjs from 'dayjs';
 import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
 import Comment from './components/Comment';
+import Alert from '@/components/alert';
 import { replaceBigImg } from '@/util';
 
 export default {
@@ -253,7 +254,13 @@ export default {
     },
     handleLike() {
       if (!this.user.id) {
-        return alert('请先登录~');
+        this.$router.push({
+          name: 'Login',
+          query: {
+            return_to: window.location.href
+          }
+        });
+        return;
       }
       const params = {
         userId: this.user.id,
@@ -263,23 +270,33 @@ export default {
         this.illustDetail.isLiked = true;
         this.$store.dispatch('handleCollectIllust', params)
           .then(() => {})
-          .catch(err => {
+          .catch(() => {
             this.illustDetail.isLiked = false;
-            alert('收藏失败', err);
+            Alert({
+              content: '收藏失败'
+            });
           });
       } else {
         this.illustDetail.isLiked = false;
         this.$store.dispatch('deleteCollectIllust', params)
           .then(() => {})
-          .catch(err => {
+          .catch(() => {
             this.illustDetail.isLiked = true;
-            alert('取消收藏失败', err);
+            Alert({
+              content: '取消收藏失败'
+            });
           });
       }
     },
     follow() {
       if (!this.user.id) {
-        return alert('请先登录~');
+        this.$router.push({
+          name: 'Login',
+          query: {
+            return_to: window.location.href
+          }
+        });
+        return;
       }
       const data = {
         artistId: this.illustDetail.artistPreView.id,
@@ -291,7 +308,9 @@ export default {
           .then(res => {})
           .catch(() => {
             this.illustDetail.artistPreView.isFollowed = false;
-            alert('关注失败');
+            Alert({
+              content: '关注失败'
+            });
           });
       } else {
         this.illustDetail.artistPreView.isFollowed = false;
@@ -299,7 +318,9 @@ export default {
           .then(res => {})
           .catch(() => {
             this.illustDetail.artistPreView.isFollowed = true;
-            alert('取消关注失败');
+            Alert({
+              content: '取消关注失败'
+            });
           });
       }
     },
