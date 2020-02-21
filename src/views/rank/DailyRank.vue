@@ -37,7 +37,7 @@ export default {
     };
   },
   mounted() {
-    this.date = this.maxDate = dayjs(new Date()).add(-17, 'days').format('YYYY-MM-DD');
+    this.date = this.maxDate = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD');
     this.mode = 'day';
     const flag = localStorage.getItem('pixivic_alert');
     if (!flag) {
@@ -56,10 +56,10 @@ export default {
           mode: this.mode
         })
         .then(res => {
-          if (!res.data.data) {
+          if (!res.data.data.data.length) {
             $state.complete();
           } else {
-            this.pictureList = this.pictureList.concat(res.data.data);
+            this.pictureList = this.pictureList.concat(res.data.data.data);
             $state.loaded();
           }
         });

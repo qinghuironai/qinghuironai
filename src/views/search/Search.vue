@@ -395,8 +395,8 @@ export default {
           keyword: this.value
         })
         .then(res => {
-          const data = res.data.data;
-          if (!data) {
+          const data = res.data.data.illustrations;
+          if (!data.length) {
             $state.complete();
           } else {
             this.pictureList = this.pictureList.concat(data);
