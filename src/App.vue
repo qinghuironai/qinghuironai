@@ -28,6 +28,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
@@ -54,7 +55,7 @@ export default {
       'user'
     ]),
     key() {
-      return this.$route.path;
+      return this.$route.fullPath;
     }
   },
   watch: {

@@ -1,5 +1,5 @@
 <template>
-  <transition enter-active-class="animated zoomIn">
+  <transition>
     <div class="search">
       <div class="search-header">
         <svg
@@ -74,7 +74,10 @@
           画作搜索
         </v-btn>
       </div>
-      <Loading v-if="loading" />
+      <div v-if="loading" class="search-img">
+        <img :src="backgroundImage">
+        <Loading style="background: transparent" />
+      </div>
       <v-dialog
         v-model="dialog"
         fullscreen
@@ -227,7 +230,6 @@ export default {
       exclusive: [],
       loading: false,
       identifier: +new Date(),
-      isSearchByImg: false,
       dialog: false,
       type: [{ text: '插画', value: 'illust' }, { text: '漫画', value: 'manga' }],
       searchTypes: [{ text: '原始', value: 'original' }, { text: '自动翻译', value: 'autoTranslate' }],
@@ -240,7 +242,8 @@ export default {
       beginDate: null, // 画作发布日期限制
       endDate: null, // 画作发布日期限制
       xRestrict: 0,
-      maxSanityLevel: 6
+      maxSanityLevel: 6,
+      backgroundImage: null
     };
   },
   computed: {
@@ -286,7 +289,6 @@ export default {
     }, 500),
     enter(val) {
       if (!this.value) return;
-      this.isSearchByImg = false;
       this.value = val;
       this.$refs.input.blur();
       this.isSearch = false;
@@ -345,21 +347,29 @@ export default {
         });
         return false;
       }
-      this.isSearchByImg = true;
+      const reader = new FileReader();
+      reader.onload = e => {
+        let data;
+        if (typeof e.target.result === 'object') {
+          data = window.URL.createObjectURL(new Blob([e.target.result]));
+        } else {
+          data = e.target.result;
+        }
+        this.backgroundImage = data;
+      };
+      reader.readAsArrayBuffer(file);
       this.loading = true;
-      this.isSearch = false;
-      this.page = 1;
-      this.pictureList = [];
-      this.tags = this.exclusive = [];
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
       const result = await this.$api.search.uploadImg(formData);
       const res = await this.$api.search.searchByImg(result.data.data);
-      if (res.status === 200) {
-        const { data: { data }} = res;
-        this.pictureList = data || [];
-        // this.getTags(data[0].title);
-        // this.getExclusive(data[0].title);
+      const { data: { data }} = res;
+      if (data) {
+        this.$router.push(`/detail/${data[0].id}`);
+      } else {
+        Alert({
+          content: res.data.message
+        });
       }
       this.loading = false;
     },
@@ -378,16 +388,13 @@ export default {
               this.$router.push(`/detail/${this.value}`);
             }
           } else {
-            alert('不存在');
+            Alert({
+              content: '不存在'
+            });
           }
         });
     },
     infinite($state) {
-      if (this.isSearchByImg) {
-        $state.loaded();
-        $state.complete();
-        return;
-      }
       this.$api.search
         .getSearch({
           ...this.optionsParams,
@@ -491,6 +498,16 @@ export default {
     justify-content center
     align-items center
     height 40px
+  .search-img
+    position fixed
+    top 0
+    right 0
+    bottom 0
+    left 0
+    img
+      width 100%
+      height 100%
+      object-fit cover
   .search-suggest
     width 100%
     position absolute
