@@ -56,10 +56,10 @@ export default {
           mode: this.mode
         })
         .then(res => {
-          if (!res.data.data.data.length) {
+          if (!res.data.data) {
             $state.complete();
           } else {
-            this.pictureList = this.pictureList.concat(res.data.data.data);
+            this.pictureList = this.pictureList.concat(res.data.data);
             $state.loaded();
           }
         });
