@@ -31,6 +31,9 @@ const mutations = {
   },
   [types.SET_DETAIL](state, data) {
     state.detail = data;
+  },
+  [types.SHOW_SEARCH_BOX](state, flag) {
+    state.showSearchBox = flag;
   }
 };
 
