@@ -113,7 +113,7 @@ export default {
     position relative
     top 0
     background-color #ffffff
-    height 48px
+    // height 48px
     display flex
     align-items center
     justify-content space-between

@@ -6,6 +6,7 @@
         :style="{opacity}"
         @load="handleLoad"
       >
+      <div class="img-filter" />
       <div v-if="column.pageCount > 1" class="count">
         <img src="../../assets/images/count.svg">
         <span>{{ column.pageCount }}</span>
@@ -72,12 +73,20 @@ export default {
     width 100%
     height 100%
     border-radius 8px
+    overflow hidden
     img
       width 100%
       height 100%
       transition opacity .3s
       object-fit cover
-      border-radius 5px
+      border-radius 8px
+    .img-filter
+      position absolute
+      top 0
+      right 0
+      bottom 0
+      left 0
+      background rgba(0, 0, 0, .03)
   .count
     position absolute
     display inline-block
