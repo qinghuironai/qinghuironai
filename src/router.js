@@ -23,8 +23,8 @@ const pages = {
   QQauth: () => import('./views/login/qqauth'),
   Register: () => import('./views/register/Register'),
   ResetPassword: () => import('./views/reset/ResetPassword'),
-  EmailCheck: () => import('./views/reset/EmailCheck'),
-  NotFound: () => import('./views/not-found/NotFound')
+  EmailCheck: () => import('./views/reset/EmailCheck')
+  // NotFound: () => import('./views/not-found/NotFound')
 };
 
 // const originalPush = Router.prototype.push;
@@ -149,8 +149,7 @@ const router = new Router({
   },
   {
     path: '*',
-    name: 'NotFound',
-    component: pages.NotFound
+    redirect: '/dailyRank'
   }
   ]
 });

@@ -10,6 +10,7 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css';
 import VuePageStack from 'vue-page-stack';
+import VueGtag from 'vue-gtag';
 
 Vue.use(Vuetify);
 Vue.use(VuePageStack, { router, keyName: 'VNK' });
@@ -18,6 +19,9 @@ Vue.use(VuePageStack, { router, keyName: 'VNK' });
 // new VConsole();
 Vue.config.productionTip = false;
 Vue.use(animated);
+Vue.use(VueGtag, {
+  config: { id: 'UA-158701012-1' }
+});
 Vue.prototype.$api = api;
 Vue.prototype.$util = util;
 

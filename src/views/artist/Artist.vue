@@ -81,7 +81,8 @@
 import { mapGetters } from 'vuex';
 import List from '@/components/virtual-list/VirtualList';
 import Loading from '@/components/loading/Loading';
-import { IMG_PREFIX } from '@/util/constants';
+import Alert from '@/components/alert';
+import { replaceBigImg } from '@/util';
 
 export default {
   name: 'Artist',
@@ -128,7 +129,7 @@ export default {
           const { data: { data }} = res;
           this.artistDetail = {
             ...data,
-            avatarSrc: IMG_PREFIX + data.avatar
+            avatarSrc: replaceBigImg(data.avatar)
           };
         });
     },
@@ -177,7 +178,13 @@ export default {
     },
     follow() {
       if (!this.user.id) {
-        return alert('请先登录~');
+        this.$router.push({
+          name: 'Login',
+          query: {
+            return_to: window.location.href
+          }
+        });
+        return;
       }
       const data = {
         artistId: this.artistDetail.id,
@@ -189,7 +196,9 @@ export default {
           .then(res => {})
           .catch(() => {
             this.artistDetail.isFollowed = false;
-            alert('关注失败');
+            Alert({
+              content: '关注失败'
+            });
           });
       } else {
         this.artistDetail.isFollowed = false;
@@ -197,7 +206,9 @@ export default {
           .then(res => {})
           .catch(() => {
             this.artistDetail.isFollowed = true;
-            alert('取消关注失败');
+            Alert({
+              content: '取消关注失败'
+            });
           });
       }
     }

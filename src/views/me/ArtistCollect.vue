@@ -42,7 +42,8 @@
 <script>
 import { mapGetters } from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
-import { IMG_PREFIX } from '@/util/constants';
+import { replaceBigImg } from '@/util';
+import Alert from '@/components/alert';
 
 export default {
   name: 'ArtistCollect',
@@ -87,7 +88,7 @@ export default {
             for (const item of data) {
               const data = {
                 ...item,
-                avatar: IMG_PREFIX + item.avatar,
+                avatar: replaceBigImg(item.avatar),
                 isFollowed: true
               };
               this.artistList.push(data);
@@ -108,7 +109,9 @@ export default {
           .then(res => {})
           .catch(() => {
             val.isFollowed = true;
-            alert('取消关注失败');
+            Alert({
+              content: '取消关注失败'
+            });
           });
       } else {
         val.isFollowed = true;
@@ -116,7 +119,9 @@ export default {
           .then(res => {})
           .catch(() => {
             val.isFollowed = false;
-            alert('关注失败');
+            Alert({
+              content: '关注失败'
+            });
           });
       }
     },

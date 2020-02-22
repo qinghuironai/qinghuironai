@@ -20,10 +20,10 @@
 import dayjs from 'dayjs';
 import { mapGetters } from 'vuex';
 import VirtualCollection from '@/components/collect/VirtualCollection';
+import Alert from '@/components/alert';
 import throttle from 'lodash/throttle';
 import Item from './Item';
-import { IMG_PREFIX } from '@/util/constants';
-import { randomColor } from '@/util';
+import { randomColor, replaceBigImg, replaceSmallImg } from '@/util';
 import { getClient } from '@/util/dom';
 const columnWidth = 200; // 屏幕小于200则1列
 
@@ -105,7 +105,13 @@ export default {
     },
     handleLike(data) {
       if (!this.user.id) {
-        return alert('请先登录~');
+        this.$router.push({
+          name: 'Login',
+          query: {
+            return_to: window.location.href
+          }
+        });
+        return;
       }
       const item = this.listMap.get(data.id);
       const flag = item.isLiked;
@@ -117,17 +123,21 @@ export default {
         this.$set(item, 'isLiked', true); // 先强制视图更新 防止网络延迟不动
         this.$store.dispatch('handleCollectIllust', params)
           .then(() => {})
-          .catch(err => {
+          .catch(() => {
             this.$set(item, 'isLiked', false); // 失败的话在改回去
-            alert('收藏失败', err);
+            Alert({
+              content: '收藏失败'
+            });
           });
       } else {
         this.$set(item, 'isLiked', false);
         this.$store.dispatch('deleteCollectIllust', params)
           .then(() => {})
-          .catch(err => {
+          .catch(() => {
             this.$set(item, 'isLiked', true);
-            alert('取消收藏失败', err);
+            Alert({
+              content: '取消收藏失败'
+            });
           });
       }
     },
@@ -164,18 +174,18 @@ export default {
 
         tmp['height'] = height;
         tmp['width'] = width;
-        tmp['src'] = `${IMG_PREFIX}${tmp.imageUrls[0].medium}`;
+        tmp['src'] = replaceSmallImg(tmp.imageUrls[0].medium);
         tmp['setu'] = !!((tmp.xrestrict === 1 || tmp.sanityLevel > 5)) && this.user.username !== 'pixivic';
         tmp['style'] = {
           backgroundColor: randomColor()
         };
         tmp['itemHeight'] = parseInt(per * this.width);
-        tmp['avatarSrc'] = IMG_PREFIX + tmp.artistPreView.avatar;
+        tmp['avatarSrc'] = replaceBigImg(tmp.artistPreView.avatar);
         tmp['createDate'] = dayjs(tmp.createDate).format('YYYY-MM-DD');
         tmp['imgs'] = tmp.imageUrls.reduce((pre, cur) => {
-          return pre.concat(`${IMG_PREFIX + cur.original}`);
+          return pre.concat(replaceBigImg(cur.original));
         }, []);
-        tmp['originalSrc'] = IMG_PREFIX + tmp.imageUrls[0].original.replace('_webp', '');
+        tmp['originalSrc'] = replaceBigImg(tmp.imageUrls[0].original);
       }
     }
   }
