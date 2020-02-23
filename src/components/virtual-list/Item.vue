@@ -73,7 +73,6 @@ export default {
     width 100%
     height 100%
     border-radius 8px
-    overflow hidden
     img
       width 100%
       height 100%
@@ -87,6 +86,7 @@ export default {
       bottom 0
       left 0
       background rgba(0, 0, 0, .03)
+      border-radius 8px
   .count
     position absolute
     display inline-block

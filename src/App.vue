@@ -16,7 +16,7 @@
           alt=""
         >
       </div>
-      <div class="tabs-item me" @click="$router.push('/me')">
+      <div class="tabs-item " @click="$router.push('/me')">
         <img
           :src="user.avatar || require('../src/assets/images/me.svg')"
           :style="{transform: $route.name === 'Me' ? 'scale(1.1)' : ''}"
@@ -98,10 +98,8 @@ export default {
       height 25px
       vertical-align middle
       transition all .3s
-  .me
-    img
-      height 100%
       border-radius 50%
+      object-fit cover
 .show
   transform translateY(0)
   opacity 1
