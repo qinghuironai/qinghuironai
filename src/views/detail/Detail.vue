@@ -83,8 +83,8 @@
                 <span>{{ illustDetail.createDate }}</span>
               </a>
               <a class="work-stats-a stats-comment" @click="openComment">
-                <svg font-size="30" class="icon" aria-hidden="true">
-                  <use xlink:href="#picpinglun" />
+                <svg font-size="35" class="icon" aria-hidden="true">
+                  <use xlink:href="#picliuyan-copy" />
                 </svg>
               </a>
             </div>
@@ -115,7 +115,7 @@
         >
           <v-carousel-item v-for="(item, i) in illustDetail.imgs" :key="i">
             <v-row class="fill-height" align="center" justify="center">
-              <img width="100%" :src="item">
+              <img width="100%" :src="item" :style="{filter: illustDetail.setu ? 'blur(20px)' : ''}">
             </v-row>
           </v-carousel-item>
         </v-carousel>
@@ -168,8 +168,8 @@ export default {
       page: 1,
       preview: false,
       items: [
-        { val: 'pixiv', title: '跳转pixiv' },
-        { val: 'origin', title: '跳转图片链接' }
+        { val: 'pixiv', title: '跳转pixiv详情' },
+        { val: 'artist', title: '跳转pixiv画师' }
       ],
       like: false,
       opacity: 0
@@ -247,8 +247,8 @@ export default {
         case 'pixiv':
           window.open(`https://www.pixiv.net/artworks/${this.pid}`);
           break;
-        case 'origin':
-          window.open(this.illustDetail.originalSrc);
+        case 'artist':
+          window.open(`https://www.pixiv.net/users/${this.illustDetail.artistId}`);
           break;
       }
     },
@@ -325,10 +325,8 @@ export default {
       }
     },
     seePreview() {
-      if (!this.illustDetail.setu) {
-        this.preview = true;
-        this.$store.dispatch('changeTab', false);
-      }
+      this.preview = true;
+      this.$store.dispatch('changeTab', false);
     },
     openComment() {
       if (this.user.id) {
@@ -350,6 +348,17 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~@/assets/style/color.styl'
+@keyframes motion {
+  0% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
 .detail
   background-size contain
   width 100%
@@ -407,6 +416,8 @@ export default {
       .stats-comment
         position absolute
         right 0
+        svg
+          animation motion 2s infinite
     .title
       margin-top 12px
       h2

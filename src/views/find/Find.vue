@@ -28,7 +28,8 @@ export default {
         { id: 2, text: '论坛', value: 'https://discuss.pixivic.com/', icon: '#picluntan1' },
         { id: 3, text: '关于我们', value: '/links', icon: '#picyonghuxuzhi-' },
         { id: 4, text: '前端', value: 'https://github.com/cheer-fun/pixivic-mobile', icon: '#picGithub' },
-        { id: 5, text: '后端', value: 'https://github.com/cheer-fun/pixivic-web-backend', icon: '#picGithub' }
+        { id: 5, text: '后端', value: 'https://github.com/cheer-fun/pixivic-web-backend', icon: '#picGithub' },
+        { id: 5, text: '友链', value: '/friends', icon: '#piclianjie-copy' }
       ]
     };
   }

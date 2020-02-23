@@ -13,71 +13,73 @@
           </div>
         </div>
         <div class="popup-content">
-          <div class="popup-content-inside">
-            <div class="list">
-              <div v-for="item in commentList" :key="item.id" v-ripple class="list-item">
-                <a class="profile-img">
-                  <v-avatar size="40">
-                    <v-img :src="`https://pic.pixivic.com/${item.replyFrom}.png`" />
-                  </v-avatar>
-                </a>
-                <a>
-                  <div class="user-name">{{ item.replyFromName }}</div>
-                </a>
-                <div class="comment-text f-caption-s">
-                  <span class="comment-text">{{ item.content }}</span>
-                </div>
-                <div class="status-bar">
-                  <div class="time">{{ item.createDate | formatDate }}</div>
-                  <div class="reply">
-                    <span @click="reply(item.id, item)">回复</span>
+          <Scroll>
+            <div class="popup-content-inside">
+              <div class="list">
+                <div v-for="item in commentList" :key="item.id" v-ripple class="list-item">
+                  <a class="profile-img">
+                    <v-avatar size="40">
+                      <v-img :src="`https://pic.pixivic.com/${item.replyFrom}.png`" />
+                    </v-avatar>
+                  </a>
+                  <a>
+                    <div class="user-name">{{ item.replyFromName }}</div>
+                  </a>
+                  <div class="comment-text f-caption-s">
+                    <span class="comment-text">{{ item.content }}</span>
                   </div>
-                </div>
-                <div class="comment-replies">
-                  <div v-for="val in item.subCommentList" :key="val.id" v-ripple class="list-item">
-                    <a class="profile-img">
-                      <v-avatar size="40">
-                        <v-img :src="`https://pic.pixivic.com/${val.replyFrom}.png`" />
-                      </v-avatar>
-                    </a>
-                    <a>
-                      <div class="user-name">{{ val.replyFromName }}</div>
-                    </a>
-                    <div class="comment-text f-caption-s">
-                      <span class="comment-text">@{{ val.replyToName }}: {{ val.content }}</span>
+                  <div class="status-bar">
+                    <div class="time">{{ item.createDate | formatDate }}</div>
+                    <div class="reply">
+                      <span @click="reply(item.id, item)">回复</span>
                     </div>
-                    <div class="status-bar">
-                      <div class="time">{{ val.createDate | formatDate }}</div>
-                      <div class="reply">
-                        <span @click="reply(item.id, val)">回复</span>
+                  </div>
+                  <div class="comment-replies">
+                    <div v-for="val in item.subCommentList" :key="val.id" v-ripple class="list-item">
+                      <a class="profile-img">
+                        <v-avatar size="40">
+                          <v-img :src="`https://pic.pixivic.com/${val.replyFrom}.png`" />
+                        </v-avatar>
+                      </a>
+                      <a>
+                        <div class="user-name">{{ val.replyFromName }}</div>
+                      </a>
+                      <div class="comment-text f-caption-s">
+                        <span class="comment-text">@{{ val.replyToName }}: {{ val.content }}</span>
+                      </div>
+                      <div class="status-bar">
+                        <div class="time">{{ val.createDate | formatDate }}</div>
+                        <div class="reply">
+                          <span @click="reply(item.id, val)">回复</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </Scroll>
+        </div>
+        <div class="popup-input">
+          <div class="input-emoji">
+            <svg font-size="30" class="icon" aria-hidden="true">
+              <use xlink:href="#picbiaoqing" />
+            </svg>
           </div>
-          <div class="popup-input">
-            <div class="input-emoji">
+          <div class="input-container">
+            <form>
+              <textarea
+                ref="input"
+                v-model="value"
+                maxlength="140"
+                :placeholder="placeholder"
+                @input="handleInput"
+              />
+            </form>
+            <div class="input-send" @click="submitComment">
               <svg font-size="30" class="icon" aria-hidden="true">
-                <use xlink:href="#picbiaoqing" />
+                <use xlink:href="#picfasong" />
               </svg>
-            </div>
-            <div class="input-container">
-              <form>
-                <textarea
-                  ref="input"
-                  v-model="value"
-                  maxlength="140"
-                  :placeholder="placeholder"
-                  @input="handleInput"
-                />
-              </form>
-              <div class="input-send" @click="submitComment">
-                <svg font-size="30" class="icon" aria-hidden="true">
-                  <use xlink:href="#picfasong" />
-                </svg>
-              </div>
             </div>
           </div>
         </div>
@@ -87,11 +89,14 @@
 </template>
 
 <script>
+import Scroll from '@/components/scroll/Scroll';
 import { mapGetters } from 'vuex';
+import Alert from '@/components/alert';
 const INPUT_HEIGHT = 40;
 
 export default {
   components: {
+    Scroll
   },
   filters: {
     formatDate(time) {
@@ -139,6 +144,11 @@ export default {
         });
     },
     submitComment() {
+      if (!this.value) {
+        return Alert({
+          content: '请输入评论内容~'
+        });
+      }
       let data = {
         commentAppType: 'illusts',
         commentAppId: this.pid,
@@ -223,9 +233,12 @@ export default {
           right 0
           padding 12px 0
     .popup-content
-      max-height calc(100vh - 55px)
-      overflow auto
-      padding 16px 16px 120px
+      position fixed
+      top 48px
+      right 0
+      bottom 0
+      left 0
+      padding 16px 16px 80px
       box-sizing border-box
       &-inside
         width 100%
