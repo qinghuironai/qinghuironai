@@ -18,7 +18,7 @@
       </div>
       <div class="tabs-item " @click="$router.push('/me')">
         <img
-          :src="user.avatar || require('../src/assets/images/me.svg')"
+          :src="user.id ? `https://pic.pixivic.com/${user.id}.png?t=${new Date().getTime()}` : require('../src/assets/images/me.svg')"
           :style="{transform: $route.name === 'Me' ? 'scale(1.1)' : ''}"
         >
       </div>

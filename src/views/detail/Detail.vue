@@ -117,15 +117,29 @@
             <v-row class="fill-height" align="center" justify="center">
               <img width="100%" :src="item" :style="{filter: illustDetail.setu ? 'blur(20px)' : ''}">
             </v-row>
+            <v-btn
+              color="#b9eee5"
+              dark
+              small
+              fixed
+              top
+              right
+              fab
+              @click="jumpUrl(item)"
+            >
+              <svg font-size="20" class="icon" aria-hidden="true">
+                <use xlink:href="#picfasong" />
+              </svg>
+            </v-btn>
           </v-carousel-item>
         </v-carousel>
         <v-btn
-          color="pink"
+          color="#b9eee5"
           dark
           small
           fixed
           top
-          right
+          left
           fab
           @click="preview = false"
         >
@@ -342,6 +356,9 @@ export default {
           tag
         }
       });
+    },
+    jumpUrl(url) {
+      window.open(url);
     }
   }
 };
