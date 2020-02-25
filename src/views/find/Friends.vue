@@ -31,12 +31,12 @@
       <ul>
         <li>一个简约优质实用的资源导航平台</li>
       </ul>
-        <h4>
-              <a href="http://www.animetox.com/">Animex动漫社</a>
-            </h4>
-            <ul>
-              <li>二次元及日本文化最速报</li>
-            </ul>
+      <h4>
+        <a href="http://www.animetox.com/">Animex动漫社</a>
+      </h4>
+      <ul>
+        <li>二次元及日本文化最速报</li>
+      </ul>
     </div>
   </div>
 </template>
