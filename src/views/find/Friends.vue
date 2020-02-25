@@ -20,17 +20,23 @@
         <li>一个有趣的动漫小站</li>
       </ul>
       <h4>
-        <a href="https://xinger.ink">Xinger1337's Home</a>
+        <a href="https://acg.blue">Xinger1337's Home</a>
       </h4>
       <ul>
         <li>搜刮各种二次元美图</li>
       </ul>
       <h4>
-        <a href="https://lsa.la">萌芋小筑</a>
+        <a href="http://guozhivip.com/nav/">果汁导航</a>
       </h4>
       <ul>
-        <li>一个可爱的小博客</li>
+        <li>一个简约优质实用的资源导航平台</li>
       </ul>
+        <h4>
+              <a href="http://www.animetox.com/">Animex动漫社</a>
+            </h4>
+            <ul>
+              <li>二次元及日本文化最速报</li>
+            </ul>
     </div>
   </div>
 </template>
