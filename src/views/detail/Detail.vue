@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="illustDetail" class="detail animated zoomIn">
+    <div v-if="illustDetail" class="detail">
       <List :list="pictureList" @infinite="infinite">
         <div class="detail-top">
-          <div class="detail-img">
+          <div class="detail-img animated zoomIn">
             <img
               :height="illustDetail.itemHeight"
               :src="illustDetail.originalSrc"
@@ -99,7 +99,7 @@
             <div class="detail-comment">
               <div class="comment-title">评论</div>
               <div v-if="commentList.length">
-                <comment-list :list="commentList.slice(0, 3)" />
+                <comment-list :list="commentList.slice(0, 5)" @reply="openComment" />
               </div>
               <div v-else class="comment-no">
                 <svg font-size="36" class="icon" aria-hidden="true">
@@ -107,7 +107,15 @@
                 </svg>
                 <span>暂无任何评论~快来添加评论吧</span>
               </div>
-              <v-btn color="rgba(0, 0, 0, 0.04)" width="100%" depressed rounded @click="openComment">{{ commentList.length ? '浏览更多' : '添加评论' }}</v-btn>
+              <v-btn
+                color="rgba(0, 0, 0, 0.04)"
+                width="100%"
+                depressed
+                rounded
+                @click="openComment"
+              >
+                {{ commentList.length ? '浏览更多' : '添加评论' }}
+              </v-btn>
             </div>
 
             <v-divider />
@@ -160,7 +168,7 @@
         </v-btn>
       </div>
     </div>
-    <Comment ref="comment" :list="commentList" :pid="pid" />
+    <Comment ref="comment" :list="commentList" :pid="pid" @reply="reply" />
   </div>
 </template>
 
@@ -386,6 +394,9 @@ export default {
             this.commentList = res.data.data || [];
           }
         });
+    },
+    reply(list) {
+      this.commentList = list;
     }
   }
 };
