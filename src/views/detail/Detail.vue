@@ -82,11 +82,6 @@
               <a class="work-stats-a">
                 <span>{{ illustDetail.createDate }}</span>
               </a>
-              <a class="work-stats-a stats-comment" @click="openComment">
-                <svg font-size="35" class="icon" aria-hidden="true">
-                  <use xlink:href="#picliuyan-copy" />
-                </svg>
-              </a>
             </div>
             <div class="user">
               <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
@@ -99,6 +94,22 @@
                 {{ illustDetail.artistPreView.isFollowed ? '已关注' : '+加关注' }}
               </v-btn>
             </div>
+            <v-divider />
+
+            <div class="detail-comment">
+              <div class="comment-title">评论</div>
+              <div v-if="commentList.length">
+                <comment-list :list="commentList.slice(0, 3)" />
+              </div>
+              <div v-else class="comment-no">
+                <svg font-size="36" class="icon" aria-hidden="true">
+                  <use xlink:href="#picpinglun" />
+                </svg>
+                <span>暂无任何评论~快来添加评论吧</span>
+              </div>
+              <v-btn color="rgba(0, 0, 0, 0.04)" width="100%" depressed rounded @click="openComment">{{ commentList.length ? '浏览更多' : '添加评论' }}</v-btn>
+            </div>
+
             <v-divider />
             <div class="title">
               <h2>相关作品</h2>
@@ -149,7 +160,7 @@
         </v-btn>
       </div>
     </div>
-    <Comment ref="comment" :pid="pid" />
+    <Comment ref="comment" :list="commentList" />
   </div>
 </template>
 
@@ -160,6 +171,7 @@ import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
 import Comment from './components/Comment';
 import Alert from '@/components/alert';
+import CommentList from './components/List';
 import { replaceBigImg } from '@/util';
 
 export default {
@@ -167,7 +179,8 @@ export default {
   components: {
     List,
     Like,
-    Comment
+    Comment,
+    CommentList
   },
   props: {
     pid: {
@@ -186,7 +199,8 @@ export default {
         { val: 'artist', title: '跳转pixiv画师' }
       ],
       like: false,
-      opacity: 0
+      opacity: 0,
+      commentList: []
     };
   },
   computed: {
@@ -218,6 +232,7 @@ export default {
     } else {
       this.getIllustDetail();
     }
+    this.getCommentsList();
   },
   methods: {
     getIllustDetail() {
@@ -359,23 +374,23 @@ export default {
     },
     jumpUrl(url) {
       window.open(url);
+    },
+    getCommentsList() {
+      this.$api.comment.getComments({
+        commentAppType: 'illusts',
+        commentAppId: this.pid
+      })
+        .then(res => {
+          if (res.status === 200) {
+            this.commentList = res.data.data || [];
+          }
+        });
     }
   }
 };
 </script>
 <style lang="stylus" scoped>
 @import '~@/assets/style/color.styl'
-@keyframes motion {
-  0% {
-    transform: scale(1.2);
-  }
-  50% {
-    transform: scale(0.8);
-  }
-  100% {
-    transform: scale(1.2);
-  }
-}
 .detail
   background-size contain
   width 100%
@@ -393,6 +408,23 @@ export default {
       transition opacity .3s
       vertical-align bottom
       object-fit cover
+  &-comment
+    margin-bottom 12px
+    .comment-title
+      padding-top 10px
+      font-size 12px
+      font-weight 700
+    .comment-no
+      display flex
+      justify-content center
+      align-items center
+      flex-direction column
+      padding 30px
+      span
+        font-size 14px
+        font-weight 700px
+        color rgba(0, 0, 0, 0.32)
+        margin 12px 0 20px
   &-info
     padding 8px
     overflow hidden
@@ -430,11 +462,6 @@ export default {
           margin-left 2px
           color rgba(0, 0, 0, 0.32)
           vertical-align middle
-      .stats-comment
-        position absolute
-        right 0
-        svg
-          animation motion 2s infinite
     .title
       margin-top 12px
       h2
