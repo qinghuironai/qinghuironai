@@ -65,7 +65,8 @@ export default {
       default: () => []
     },
     pid: {
-      type: String
+      type: String,
+      required: true
     }
   },
   data() {
@@ -121,6 +122,7 @@ export default {
             this.value = '';
             this.placeholder = '';
             this.replyParam = {};
+            this.$emit('reply', this.commentList);
           }
         });
     },
