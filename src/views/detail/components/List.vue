@@ -60,8 +60,8 @@ export default {
     }
   },
   methods: {
-    reply() {
-
+    reply(id, val) {
+      this.$emit('reply', { id, val });
     }
   }
 };

@@ -160,7 +160,7 @@
         </v-btn>
       </div>
     </div>
-    <Comment ref="comment" :list="commentList" />
+    <Comment ref="comment" :list="commentList" :pid="pid" />
   </div>
 </template>
 
@@ -375,6 +375,7 @@ export default {
     jumpUrl(url) {
       window.open(url);
     },
+    // 等待后端分页处理
     getCommentsList() {
       this.$api.comment.getComments({
         commentAppType: 'illusts',
@@ -424,7 +425,7 @@ export default {
         font-size 14px
         font-weight 700px
         color rgba(0, 0, 0, 0.32)
-        margin 12px 0 20px
+        margin 12px 0
   &-info
     padding 8px
     overflow hidden
