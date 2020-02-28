@@ -15,7 +15,7 @@
         <div class="popup-content">
           <Scroll>
             <div class="popup-content-inside">
-              <List :list="list" />
+              <List :list="commentList" @reply="reply" />
             </div>
           </Scroll>
         </div>
@@ -63,6 +63,9 @@ export default {
     list: {
       type: Array,
       default: () => []
+    },
+    pid: {
+      type: String
     }
   },
   data() {
@@ -80,6 +83,7 @@ export default {
   methods: {
     show() {
       this.showComment = true;
+      this.getCommentsList();
     },
     close() {
       this.showComment = false;
@@ -124,14 +128,26 @@ export default {
       const input = this.$refs.input;
       input.style.height = input.scrollTop + INPUT_HEIGHT + 'px';
     },
-    reply(id, item) {
+    reply({ id, val }) {
+      console.log(id, val);
       this.replyParam = {
         parentId: id,
-        replyTo: item.replyFrom,
-        replyToName: item.replyFromName
+        replyTo: val.replyFrom,
+        replyToName: val.replyFromName
       };
-      this.placeholder = '回复: ' + item.replyFromName;
+      this.placeholder = '回复: ' + val.replyFromName;
       this.$refs.input.focus();
+    },
+    getCommentsList() {
+      this.$api.comment.getComments({
+        commentAppType: 'illusts',
+        commentAppId: this.pid
+      })
+        .then(res => {
+          if (res.status === 200) {
+            this.commentList = res.data.data || [];
+          }
+        });
     }
   }
 };
