@@ -186,6 +186,7 @@ export default {
           return pre.concat(replaceBigImg(cur.original));
         }, []);
         tmp['originalSrc'] = replaceBigImg(tmp.imageUrls[0].original);
+        tmp['isad'] = tmp.type === 'ad_image' || tmp.type === 'donate';
       }
     }
   }

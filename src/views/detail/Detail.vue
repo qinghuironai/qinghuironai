@@ -105,7 +105,7 @@
                 <svg font-size="36" class="icon" aria-hidden="true">
                   <use xlink:href="#picpinglun" />
                 </svg>
-                <span>暂无任何评论~快来添加评论吧</span>
+                <span>暂无任何评论~快来添加评论吧o(*￣▽￣*)o</span>
               </div>
               <v-btn
                 color="rgba(0, 0, 0, 0.04)"
@@ -114,7 +114,7 @@
                 rounded
                 @click="openComment"
               >
-                {{ commentList.length ? '浏览更多' : '添加评论' }}
+                添加评论
               </v-btn>
             </div>
 

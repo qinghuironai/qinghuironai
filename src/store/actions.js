@@ -14,18 +14,6 @@ export const clearCurrentState = ({
   commit(types.SET_USER, null);
 };
 
-export const addCachedView = ({
-  commit
-}, view) => {
-  commit(types.ADD_CACHED_VIEWS, view);
-};
-
-export const delCachedView = ({
-  commit
-}, name) => {
-  commit(types.DEL_CACHED_VIEW, name);
-};
-
 export const changeTab = ({
   commit
 }, flag) => {

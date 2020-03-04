@@ -268,7 +268,7 @@ export default {
     swipe(direction) {
       switch (direction) {
         case 'Up':
-          if (!this.showTab) return;
+          if (!this.showTab || this.$refs.outer.scrollTop < 100) return;
           this.$store.dispatch('changeTab', false);
           break;
         case 'Down':
