@@ -8,12 +8,6 @@ const mutations = {
       state.user = {};
     }
   },
-  [types.ADD_CACHED_VIEWS](state, view) {
-    if (state.cachedViews.includes(view.name)) return;
-    if (!view.meta.noCache) {
-      state.cachedViews.push(view.name);
-    }
-  },
   [types.DEL_CACHED_VIEW](state, name) {
     const index = state.cachedViews.indexOf(name);
     if (index > -1) {

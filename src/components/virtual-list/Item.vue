@@ -11,7 +11,7 @@
         <img src="../../assets/images/count.svg">
         <span>{{ column.pageCount }}</span>
       </div>
-      <Like :like="column.isLiked" @handleLike="handleLike" />
+      <Like v-if="!column.isad" :like="column.isLiked" @handleLike="handleLike" />
       <div v-if="column.setu" class="setu-filter">
         <svg font-size="50" class="icon" aria-hidden="true">
           <use xlink:href="#picsuo2" />
@@ -50,8 +50,12 @@ export default {
       }
     },
     goDetail() {
-      this.$store.dispatch('setDetail', this.column);
-      this.$router.push(`/detail/${this.column.id}`);
+      if (this.column.isad) {
+        window.open(this.column.link);
+      } else {
+        this.$store.dispatch('setDetail', this.column);
+        this.$router.push(`/detail/${this.column.id}`);
+      }
     }
   }
 };
