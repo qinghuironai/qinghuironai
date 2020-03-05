@@ -165,6 +165,14 @@ function checkQQ(userId) {
   });
 }
 
+// 查看用户信息
+function getUsers(userId) {
+  return axios({
+    url: `/users/${userId}`,
+    method: 'get'
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -184,5 +192,6 @@ export {
   setEmail,
   qqLogin,
   qqAccess,
-  checkQQ
+  checkQQ,
+  getUsers
 };

@@ -2,7 +2,7 @@
   <div class="list">
     <div v-for="item in list" :key="item.id" v-ripple class="list-item">
       <a class="profile-img">
-        <v-avatar size="40">
+        <v-avatar size="40" @click="goUsers(item.replyFrom)">
           <v-img :src="`https://pic.pixivic.com/${item.replyFrom}.png`" />
         </v-avatar>
       </a>
@@ -21,7 +21,7 @@
       <div class="comment-replies">
         <div v-for="val in item.subCommentList" :key="val.id" v-ripple class="list-item">
           <a class="profile-img">
-            <v-avatar size="40">
+            <v-avatar size="40" @click="goUsers(val.replyFrom)">
               <v-img :src="`https://pic.pixivic.com/${val.replyFrom}.png`" />
             </v-avatar>
           </a>
@@ -62,6 +62,11 @@ export default {
   methods: {
     reply(id, val) {
       this.$emit('reply', { id, val });
+    },
+    goUsers(id) {
+      const userId = this.$store.getters.user.id;
+      if (id === userId) return;
+      this.$router.push(`/users/${id}`);
     }
   }
 };

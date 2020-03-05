@@ -105,7 +105,7 @@
                 <svg font-size="36" class="icon" aria-hidden="true">
                   <use xlink:href="#picpinglun" />
                 </svg>
-                <span>暂无任何评论~快来添加评论吧o(*￣▽￣*)o</span>
+                <span>快来添加评论吧o(*￣▽￣*)o</span>
               </div>
               <v-btn
                 color="rgba(0, 0, 0, 0.04)"
@@ -424,7 +424,7 @@ export default {
     margin-bottom 12px
     .comment-title
       padding-top 10px
-      font-size 12px
+      font-size 14px
       font-weight 700
     .comment-no
       display flex
