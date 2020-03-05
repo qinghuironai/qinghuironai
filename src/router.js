@@ -24,7 +24,8 @@ const pages = {
   Register: () => import('./views/register/Register'),
   ResetPassword: () => import('./views/reset/ResetPassword'),
   EmailCheck: () => import('./views/reset/EmailCheck'),
-  Friends: () => import('./views/find/Friends')
+  Friends: () => import('./views/find/Friends'),
+  Users: () => import('./views/users/Users')
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -152,6 +153,12 @@ const router = new Router({
     path: '/friends',
     name: 'Friends',
     component: pages.Friends
+  },
+  {
+    path: '/users/:userId',
+    name: 'Users',
+    component: pages.Users,
+    props: true
   },
   {
     path: '*',
