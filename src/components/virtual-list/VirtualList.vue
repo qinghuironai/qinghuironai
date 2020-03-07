@@ -46,22 +46,15 @@ export default {
   },
   data() {
     return {
-      scrollY: 0,
       columnHeight: [],
       column: 0,
       width: getClient().width,
-      height: getClient().height
+      height: getClient().height,
+      listMap: new Map()
     };
   },
   computed: {
-    ...mapGetters(['user', 'likeStatus', 'showTab']),
-    listMap() {
-      const map = new Map();
-      for (const item of this.list) {
-        map.set(item.id, item);
-      }
-      return map;
-    }
+    ...mapGetters(['user', 'likeStatus', 'showTab'])
   },
   watch: {
     list: {
@@ -71,6 +64,9 @@ export default {
         } else {
           const list = val.filter(e => !old.includes(e));
           this.handleList(list);
+          for (const item of list) {
+            this.listMap.set(item.id, item);
+          }
         }
       }
     },
@@ -117,7 +113,8 @@ export default {
       const flag = item.isLiked;
       const params = {
         userId: this.user.id,
-        illustId: data.id
+        illustId: data.id,
+        username: this.user.username
       };
       if (!flag) {
         this.$set(item, 'isLiked', true); // 先强制视图更新 防止网络延迟不动

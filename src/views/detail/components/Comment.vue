@@ -131,7 +131,6 @@ export default {
       input.style.height = input.scrollTop + INPUT_HEIGHT + 'px';
     },
     reply({ id, val }) {
-      console.log(id, val);
       this.replyParam = {
         parentId: id,
         replyTo: val.replyFrom,

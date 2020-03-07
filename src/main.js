@@ -25,6 +25,14 @@ Vue.use(VueGtag, {
 Vue.prototype.$api = api;
 Vue.prototype.$util = util;
 
+Vue.filter('dateFormat', val => {
+  const time = new Date(val);
+  const y = time.getFullYear();
+  const m = time.getMonth() + 1;
+  const d = time.getDate();
+  return `${y}-${m < 10 ? '0' + m : m}-${d < 10 ? '0' + d : d}`;
+});
+
 const app = new Vue({
   router,
   store,

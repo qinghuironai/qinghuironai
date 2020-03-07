@@ -173,6 +173,18 @@ function getUsers(userId) {
   });
 }
 
+// 查看画师关注用户列表
+function getFollowers(params) {
+  return axios({
+    url: `/artists/${params.artistId}/followedUsers`,
+    method: 'get',
+    params: {
+      page: params.page || 1,
+      pageSize: params.pageSize || 30
+    }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -193,5 +205,6 @@ export {
   qqLogin,
   qqAccess,
   checkQQ,
-  getUsers
+  getUsers,
+  getFollowers
 };
