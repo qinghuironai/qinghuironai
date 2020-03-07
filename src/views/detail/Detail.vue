@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="illustDetail" class="detail animated zoomIn">
+    <div v-if="illustDetail" class="detail">
       <List :list="pictureList" @infinite="infinite">
         <div class="detail-top">
-          <div class="detail-img">
+          <div class="detail-img animated zoomIn">
             <img
               :height="illustDetail.itemHeight"
               :src="illustDetail.originalSrc"
@@ -82,12 +82,13 @@
               <a class="work-stats-a">
                 <span>{{ illustDetail.createDate }}</span>
               </a>
-              <a class="work-stats-a stats-comment" @click="openComment">
-                <svg font-size="30" class="icon" aria-hidden="true">
-                  <use xlink:href="#picpinglun" />
-                </svg>
+              <a v-if="likeUsers" class="work-stats-a user-avatar">
+                <v-avatar v-for="item in likeUsers" :key="item.userId" size="30" @click="goUsers">
+                  <v-img class="grey lighten-2" :src="`https://pic.pixivic.com/${item}.png`" />
+                </v-avatar>
               </a>
             </div>
+            <v-divider />
             <div class="user">
               <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
                 <v-avatar>
@@ -99,6 +100,30 @@
                 {{ illustDetail.artistPreView.isFollowed ? '已关注' : '+加关注' }}
               </v-btn>
             </div>
+            <v-divider />
+
+            <div class="detail-comment">
+              <div class="comment-title">评论</div>
+              <div v-if="commentList.length">
+                <comment-list :list="commentList.slice(0, 5)" @reply="openComment" />
+              </div>
+              <div v-else class="comment-no">
+                <svg font-size="36" class="icon" aria-hidden="true">
+                  <use xlink:href="#picpinglun" />
+                </svg>
+                <span>快来添加评论吧o(*￣▽￣*)o</span>
+              </div>
+              <v-btn
+                color="rgba(0, 0, 0, 0.04)"
+                width="100%"
+                depressed
+                rounded
+                @click="openComment"
+              >
+                添加评论
+              </v-btn>
+            </div>
+
             <v-divider />
             <div class="title">
               <h2>相关作品</h2>
@@ -115,17 +140,31 @@
         >
           <v-carousel-item v-for="(item, i) in illustDetail.imgs" :key="i">
             <v-row class="fill-height" align="center" justify="center">
-              <img width="100%" :src="item">
+              <img width="100%" :src="item" :style="{filter: illustDetail.setu ? 'blur(20px)' : ''}">
             </v-row>
+            <v-btn
+              color="#b9eee5"
+              dark
+              small
+              fixed
+              top
+              right
+              fab
+              @click="jumpUrl(item)"
+            >
+              <svg font-size="20" class="icon" aria-hidden="true">
+                <use xlink:href="#picfasong" />
+              </svg>
+            </v-btn>
           </v-carousel-item>
         </v-carousel>
         <v-btn
-          color="pink"
+          color="#b9eee5"
           dark
           small
           fixed
           top
-          right
+          left
           fab
           @click="preview = false"
         >
@@ -135,7 +174,7 @@
         </v-btn>
       </div>
     </div>
-    <Comment ref="comment" :pid="pid" />
+    <Comment ref="comment" :list="commentList" :pid="pid" @reply="reply" />
   </div>
 </template>
 
@@ -146,6 +185,7 @@ import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
 import Comment from './components/Comment';
 import Alert from '@/components/alert';
+import CommentList from './components/List';
 import { replaceBigImg } from '@/util';
 
 export default {
@@ -153,7 +193,8 @@ export default {
   components: {
     List,
     Like,
-    Comment
+    Comment,
+    CommentList
   },
   props: {
     pid: {
@@ -168,11 +209,13 @@ export default {
       page: 1,
       preview: false,
       items: [
-        { val: 'pixiv', title: '跳转pixiv' },
-        { val: 'origin', title: '跳转图片链接' }
+        { val: 'pixiv', title: '跳转pixiv详情' },
+        { val: 'artist', title: '跳转pixiv画师' }
       ],
       like: false,
-      opacity: 0
+      opacity: 0,
+      commentList: [],
+      likeUsers: []
     };
   },
   computed: {
@@ -204,6 +247,8 @@ export default {
     } else {
       this.getIllustDetail();
     }
+    this.getCommentsList();
+    this.bookmarkedUsers();
   },
   methods: {
     getIllustDetail() {
@@ -247,8 +292,8 @@ export default {
         case 'pixiv':
           window.open(`https://www.pixiv.net/artworks/${this.pid}`);
           break;
-        case 'origin':
-          window.open(this.illustDetail.originalSrc);
+        case 'artist':
+          window.open(`https://www.pixiv.net/users/${this.illustDetail.artistId}`);
           break;
       }
     },
@@ -264,7 +309,8 @@ export default {
       }
       const params = {
         userId: this.user.id,
-        illustId: this.illustDetail.id
+        illustId: this.illustDetail.id,
+        username: this.user.username
       };
       if (!this.illustDetail.isLiked) {
         this.illustDetail.isLiked = true;
@@ -300,7 +346,8 @@ export default {
       }
       const data = {
         artistId: this.illustDetail.artistPreView.id,
-        userId: this.user.id
+        userId: this.user.id,
+        username: this.user.username
       };
       if (!this.illustDetail.artistPreView.isFollowed) {
         this.illustDetail.artistPreView.isFollowed = true;
@@ -325,10 +372,8 @@ export default {
       }
     },
     seePreview() {
-      if (!this.illustDetail.setu) {
-        this.preview = true;
-        this.$store.dispatch('changeTab', false);
-      }
+      this.preview = true;
+      this.$store.dispatch('changeTab', false);
     },
     openComment() {
       if (this.user.id) {
@@ -344,6 +389,36 @@ export default {
           tag
         }
       });
+    },
+    jumpUrl(url) {
+      window.open(url);
+    },
+    // 等待后端分页处理
+    getCommentsList() {
+      this.$api.comment.getComments({
+        commentAppType: 'illusts',
+        commentAppId: this.pid
+      })
+        .then(res => {
+          if (res.status === 200) {
+            this.commentList = res.data.data || [];
+          }
+        });
+    },
+    reply(list) {
+      this.commentList = list;
+    },
+    bookmarkedUsers() {
+      this.$api.detail.bookmarkedUsers({
+        illustId: this.pid,
+        pageSize: 3
+      })
+        .then(res => {
+          this.likeUsers = res.data.data;
+        });
+    },
+    goUsers() {
+      this.$router.push(`/bookmark/${this.pid}`);
     }
   }
 };
@@ -367,6 +442,23 @@ export default {
       transition opacity .3s
       vertical-align bottom
       object-fit cover
+  &-comment
+    margin-bottom 12px
+    .comment-title
+      padding-top 10px
+      font-size 14px
+      font-weight 700
+    .comment-no
+      display flex
+      justify-content center
+      align-items center
+      flex-direction column
+      padding 30px
+      span
+        font-size 14px
+        font-weight 700px
+        color rgba(0, 0, 0, 0.32)
+        margin 12px 0
   &-info
     padding 8px
     overflow hidden
@@ -397,16 +489,23 @@ export default {
       margin 10px 0 15px
       user-select none
       position relative
+      display flex
+      align-items center
       &-a
         margin-right 10px
+        height 30px
+        line-height 30px
         span
           font-size 12px
           margin-left 2px
           color rgba(0, 0, 0, 0.32)
           vertical-align middle
-      .stats-comment
-        position absolute
-        right 0
+      .user-avatar
+        flex 1
+        text-align right
+        margin 0
+        .v-avatar
+          margin-right 5px
     .title
       margin-top 12px
       h2

@@ -4,22 +4,26 @@
 
 ### Refactor
 
-- [x] 基础架构 20190616 Arius
-- [x] Home 20190616 Arius
-- [x] DailyRank 20190709 Kim & Arius
-- [x] PopSearch Arius
-- [ ] Intro
-- [ ] Links
-- [ ] Donate
-- [ ] Comments
-- [ ] NotFound
+- [x] 基础架构
+- [x] Home
+- [x] DailyRank
+- [x] PopSearch
+- [x] Intro
+- [x] Links
+- [x] Donate
+- [x] Comment
+- [x] User System
+- [x] Artist
+- [x] Collect
+- [x] Artist New
+- [x] Find
 
 ### Optimization
 
 - [x] 搜索提示词
-- [ ] 搜索的日期范围选定
-- [ ] 日排行页面和搜索页面的作品详情
-- [ ] 排行模式切换以及前后切换
+- [x] 搜索的日期范围选定
+- [x] 日排行页面和搜索页面的作品详情
+- [x] 排行模式切换以及前后切换 包含左右滑动
 
 ## Project setup
 ```

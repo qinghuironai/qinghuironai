@@ -16,12 +16,19 @@
           alt=""
         >
       </div>
+      <div class="tabs-item " @click="$router.push('/me')">
+        <img
+          :src="user.id ? `https://pic.pixivic.com/${user.id}.png?t=${new Date().getTime()}` : require('../src/assets/images/me.svg')"
+          :style="{transform: $route.name === 'Me' ? 'scale(1.1)' : ''}"
+        >
+      </div>
     </div>
   </v-app>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
@@ -38,10 +45,6 @@ export default {
         value: '/new',
         src: require('../src/assets/images/new.svg'),
         activeSrc: require('../src/assets/images/new-active.svg')
-      }, {
-        value: '/me',
-        src: require('../src/assets/images/me.svg'),
-        activeSrc: require('../src/assets/images/me-active.svg')
       }]
     };
   },
@@ -52,7 +55,7 @@ export default {
       'user'
     ]),
     key() {
-      return this.$route.path;
+      return this.$route.fullPath;
     }
   },
   watch: {
@@ -95,6 +98,8 @@ export default {
       height 25px
       vertical-align middle
       transition all .3s
+      border-radius 50%
+      object-fit cover
 .show
   transform translateY(0)
   opacity 1

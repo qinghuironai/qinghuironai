@@ -1,12 +1,10 @@
 <template>
   <div class="rank-header">
     <div class="header-container" :style="{top: showTab ? 0 : '-50px'}">
-      <v-btn icon>
-        <router-link to="/search">
-          <svg font-size="20" class="icon" aria-hidden="true">
-            <use xlink:href="#picsearch" />
-          </svg>
-        </router-link>
+      <v-btn icon @click="goSearch">
+        <svg font-size="20" class="icon" aria-hidden="true">
+          <use xlink:href="#picsearch" />
+        </svg>
       </v-btn>
       <v-bottom-sheet v-model="showMode">
         <template v-slot:activator="{ on }">
@@ -98,6 +96,9 @@ export default {
     selectDate(val) {
       this.showDate = false;
       this.$emit('selectDate', val);
+    },
+    goSearch() {
+      this.$router.push('/search');
     }
   }
 };
@@ -113,7 +114,7 @@ export default {
     position relative
     top 0
     background-color #ffffff
-    height 48px
+    // height 48px
     display flex
     align-items center
     justify-content space-between

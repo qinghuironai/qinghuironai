@@ -165,6 +165,26 @@ function checkQQ(userId) {
   });
 }
 
+// 查看用户信息
+function getUsers(userId) {
+  return axios({
+    url: `/users/${userId}`,
+    method: 'get'
+  });
+}
+
+// 查看画师关注用户列表
+function getFollowers(params) {
+  return axios({
+    url: `/artists/${params.artistId}/followedUsers`,
+    method: 'get',
+    params: {
+      page: params.page || 1,
+      pageSize: params.pageSize || 30
+    }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -184,5 +204,7 @@ export {
   setEmail,
   qqLogin,
   qqAccess,
-  checkQQ
+  checkQQ,
+  getUsers,
+  getFollowers
 };

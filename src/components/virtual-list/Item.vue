@@ -6,11 +6,12 @@
         :style="{opacity}"
         @load="handleLoad"
       >
+      <div class="img-filter" />
       <div v-if="column.pageCount > 1" class="count">
         <img src="../../assets/images/count.svg">
         <span>{{ column.pageCount }}</span>
       </div>
-      <Like :like="column.isLiked" @handleLike="handleLike" />
+      <Like v-if="!column.isad" :like="column.isLiked" @handleLike="handleLike" />
       <div v-if="column.setu" class="setu-filter">
         <svg font-size="50" class="icon" aria-hidden="true">
           <use xlink:href="#picsuo2" />
@@ -49,8 +50,12 @@ export default {
       }
     },
     goDetail() {
-      this.$store.dispatch('setDetail', this.column);
-      this.$router.push(`/detail/${this.column.id}`);
+      if (this.column.isad) {
+        window.open(this.column.link);
+      } else {
+        this.$store.dispatch('setDetail', this.column);
+        this.$router.push(`/detail/${this.column.id}`);
+      }
     }
   }
 };
@@ -77,7 +82,15 @@ export default {
       height 100%
       transition opacity .3s
       object-fit cover
-      border-radius 5px
+      border-radius 8px
+    .img-filter
+      position absolute
+      top 0
+      right 0
+      bottom 0
+      left 0
+      background rgba(0, 0, 0, .03)
+      border-radius 8px
   .count
     position absolute
     display inline-block

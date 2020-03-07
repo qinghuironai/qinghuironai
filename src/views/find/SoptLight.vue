@@ -1,58 +1,47 @@
 <template>
-  <div
-    id="scroll-target"
-    ref="scroll"
-    class="spotlight"
+  <List
+    :list="list"
+    :height="270"
+    @infinite="infinite"
   >
-    <v-row v-scroll:#scroll-target="onScroll" dense>
-      <v-col
-        v-for="item in list"
-        :key="item.id"
-        cols="12"
-        class="mb-2"
-        @click="goSpot(item.id)"
-      >
-        <v-card>
+    <template v-slot:cell="props">
+      <v-list-item class="item" @click="goSpot(props.data.id)">
+        <v-card width="100%">
           <v-img
-            :src="item.thumbnail"
-            class="white--text align-end"
+            :src="props.data.thumbnail"
+            class="white--text align-end grey lighten-2"
             height="200px"
           >
-            <v-card-title style="font-size: 16px;" v-text="item.title" />
+            <v-card-title style="font-size: 16px; background: rgba(0,0,0,0.1)" v-text="props.data.title" />
           </v-img>
           <v-card-actions>
             <div
               style="width: 100%;"
               class="pa-1 d-flex align-center justify-space-between"
             >
-              <v-chip color="primary">{{ item.subcategoryLabel }}</v-chip>
-              <span>{{ item.publishDate }}</span>
+              <v-chip color="primary">{{ props.data.subcategoryLabel }}</v-chip>
+              <span>{{ props.data.publishDate }}</span>
             </div>
           </v-card-actions>
         </v-card>
-      </v-col>
-    </v-row>
-    <infinite-loading @infinite="infinite" />
-  </div>
+      </v-list-item>
+    </template>
+  </List>
 </template>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading';
+import List from '@/components/list/List';
 
 export default {
   name: 'SpotLight',
   components: {
-    InfiniteLoading
+    List
   },
   data() {
     return {
       page: 1,
-      list: [],
-      scrollTop: 0
+      list: []
     };
-  },
-  activated() {
-    this.$refs.scroll.scrollTop = this.scrollTop;
   },
   methods: {
     infinite($state) {
@@ -72,20 +61,14 @@ export default {
     },
     goSpot(id) {
       this.$router.push(`/spot/${id}`);
-    },
-    onScroll(e) {
-      this.scrollTop = e.target.scrollTop;
     }
   }
 };
 </script>
 
 <style scoped lang="stylus">
-.spotlight
-  width 100vw
-  min-height 100vh
-  overflow scroll
-  background #fff
-  padding 5px 15px
-  box-sizing border-box
+.item
+  width 100%
+  height 100%
+  padding 10px
 </style>
