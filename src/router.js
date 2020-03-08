@@ -25,7 +25,8 @@ const pages = {
   ResetPassword: () => import('./views/reset/ResetPassword'),
   EmailCheck: () => import('./views/reset/EmailCheck'),
   Friends: () => import('./views/find/Friends'),
-  Users: () => import('./views/users/Users')
+  Users: () => import('./views/users/Users'),
+  BookMark: () => import('./views/bookmark/BookMark')
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -158,6 +159,12 @@ const router = new Router({
     path: '/users/:userId',
     name: 'Users',
     component: pages.Users,
+    props: true
+  },
+  {
+    path: '/bookmark/:illustId',
+    name: 'BookMark',
+    component: pages.BookMark,
     props: true
   },
   {

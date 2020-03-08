@@ -53,11 +53,24 @@ function reqSummary(artistId) {
   });
 }
 
+// 查看画作收藏用户列表
+function bookmarkedUsers(params) {
+  return axios({
+    url: `/illusts/${params.illustId}/bookmarkedUsers`,
+    method: 'get',
+    params: {
+      page: params.page || 1,
+      pageSize: params.pageSize || 30
+    }
+  });
+}
+
 export {
   getPixById,
   reqArtistIllust,
   reqIllustDetail,
   reqArtist,
   reqRelatedIllust,
-  reqSummary
+  reqSummary,
+  bookmarkedUsers
 };

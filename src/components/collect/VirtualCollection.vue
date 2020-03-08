@@ -119,8 +119,7 @@ export default {
       totalHeight: 0,
       totalWidth: 0,
       displayItems: [],
-      scrollY: 0,
-      contentTop: 0
+      scrollY: 0
     };
   },
   computed: {
@@ -154,9 +153,6 @@ export default {
     }
   },
   created() {
-    this.$nextTick(() => {
-      this.contentTop = this.$refs.watercontent.offsetTop;
-    });
     this.groupManagers = [];
     this.onCollectionChanged();
   },
@@ -239,7 +235,7 @@ export default {
           height: this.height,
           width: this.width,
           x: scrollLeft,
-          y: scrollTop - this.contentTop
+          y: scrollTop - this.$refs.watercontent.offsetTop
         });
 
         indices.forEach(itemIndex => {

@@ -82,7 +82,13 @@
               <a class="work-stats-a">
                 <span>{{ illustDetail.createDate }}</span>
               </a>
+              <a v-if="likeUsers" class="work-stats-a user-avatar">
+                <v-avatar v-for="item in likeUsers" :key="item.userId" size="30" @click="goUsers">
+                  <v-img class="grey lighten-2" :src="`https://pic.pixivic.com/${item}.png`" />
+                </v-avatar>
+              </a>
             </div>
+            <v-divider />
             <div class="user">
               <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
                 <v-avatar>
@@ -208,7 +214,8 @@ export default {
       ],
       like: false,
       opacity: 0,
-      commentList: []
+      commentList: [],
+      likeUsers: []
     };
   },
   computed: {
@@ -241,6 +248,7 @@ export default {
       this.getIllustDetail();
     }
     this.getCommentsList();
+    this.bookmarkedUsers();
   },
   methods: {
     getIllustDetail() {
@@ -301,7 +309,8 @@ export default {
       }
       const params = {
         userId: this.user.id,
-        illustId: this.illustDetail.id
+        illustId: this.illustDetail.id,
+        username: this.user.username
       };
       if (!this.illustDetail.isLiked) {
         this.illustDetail.isLiked = true;
@@ -337,7 +346,8 @@ export default {
       }
       const data = {
         artistId: this.illustDetail.artistPreView.id,
-        userId: this.user.id
+        userId: this.user.id,
+        username: this.user.username
       };
       if (!this.illustDetail.artistPreView.isFollowed) {
         this.illustDetail.artistPreView.isFollowed = true;
@@ -397,6 +407,18 @@ export default {
     },
     reply(list) {
       this.commentList = list;
+    },
+    bookmarkedUsers() {
+      this.$api.detail.bookmarkedUsers({
+        illustId: this.pid,
+        pageSize: 3
+      })
+        .then(res => {
+          this.likeUsers = res.data.data;
+        });
+    },
+    goUsers() {
+      this.$router.push(`/bookmark/${this.pid}`);
     }
   }
 };
@@ -467,13 +489,23 @@ export default {
       margin 10px 0 15px
       user-select none
       position relative
+      display flex
+      align-items center
       &-a
         margin-right 10px
+        height 30px
+        line-height 30px
         span
           font-size 12px
           margin-left 2px
           color rgba(0, 0, 0, 0.32)
           vertical-align middle
+      .user-avatar
+        flex 1
+        text-align right
+        margin 0
+        .v-avatar
+          margin-right 5px
     .title
       margin-top 12px
       h2

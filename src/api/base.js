@@ -2,10 +2,11 @@ import axios from 'axios';
 import cookie from 'js-cookie';
 import router from '../router';
 
+// console.log(process.env);
+
 // 创建axios实例
 const instance = axios.create({
-  baseURL: 'https://api.pixivic.com',
-  // baseURL: 'https://v1.api.pixivic.com',
+  baseURL: process.env.VUE_APP_BASE_API,
   timeout: 20000,
   validateStatus(status) {
     return status >= 200 && status < 600;

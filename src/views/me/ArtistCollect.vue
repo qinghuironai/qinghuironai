@@ -1,61 +1,42 @@
 <template>
-  <div
-    id="scroll-target"
-    ref="scroll"
-    class="artist-collect"
+  <List
+    :list="artistList"
+    @infinite="infinite"
   >
-    <v-list
-      v-scroll:#scroll-target="onScroll"
-      subheader
-      class="list"
-    >
-      <v-subheader>关注列表</v-subheader>
-      <v-list-item
-        v-for="item in artistList"
-        :key="item.id"
-        @click="$router.push({name: 'Artist', params: {artistId: item.id}})"
-      >
+    <v-subheader>关注画师列表</v-subheader>
+    <template v-slot:cell="props">
+      <v-list-item @click="handleClick(props.data.id)">
         <v-list-item-avatar>
-          <v-img :src="item.avatar" />
+          <v-img class="grey lighten-2" :src="props.data.avatar" />
         </v-list-item-avatar>
-
         <v-list-item-content>
-          <v-list-item-title v-text="item.name" />
+          <v-list-item-title v-text="props.data.name" />
         </v-list-item-content>
-        <v-btn color="primary" small @click.stop="follow(item)">
-          {{ item.isFollowed ? '关注中' : '+关注' }}
+        <v-btn color="primary" small @click.stop="follow(props.data)">
+          {{ props.data.isFollowed ? '关注中' : '+关注' }}
         </v-btn>
       </v-list-item>
-      <infinite-loading @infinite="infinite">
-        <div slot="no-more" />
-        <div slot="no-results" style="marginTop: 50px;">
-          <svg font-size="160" class="icon" aria-hidden="true">
-            <use xlink:href="#pickongtai1" />
-          </svg>
-          <p style="color: #E3F2FA; font-size: 20px;">没有内容</p>
-        </div>
-      </infinite-loading>
-    </v-list>
-  </div>
+    </template>
+  </List>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import InfiniteLoading from 'vue-infinite-loading';
 import { replaceBigImg } from '@/util';
 import Alert from '@/components/alert';
+import List from '@/components/list/List';
 
 export default {
   name: 'ArtistCollect',
   components: {
-    InfiniteLoading
+    List
   },
   data() {
     return {
       artistList: [],
       listMap: new Map(),
       page: 1,
-      scrollTop: 0
+      userId: null
     };
   },
   computed: {
@@ -70,15 +51,16 @@ export default {
       }
     }
   },
-  activated() {
-    this.$refs.scroll.scrollTop = this.scrollTop;
+  mounted() {
+    const { userId } = this.$route.query;
+    this.userId = userId || this.user.id;
   },
   methods: {
     infinite($state) {
       this.$api.user
         .getFollowArtist({
           page: this.page++,
-          userId: this.user.id
+          userId: this.userId
         })
         .then(res => {
           const { data: { data }} = res;
@@ -88,8 +70,7 @@ export default {
             for (const item of data) {
               const data = {
                 ...item,
-                avatar: replaceBigImg(item.avatar),
-                isFollowed: true
+                avatar: replaceBigImg(item.avatar)
               };
               this.artistList.push(data);
               this.listMap.set(data.id, data);
@@ -98,10 +79,12 @@ export default {
           }
         });
     },
-    follow(val) {
+    follow(item) {
+      const val = this.listMap.get(item.id);
       const data = {
         artistId: val.id,
-        userId: this.user.id
+        userId: this.user.id,
+        username: this.user.username
       };
       if (val.isFollowed) {
         val.isFollowed = false;
@@ -125,19 +108,12 @@ export default {
           });
       }
     },
-    onScroll(e) {
-      this.scrollTop = e.target.scrollTop;
+    handleClick(id) {
+      this.$router.push(`/artist/${id}`);
     }
   }
 };
 </script>
 
 <style lang="stylus" scoped>
-.artist-collect
-  width 100%
-  min-height 100%
-  overflow scroll
-  background #fff
-  .list
-    padding-bottom 40px
 </style>

@@ -48,13 +48,9 @@
                 </v-btn>
               </div>
               <div class="friends">
-                <span>
-                  {{ artistDetail.totalFollowUsers }}
+                <span @click="seeFollower">
+                  <span>{{ artistDetail.totalFollowUsers }}</span>
                   <span>关注</span>
-                </span>
-                <span>
-                  {{ artistDetail.totalIllustBookmarksPublic }}
-                  <span>好P友</span>
                 </span>
               </div>
               <p class="caption">{{ artistDetail.comment }}</p>
@@ -188,7 +184,8 @@ export default {
       }
       const data = {
         artistId: this.artistDetail.id,
-        userId: this.user.id
+        userId: this.user.id,
+        username: this.user.username
       };
       if (!this.artistDetail.isFollowed) {
         this.artistDetail.isFollowed = true;
@@ -211,6 +208,14 @@ export default {
             });
           });
       }
+    },
+    seeFollower() {
+      this.$router.push({
+        path: `/bookmark/${this.artistId}`,
+        query: {
+          type: 'artist'
+        }
+      });
     }
   }
 };
@@ -251,12 +256,13 @@ export default {
         .friends
           font-size 14px
           margin-top 10px
-          >span:first-child
-            margin-right 20px
+          user-select none
           >span
             span
               color #ccc
-              margin-left 5px
+            span:first-child
+              color #1976d2
+              margin-right 3px
         .caption
           padding 20px
           word-wrap break-word

@@ -1,35 +1,34 @@
 <template>
-  <transition enter-active-class="animated zoomIn">
-    <div class="artist-container">
-      <div v-if="userInfo" class="artists">
-        <List
-          :list="pictureList"
-          :identifier="identifier"
-          @infinite="infinite"
-        >
-          <div class="list-header">
-            <div class="avatar">
-              <v-avatar :size="80">
-                <img :src="`${userInfo.avatar}`" alt="">
-              </v-avatar>
-            </div>
-            <div class="artists-info">
-              <p class="name">{{ userInfo.username }}</p>
-            </div>
-            <v-tabs centered grow>
-              <v-tab @click="getList('illust')">
-                插画
-              </v-tab>
-              <v-tab @click="getList('manga')">
-                漫画
-              </v-tab>
-            </v-tabs>
+  <div class="artist-container">
+    <div v-if="userInfo" class="artists">
+      <List
+        :list="pictureList"
+        :identifier="identifier"
+        @infinite="infinite"
+      >
+        <div class="list-header">
+          <div class="avatar">
+            <v-avatar :size="80">
+              <img :src="`${userInfo.avatar}`" alt="">
+            </v-avatar>
           </div>
-        </List>
-      </div>
-      <Loading v-else />
+          <div class="artists-info">
+            <p class="name">{{ userInfo.username }}</p>
+            <v-btn class="follow" text color="primary" @click="goFollower">Ta的关注</v-btn>
+          </div>
+          <v-tabs centered grow>
+            <v-tab @click="getList('illust')">
+              插画
+            </v-tab>
+            <v-tab @click="getList('manga')">
+              漫画
+            </v-tab>
+          </v-tabs>
+        </div>
+      </List>
     </div>
-  </transition>
+    <Loading v-else />
+  </div>
 </template>
 
 <script>
@@ -90,6 +89,14 @@ export default {
       this.page = 1;
       this.pictureList = [];
       this.identifier += 1;
+    },
+    goFollower() {
+      this.$router.push({
+        path: '/artistCollect',
+        query: {
+          userId: this.userId
+        }
+      });
     }
   }
 };
@@ -120,6 +127,9 @@ export default {
         text-align center
         .name
           font-size 20px
+          margin-bottom 4px
+        .follow
+          text-transform none
         .link
           display flex
           align-items center
