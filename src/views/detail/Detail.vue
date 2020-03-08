@@ -4,13 +4,23 @@
       <List :list="pictureList" @infinite="infinite">
         <div class="detail-top">
           <div class="detail-img animated zoomIn">
-            <img
+            <v-img
               :height="illustDetail.itemHeight"
               :src="illustDetail.originalSrc"
+              :lazy-src="illustDetail.src"
               :style="imgStyle"
-              @load="opacity = 1"
               @click="seePreview"
             >
+              <template v-slot:placeholder>
+                <v-row
+                  class="fill-height ma-0"
+                  align="center"
+                  justify="center"
+                >
+                  <v-progress-circular indeterminate color="grey lighten-5" />
+                </v-row>
+              </template>
+            </v-img>
             <Like
               :width="80"
               :like="illustDetail.isLiked"
@@ -186,7 +196,7 @@ import Like from '@/components/like/Like';
 import Comment from './components/Comment';
 import Alert from '@/components/alert';
 import CommentList from './components/List';
-import { replaceBigImg } from '@/util';
+import { replaceBigImg, replaceSmallImg } from '@/util';
 
 export default {
   name: 'Detail',
@@ -213,7 +223,6 @@ export default {
         { val: 'artist', title: '跳转pixiv画师' }
       ],
       like: false,
-      opacity: 0,
       commentList: [],
       likeUsers: []
     };
@@ -222,8 +231,7 @@ export default {
     ...mapGetters(['user', 'likeStatus', 'followStatus', 'detail']),
     imgStyle() {
       return {
-        filter: this.illustDetail.setu ? `blur(25px)` : '',
-        opacity: this.opacity
+        filter: this.illustDetail.setu ? `blur(25px)` : ''
       };
     }
   },
@@ -260,6 +268,7 @@ export default {
             ...data,
             itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
             originalSrc: replaceBigImg(data.imageUrls[0].original),
+            src: replaceSmallImg(data.imageUrls[0].medium),
             avatarSrc: replaceBigImg(data.artistPreView.avatar),
             createDate: dayjs(data.createDate).format('YYYY-MM-DD'),
             setu: !!((data.xrestrict === 1 || data.sanityLevel > 5)) && this.user.username !== 'pixivic',
@@ -372,6 +381,7 @@ export default {
       }
     },
     seePreview() {
+      if (this.illustDetail.xrestrict === 1 && this.user.username !== 'pixivic') return;
       this.preview = true;
       this.$store.dispatch('changeTab', false);
     },
