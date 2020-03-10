@@ -89,7 +89,11 @@ function followArtist(data) {
   return axios({
     url: `/followed`,
     method: data.follow ? 'post' : 'delete',
-    data: { artistId: data.artistId, userId: data.userId }
+    data: {
+      artistId: data.artistId,
+      userId: data.userId,
+      username: data.username
+    }
   });
 }
 
