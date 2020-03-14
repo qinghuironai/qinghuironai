@@ -57,7 +57,7 @@
     </div>
     <div :class="['top', { 'is-active': showTab }]" @click.stop="scrollToTop">
       <svg font-size="30" class="icon" aria-hidden="true">
-        <use xlink:href="#picdingbu1" />
+        <use xlink:href="#picfanhuidingbu1" />
       </svg>
     </div>
     <infinite-loading :identifier="identifier" @infinite="infinite">
