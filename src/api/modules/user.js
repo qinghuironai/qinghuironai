@@ -109,7 +109,7 @@ function getFollowArtist(data) {
 // 关注画师新作
 function getNewIllust(data) {
   return axios({
-    url: `${data.userId}/followed/latest/${data.type}`,
+    url: `/users/${data.userId}/followed/latest/${data.type}`,
     method: 'get',
     params: {
       page: data.page,

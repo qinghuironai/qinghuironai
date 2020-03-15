@@ -17,11 +17,20 @@
             <router-link :to="`/detail/${item.id}`">
               <v-img
                 :src="item.url"
-                :lazy-src="require('../../assets/images/girl.gif')"
                 :style="{filter: item.setu ? `blur(20px)` : ''}"
                 width="100%"
                 height="100%"
-              />
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular indeterminate color="grey lighten-3" />
+                  </v-row>
+                </template>
+              </v-img>
               <div class="mask" />
             </router-link>
           </div>
