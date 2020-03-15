@@ -257,6 +257,7 @@ export default {
           font-size 14px
           margin-top 10px
           user-select none
+          text-align center
           >span
             span
               color #ccc

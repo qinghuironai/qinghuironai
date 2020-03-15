@@ -57,7 +57,7 @@
     </div>
     <div :class="['top', { 'is-active': showTab }]" @click.stop="scrollToTop">
       <svg font-size="30" class="icon" aria-hidden="true">
-        <use xlink:href="#picdingbu1" />
+        <use xlink:href="#picfanhuidingbu1" />
       </svg>
     </div>
     <infinite-loading :identifier="identifier" @infinite="infinite">
@@ -75,6 +75,7 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading';
 import { mapGetters } from 'vuex';
+import throttle from 'lodash/throttle';
 import GroupManager from './GroupManager';
 import { getClient } from '@/util/dom';
 
@@ -91,20 +92,6 @@ export default {
       type: Array,
       required: true
     },
-    height: {
-      type: Number,
-      validator(value) {
-        return value >= 0;
-      },
-      default: getClient().height
-    },
-    width: {
-      type: Number,
-      validator(value) {
-        return value >= 0;
-      },
-      default: getClient().width
-    },
     sectionSize: {
       type: Number,
       default: getClient().width
@@ -119,7 +106,9 @@ export default {
       totalHeight: 0,
       totalWidth: 0,
       displayItems: [],
-      scrollY: 0
+      scrollY: 0,
+      width: getClient().width,
+      height: getClient().height
     };
   },
   computed: {
@@ -141,12 +130,7 @@ export default {
   watch: {
     collection() {
       // Dispose previous groups and reset associated data
-      this.groupManagers.forEach(manager => manager.dispose());
-      this.groupManagers = [];
-      this.totalHeight = 0;
-      this.totalWidth = 0;
-
-      this.onCollectionChanged();
+      this.resetData();
     },
     identifier() {
       this.totalHeight = 0;
@@ -156,8 +140,14 @@ export default {
     this.groupManagers = [];
     this.onCollectionChanged();
   },
+  mounted() {
+    window.addEventListener('resize', throttle(this.resize));
+  },
   activated() {
     this.$refs.outer.scrollTop = this.scrollY;
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.resize);
   },
   methods: {
     onCollectionChanged() {
@@ -275,6 +265,20 @@ export default {
     },
     scrollToTop() {
       this.$refs.outer.scrollTop = 0;
+    },
+    resetData() {
+      this.groupManagers.forEach(manager => manager.dispose());
+      this.groupManagers = [];
+      this.totalHeight = 0;
+      this.totalWidth = 0;
+
+      this.onCollectionChanged();
+    },
+    resize() {
+      this.width = getClient().width;
+      this.height = getClient().height;
+      this.$emit('resize');
+      this.resetData();
     }
   }
 };
