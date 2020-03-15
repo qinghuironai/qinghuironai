@@ -1,6 +1,7 @@
 <template>
   <List
     :list="usersList"
+    :height="56"
     @infinite="infinite"
   >
     <v-subheader>{{ type === 'artist' ? '这些用户关注了Ta' : '这些用户收藏了' }}</v-subheader>
