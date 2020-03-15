@@ -189,6 +189,18 @@ function getFollowers(params) {
   });
 }
 
+// 获取带有3幅近期画作的follow画师列表
+function getArtists(data) {
+  return axios({
+    url: `/users/${data.userId}/followedWithRecentlyIllusts`,
+    method: 'get',
+    params: {
+      page: data.page,
+      pageSize: data.pageSize || 30
+    }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -210,5 +222,6 @@ export {
   qqAccess,
   checkQQ,
   getUsers,
-  getFollowers
+  getFollowers,
+  getArtists
 };
