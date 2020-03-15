@@ -5,6 +5,7 @@
       :collection="list"
       :identifier="identifier"
       @infinite="infinite"
+      @resize="resize"
     >
       <slot />
       <template v-slot:cell="props">
@@ -34,7 +35,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 56
+      required: true
     }
   },
   methods: {
@@ -46,11 +47,14 @@ export default {
         width: getClient().width - 16,
         height: this.height,
         x: 0,
-        y: this.height * index
+        y: (item.height ? item.height : this.height) * index
       };
     },
     handleClick(id) {
       this.$emit('handleClick', id);
+    },
+    resize() {
+      this.$emit('resize');
     }
   }
 };

@@ -4,6 +4,7 @@
       <List
         :list="pictureList"
         :identifier="identifier"
+        :height="56"
         @infinite="infinite"
       >
         <div class="list-header">

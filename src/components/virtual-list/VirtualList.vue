@@ -4,9 +4,8 @@
       :cell-size-and-position-getter="cellSizeAndPositionGetter"
       :collection="list"
       :identifier="identifier"
-      :width="width"
-      :height="height"
       @infinite="infinite"
+      @resize="waterFall"
     >
       <slot />
       <template v-slot:cell="props">
@@ -21,7 +20,6 @@ import dayjs from 'dayjs';
 import { mapGetters } from 'vuex';
 import VirtualCollection from '@/components/collect/VirtualCollection';
 import Alert from '@/components/alert';
-import throttle from 'lodash/throttle';
 import Item from './Item';
 import { randomColor, replaceBigImg, replaceSmallImg } from '@/util';
 import { getClient } from '@/util/dom';
@@ -48,8 +46,6 @@ export default {
     return {
       columnHeight: [],
       column: 0,
-      width: getClient().width,
-      height: getClient().height,
       listMap: new Map()
     };
   },
@@ -82,10 +78,6 @@ export default {
   },
   mounted() {
     this.waterFall();
-    window.addEventListener('resize', throttle(this.waterFall));
-  },
-  destroyed() {
-    window.removeEventListener('resize', this.waterFall);
   },
   methods: {
     infinite($state) {
@@ -139,13 +131,11 @@ export default {
       }
     },
     waterFall() {
-      this.width = getClient().width;
-      this.height = getClient().height;
       const column = parseInt(localStorage.getItem('waterfull-column'));
       if (column) {
         this.column = column;
       } else {
-        this.column = Math.ceil(this.width / columnWidth);
+        this.column = Math.ceil(getClient().width / columnWidth);
       }
       this.columnHeight = new Array(this.column).fill(0);
       this.handleList(this.list);
@@ -154,7 +144,7 @@ export default {
       for (let i = 0; i < list.length; i++) {
         const tmp = list[i];
         const per = tmp.height / tmp.width;
-        const width = Math.floor((this.width - 16) / this.column);
+        const width = Math.floor((getClient().width - 16) / this.column);
         const height = Math.max(Math.min(width * per, 400), 100);
         // 找出最小列
         let minHeight = this.columnHeight[0];
@@ -176,7 +166,7 @@ export default {
         tmp['style'] = {
           backgroundColor: randomColor()
         };
-        tmp['itemHeight'] = parseInt(per * this.width);
+        tmp['itemHeight'] = parseInt(per * getClient().width);
         tmp['avatarSrc'] = replaceBigImg(tmp.artistPreView.avatar);
         tmp['createDate'] = dayjs(tmp.createDate).format('YYYY-MM-DD');
         tmp['imgs'] = tmp.imageUrls.reduce((pre, cur) => {
