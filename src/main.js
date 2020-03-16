@@ -11,6 +11,7 @@ import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css';
 import VuePageStack from 'vue-page-stack';
 import VueGtag from 'vue-gtag';
+import { replaceBigImg, replaceSmallImg } from '@/util';
 
 Vue.use(Vuetify);
 Vue.use(VuePageStack, { router, keyName: 'VNK' });
@@ -32,6 +33,8 @@ Vue.filter('dateFormat', val => {
   const d = time.getDate();
   return `${y}-${m < 10 ? '0' + m : m}-${d < 10 ? '0' + d : d}`;
 });
+Vue.filter('replaceBig', val => replaceBigImg(val));
+Vue.filter('replaceSmall', val => replaceSmallImg(val));
 
 const app = new Vue({
   router,
