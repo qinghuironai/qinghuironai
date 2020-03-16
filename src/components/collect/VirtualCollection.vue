@@ -1,6 +1,8 @@
 <style lang="stylus" scoped>
 .vue-virtual-collection
+  width 100vw
   overflow scroll
+  overflow-x hidden
   -webkit-overflow-scrolling touch
   box-sizing border-box
   padding-left 8px
@@ -118,7 +120,7 @@ export default {
     outerStyle() {
       return {
         // height: this.height + 'px',
-        width: this.width + 'px'
+        width: '100vw'
       };
     },
     contentStyle() {
