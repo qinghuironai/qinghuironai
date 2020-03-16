@@ -8,7 +8,7 @@
       <v-list-item class="item" @click="goSpot(props.data.id)">
         <v-card width="100%">
           <v-img
-            :src="props.data.thumbnail | replaceImg"
+            :src="props.data.thumbnail | replaceBig"
             class="white--text align-end grey lighten-2"
             height="200px"
           >
@@ -31,17 +31,11 @@
 
 <script>
 import List from '@/components/list/List';
-import { replaceBigImg } from '@/util';
 
 export default {
   name: 'SpotLight',
   components: {
     List
-  },
-  filters: {
-    replaceImg(val) {
-      return replaceBigImg(val);
-    }
   },
   data() {
     return {

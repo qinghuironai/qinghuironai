@@ -10,14 +10,14 @@
       <div class="item-container">
         <div class="artist-illust">
           <div
-            v-for="(item, index) in props.data.imgs"
+            v-for="(item, index) in props.data.recentlyIllustrations"
             :key="index"
             class="illust-item"
           >
-            <router-link :to="`/detail/${item.id}`">
+            <div class="img-item" @click="goDetail(item)">
               <v-img
-                :src="item.url"
-                :style="{filter: item.setu ? `blur(20px)` : ''}"
+                :src="item.imageUrls[0].squareMedium | replaceImg"
+                :style="{filter: (item.xrestrict === 1 || item.sanityLevel > 5) ? `blur(20px)` : ''}"
                 width="100%"
                 height="100%"
               >
@@ -32,12 +32,12 @@
                 </template>
               </v-img>
               <div class="mask" />
-            </router-link>
+            </div>
           </div>
         </div>
         <v-list-item class="user-item" @click="handleClick(props.data.id)">
           <v-list-item-avatar>
-            <v-img class="grey lighten-2" :src="props.data.avatar" />
+            <v-img class="grey lighten-2" :src="props.data.avatar | replaceBig" />
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title v-text="props.data.name" />
@@ -53,7 +53,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { replaceBigImg, replaceSmallImg } from '@/util';
 import { getClient } from '@/util/dom';
 import Alert from '@/components/alert';
 import List from '@/components/list/List';
@@ -62,6 +61,11 @@ export default {
   name: 'ArtistCollect',
   components: {
     List
+  },
+  filters: {
+    replaceImg(val) {
+      return 'https://img.cheerfun.dev:233/c/360x360_70/img-master' + val.split('img-master')[1];
+    }
   },
   data() {
     return {
@@ -104,18 +108,11 @@ export default {
             $state.complete();
           } else {
             for (const item of data) {
-              const data = {
-                ...item,
-                avatar: replaceBigImg(item.avatar),
-                imgs: item.recentlyIllustrations.reduce((pre, cur) => {
-                  return [...pre, { id: cur.id, url: replaceSmallImg(cur.imageUrls[0].squareMedium), setu: cur.xrestrict === 1 || cur.sanityLevel > 5 }];
-                }, [])
-              };
-              this.artistList.push(data);
-              this.listMap.set(data.id, data);
+              this.artistList.push(item);
+              this.listMap.set(item.id, item);
             }
-            $state.loaded();
           }
+          $state.loaded();
         });
     },
     follow(item) {
@@ -155,6 +152,10 @@ export default {
       for (const item of this.artistList) {
         item.height = this.height;
       }
+    },
+    goDetail(data) {
+      this.$store.dispatch('setDetail', data);
+      this.$router.push(`/detail/${data.id}`);
     }
   }
 };
@@ -172,6 +173,9 @@ export default {
       position relative
       width calc((100vw - 16px) / 3)
       height calc((100vw - 16px) / 3)
+      .img-item
+        width 100%
+        height 100%
       .mask
         position absolute
         top 0

@@ -30,7 +30,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scope>
+<style lang="stylus" scoped>
 .header
   position relative
   z-index 102

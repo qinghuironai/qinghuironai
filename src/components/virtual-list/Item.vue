@@ -61,7 +61,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scope>
+<style lang="stylus" scoped>
 @import '~@/assets/style/global.styl'
 .item
   box-sizing border-box

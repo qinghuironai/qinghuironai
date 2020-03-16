@@ -150,7 +150,11 @@
         >
           <v-carousel-item v-for="(item, i) in illustDetail.imgs" :key="i">
             <v-row class="fill-height" align="center" justify="center">
-              <img width="100%" :src="item" :style="{filter: illustDetail.setu ? 'blur(20px)' : ''}">
+              <img
+                width="100%"
+                :src="item"
+                :style="{filter: illustDetail.setu ? 'blur(20px)' : ''}"
+              >
             </v-row>
             <v-btn
               color="#b9eee5"
@@ -251,7 +255,7 @@ export default {
   },
   mounted() {
     if (this.detail) {
-      this.illustDetail = JSON.parse(JSON.stringify(this.detail));
+      this.illustDetail = this.handleData(JSON.parse(JSON.stringify(this.detail)));
     } else {
       this.getIllustDetail();
     }
@@ -264,18 +268,7 @@ export default {
         .reqIllustDetail(this.pid)
         .then(res => {
           const data = res.data.data;
-          this.illustDetail = {
-            ...data,
-            itemHeight: parseInt((data.height / data.width) * document.body.clientWidth),
-            originalSrc: replaceBigImg(data.imageUrls[0].original),
-            src: replaceSmallImg(data.imageUrls[0].medium),
-            avatarSrc: replaceBigImg(data.artistPreView.avatar),
-            createDate: dayjs(data.createDate).format('YYYY-MM-DD'),
-            setu: !!((data.xrestrict === 1 || data.sanityLevel > 5)) && this.user.username !== 'pixivic',
-            imgs: data.imageUrls.reduce((pre, cur) => {
-              return pre.concat(replaceBigImg(cur.original));
-            }, [])
-          };
+          this.illustDetail = this.handleData(data);
         });
     },
     infinite($state) {
@@ -429,6 +422,20 @@ export default {
     },
     goUsers() {
       this.$router.push(`/bookmark/${this.pid}`);
+    },
+    handleData(data) {
+      return {
+        ...data,
+        itemHeight: data.itemHeight || parseInt((data.height / data.width) * document.body.clientWidth),
+        originalSrc: data.originalSrc || replaceBigImg(data.imageUrls[0].original),
+        src: data.src || replaceSmallImg(data.imageUrls[0].medium),
+        avatarSrc: data.avatarSrc || replaceBigImg(data.artistPreView.avatar),
+        createDate: dayjs(data.createDate).format('YYYY-MM-DD'),
+        setu: data.setu || !!((data.xrestrict === 1 || data.sanityLevel > 5)) && this.user.username !== 'pixivic',
+        imgs: data.imgs || data.imageUrls.reduce((pre, cur) => {
+          return pre.concat(replaceBigImg(cur.original));
+        }, [])
+      };
     }
   }
 };
