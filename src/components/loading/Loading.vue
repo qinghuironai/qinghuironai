@@ -10,7 +10,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scope>
+<style lang="stylus" scoped>
 @keyframes scaleout
   0%, 100%
     transform scale(0)

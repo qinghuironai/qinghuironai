@@ -60,7 +60,7 @@ function checkUser(user) {
 // 收藏画作
 function collectIllust(data) {
   return axios({
-    url: `/bookmarked`,
+    url: `/users/bookmarked`,
     method: 'post',
     data
   });
@@ -69,7 +69,7 @@ function collectIllust(data) {
 // 收藏画作列表
 function getCollectList(params) {
   return axios({
-    url: `/${params.userId}/bookmarked/${params.type}`,
+    url: `/users/${params.userId}/bookmarked/${params.type}`,
     method: 'get',
     params: { page: params.page, pageSize: params.pageSize || 30 }
   });
@@ -78,7 +78,7 @@ function getCollectList(params) {
 // 取消收藏
 function deleteCollect(data) {
   return axios({
-    url: `/bookmarked`,
+    url: `/users/bookmarked`,
     method: 'delete',
     data
   });
@@ -87,7 +87,7 @@ function deleteCollect(data) {
 // 关注和取消关注画师
 function followArtist(data) {
   return axios({
-    url: `/followed`,
+    url: `/users/followed`,
     method: data.follow ? 'post' : 'delete',
     data: {
       artistId: data.artistId,
@@ -100,7 +100,7 @@ function followArtist(data) {
 // 用户关注画师列表
 function getFollowArtist(data) {
   return axios({
-    url: `${data.userId}/followed`,
+    url: `/users/${data.userId}/followed`,
     method: 'get',
     params: { page: data.page, pageSize: data.pageSize || 30 }
   });
@@ -109,7 +109,7 @@ function getFollowArtist(data) {
 // 关注画师新作
 function getNewIllust(data) {
   return axios({
-    url: `${data.userId}/followed/latest/${data.type}`,
+    url: `/users/${data.userId}/followed/latest/${data.type}`,
     method: 'get',
     params: {
       page: data.page,

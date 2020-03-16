@@ -31,6 +31,11 @@ module.exports = {
         'vue$': 'vue/dist/vue.esm.js' // https://github.com/vuejs/vue-cli/issues/2359
       }
     }
+  },
+
+  devServer: {
+    host: '192.168.137.1',
+    port: 8080
   }
 }
 ;

@@ -180,7 +180,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scope>
+<style lang="stylus" scoped>
 .list
   position relative
   background-color #fff
