@@ -64,7 +64,7 @@ export default {
   },
   filters: {
     replaceImg(val) {
-      return 'https://original.img.cheerfun.dev/c/360x360_70/img-master' + val.split('img-master')[1];
+      return 'https://img.cheerfun.dev:233/c/360x360_70/img-master' + val.split('img-master')[1];
     }
   },
   data() {
