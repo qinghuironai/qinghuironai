@@ -58,7 +58,7 @@ export default {
         if (val.length === 0) {
           this.columnHeight = new Array(this.column).fill(0);
         } else {
-          const list = val.filter(e => !old.includes(e));
+          const list = val.filter(e => !old.includes(e) && (e.xrestrict !== 1 || this.user.username === 'pixivic'));
           this.handleList(list);
           for (const item of list) {
             this.listMap.set(item.id, item);
