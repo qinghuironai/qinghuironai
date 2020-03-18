@@ -134,13 +134,8 @@ export default {
         .reqSummary(this.artistId)
         .then(res => {
           const { data: { data }} = res;
-          for (const item of data) {
-            if (item.type === 'illust') {
-              this.illustSum = item.sum;
-            } else if (item.type === 'manga') {
-              this.mangaSum = item.sum;
-            }
-          }
+          this.illustSum = data.illustSum;
+          this.mangaSum = data.mangaSum;
         });
     },
     handleClick() {
