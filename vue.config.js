@@ -26,6 +26,9 @@ module.exports = {
   },
 
   configureWebpack: {
+    performance: {
+      hints: false
+    },
     resolve: {
       alias: {
         'vue$': 'vue/dist/vue.esm.js' // https://github.com/vuejs/vue-cli/issues/2359
