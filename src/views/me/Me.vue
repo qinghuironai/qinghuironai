@@ -4,7 +4,7 @@
       <v-card class="header-box" width="95%" outlined>
         <div class="link">
           <v-avatar class="user-avatar" size="80" @click="$router.push('/avatar')">
-            <img :src="`https://pic.pixivic.com/${user.id}.png?t=${new Date().getTime()}`" alt="Avatar">
+            <img :src="`https://pic.cheerfun.dev/${user.id}.png?t=${new Date().getTime()}`" alt="Avatar">
           </v-avatar>
           <div class="user-info">
             <p class="font-weight-bold text-no-wrap text-truncate">{{ user.username }}</p>
