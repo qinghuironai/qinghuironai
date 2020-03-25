@@ -261,6 +261,7 @@ export default {
     }
     this.getCommentsList();
     this.bookmarkedUsers();
+    this.illustHistory();
   },
   methods: {
     getIllustDetail() {
@@ -436,6 +437,14 @@ export default {
           return pre.concat(replaceBigImg(cur.original));
         }, [])
       };
+    },
+    illustHistory() {
+      if (this.user) {
+        this.$api.detail.illustHistory({
+          userId: this.user.id,
+          illustId: this.pid
+        });
+      }
     }
   }
 };

@@ -58,6 +58,7 @@ export default {
       list: [
         { icon: '#picshoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
         { icon: '#picicon-copy', text: '我的关注', val: '/artistCollect' },
+        { icon: '#piclishi', text: '历史记录', val: '/history' },
         { icon: '#picshezhi', text: '用户设置', val: '/setting' },
         { icon: '#piclog_out', text: '退出登录', val: 'logout' }
       ]

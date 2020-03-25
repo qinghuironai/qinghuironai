@@ -65,6 +65,15 @@ function bookmarkedUsers(params) {
   });
 }
 
+// 新增用户查看画作历史记录
+function illustHistory(data) {
+  return axios({
+    url: `/users/${data.userId}/illustHistory`,
+    method: 'post',
+    data
+  });
+}
+
 export {
   getPixById,
   reqArtistIllust,
@@ -72,5 +81,6 @@ export {
   reqArtist,
   reqRelatedIllust,
   reqSummary,
-  bookmarkedUsers
+  bookmarkedUsers,
+  illustHistory
 };
