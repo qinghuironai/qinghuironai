@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       option: {
-        img: 'https://pic.pixivic.com/53.png',
+        img: 'https://pic.cheerfun.dev/53.png',
         size: 0.1,
         autoCrop: true
       },
