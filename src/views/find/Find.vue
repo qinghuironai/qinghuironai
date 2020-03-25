@@ -1,3 +1,11 @@
+<!--
+ * @Author: Dongzy
+ * @since: 2020-03-16 23:57:53
+ * @lastTime: 2020-03-25 21:40:35
+ * @LastAuthor: Dongzy
+ * @FilePath: \pixivic-mobile\src\views\find\Find.vue
+ * @message:
+ -->
 <template>
   <div class="find">
     <div class="container">
@@ -43,7 +51,7 @@ export default {
   position relative
   z-index 2
   padding 20px
-  background url('../../assets/images/bg.jpg') no-repeat
+  background url('https://pic.cheerfun.dev/bg.jpg') no-repeat
   background-size cover
   .container
     width 100%
