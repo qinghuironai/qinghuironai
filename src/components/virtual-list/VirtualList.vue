@@ -50,7 +50,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'likeStatus', 'showTab'])
+    ...mapGetters(['user', 'likeStatus', 'showTab', 'followStatus'])
   },
   watch: {
     list: {
@@ -74,6 +74,10 @@ export default {
       if (item) {
         this.$set(item, 'isLiked', like);
       }
+    },
+    followStatus(val) {
+      const item = this.list.find(item => item.artistId === val.artistId);
+      this.$set(item.artistPreView, 'isFollowed', val.follow);
     }
   },
   mounted() {
