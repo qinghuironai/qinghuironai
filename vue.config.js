@@ -1,7 +1,7 @@
 /*
  * @Author: Kim
  * @since: 2020-03-21 14:10:00
- * @lastTime: 2020-03-25 22:54:14
+ * @lastTime: 2020-03-25 23:01:46
  * @LastAuthor: Dongzy
  * @FilePath: \pixivic-mobile\vue.config.js
  * @message:
@@ -41,7 +41,7 @@ module.exports = {
     config.externals = {
       // vue: 'Vue',
       // 'vue-router': 'VueRouter',
-      'vuetify': 'Vuetify'
+      // 'vuetify': 'Vuetify'
       // 'element-ui': 'ElementUI'
       // 其他三方库 ...
     };
