@@ -4,7 +4,7 @@
       <v-card class="header-box" width="95%" outlined>
         <div class="link">
           <v-avatar class="user-avatar" size="80" @click="$router.push('/avatar')">
-            <img :src="`https://pic.pixivic.com/${user.id}.png?t=${new Date().getTime()}`" alt="Avatar">
+            <img :src="`https://pic.cheerfun.dev/${user.id}.png?t=${new Date().getTime()}`" alt="Avatar">
           </v-avatar>
           <div class="user-info">
             <p class="font-weight-bold text-no-wrap text-truncate">{{ user.username }}</p>
@@ -96,7 +96,7 @@ export default {
   &-header
     height 200px
     overflow hidden
-    background url('../../assets/images/girl.jpg') no-repeat
+    background url('https://pic.cheerfun.dev/girl.jpg') no-repeat
     background-size 100%
     background-position 0 -100px
     border-bottom-right-radius 70% 60%

@@ -18,7 +18,7 @@
       </div>
       <div class="tabs-item " @click="$router.push('/me')">
         <img
-          :src="user.id ? `https://pic.pixivic.com/${user.id}.png?t=${new Date().getTime()}` : require('../src/assets/images/me.svg')"
+          :src="user.id ? `https://pic.cheerfun.dev/${user.id}.png?t=${new Date().getTime()}` : require('../src/assets/images/me.svg')"
           :style="{transform: $route.name === 'Me' ? 'scale(1.1)' : ''}"
         >
       </div>
@@ -35,8 +35,8 @@ export default {
       active: '/dailyRank',
       tabs: [{
         value: '/dailyRank',
-        src: require('../src/assets/images/pixivic.svg'),
-        activeSrc: require('../src/assets/images/pixivic-active.svg')
+        src: ('https://pic.cheerfun.dev/pixivic-active.svg'),
+        activeSrc: ('https://pic.cheerfun.dev/pixivic-active.svg')
       }, {
         value: '/find',
         src: require('../src/assets/images/find.svg'),
