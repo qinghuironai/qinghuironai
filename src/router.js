@@ -26,7 +26,8 @@ const pages = {
   EmailCheck: require('./views/reset/EmailCheck').default,
   Friends: require('./views/find/Friends').default,
   Users: require('./views/users/Users').default,
-  BookMark: require('./views/bookmark/BookMark').default
+  BookMark: require('./views/bookmark/BookMark').default,
+  History: require('./views/me/History').default
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -166,6 +167,11 @@ const router = new Router({
     name: 'BookMark',
     component: pages.BookMark,
     props: true
+  },
+  {
+    path: '/history',
+    name: 'History',
+    component: pages.History
   },
   {
     path: '*',
