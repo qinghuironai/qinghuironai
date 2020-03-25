@@ -1,7 +1,7 @@
 /*
  * @Author: Kim
  * @since: 2020-03-21 14:10:00
- * @lastTime: 2020-03-25 22:54:14
+ * @lastTime: 2020-03-25 23:07:01
  * @LastAuthor: Dongzy
  * @FilePath: \pixivic-mobile\vue.config.js
  * @message:
@@ -39,10 +39,9 @@ module.exports = {
     const devPlugins = [new BundleAnalyzerPlugin()];
     const plugins = [];
     config.externals = {
-      // vue: 'Vue',
-      // 'vue-router': 'VueRouter',
+      vue: 'Vue',
+      'vue-router': 'VueRouter',
       'vuetify': 'Vuetify'
-      // 'element-ui': 'ElementUI'
       // 其他三方库 ...
     };
     if (process.env.NODE_ENV !== 'development') {
