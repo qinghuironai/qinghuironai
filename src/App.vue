@@ -35,8 +35,8 @@ export default {
       active: '/dailyRank',
       tabs: [{
         value: '/dailyRank',
-        src: require('../src/assets/images/pixivic.svg'),
-        activeSrc: require('../src/assets/images/pixivic-active.svg')
+        src: ('https://pic.cheerfun.dev/pixivic-active.svg'),
+        activeSrc: ('https://pic.cheerfun.dev/pixivic-active.svg')
       }, {
         value: '/find',
         src: require('../src/assets/images/find.svg'),

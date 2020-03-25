@@ -1,5 +1,14 @@
+/*
+ * @Author: Kim
+ * @since: 2020-03-21 14:10:00
+ * @lastTime: 2020-03-25 21:45:19
+ * @LastAuthor: Dongzy
+ * @FilePath: \pixivic-mobile\vue.config.js
+ * @message:
+ */
 const path = require('path');
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
@@ -7,6 +16,7 @@ function resolve(dir) {
 console.log('Url prefix: ', process.env.VUE_APP_PREFIX);
 
 module.exports = {
+  runtimeCompiler: true,
   lintOnSave: false,
   publicPath: process.env.VUE_APP_PREFIX,
   // publicPath: './',
@@ -25,20 +35,22 @@ module.exports = {
     }
   },
 
-  configureWebpack: {
-    performance: {
-      hints: false
-    },
-    resolve: {
-      alias: {
-        'vue$': 'vue/dist/vue.esm.js' // https://github.com/vuejs/vue-cli/issues/2359
-      }
+  configureWebpack: config => {
+    const devPlugins = [new BundleAnalyzerPlugin()];
+    const plugins = [];
+    config.externals = {
+      vue: 'Vue',
+      'vue-router': 'VueRouter',
+      'vuetify': 'Vuetify'
+      // 'element-ui': 'ElementUI'
+      // 其他三方库 ...
+    };
+    if (process.env.NODE_ENV !== 'development') {
+      config.plugins = [...config.plugins, ...plugins];
+    } else {
+      config.plugins = [...config.plugins, ...devPlugins];
     }
-  },
-
-  devServer: {
-    host: '192.168.137.1',
-    port: 8080
   }
+
 }
 ;
