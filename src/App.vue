@@ -35,8 +35,8 @@ export default {
       active: '/dailyRank',
       tabs: [{
         value: '/dailyRank',
-        src: ('https://pic.cheerfun.dev/pixivic-active.svg'),
-        activeSrc: ('https://pic.cheerfun.dev/pixivic-active.svg')
+        src: 'https://pic.cheerfun.dev/pixivic.svg',
+        activeSrc: 'https://pic.cheerfun.dev/pixivic-active.svg'
       }, {
         value: '/find',
         src: require('../src/assets/images/find.svg'),
@@ -59,8 +59,11 @@ export default {
     }
   },
   watch: {
-    $route(val) {
-      this.active = val.path;
+    $route: {
+      handler(val) {
+        this.active = val.path;
+      },
+      immediate: true
     }
   },
   methods: {
