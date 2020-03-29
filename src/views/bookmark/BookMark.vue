@@ -8,7 +8,7 @@
     <template v-slot:cell="props">
       <v-list-item @click="handleClick(props.data.userId)">
         <v-list-item-avatar>
-          <v-img class="grey lighten-2" :src="`https://pic.cheerfun.dev/${props.data.userId}.png`" />
+          <v-img class="grey lighten-2" :src="props.data.userId | replaceAvatar" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title v-text="props.data.username" />

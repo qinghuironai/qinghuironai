@@ -9,6 +9,7 @@ const pages = {
   Detail: require('./views/detail/Detail').default,
   Artist: require('./views/artist/Artist').default,
   Search: require('./views/search/Search').default,
+  Illusts: require('./views/search/children/Illusts').default,
   Find: require('./views/find/Find').default,
   SpotLight: require('./views/find/SoptLight').default,
   Spot: require('./views/find/Spot.vue').default,
@@ -73,7 +74,14 @@ const router = new Router({
   {
     path: '/search',
     name: 'Search',
-    component: pages.Search
+    component: pages.Search,
+    children: [
+      {
+        path: 'illusts',
+        name: 'Illusts',
+        component: pages.Illusts
+      }
+    ]
   },
   {
     path: '/find',

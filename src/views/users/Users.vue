@@ -10,7 +10,7 @@
         <div class="list-header">
           <div class="avatar">
             <v-avatar :size="80">
-              <img :src="`${userInfo.avatar}`" alt="">
+              <img :src="userInfo.id | replaceAvatar" alt="">
             </v-avatar>
           </div>
           <div class="artists-info">
@@ -123,6 +123,8 @@ export default {
       .avatar
         padding-top 50px
         text-align center
+        img
+          object-fit cover
       .artists-info
         padding-top 15px
         text-align center

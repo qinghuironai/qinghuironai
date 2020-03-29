@@ -16,7 +16,7 @@
           >
             <div class="img-item" @click="goDetail(item)">
               <v-img
-                :src="item.imageUrls[0].squareMedium | replaceImg"
+                :src="item.imageUrls[0].squareMedium | replaceSquare"
                 :style="{filter: (item.xrestrict === 1 || item.sanityLevel > 5) ? `blur(20px)` : ''}"
                 width="100%"
                 height="100%"
@@ -61,11 +61,6 @@ export default {
   name: 'ArtistCollect',
   components: {
     List
-  },
-  filters: {
-    replaceImg(val) {
-      return 'https://img.cheerfun.dev:233/c/360x360_70/img-master' + val.split('img-master')[1];
-    }
   },
   data() {
     return {
