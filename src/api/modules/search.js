@@ -1,4 +1,5 @@
 import axios from '../base';
+import dayjs from 'dayjs';
 
 function format(param) {
   return encodeURIComponent(param).replace('%2F', '/');
@@ -58,7 +59,7 @@ function uploadImg(data, params) {
 // 以图搜图
 function searchByImg(imageUrl) {
   return axios({
-    url: `https://api.pixivic.com/similarityImages?imageUrl=${imageUrl}`,
+    url: `/similarityImages?imageUrl=${imageUrl}`,
     method: 'get'
   });
 }
@@ -66,8 +67,17 @@ function searchByImg(imageUrl) {
 // 获取存在信息
 function getExists(param) {
   return axios({
-    url: `https://api.pixivic.com/exists/${param.type}/${param.id}`,
+    url: `/exists/${param.type}/${param.id}`,
     method: 'get'
+  });
+}
+
+// 查看热门搜索标签
+function getHotTag(params) {
+  return axios({
+    url: `/trendingTags`,
+    method: 'get',
+    params: params || { date: dayjs(new Date()).format('YYYY-MM-DD') }
   });
 }
 
@@ -79,5 +89,6 @@ export {
   getExclusive,
   uploadImg,
   searchByImg,
-  getExists
+  getExists,
+  getHotTag
 };

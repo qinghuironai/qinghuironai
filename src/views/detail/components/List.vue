@@ -3,7 +3,7 @@
     <div v-for="item in list" :key="item.id" v-ripple class="list-item">
       <a class="profile-img">
         <v-avatar size="40" @click="goUsers(item.replyFrom)">
-          <v-img :src="`https://pic.cheerfun.dev/${item.replyFrom}.png`" />
+          <v-img :src="item.replyFrom | replaceAvatar" />
         </v-avatar>
       </a>
       <a>
@@ -22,7 +22,7 @@
         <div v-for="val in item.subCommentList" :key="val.id" v-ripple class="list-item">
           <a class="profile-img">
             <v-avatar size="40" @click="goUsers(val.replyFrom)">
-              <v-img :src="`https://pic.cheerfun.dev/${val.replyFrom}.png`" />
+              <v-img :src="val.replyFrom | replaceAvatar" />
             </v-avatar>
           </a>
           <a>

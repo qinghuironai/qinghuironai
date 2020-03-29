@@ -42,6 +42,8 @@
         </v-btn>
       </div>
 
+      <HotTag :data="hotTags" @clickTag="enter" />
+
       <router-view />
     </div>
   </transition>
@@ -51,11 +53,13 @@
 import debounce from 'lodash/debounce';
 import Alert from '@/components/alert';
 import SearchBox from './components/search-box';
+import HotTag from './components/hot-tag';
 
 export default {
   name: 'Search',
   components: {
-    SearchBox
+    SearchBox,
+    HotTag
   },
   data() {
     return {
@@ -64,13 +68,17 @@ export default {
       tab: null,
       items: [
         '插画漫画', '画师'
-      ]
+      ],
+      hotTags: []
     };
   },
   watch: {
     value() {
       this.getKeyword();
     }
+  },
+  mounted() {
+    this.getHotTag();
   },
   methods: {
     getKeyword: debounce(function() {
@@ -80,7 +88,7 @@ export default {
         });
     }, 500),
     enter(val) {
-      if (!this.value) return;
+      if (!val) return;
       this.$router.push({
         name: 'Illusts',
         query: {
@@ -114,6 +122,13 @@ export default {
               content: '不存在'
             });
           }
+        });
+    },
+    getHotTag() {
+      this.$api.search
+        .getHotTag()
+        .then(res => {
+          this.hotTags = res.data.data;
         });
     }
   }

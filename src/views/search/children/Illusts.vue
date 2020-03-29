@@ -6,7 +6,7 @@
         :identifier="identifier"
         @infinite="infinite"
       >
-        <search-box v-model="tag" @focus="$router.replace('/search')">
+        <search-box v-model="tag" @focus="focus">
           <template v-slot:right>
             <svg
               font-size="20"
@@ -110,6 +110,15 @@ export default {
       this.page = 1;
       this.pictureList = [];
       this.identifier += 1;
+    },
+    focus() {
+      if (this.$route.query.source) {
+        this.$router.replace({
+          name: 'Search'
+        });
+      } else {
+        this.$router.back();
+      }
     }
   }
 };

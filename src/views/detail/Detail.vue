@@ -94,7 +94,7 @@
               </a>
               <a v-if="likeUsers" class="work-stats-a user-avatar">
                 <v-avatar v-for="item in likeUsers" :key="item.userId" size="30" @click="goUsers">
-                  <v-img class="grey lighten-2" :src="`https://pic.cheerfun.dev/${item.userId}.png`" />
+                  <v-img class="grey lighten-2" :src="item.userId | replaceAvatar" />
                 </v-avatar>
               </a>
             </div>
@@ -390,7 +390,8 @@ export default {
       this.$router.push({
         name: 'Illusts',
         query: {
-          tag
+          tag,
+          source: 'detail'
         }
       });
     },
