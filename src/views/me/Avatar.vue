@@ -7,6 +7,7 @@
         :img="option.img"
         :output-size="option.size"
         :auto-crop="option.autoCrop"
+        :fixed="option.fixed"
       />
     </div>
 
@@ -26,7 +27,7 @@
     </div>
 
     <p class="intro">
-      尽可能使用1:1的图片，先选择图片，然后保存头像。可移动图片，双指可放大缩小图片。
+      先选择图片，然后保存头像。可移动图片，双指可放大缩小图片。
     </p>
 
     <v-dialog v-model="dialog" width="100%">
@@ -70,9 +71,10 @@ export default {
   data() {
     return {
       option: {
-        img: 'https://pic.cheerfun.dev/53.png',
+        img: `https://pic.cheerfun.dev/53.png`,
         size: 0.1,
-        autoCrop: true
+        autoCrop: true,
+        fixed: true
       },
       dialog: false,
       loading: false
