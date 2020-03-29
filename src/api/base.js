@@ -2,15 +2,15 @@ import axios from 'axios';
 import cookie from 'js-cookie';
 import router from '../router';
 
-let baseURL = process.env.VUE_APP_BASE_API;
-if (location.hostname === 'dev.pixivic.com') {
-  baseURL = 'https://v1.api.pixivic.com';
-}
+// let baseURL = process.env.VUE_APP_BASE_API;
+// if (location.hostname === 'dev.pixivic.com') {
+//   baseURL = 'https://v1.api.pixivic.com';
+// }
 
 // 创建axios实例
 const instance = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API,
-  baseURL,
+  baseURL: 'https://api.pixivic.com',
   timeout: 20000,
   validateStatus(status) {
     return status >= 200 && status < 600;

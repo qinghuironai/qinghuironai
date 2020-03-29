@@ -28,6 +28,9 @@ const mutations = {
   },
   [types.SHOW_SEARCH_BOX](state, flag) {
     state.showSearchBox = flag;
+  },
+  [types.SET_OPTION](state, option) {
+    state.option = option;
   }
 };
 
