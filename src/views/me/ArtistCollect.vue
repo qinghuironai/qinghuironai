@@ -168,6 +168,7 @@ export default {
       position relative
       width calc((100vw - 16px) / 3)
       height calc((100vw - 16px) / 3)
+      border 1px solid #fff
       .img-item
         width 100%
         height 100%
