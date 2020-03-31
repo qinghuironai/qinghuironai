@@ -28,6 +28,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import Alert from '@/components/alert';
 
 export default {
   data() {
@@ -64,6 +65,19 @@ export default {
         this.active = val.path;
       },
       immediate: true
+    }
+  },
+  async mounted() {
+    const flag = localStorage.getItem('pixivic-msg');
+    if (!flag) {
+      const res = await Alert({
+        content: '为了更好得体验 请协助我们做个小调查o(*￣▽￣*)o',
+        btn: '前往'
+      });
+      if (res === 'close') {
+        window.open('https://www.wjx.cn/jq/68608466.aspx');
+        localStorage.setItem('pixivic-msg', true);
+      }
     }
   },
   methods: {
