@@ -28,7 +28,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Alert from '@/components/alert';
+import dayjs from 'dayjs';
+import { prefixStyle } from '@/util/dom';
 
 export default {
   data() {
@@ -69,15 +70,13 @@ export default {
   },
   async mounted() {
     const flag = localStorage.getItem('pixivic-msg');
-    if (!flag) {
-      const res = await Alert({
-        content: '为了更好得体验 请协助我们做个小调查o(*￣▽￣*)o',
-        btn: '前往'
-      });
-      if (res === 'close') {
-        window.open('https://www.wjx.cn/jq/68608466.aspx');
-        localStorage.setItem('pixivic-msg', true);
-      }
+    const alert = localStorage.getItem('pixivic-alert');
+    if (flag) localStorage.removeItem('pixivic-msg');
+    if (alert) localStorage.removeItem('pixivic-alert');
+    const filter = prefixStyle('filter');
+    const date = dayjs(new Date()).format('MM-DD');
+    if (date === '04-04') {
+      document.getElementsByTagName('html')[0].style[filter] = 'grayscale(0.98)';
     }
   },
   methods: {
