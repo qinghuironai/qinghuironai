@@ -112,7 +112,7 @@
             </div>
             <v-divider />
 
-            <div class="detail-comment">
+            <div v-if="new Date().getDate() !== 4" class="detail-comment">
               <div class="comment-title">评论</div>
               <div v-if="commentList.length">
                 <comment-list :list="commentList.slice(0, 5)" @reply="openComment" />
