@@ -70,7 +70,7 @@ export default {
   },
   async mounted() {
     const flag = localStorage.getItem('pixivic-msg');
-    const alert = localStorage.getItem('pixivic-alert');
+    const alert = localStorage.getItem('pixivic_alert');
     if (flag) localStorage.removeItem('pixivic-msg');
     if (alert) localStorage.removeItem('pixivic-alert');
     const filter = prefixStyle('filter');
