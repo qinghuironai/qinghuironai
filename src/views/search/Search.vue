@@ -115,6 +115,7 @@ export default {
             if (type === 'artist') {
               this.$router.push(`/artist/${this.value}`);
             } else if (type === 'illust') {
+              this.$store.dispatch('setDetail', null);
               this.$router.push(`/detail/${this.value}`);
             }
           } else {

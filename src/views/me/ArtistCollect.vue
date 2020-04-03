@@ -16,8 +16,8 @@
           >
             <div class="img-item" @click="goDetail(item)">
               <v-img
+                v-if="item.xrestrict === 0 && item.sanityLevel < 6"
                 :src="item.imageUrls[0].squareMedium | replaceSquare"
-                :style="{filter: (item.xrestrict === 1 || item.sanityLevel > 5) ? `blur(20px)` : ''}"
                 width="100%"
                 height="100%"
               >
@@ -168,6 +168,7 @@ export default {
       position relative
       width calc((100vw - 16px) / 3)
       height calc((100vw - 16px) / 3)
+      border 1px solid #fff
       .img-item
         width 100%
         height 100%

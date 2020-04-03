@@ -28,6 +28,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import dayjs from 'dayjs';
+import { prefixStyle } from '@/util/dom';
 
 export default {
   data() {
@@ -64,6 +66,17 @@ export default {
         this.active = val.path;
       },
       immediate: true
+    }
+  },
+  async mounted() {
+    const flag = localStorage.getItem('pixivic-msg');
+    const alert = localStorage.getItem('pixivic-alert');
+    if (flag) localStorage.removeItem('pixivic-msg');
+    if (alert) localStorage.removeItem('pixivic-alert');
+    const filter = prefixStyle('filter');
+    const date = dayjs(new Date()).format('MM-DD');
+    if (date === '04-04') {
+      document.getElementsByTagName('html')[0].style[filter] = 'grayscale(0.98)';
     }
   },
   methods: {

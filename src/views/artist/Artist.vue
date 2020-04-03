@@ -10,11 +10,16 @@
           <div class="list-header">
             <div class="avatar">
               <v-avatar :size="80">
-                <img :src="`${artistDetail.avatarSrc}`" alt="">
+                <img :src="artistDetail.avatarSrc" alt="">
               </v-avatar>
             </div>
             <div class="artists-info">
-              <p class="name">{{ artistDetail.name }}</p>
+              <svg v-if="artistDetail.gender" font-size="16" class="icon" aria-hidden="true">
+                <use :xlink:href="artistDetail.gender === 'female' ? '#picnv' : '#picnan'" />
+              </svg>
+              <p class="name">
+                {{ artistDetail.name }}
+              </p>
               <v-btn
                 class="mb-5"
                 color="primary"
@@ -236,6 +241,8 @@ export default {
       .avatar
         padding-top 50px
         text-align center
+        img
+          object-fit cover
       .artists-info
         padding-top 15px
         text-align center

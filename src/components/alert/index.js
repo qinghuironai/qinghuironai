@@ -28,7 +28,7 @@ export default function Alert(config) {
     methods: {
       close() {
         root.removeChild(wrap);
-        resolve(this);
+        resolve('close');
       }
     },
     template: `
