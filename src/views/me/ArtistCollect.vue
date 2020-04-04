@@ -16,7 +16,7 @@
           >
             <div class="img-item" @click="goDetail(item)">
               <v-img
-                v-if="item.xrestrict === 0 && item.sanityLevel < 6"
+                :style="{filter: (item.xrestrict === 1 || item.sanityLevel > 5) ? `blur(20px)` : ''}"
                 :src="item.imageUrls[0].squareMedium | replaceSquare"
                 width="100%"
                 height="100%"
