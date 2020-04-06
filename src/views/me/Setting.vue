@@ -53,14 +53,14 @@
           </svg>
         </v-list-item-icon>
       </v-list-item>
-      <!-- <v-list-item>
+      <v-list-item>
         <v-list-item-content>
           <v-list-item-title>
-            Lock
+            16
           </v-list-item-title>
         </v-list-item-content>
         <v-switch v-model="lockShow" @change="changeLock" />
-      </v-list-item> -->
+      </v-list-item>
     </v-list>
 
     <v-bottom-sheet v-model="sheet">
