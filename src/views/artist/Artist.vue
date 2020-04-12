@@ -9,8 +9,20 @@
         >
           <div class="list-header">
             <div class="avatar">
+              <v-btn
+                absolute
+                top
+                style="left: 0; top: 0; z-index: 2;"
+                icon
+                @click.stop="$router.back()"
+              >
+                <svg font-size="20" class="icon" aria-hidden="true">
+                  <use xlink:href="#picfanhui2" />
+                </svg>
+              </v-btn>
+              <v-img class="avatar-top" :src="artistDetail.avatar | replaceBig" height="25vh" />
               <v-avatar :size="80">
-                <img :src="artistDetail.avatarSrc" alt="">
+                <img :src="artistDetail.avatar | replaceBig" alt="">
               </v-avatar>
             </div>
             <div class="artists-info">
@@ -83,7 +95,6 @@ import { mapGetters } from 'vuex';
 import List from '@/components/virtual-list/VirtualList';
 import Loading from '@/components/loading/Loading';
 import Alert from '@/components/alert';
-import { replaceBigImg } from '@/util';
 
 export default {
   name: 'Artist',
@@ -128,10 +139,7 @@ export default {
         .reqArtist(this.artistId)
         .then(res => {
           const { data: { data }} = res;
-          this.artistDetail = {
-            ...data,
-            avatarSrc: replaceBigImg(data.avatar)
-          };
+          this.artistDetail = data;
         });
     },
     getSummary() {
@@ -239,10 +247,17 @@ export default {
     font-size 16px
     .list-header
       .avatar
-        padding-top 50px
+        position relative
+        // padding-top 50px
         text-align center
-        img
-          object-fit cover
+        margin 0 -8px
+        box-sizing border-box
+        .avatar-top
+          filter blur(10px)
+        .v-avatar
+          margin-top -40px
+          img
+            object-fit cover
       .artists-info
         padding-top 15px
         text-align center
