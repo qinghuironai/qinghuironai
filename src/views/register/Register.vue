@@ -104,7 +104,7 @@ export default {
         return debounce()
           .then(() => this.$api.user.checkEmail(value))
           .then(res => {
-            return Boolean(res.status === 404);
+            return Boolean(res.status === 200);
           });
       }, 500)
     },
@@ -122,7 +122,7 @@ export default {
         return debounce()
           .then(() => this.$api.user.checkUser(value))
           .then(res => {
-            return Boolean(res.status === 404);
+            return Boolean(res.status === 200);
           });
       }, 500)
     },
