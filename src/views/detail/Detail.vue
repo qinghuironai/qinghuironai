@@ -6,21 +6,10 @@
           <div class="detail-img animated zoomIn">
             <v-img
               :height="illustDetail.itemHeight"
-              :src="illustDetail.originalSrc"
-              :lazy-src="illustDetail.src"
+              :src="illustDetail.src"
               :style="imgStyle"
               @click="seePreview"
-            >
-              <template v-slot:placeholder>
-                <v-row
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center"
-                >
-                  <v-progress-circular indeterminate color="grey lighten-5" />
-                </v-row>
-              </template>
-            </v-img>
+            />
             <Like
               :width="80"
               :like="illustDetail.isLiked"
