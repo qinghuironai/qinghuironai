@@ -48,8 +48,8 @@
       <slot />
       <div ref="watercontent" class="water-content" :style="contentStyle">
         <div
-          v-for="item in displayItems"
-          :key="item.id"
+          v-for="(item, index) in displayItems"
+          :key="item.id || index"
           class="cell-container"
           :style="getComputedStyle(item)"
         >

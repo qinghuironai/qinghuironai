@@ -51,7 +51,7 @@ export default {
   position relative
   z-index 2
   padding 20px
-  background url('https://pic.cheerfun.dev/bg.jpg') no-repeat
+  background url('../../assets/images/bg.jpg') no-repeat
   background-size cover
   .container
     width 100%

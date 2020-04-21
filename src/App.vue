@@ -35,8 +35,8 @@ export default {
       active: '/dailyRank',
       tabs: [{
         value: '/dailyRank',
-        src: 'https://pic.cheerfun.dev/pixivic.svg',
-        activeSrc: 'https://pic.cheerfun.dev/pixivic-active.svg'
+        src: require('../src/assets/images/pixivic.svg'),
+        activeSrc: require('../src/assets/images/pixivic-active.svg')
       }, {
         value: '/find',
         src: require('../src/assets/images/find.svg'),
@@ -65,12 +65,6 @@ export default {
       },
       immediate: true
     }
-  },
-  async mounted() {
-    const flag = localStorage.getItem('pixivic-msg');
-    const alert = localStorage.getItem('pixivic_alert');
-    if (flag) localStorage.removeItem('pixivic-msg');
-    if (alert) localStorage.removeItem('pixivic_alert');
   },
   methods: {
     clickTab(val) {
