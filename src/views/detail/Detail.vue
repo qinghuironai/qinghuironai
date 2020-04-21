@@ -6,8 +6,9 @@
           <div class="detail-img animated zoomIn">
             <v-img
               :height="illustDetail.itemHeight"
-              :src="illustDetail.src"
+              :src="illustDetail.originalSrc"
               :style="imgStyle"
+              class="grey"
               @click="seePreview"
             />
             <Like
