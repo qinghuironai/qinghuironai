@@ -260,7 +260,7 @@ export default {
           img
             object-fit cover
       .artists-info
-        padding-top 15px
+        padding-top 60px
         text-align center
         .name
           font-size 20px
