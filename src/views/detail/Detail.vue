@@ -3,14 +3,7 @@
     <div v-if="illustDetail" class="detail">
       <List :list="pictureList" @infinite="infinite">
         <div class="detail-top">
-          <div class="detail-img animated zoomIn" :style="{height: `${illustDetail.itemHeight}px`}">
-            <!-- <v-img
-              :height="illustDetail.itemHeight"
-              :src="illustDetail.originalSrc"
-              :style="imgStyle"
-              class="grey"
-              @click="seePreview"
-            /> -->
+          <div class="detail-img animated zoomIn" :style="{height: `${illustDetail.itemHeight}px`}" @click="seePreview">
             <img :src="illustDetail.originalSrc" width="100%" height="100%" alt="detail" :style="imgStyle">
             <Like
               :width="80"
@@ -54,7 +47,8 @@
             </v-menu>
           </div>
           <div class="detail-info">
-            <h2 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h2>
+            <h3 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h3>
+            <p>ID:  {{ illustDetail.id }}</p>
             <p class="caption" v-html="illustDetail.caption" />
             <div class="tags">
               <span
@@ -85,7 +79,7 @@
               </a>
               <a v-if="likeUsers" class="work-stats-a user-avatar">
                 <v-avatar v-for="item in likeUsers" :key="item.userId" size="30" @click="goUsers">
-                  <v-img class="grey lighten-2" :src="item.userId | replaceAvatar" />
+                  <img :src="item.userId | replaceAvatar" style="object-fit: cover;">
                 </v-avatar>
               </a>
             </div>
@@ -93,7 +87,7 @@
             <div class="user">
               <router-link :to="`/artist/${illustDetail.artistId}`" class="text-no-wrap text-truncate">
                 <v-avatar>
-                  <v-img :src="illustDetail.avatarSrc" alt="avatar" />
+                  <img :src="illustDetail.avatarSrc" alt="avatar">
                 </v-avatar>
                 <span>{{ illustDetail.artistPreView.name }}</span>
               </router-link>
@@ -431,7 +425,7 @@ export default {
       };
     },
     illustHistory() {
-      if (this.user) {
+      if (this.user.id) {
         this.$api.detail.illustHistory({
           userId: this.user.id,
           illustId: this.pid
@@ -482,7 +476,7 @@ export default {
     overflow hidden
     >.caption
       word-wrap break-word
-      margin-top 5px
+      margin-top 2px
     .user
       display flex
       align-items center

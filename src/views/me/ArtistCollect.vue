@@ -15,29 +15,19 @@
             class="illust-item"
           >
             <div class="img-item" @click="goDetail(item)">
-              <v-img
+              <img
                 :style="{filter: (item.xrestrict === 1 || item.sanityLevel > 5) ? `blur(20px)` : ''}"
                 :src="item.imageUrls[0].squareMedium | replaceSquare"
                 width="100%"
                 height="100%"
               >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular indeterminate color="grey lighten-3" />
-                  </v-row>
-                </template>
-              </v-img>
               <div class="mask" />
             </div>
           </div>
         </div>
         <v-list-item class="user-item" @click="handleClick(props.data.id)">
           <v-list-item-avatar>
-            <v-img class="grey lighten-2" :src="props.data.avatar | replaceBig" />
+            <img :src="props.data.avatar | replaceBig">
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title v-text="props.data.name" />

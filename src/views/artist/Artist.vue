@@ -20,18 +20,17 @@
                   <use xlink:href="#picfanhui2" />
                 </svg>
               </v-btn>
-              <v-img class="avatar-top" :src="artistDetail.avatar | replaceBig" height="25vh" />
+              <img class="avatar-top" :src="artistDetail.avatar | replaceBig" width="100%" height="100%">
               <v-avatar :size="80">
-                <img :src="artistDetail.avatar | replaceBig" alt="">
+                <img :src="artistDetail.avatar | replaceBig" width="100%" height="100%" alt="">
               </v-avatar>
             </div>
             <div class="artists-info">
               <svg v-if="artistDetail.gender" font-size="16" class="icon" aria-hidden="true">
                 <use :xlink:href="artistDetail.gender === 'female' ? '#picnv' : '#picnan'" />
               </svg>
-              <p class="name">
-                {{ artistDetail.name }}
-              </p>
+              <p class="name">{{ artistDetail.name }}</p>
+              <p class="name">ID: {{ artistDetail.id }}</p>
               <v-btn
                 class="mb-5"
                 color="primary"
@@ -252,8 +251,10 @@ export default {
         text-align center
         margin 0 -8px
         box-sizing border-box
+        height 25vh
         .avatar-top
           filter blur(10px)
+          object-fit cover
         .v-avatar
           margin-top -40px
           img
