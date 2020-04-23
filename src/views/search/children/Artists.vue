@@ -1,5 +1,7 @@
 <template>
-  <Artist title="关注画师列表" :list="artistList" @infinite="infinite" />
+  <div class="search-artists">
+    <Artist :list="artistList" :title="title" @infinite="infinite" />
+  </div>
 </template>
 
 <script>
@@ -15,22 +17,25 @@ export default {
     return {
       artistList: [],
       page: 1,
-      userId: null
+      artistName: null
     };
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user']),
+    title() {
+      return this.artistList.length ? '为你找到以下画师' : '未找到画师';
+    }
   },
   mounted() {
-    const { userId } = this.$route.query;
-    this.userId = userId || this.user.id;
+    const { artistName } = this.$route.query;
+    this.artistName = artistName;
   },
   methods: {
     infinite($state) {
-      this.$api.user
-        .getArtists({
+      this.$api.search
+        .searchArtists({
           page: this.page++,
-          userId: this.userId
+          artistName: this.artistName
         })
         .then(res => {
           const { data: { data }} = res;
@@ -47,4 +52,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.search-artists
+  position fixed
+  top 0
+  right 0
+  left 0
+  z-index 101
+  font-size 16px
+  background #fff
+  width 100%
+  height 100vh
 </style>

@@ -5,30 +5,31 @@ import cookie from 'js-cookie';
 Vue.use(Router);
 
 const pages = {
-  DailyRank: require('./views/rank/DailyRank').default,
-  Detail: require('./views/detail/Detail').default,
-  Artist: require('./views/artist/Artist').default,
-  Search: require('./views/search/Search').default,
-  Illusts: require('./views/search/children/Illusts').default,
-  Find: require('./views/find/Find').default,
-  SpotLight: require('./views/find/SoptLight').default,
-  Spot: require('./views/find/Spot.vue').default,
-  Me: require('./views/me/Me').default,
-  Collect: require('./views/me/Collect').default,
-  ArtistCollect: require('./views/me/ArtistCollect').default,
-  Links: require('./views/find/Links').default,
-  New: require('./views/new/New.vue').default,
-  Setting: require('./views/me/Setting').default,
-  Avatar: require('./views/me/Avatar').default,
-  Login: require('./views/login/Login').default,
-  QQauth: require('./views/login/qqauth').default,
-  Register: require('./views/register/Register').default,
-  ResetPassword: require('./views/reset/ResetPassword').default,
-  EmailCheck: require('./views/reset/EmailCheck').default,
-  Friends: require('./views/find/Friends').default,
-  Users: require('./views/users/Users').default,
-  BookMark: require('./views/bookmark/BookMark').default,
-  History: require('./views/me/History').default
+  DailyRank: () => import('./views/rank/DailyRank'),
+  Detail: () => import('./views/detail/Detail'),
+  Artist: () => import('./views/artist/Artist'),
+  Search: () => import('./views/search/Search'),
+  Illusts: () => import('./views/search/children/Illusts'),
+  Artists: () => import('./views/search/children/Artists'),
+  Find: () => import('./views/find/Find'),
+  SpotLight: () => import('./views/find/SoptLight'),
+  Spot: () => import('./views/find/Spot.vue'),
+  Me: () => import('./views/me/Me'),
+  Collect: () => import('./views/me/Collect'),
+  ArtistCollect: () => import('./views/me/ArtistCollect'),
+  Links: () => import('./views/find/Links'),
+  New: () => import('./views/new/New.vue'),
+  Setting: () => import('./views/me/Setting'),
+  Avatar: () => import('./views/me/Avatar'),
+  Login: () => import('./views/login/Login'),
+  QQauth: () => import('./views/login/qqauth'),
+  Register: () => import('./views/register/Register'),
+  ResetPassword: () => import('./views/reset/ResetPassword'),
+  EmailCheck: () => import('./views/reset/EmailCheck'),
+  Friends: () => import('./views/find/Friends'),
+  Users: () => import('./views/users/Users'),
+  BookMark: () => import('./views/bookmark/BookMark'),
+  History: () => import('./views/me/History')
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -92,6 +93,11 @@ const router = new Router({
         path: 'illusts',
         name: 'Illusts',
         component: pages.Illusts
+      },
+      {
+        path: 'artists',
+        name: 'Artists',
+        component: pages.Artists
       }
     ]
   },
