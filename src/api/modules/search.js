@@ -81,6 +81,15 @@ function getHotTag(params) {
   });
 }
 
+// 搜索画师
+function searchArtists(params) {
+  return axios({
+    url: `/artists`,
+    method: 'get',
+    params: { ...params, pageSize: 30 }
+  });
+}
+
 export {
   getSearch,
   getTags,
@@ -90,5 +99,6 @@ export {
   uploadImg,
   searchByImg,
   getExists,
-  getHotTag
+  getHotTag,
+  searchArtists
 };

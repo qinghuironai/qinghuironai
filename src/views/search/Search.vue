@@ -89,12 +89,21 @@ export default {
     }, 500),
     enter(val) {
       if (!val) return;
-      this.$router.push({
-        name: 'Illusts',
-        query: {
-          tag: val
-        }
-      });
+      if (this.tab === 0) {
+        this.$router.push({
+          name: 'Illusts',
+          query: {
+            tag: val
+          }
+        });
+      } else if (this.tab === 1) {
+        this.$router.push({
+          name: 'Artists',
+          query: {
+            artistName: val
+          }
+        });
+      }
     },
     translateKeyword() {
       this.$api.search

@@ -28,6 +28,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import cookie from 'js-cookie';
+import Alert from '@/components/alert';
 
 export default {
   data() {
@@ -64,6 +66,16 @@ export default {
         this.active = val.path;
       },
       immediate: true
+    }
+  },
+  async mounted() {
+    if (!cookie.get('alert')) {
+      await Alert({
+        content: '画师搜索现已可用'
+      });
+      cookie.set('alert', true, {
+        expires: 365
+      });
     }
   },
   methods: {
