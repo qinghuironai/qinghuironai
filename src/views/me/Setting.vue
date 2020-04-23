@@ -53,6 +53,14 @@
           </svg>
         </v-list-item-icon>
       </v-list-item>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>
+            16
+          </v-list-item-title>
+        </v-list-item-content>
+        <v-switch v-model="lockShow" @change="changeLock" />
+      </v-list-item>
     </v-list>
 
     <v-bottom-sheet v-model="sheet">
@@ -92,7 +100,8 @@ export default {
       columns: ['自动', 1, 2, 3, 4],
       isCheckEmail: false,
       isConnectQQ: false,
-      column: 1
+      column: 1,
+      lockShow: false
     };
   },
   computed: {
@@ -110,6 +119,7 @@ export default {
 
     const column = parseInt(localStorage.getItem('waterfull-column'));
     this.column = column || '自动';
+    this.lockShow = JSON.parse(localStorage.getItem('lock_show') || null);
   },
   methods: {
     clickItem(val) {
@@ -139,6 +149,13 @@ export default {
         localStorage.setItem('waterfull-column', val);
       }
       this.sheet = false;
+    },
+    changeLock() {
+      if (this.lockShow) {
+        localStorage.setItem('lock_show', true);
+      } else {
+        localStorage.removeItem('lock_show');
+      }
     }
   }
 };

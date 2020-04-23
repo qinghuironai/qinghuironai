@@ -112,7 +112,7 @@
             </div>
             <v-divider />
 
-            <div v-if="new Date().getDate() !== 4" class="detail-comment">
+            <div class="detail-comment">
               <div class="comment-title">评论</div>
               <div v-if="commentList.length">
                 <comment-list :list="commentList.slice(0, 5)" @reply="openComment" />
@@ -121,7 +121,7 @@
                 <svg font-size="36" class="icon" aria-hidden="true">
                   <use xlink:href="#picpinglun" />
                 </svg>
-                <span>快来添加评论吧o(*￣▽￣*)o</span>
+                <!-- <span>留下你的足迹o(*￣▽￣*)o</span> -->
               </div>
               <v-btn
                 color="rgba(0, 0, 0, 0.04)"

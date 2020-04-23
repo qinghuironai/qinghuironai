@@ -77,7 +77,7 @@ function getHotTag(params) {
   return axios({
     url: `/trendingTags`,
     method: 'get',
-    params: params || { date: dayjs(new Date()).format('YYYY-MM-DD') }
+    params: params || { date: dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD') }
   });
 }
 

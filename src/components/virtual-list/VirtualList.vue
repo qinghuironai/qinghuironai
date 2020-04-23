@@ -59,8 +59,8 @@ export default {
           this.columnHeight = new Array(this.column).fill(0);
         } else {
           let list = val.filter(e => !old.includes(e) && (e.xrestrict !== 1 || this.user.username === 'pixivic'));
-          if (new Date().getDate() === 4) {
-            list = list.filter(item => item.xrestrict !== 1 && item.sanityLevel < 6);
+          if (!localStorage.getItem('lock_show') && this.user.username !== 'pixivic') {
+            list = list.filter(item => item.sanityLevel < 6);
           }
           this.handleList(list);
           for (const item of list) {
