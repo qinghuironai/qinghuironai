@@ -246,11 +246,11 @@ const router = new Router({
     meta: {
       title: `浏览历史`
     }
-  },
-  {
-    path: '*',
-    redirect: '/dailyRank'
   }
+  // {
+  //   path: '*',
+  //   redirect: '/dailyRank'
+  // }
   ]
 });
 

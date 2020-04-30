@@ -69,11 +69,11 @@ export default {
     }
   },
   async mounted() {
-    if (!cookie.get('alert')) {
+    if (!cookie.get('alert2')) {
       await Alert({
-        content: '画师搜索现已可用'
+        content: 'pixivic现已推出App，点击底部按钮下载'
       });
-      cookie.set('alert', true, {
+      cookie.set('alert2', true, {
         expires: 365
       });
     }

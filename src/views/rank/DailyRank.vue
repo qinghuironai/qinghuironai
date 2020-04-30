@@ -11,6 +11,8 @@
     >
       <Header @selectMode="selectMode" @selectDate="selectDate" />
     </List>
+    <a v-if="isAndroid" class="download" href="/pixivic-0.0.1.apk" download="pixivic">下载App</a>
+    <a v-if="isiOS" class="download" href="https://apps.apple.com/cn/app/pixivic/id1508873995">下载App</a>
   </div>
 </template>
 
@@ -34,6 +36,14 @@ export default {
       pictureList: [],
       identifier: +new Date()
     };
+  },
+  computed: {
+    isAndroid() {
+      return navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1;
+    },
+    isiOS() {
+      return !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    }
   },
   mounted() {
     this.date = this.maxDate = dayjs(new Date()).add(-3, 'days').format('YYYY-MM-DD');
@@ -87,4 +97,18 @@ export default {
 .rank
   position relative
   font-size 16px
+  .download
+    position fixed
+    bottom 90px
+    left 0
+    right 0
+    margin auto
+    width 97px
+    background #fc7085
+    color #fff
+    border-radius 25px
+    padding 5px
+    text-align center
+    box-shadow 0 4px 8px 0 rgba(32, 32, 32, .15)
+    user-select none
 </style>
