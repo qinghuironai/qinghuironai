@@ -11,7 +11,7 @@
     >
       <Header @selectMode="selectMode" @selectDate="selectDate" />
     </List>
-    <a v-if="isAndroid" class="download" href="https://pic.cheerfun.dev/pixivic-0.0.1.apk" download="pixivic">下载App</a>
+    <a v-if="isAndroid" class="download" href="https://pixivic.lanzous.com/ic6pw7c" download="pixivic">下载App</a>
     <a v-if="isiOS" class="download" href="https://apps.apple.com/cn/app/pixivic/id1508873995">下载App</a>
   </div>
 </template>
