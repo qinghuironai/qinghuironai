@@ -11,8 +11,7 @@
     >
       <Header @selectMode="selectMode" @selectDate="selectDate" />
     </List>
-    <a v-if="isAndroid" class="download" href="https://lanzous.com/ics37qb" download="pixivic">下载App</a>
-    <a v-if="isiOS" class="download" href="https://apps.apple.com/cn/app/pixivic/id1508873995">下载App</a>
+    <a class="download" :href="downUrl">下载App</a>
   </div>
 </template>
 
@@ -43,6 +42,9 @@ export default {
     },
     isiOS() {
       return !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    },
+    downUrl() {
+      return this.isiOS ? 'https://apps.apple.com/cn/app/pixivic/id1508873995' : 'https://lanzous.com/ics37qb';
     }
   },
   mounted() {
