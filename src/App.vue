@@ -28,7 +28,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import cookie from 'js-cookie';
+// import cookie from 'js-cookie';
 import Alert from '@/components/alert';
 
 export default {
@@ -68,15 +68,16 @@ export default {
       immediate: true
     }
   },
-  async mounted() {
-    if (!cookie.get('alert2')) {
-      await Alert({
-        content: 'pixivic现已推出App，点击底部按钮下载'
-      });
-      cookie.set('alert2', true, {
-        expires: 365
-      });
-    }
+  mounted() {
+    Alert({
+      content: '发布最新资讯以及更新记录，请大家关注一下 微信公众号和微博',
+      html: `
+        <div style="display: flex; justify-content: center;">
+          <img src="${require('../src/assets/images/wchat.jpg')}" style="width: 50%; height: 50%; margin-right: 5px;" />
+          <img src="${require('../src/assets/images/wbo.jpg')}" style="width: 50%; height: 50%;" />
+        </div>
+      `
+    });
   },
   methods: {
     clickTab(val) {
