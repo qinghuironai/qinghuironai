@@ -75,7 +75,7 @@ export default {
   async mounted() {
     if (!sessionStorage.getItem('alert')) {
       await Alert({
-        content: '发布最新资讯以及更新记录，请大家关注一下 微信公众号和微博',
+        content: '请大家关注一下微信公众号和微博，我们会在上面发布最新资讯与更新记录',
         html: `
         <div style="display: flex; justify-content: center;">
           <img src="${require('../src/assets/images/wchat.jpg')}" style="width: 50%; height: 50%; margin-right: 5px;" />
