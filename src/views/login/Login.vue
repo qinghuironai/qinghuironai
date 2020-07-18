@@ -106,7 +106,7 @@ export default {
       email: '',
       valid2: false,
       nameRules: [
-        v => !!v || '请填写用户名',
+        v => !!v || '请填写用户名或者邮箱',
         v => v.length >= 4 || '用户名或邮箱4位以上'
       ],
       passwordRules: [

@@ -30,7 +30,8 @@ const pages = {
   Friends: () => import('./views/find/Friends/'),
   Users: () => import('./views/users/Users'),
   BookMark: () => import('./views/bookmark/BookMark'),
-  History: () => import('./views/me/History/')
+  History: () => import('./views/me/History/'),
+  Recommend: () => import('./views/recommend/Recommend')
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -254,6 +255,14 @@ const router = new Router({
     component: pages.History,
     meta: {
       title: `浏览历史`
+    }
+  },
+  {
+    path: '/recommend',
+    name: 'Recommend',
+    component: pages.Recommend,
+    meta: {
+      title: `为你推荐`
     }
   }
   // {
