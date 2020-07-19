@@ -68,7 +68,7 @@
         <svg font-size="160" class="icon" aria-hidden="true">
           <use xlink:href="#pickongtai1" />
         </svg>
-        <p style="color: #E3F2FA; font-size: 20px;">没有内容</p>
+        <!-- <p style="color: #E3F2FA; font-size: 20px;">没有内容</p> -->
       </div>
     </infinite-loading>
   </div>

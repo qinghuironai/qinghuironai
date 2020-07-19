@@ -11,25 +11,27 @@ const pages = {
   Search: () => import('./views/search/Search'),
   Illusts: () => import('./views/search/children/Illusts'),
   Artists: () => import('./views/search/children/Artists'),
-  Find: () => import('./views/find/Find'),
-  SpotLight: () => import('./views/find/SoptLight'),
-  Spot: () => import('./views/find/Spot.vue'),
-  Me: () => import('./views/me/Me'),
-  Collect: () => import('./views/me/Collect'),
-  ArtistCollect: () => import('./views/me/ArtistCollect'),
-  Links: () => import('./views/find/Links'),
+  Find: () => import('./views/find/Find/'),
+  SpotLight: () => import('./views/find/SoptLight/'),
+  Spot: () => import('./views/find/Spot/'),
+  Me: () => import('./views/me/Me/'),
+  Collect: () => import('./views/me/Collect/'),
+  Collects: () => import('./views/me/Collects/'),
+  ArtistCollect: () => import('./views/me/ArtistCollect/'),
+  Links: () => import('./views/find/Links/'),
   New: () => import('./views/new/New.vue'),
-  Setting: () => import('./views/me/Setting'),
+  Setting: () => import('./views/me/Setting/'),
   Avatar: () => import('./views/me/Avatar'),
   Login: () => import('./views/login/Login'),
   QQauth: () => import('./views/login/qqauth'),
   Register: () => import('./views/register/Register'),
   ResetPassword: () => import('./views/reset/ResetPassword'),
   EmailCheck: () => import('./views/reset/EmailCheck'),
-  Friends: () => import('./views/find/Friends'),
+  Friends: () => import('./views/find/Friends/'),
   Users: () => import('./views/users/Users'),
   BookMark: () => import('./views/bookmark/BookMark'),
-  History: () => import('./views/me/History')
+  History: () => import('./views/me/History/'),
+  Recommend: () => import('./views/recommend/Recommend')
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -143,6 +145,14 @@ const router = new Router({
     }
   },
   {
+    path: '/collects',
+    name: 'Collects',
+    component: pages.Collects,
+    meta: {
+      title: `我的画集`
+    }
+  },
+  {
     path: '/artistCollect',
     name: 'ArtistCollect',
     component: pages.ArtistCollect,
@@ -245,6 +255,14 @@ const router = new Router({
     component: pages.History,
     meta: {
       title: `浏览历史`
+    }
+  },
+  {
+    path: '/recommend',
+    name: 'Recommend',
+    component: pages.Recommend,
+    meta: {
+      title: `为你推荐`
     }
   }
   // {
