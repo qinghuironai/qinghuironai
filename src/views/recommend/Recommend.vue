@@ -1,6 +1,11 @@
 <template>
   <div class="recommend">
-    <List :list="pictureList" :identifier="identifier" @infinite="infinite" />
+    <List
+      :list="pictureList"
+      :identifier="identifier"
+      :show-no-results="false"
+      @infinite="infinite"
+    />
     <div :class="['change', { 'rotate': rotate }]" @click="handleChange">
       <img src="@/assets/images/change.svg" alt="">
     </div>
@@ -53,8 +58,8 @@ export default {
     position fixed
     bottom 100px
     right 10px
-    width 30px
-    height 30px
+    width 40px
+    height 40px
     transition all 0.3s ease
     img
       width 100%

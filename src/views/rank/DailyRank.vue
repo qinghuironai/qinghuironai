@@ -11,7 +11,6 @@
     >
       <Header @selectMode="selectMode" @selectDate="selectDate" />
     </List>
-    <a v-if="downloadUrl" :class="['download', { 'is-active': showTab }]" :href="downloadUrl">下载App</a>
   </div>
 </template>
 
@@ -40,21 +39,7 @@ export default {
   computed: {
     ...mapGetters([
       'showTab'
-    ]),
-    isAndroid() {
-      return navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1;
-    },
-    isiOS() {
-      return !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-    },
-    downloadUrl() {
-      if (this.isAndroid) {
-        return 'https://wwa.lanzous.com/iR9E5eljotc';
-      } else if (this.isiOS) {
-        return 'https://apps.apple.com/cn/app/pixivic/id1508873995';
-      }
-      return null;
-    }
+    ])
   },
   mounted() {
     this.date = this.maxDate = dayjs(new Date()).subtract(39, 'hour').format('YYYY-MM-DD');
@@ -108,24 +93,4 @@ export default {
 .rank
   position relative
   font-size 16px
-  .download
-    position fixed
-    bottom 90px
-    left 0
-    right 0
-    margin auto
-    width 97px
-    background #fc7085
-    color #fff
-    border-radius 25px
-    padding 5px
-    text-align center
-    box-shadow 0 4px 8px 0 rgba(32, 32, 32, .15)
-    user-select none
-    transform translateY(100px)
-    transition all 1s
-    opacity 0
-    &.is-active
-      transform translateY(0)
-      opacity 1
 </style>

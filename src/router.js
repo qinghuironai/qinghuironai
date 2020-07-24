@@ -67,6 +67,15 @@ const router = new Router({
     }
   },
   {
+    path: '/illusts/:pid',
+    name: 'Illusts',
+    component: pages.Detail,
+    props: true,
+    meta: {
+      title: `详情`
+    }
+  },
+  {
     path: '/artist/:artistId',
     name: 'Artist',
     component: pages.Artist,
@@ -93,7 +102,7 @@ const router = new Router({
     children: [
       {
         path: 'illusts',
-        name: 'Illusts',
+        name: 'SearchIllusts',
         component: pages.Illusts
       },
       {
@@ -274,7 +283,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const isLogin = !!cookie.get('jwt');
-  const needLogin = to.path === '/me' || to.path === '/new';
+  const needLogin = to.path === '/me' || to.path === '/new' || to.path === 'recommend';
   if (to.meta.title) {
     document.title = to.meta.title;
   }

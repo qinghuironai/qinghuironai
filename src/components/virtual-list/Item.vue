@@ -54,7 +54,7 @@ export default {
         window.open(this.column.link);
       } else {
         this.$store.dispatch('setDetail', this.column);
-        this.$router.push(`/detail/${this.column.id}`);
+        this.$router.push(`/illusts/${this.column.id}`);
       }
     }
   }

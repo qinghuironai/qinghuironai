@@ -37,7 +37,9 @@ export default {
         { id: 3, text: '关于我们', value: '/links', icon: '#picyonghuxuzhi-' },
         { id: 4, text: '前端', value: 'https://github.com/cheer-fun/pixivic-mobile', icon: '#picGithub' },
         { id: 5, text: '后端', value: 'https://github.com/cheer-fun/pixivic-web-backend', icon: '#picGithub' },
-        { id: 6, text: '友链', value: '/friends', icon: '#piclianjie-copy' }
+        { id: 6, text: '友链', value: '/friends', icon: '#piclianjie-copy' },
+        { id: 7, text: 'Android', value: 'https://wwa.lanzous.com/iR9E5eljotc', icon: '#picxiazai-' },
+        { id: 8, text: 'IOS', value: 'https://apps.apple.com/cn/app/pixivic/id1508873995', icon: '#picxiazai-' }
       ]
     };
   }
