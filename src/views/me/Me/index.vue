@@ -98,7 +98,7 @@ export default {
   &-header
     height 200px
     overflow hidden
-    background url('../../../assets/images/girl.jpg') no-repeat
+    background url('~@/assets/images/girl.jpg') no-repeat
     background-size 100%
     background-position 0 -100px
     border-bottom-right-radius 70% 60%

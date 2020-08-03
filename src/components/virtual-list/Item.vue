@@ -8,7 +8,7 @@
       >
       <div class="img-filter" />
       <div v-if="column.pageCount > 1" class="count">
-        <img src="../../assets/images/count.svg">
+        <img src="@/assets/images/count.svg">
         <span>{{ column.pageCount }}</span>
       </div>
       <Like v-if="!column.isad" :like="column.isLiked" @handleLike="handleLike" />

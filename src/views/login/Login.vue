@@ -209,7 +209,7 @@ export default {
   padding 50px
   box-sizing border-box
   background-color #eee
-  //background url('../../assets/images/bg.jpg') no-repeat
+  //background url('~@/assets/images/bg.jpg') no-repeat
   background-size cover
   z-index 101
   .row
