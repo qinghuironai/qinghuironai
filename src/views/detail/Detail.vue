@@ -378,7 +378,7 @@ export default {
     },
     searchByTag(tag) {
       this.$router.push({
-        name: 'Illusts',
+        name: 'SearchIllusts',
         query: {
           tag,
           source: 'detail'
