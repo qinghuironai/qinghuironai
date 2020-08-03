@@ -368,7 +368,12 @@ export default {
       if (this.user.id) {
         this.$refs.comment.show();
       } else {
-        this.$router.push('/login');
+        this.$router.push({
+          name: 'Login',
+          query: {
+            return_to: window.location.href
+          }
+        });
       }
     },
     searchByTag(tag) {

@@ -43,16 +43,6 @@ const pages = {
 const router = new Router({
   mode: 'history',
   base: process.env.VUE_APP_PREFIX,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
-    } else {
-      return {
-        x: 0,
-        y: 0
-      };
-    }
-  },
   routes: [{
     path: '/',
     redirect: '/dailyRank'

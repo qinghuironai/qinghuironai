@@ -18,7 +18,7 @@
       </div>
       <div class="tabs-item" @click="$router.push('/me')">
         <img
-          :src="user.id ? `https://pic.cheerfun.dev/${user.id}.png?t=${new Date().getTime()}` : require('../src/assets/images/me.svg')"
+          :src="user.id ? `https://pic.cheerfun.dev/${user.id}.png?t=${new Date().getTime()}` : require('@/assets/images/me.svg')"
           :style="{transform: $route.name === 'Me' ? 'scale(1.1)' : ''}"
         >
       </div>
@@ -37,23 +37,23 @@ export default {
       tabs: [
         {
           value: '/dailyRank',
-          src: require('../src/assets/images/pixivic.svg'),
-          activeSrc: require('../src/assets/images/pixivic-active.svg')
+          src: require('@/assets/images/pixivic.svg'),
+          activeSrc: require('@/assets/images/pixivic-active.svg')
         },
         {
           value: '/recommend',
-          src: require('../src/assets/images/recommend.svg'),
-          activeSrc: require('../src/assets/images/recommend-active.svg')
+          src: require('@/assets/images/recommend.svg'),
+          activeSrc: require('@/assets/images/recommend-active.svg')
         },
         {
           value: '/find',
-          src: require('../src/assets/images/find.svg'),
-          activeSrc: require('../src/assets/images/find-active.svg')
+          src: require('@/assets/images/find.svg'),
+          activeSrc: require('@/assets/images/find-active.svg')
         },
         {
           value: '/new',
-          src: require('../src/assets/images/new.svg'),
-          activeSrc: require('../src/assets/images/new-active.svg')
+          src: require('@/assets/images/new.svg'),
+          activeSrc: require('@/assets/images/new-active.svg')
         }
       ]
     };
@@ -61,7 +61,7 @@ export default {
   computed: {
     ...mapGetters(['cachedViews', 'showTab', 'user']),
     key() {
-      return this.$route.fullPath;
+      return this.$route.path;
     }
   },
   watch: {
@@ -78,8 +78,8 @@ export default {
         content: '请大家关注一下微信公众号和微博，我们会在上面发布最新资讯与更新记录',
         html: `
         <div style="display: flex; justify-content: center;">
-          <img src="${require('../src/assets/images/wchat.jpg')}" style="width: 50%; height: 50%; margin-right: 5px;" />
-          <img src="${require('../src/assets/images/wbo.jpg')}" style="width: 50%; height: 50%;" />
+          <img src="${require('@/assets/images/wchat.jpg')}" style="width: 50%; height: 50%; margin-right: 5px;" />
+          <img src="${require('@/assets/images/wbo.jpg')}" style="width: 50%; height: 50%;" />
         </div>
       `
       });

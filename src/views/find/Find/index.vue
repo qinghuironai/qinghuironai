@@ -53,7 +53,7 @@ export default {
   position relative
   z-index 2
   padding 20px
-  background url('../../../assets/images/bg.jpg') no-repeat
+  background url('~@/assets/images/bg.jpg') no-repeat
   background-size cover
   .container
     width 100%
