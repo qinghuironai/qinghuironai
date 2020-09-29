@@ -26,7 +26,7 @@
         <li>搜刮各种二次元美图</li>
       </ul>
       <h4>
-        <a href="http://guozhivip.com/nav/">果汁导航</a>
+        <a href="http://guozhivip.com">果汁导航</a>
       </h4>
       <ul>
         <li>一个简约优质实用的资源导航平台</li>
