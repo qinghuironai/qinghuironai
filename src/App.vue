@@ -29,7 +29,7 @@
 <script>
 import { mapGetters } from 'vuex';
 // import cookie from 'js-cookie';
-import Alert from '@/components/alert';
+/* import Alert from '@/components/alert'; */
 export default {
   data() {
     return {
@@ -72,7 +72,7 @@ export default {
       immediate: true
     }
   },
-  async mounted() {
+  /* async mounted() {
     if (!sessionStorage.getItem('alert')) {
       await Alert({
         content: '请大家关注一下微信公众号和微博，我们会在上面发布最新资讯与更新记录',
@@ -85,7 +85,7 @@ export default {
       });
       sessionStorage.setItem('alert', true);
     }
-  },
+  }, */
   methods: {
     clickTab(val) {
       this.$router.push(val);
