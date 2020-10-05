@@ -21,7 +21,7 @@ Vue.use(VuePageStack, { router, keyName: 'VNK' });
 Vue.config.productionTip = false;
 Vue.use(animated);
 Vue.use(VueGtag, {
-  config: { id: 'UA-158701012-1' }
+  config: { id: 'UA-158701012-3' }
 });
 Vue.prototype.$api = api;
 Vue.prototype.$util = util;
