@@ -14,6 +14,9 @@
       </div>
       <div class="status-bar">
         <div class="time">{{ item.createDate | formatDate }}</div>
+        <div class="time">
+          <span style="font-size: 12px; margin-left: 10px;">{{ item.platform }}</span>
+        </div>
         <div class="reply">
           <span @click="reply(item.id, item)">回复</span>
         </div>

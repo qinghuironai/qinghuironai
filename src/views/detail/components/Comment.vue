@@ -102,6 +102,8 @@ export default {
         });
       }
       this.issend = true;
+      const MobileDetect = require('mobile-detect');
+      const md = new MobileDetect(window.navigator.userAgent);
       let data = {
         commentAppType: 'illusts',
         commentAppId: this.pid,
@@ -109,7 +111,8 @@ export default {
         replyTo: 0, // 回复者，没有就是0
         replyFromName: this.user.username, // 评论者用户名
         replyToName: '', // 回复者用户名
-        content: this.value// 内容
+        content: this.value, // 内容
+        platform: `来自${md.mobile()}-${md.userAgent()}`
       };
       data = Object.assign(data, this.replyParam);
       this.$api.comment.makeComments(data)

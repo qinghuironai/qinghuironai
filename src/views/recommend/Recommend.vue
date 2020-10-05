@@ -44,7 +44,7 @@ export default {
     },
     handleChange() {
       this.rotate = !this.rotate;
-      this.type = this.type === 'getRecommend' ? 'getRecommendView' : 'getRecommend';
+      // this.type = this.type === 'getRecommend' ? 'getRecommendView' : 'getRecommend';
       this.pictureList = [];
       this.identifier += 1;
     }
