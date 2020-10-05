@@ -75,7 +75,8 @@ export default {
       value: '',
       commentList: [],
       placeholder: '添加评论...',
-      replyParam: {}
+      replyParam: {},
+      issend: false
     };
   },
   computed: {
@@ -95,6 +96,14 @@ export default {
           content: '请输入评论内容~'
         });
       }
+      if (this.issend) {
+        return Alert({
+          content: '评论正在发送中~'
+        });
+      }
+      this.issend = true;
+      const MobileDetect = require('mobile-detect');
+      const md = new MobileDetect(window.navigator.userAgent);
       let data = {
         commentAppType: 'illusts',
         commentAppId: this.pid,
@@ -102,7 +111,8 @@ export default {
         replyTo: 0, // 回复者，没有就是0
         replyFromName: this.user.username, // 评论者用户名
         replyToName: '', // 回复者用户名
-        content: this.value// 内容
+        content: this.value, // 内容
+        platform: `来自${md.mobile()}-${md.userAgent()}`
       };
       data = Object.assign(data, this.replyParam);
       this.$api.comment.makeComments(data)
@@ -124,6 +134,9 @@ export default {
             this.replyParam = {};
             this.$emit('reply', this.commentList);
           }
+        })
+        .finally(() => {
+          this.issend = false;
         });
     },
     handleInput() {
