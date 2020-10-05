@@ -112,7 +112,7 @@ export default {
         replyFromName: this.user.username, // 评论者用户名
         replyToName: '', // 回复者用户名
         content: this.value, // 内容
-        platform: `来自${md.os()}-${md.userAgent()}`
+        platform: `${md.os()} ${md.userAgent()}`
       };
       data = Object.assign(data, this.replyParam);
       this.$api.comment.makeComments(data)
