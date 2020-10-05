@@ -20,9 +20,9 @@ Vue.use(VuePageStack, { router, keyName: 'VNK' });
 // new VConsole();
 Vue.config.productionTip = false;
 Vue.use(animated);
-Vue.use(VueGtag, {
+/*Vue.use(VueGtag, {
   config: { id: 'UA-158701012-1' }
-});
+});*/
 Vue.prototype.$api = api;
 Vue.prototype.$util = util;
 
