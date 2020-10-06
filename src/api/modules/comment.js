@@ -26,7 +26,26 @@ function makeComments(params) {
   });
 }
 
+// 点赞
+function likedComments(data) {
+  return axios({
+    url: `/user/likedComments`,
+    method: 'post',
+    data
+  });
+}
+
+// 取消点赞
+function canclelikedComments(param) {
+  return axios({
+    url: `/user/likedComments/${param.commentAppType}/${param.commentAppId}/${param.commentId}`,
+    method: 'delete'
+  });
+}
+
 export {
   getComments,
-  makeComments
+  makeComments,
+  likedComments,
+  canclelikedComments
 };

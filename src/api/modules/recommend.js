@@ -16,7 +16,16 @@ function getRecommendView(userId) {
   });
 }
 
+// 获取可能喜欢的画师
+function getRecommendArtists(userId) {
+  return axios({
+    url: `/users/${userId}/recommendArtists`,
+    method: 'get'
+  });
+}
+
 export {
   getRecommend,
-  getRecommendView
+  getRecommendView,
+  getRecommendArtists
 };

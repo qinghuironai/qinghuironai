@@ -17,6 +17,12 @@
         <div class="time">
           <span style="font-size: 12px; margin-left: 10px;">{{ item.platform }}</span>
         </div>
+        <div class="like" style="margin-left: 10px;">
+          <svg font-size="12" class="icon" aria-hidden="true" @click="handleLike(item)">
+            <use :xlink:href="item.isLike ? '#pictuijian-copy-copy' : '#pictuijian-copy'" />
+          </svg>
+          <span v-if="item.likedCount > 0" style="margin-left: 4px; vertical-align: middle; color: #999;">{{ item.likedCount }}</span>
+        </div>
         <div class="reply">
           <span @click="reply(item.id, item)">回复</span>
         </div>
@@ -36,6 +42,12 @@
           </div>
           <div class="status-bar">
             <div class="time">{{ val.createDate | formatDate }}</div>
+            <div class="like" style="margin-left: 10px;">
+              <svg font-size="12" class="icon" aria-hidden="true" @click="handleLike(val)">
+                <use :xlink:href="val.isLike ? '#pictuijian-copy-copy' : '#pictuijian-copy'" />
+              </svg>
+              <span v-if="val.likedCount" style="margin-left: 4px; vertical-align: middle; color: #999;">{{ val.likedCount }}</span>
+            </div>
             <div class="reply">
               <span @click="reply(item.id, val)">回复</span>
             </div>
@@ -70,6 +82,30 @@ export default {
       const userId = this.$store.getters.user.id;
       if (id === userId) return;
       this.$router.push(`/users/${id}`);
+    },
+    handleLike(item) {
+      const data = {
+        commentAppType: item.appType,
+        commentAppId: item.appId,
+        commentId: item.id
+      };
+      if (!item.isLike) {
+        this.$api.comment.likedComments(data)
+          .then(res => {
+            if (res.status === 200) {
+              item.likedCount++;
+              item.isLike = true;
+            }
+          });
+      } else {
+        this.$api.comment.canclelikedComments(data)
+          .then(res => {
+            if (res.status === 200) {
+              item.likedCount--;
+              item.isLike = false;
+            }
+          });
+      }
     }
   }
 };
