@@ -13,11 +13,16 @@
           </div>
         </div>
         <div class="popup-content">
-          <Scroll>
+          <vue-better-scroll
+            ref="scroll"
+            class="wrapper"
+            :pull-up-load="pullUpLoadObj"
+            @pulling-up="getCommentsList"
+          >
             <div class="popup-content-inside">
               <List :list="commentList" @reply="reply" />
             </div>
-          </Scroll>
+          </vue-better-scroll>
         </div>
         <div class="popup-input">
           <div class="input-emoji">
@@ -48,7 +53,7 @@
 </template>
 
 <script>
-import Scroll from '@/components/scroll/Scroll';
+import VueBetterScroll from 'vue2-better-scroll';
 import { mapGetters } from 'vuex';
 import Alert from '@/components/alert';
 import List from './List';
@@ -56,7 +61,7 @@ const INPUT_HEIGHT = 40;
 
 export default {
   components: {
-    Scroll,
+    VueBetterScroll,
     List
   },
   props: {
@@ -76,7 +81,16 @@ export default {
       commentList: [],
       placeholder: '添加评论...',
       replyParam: {},
-      issend: false
+      issend: false,
+      pullUpLoadObj: {
+        threshold: 0,
+        txt: {
+          more: '加载更多',
+          noMore: '到底了～'
+        }
+      },
+      page: 1,
+      pageSize: 10
     };
   },
   computed: {
@@ -155,11 +169,19 @@ export default {
     getCommentsList() {
       this.$api.comment.getComments({
         commentAppType: 'illusts',
-        commentAppId: this.pid
+        commentAppId: this.pid,
+        page: this.page++,
+        pageSize: this.pageSize
       })
         .then(res => {
           if (res.status === 200) {
-            this.commentList = res.data.data || [];
+            const list = res.data.data || [];
+            this.commentList = this.commentList.concat(list);
+            if (list.length < 10) {
+              this.$refs.scroll.forceUpdate(false);
+            } else {
+              this.$refs.scroll.forceUpdate(true);
+            }
           }
         });
     }
