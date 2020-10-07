@@ -10,7 +10,6 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css';
 import VuePageStack from 'vue-page-stack';
-import VueGtag from 'vue-gtag';
 import { replaceBigImg, replaceSmallImg } from '@/util';
 
 Vue.use(Vuetify);
@@ -20,9 +19,7 @@ Vue.use(VuePageStack, { router, keyName: 'VNK' });
 // new VConsole();
 Vue.config.productionTip = false;
 Vue.use(animated);
-/*Vue.use(VueGtag, {
-  config: { id: 'UA-158701012-1' }
-});*/
+
 Vue.prototype.$api = api;
 Vue.prototype.$util = util;
 
@@ -35,7 +32,7 @@ Vue.filter('dateFormat', val => {
 });
 Vue.filter('replaceBig', val => replaceBigImg(val));
 Vue.filter('replaceSmall', val => replaceSmallImg(val));
-Vue.filter('replaceAvatar', val => `https://pic.cheerfun.dev/${val}.png`);
+Vue.filter('replaceAvatar', val => `https://static.pixivic.net/avatar/299x299/${val}.jpg`);
 Vue.filter('replaceSquare', val => 'https://img.cheerfun.dev/c/360x360_70/img-master' + val.split('img-master')[1]);
 
 const app = new Vue({

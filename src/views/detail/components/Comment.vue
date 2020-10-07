@@ -25,7 +25,7 @@
           </vue-better-scroll>
         </div>
         <div class="popup-input">
-          <div class="input-emoji">
+          <div class="input-emoji" @click="openEmoji">
             <svg font-size="30" class="icon" aria-hidden="true">
               <use xlink:href="#picbiaoqing" />
             </svg>
@@ -47,6 +47,7 @@
             </div>
           </div>
         </div>
+        <Emoji :visible.sync="showemoji" @clickEmoji="clickEmoji" />
       </div>
     </div>
   </transition>
@@ -54,6 +55,7 @@
 
 <script>
 import VueBetterScroll from 'vue2-better-scroll';
+import Emoji from '@/components/emoji';
 import { mapGetters } from 'vuex';
 import Alert from '@/components/alert';
 import List from './List';
@@ -62,7 +64,8 @@ const INPUT_HEIGHT = 40;
 export default {
   components: {
     VueBetterScroll,
-    List
+    List,
+    Emoji
   },
   props: {
     list: {
@@ -90,7 +93,8 @@ export default {
         }
       },
       page: 1,
-      pageSize: 10
+      pageSize: 10,
+      showemoji: false
     };
   },
   computed: {
@@ -184,6 +188,14 @@ export default {
             }
           }
         });
+    },
+    openEmoji() {
+      this.showemoji = true;
+    },
+    clickEmoji(item) {
+      this.value = item;
+      this.submitComment();
+      this.showemoji = false;
     }
   }
 };

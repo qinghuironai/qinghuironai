@@ -47,12 +47,11 @@ function getTranslations(param) {
 }
 
 // 图片上传
-function uploadImg(data, params) {
+function uploadImg(param) {
   return axios({
-    url: `https://pic.cheerfun.dev/upload?isTemp=${!params}`,
+    url: `https://upload.pixivic.net/${param.moduleName}/image`,
     method: 'post',
-    data,
-    params
+    data: param.data
   });
 }
 
