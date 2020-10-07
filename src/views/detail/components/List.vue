@@ -10,7 +10,8 @@
         <div class="user-name">{{ item.replyFromName }}</div>
       </a>
       <div class="comment-text f-caption-s">
-        <span class="comment-text">{{ item.content }}</span>
+        <img v-if="isimg(item.content)" :src="require(`@/assets/${isimg(item.content)}`)">
+        <span v-else class="comment-text">{{ item.content }}</span>
       </div>
       <div class="status-bar">
         <div class="time">{{ item.createDate | formatDate }}</div>
@@ -38,7 +39,10 @@
             <div class="user-name">{{ val.replyFromName }}</div>
           </a>
           <div class="comment-text f-caption-s">
-            <span class="comment-text">@{{ val.replyToName }}: {{ val.content }}</span>
+            <span class="comment-text">@{{ val.replyToName }}:
+              <img v-if="isimg(val.content)" :src="require(`@/assets/${isimg(val.content)}`)">
+              <span v-else class="comment-text">{{ val.content }}</span>
+            </span>
           </div>
           <div class="status-bar">
             <div class="time">{{ val.createDate | formatDate }}</div>
@@ -59,6 +63,7 @@
 </template>
 
 <script>
+import data from '@/static/resources/sticker.json';
 export default {
   filters: {
     formatDate(time) {
@@ -73,6 +78,11 @@ export default {
       type: Array,
       default: () => []
     }
+  },
+  data() {
+    return {
+      emoji: data
+    };
   },
   methods: {
     reply(id, val) {
@@ -106,6 +116,13 @@ export default {
             }
           });
       }
+    },
+    isimg(item) {
+      const reg = /\[(.+?)\]/g;
+      if (!reg.test(item)) return false;
+      const data = item.replace(/\[|\]/g, '').split('_');
+      if (!this.emoji[data[0]]) return false;
+      return this.emoji[data[0]][data[1]];
     }
   }
 };
@@ -142,6 +159,13 @@ export default {
     .comment-text
       padding 0 0 4px
       word-wrap break-word
+      img
+        width 80px
+        height 80px
+        object-fit cover
+        margin 4px
+        vertical-align middle
+        border-radius 5px
     .f-caption-s
       line-height 16px
       font-size 12px

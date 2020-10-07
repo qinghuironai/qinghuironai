@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       option: {
-        img: `https://pic.cheerfun.dev/53.png`,
+        img: `https://static.pixivic.net/avatar/299x299/53.jpg`,
         size: 0.1,
         autoCrop: true,
         fixed: true
@@ -92,9 +92,9 @@ export default {
         });
         return false;
       }
-      if (file.size > 5 * 1024 * 1024) {
+      if (file.size > 10 * 1024 * 1024) {
         Alert({
-          content: '图片大小不能超过5m'
+          content: '图片大小不能超过10m'
         });
         return false;
       }
@@ -119,7 +119,11 @@ export default {
         const files = new File([data], `${this.user.id}.${type}`, { type: data.type });
         const formData = new FormData();
         formData.append('file', files);
-        const result = await this.$api.search.uploadImg(formData, { userId: this.user.id });
+        const param = {
+          data: formData,
+          moduleName: 'avatar'
+        };
+        const result = await this.$api.search.uploadImg(param);
         if (result.status === 200) {
           this.dialog = false;
           this.$router.back();
