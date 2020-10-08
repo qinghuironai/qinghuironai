@@ -49,7 +49,7 @@ function getTranslations(param) {
 // 图片上传
 function uploadImg(param) {
   return axios({
-    url: `https://upload.pixivic.net/${param.moduleName}/image`,
+    url: `https://upload.pixivic.com/${param.moduleName}/image`,
     method: 'post',
     data: param.data
   });
