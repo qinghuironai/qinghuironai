@@ -18,7 +18,7 @@
       </div>
       <div class="tabs-item" @click="$router.push('/me')">
         <img
-          :src="user.id ? `https://static.pixivic.net/avatar/299x299/${user.id}.jpg` : require('@/assets/images/me.svg')"
+          :src="avatar ? avatar : require('@/assets/images/me.svg')"
           :style="{transform: $route.name === 'Me' ? 'scale(1.1)' : ''}"
         >
       </div>
@@ -59,7 +59,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['cachedViews', 'showTab', 'user']),
+    ...mapGetters(['cachedViews', 'showTab', 'avatar']),
     key() {
       return this.$route.path;
     }

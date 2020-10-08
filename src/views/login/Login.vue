@@ -155,8 +155,10 @@ export default {
         this.$api.user.login(data)
           .then(res => {
             if (res.status === 200) {
-              localStorage.setItem('user', JSON.stringify(res.data.data));
-              this.$store.dispatch('setUser', res.data.data);
+              const avatar = `https://static.pixivic.net/avatar/299x299/${res.data.data.id}.jpg`;
+              const user = { ...res.data.data, avatar };
+              localStorage.setItem('user', JSON.stringify(user));
+              this.$store.dispatch('setUser', user);
               // this.$router.push('/me');
               const url = this.$route.query.return_to;
               window.location.href = url || `https://m.pixivic.com/me`;
