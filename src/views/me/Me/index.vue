@@ -4,7 +4,7 @@
       <v-card class="header-box" width="95%" outlined>
         <div class="link">
           <v-avatar class="user-avatar" size="80" @click="$router.push('/avatar')">
-            <img :src="`https://static.pixivic.net/avatar/299x299/${user.id}.jpg?t=${Date.now()}`" alt="Avatar">
+            <img :src="avatar" alt="Avatar">
           </v-avatar>
           <div class="user-info">
             <p class="font-weight-bold text-no-wrap text-truncate">{{ user.username }}</p>
@@ -67,7 +67,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user'
+      'user',
+      'avatar'
     ])
   },
   methods: {

@@ -81,7 +81,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'avatar'])
   },
   methods: {
     uploadImg(e, num) {
@@ -126,6 +126,10 @@ export default {
         const result = await this.$api.search.uploadImg(param);
         if (result.status === 200) {
           this.dialog = false;
+          const avatar = `${this.avatar}?t=${Date.now()}`;
+          const user = { ...this.user, avatar };
+          localStorage.setItem('user', JSON.stringify(user));
+          this.$store.dispatch('setUser', user);
           this.$router.back();
         } else {
           Alert({
