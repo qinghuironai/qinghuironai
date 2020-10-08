@@ -138,11 +138,11 @@ export default {
           if (res.status === 200) {
             const params = { ...data, createDate: new Date(), replyFrom: this.user.id };
             if (params.parentId === 0) {
-              this.commentList.push(params);
+              this.commentList.unshift(params);
             } else {
               const item = this.commentList.find(item => item.id === params.parentId);
               if (item.subCommentList) {
-                item.subCommentList.push(params);
+                item.subCommentList.unshift(params);
               } else {
                 item.subCommentList = [params];
               }
