@@ -89,8 +89,6 @@ export default {
       this.$emit('reply', { id, val });
     },
     goUsers(id) {
-      const userId = this.$store.getters.user.id;
-      if (id === userId) return;
       this.$router.push(`/users/${id}`);
     },
     handleLike(item) {
