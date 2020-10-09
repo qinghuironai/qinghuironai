@@ -4,6 +4,7 @@ import { collectIllust, deleteCollect, followArtist } from '@/api/modules/user';
 export const setUser = ({
   commit
 }, user) => {
+  localStorage.setItem('user', JSON.stringify(user));
   commit(types.SET_USER, user);
 };
 
