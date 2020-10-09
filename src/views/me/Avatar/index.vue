@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       option: {
-        img: 'https://static.pixivic.net/avatar/299x299/53.jpg',
+        img: 'https://original.img.cheerfun.dev/img-original/img/2020/10/05/00/00/16/84808352_p0.png',
         size: 0.1,
         autoCrop: true,
         fixed: true
@@ -128,7 +128,6 @@ export default {
           this.dialog = false;
           const avatar = `${this.avatar}?t=${Date.now()}`;
           const user = { ...this.user, avatar };
-          localStorage.setItem('user', JSON.stringify(user));
           this.$store.dispatch('setUser', user);
           this.$router.back();
         } else {
