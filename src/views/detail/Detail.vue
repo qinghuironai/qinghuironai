@@ -47,8 +47,15 @@
             </v-menu>
           </div>
           <div class="detail-info">
-            <h3 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h3>
-            <p>ID:  {{ illustDetail.id }}</p>
+            <div class="info-top">
+              <h3 class="text-no-wrap text-truncate">{{ illustDetail.title }}</h3>
+              <p>ID:  {{ illustDetail.id }}</p>
+              <v-btn class="collects" outlined small fab color="rgb(212, 35, 122)" @click="addCollects">
+                <svg font-size="30" class="icon" aria-hidden="true">
+                  <use xlink:href="#pictianjia1" />
+                </svg>
+              </v-btn>
+            </div>
             <p class="caption" v-html="illustDetail.caption" />
             <div class="tags">
               <span
@@ -174,6 +181,7 @@
       </div>
     </div>
     <Comment ref="comment" :list="commentList" :pid="pid" @reply="reply" />
+    <CollectsList ref="collects" @clickItem="clickItem" />
   </div>
 </template>
 
@@ -185,6 +193,7 @@ import Like from '@/components/like/Like';
 import Comment from './components/Comment';
 import Alert from '@/components/alert';
 import CommentList from './components/List';
+import CollectsList from '@/components/collects-list';
 import { replaceBigImg, replaceSmallImg } from '@/util';
 
 export default {
@@ -193,7 +202,8 @@ export default {
     List,
     Like,
     Comment,
-    CommentList
+    CommentList,
+    CollectsList
   },
   props: {
     pid: {
@@ -436,6 +446,24 @@ export default {
           illustId: this.pid
         });
       }
+    },
+    addCollects() {
+      this.$refs.collects.show();
+    },
+    clickItem(id) {
+      this.$api.collections.illustrations({
+        collectionId: id,
+        data: [this.pid]
+      })
+        .then(res => {
+          if (res.status === 200) {
+            this.$refs.collects.close();
+          } else {
+            Alert({
+              content: res.data.message
+            });
+          }
+        });
     }
   }
 };
@@ -482,6 +510,14 @@ export default {
     >.caption
       word-wrap break-word
       margin-top 2px
+    .info-top
+      position relative
+      h3
+        max-width 80%
+      .collects
+        position absolute
+        right 0
+        top 6px
     .user
       display flex
       align-items center
