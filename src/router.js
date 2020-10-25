@@ -31,9 +31,7 @@ const pages = {
   Users: () => import('./views/users/Users'),
   BookMark: () => import('./views/bookmark/BookMark'),
   History: () => import('./views/me/History/'),
-  Recommend: () => import('./views/recommend/Recommend'),
-  Illustration: () => import('./views/me/Collects/Illustrations'),
-  Edit: () => import('./views/me/Collects/Edit')
+  Recommend: () => import('./views/recommend/Recommend')
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -264,24 +262,6 @@ const router = new Router({
     component: pages.Recommend,
     meta: {
       title: `为你推荐`
-    }
-  },
-  {
-    path: '/illustration/:id',
-    name: 'Illustration',
-    component: pages.Illustration,
-    props: true,
-    meta: {
-      title: `illustration`
-    }
-  },
-  {
-    path: '/edit/:id',
-    name: 'Edit',
-    component: pages.Edit,
-    props: true,
-    meta: {
-      title: `画集编辑`
     }
   }
   // {
