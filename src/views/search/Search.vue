@@ -1,7 +1,7 @@
 <template>
   <transition>
     <div class="search">
-      <search-box v-model="value" @enter="enter" />
+      <search-box ref="box" v-model="value" @enter="enter" />
 
       <v-tabs
         v-model="tab"
@@ -78,6 +78,11 @@ export default {
     }
   },
   mounted() {
+    const tag = this.$route.query.tag;
+    if (tag) {
+      this.value = tag;
+      this.$refs.box.onfocus();
+    }
     this.getHotTag();
   },
   methods: {

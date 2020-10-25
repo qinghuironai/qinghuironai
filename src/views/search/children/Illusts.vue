@@ -112,13 +112,22 @@ export default {
       this.identifier += 1;
     },
     focus() {
-      if (this.$route.query.source) {
+      /*       if (this.$route.query.source) {
         this.$router.replace({
-          name: 'Search'
+          name: 'Search',
+          query: {
+            tag: this.tag
+          }
         });
       } else {
         this.$router.back();
-      }
+      } */
+      this.$router.push({
+        name: 'Search',
+        query: {
+          tag: this.tag
+        }
+      });
     }
   }
 };

@@ -59,6 +59,9 @@ export default {
     },
     focus() {
       this.$emit('focus');
+    },
+    onfocus() {
+      this.$refs.input.focus();
     }
   }
 };
