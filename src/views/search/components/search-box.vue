@@ -1,6 +1,7 @@
 <template>
   <div class="search-header">
     <svg
+      v-if="left"
       font-size="20"
       class="icon"
       aria-hidden="true"
@@ -17,10 +18,10 @@
         @keyup.enter="enter(value)"
         @focus="focus"
       >
-      <svg font-size="30" class="icon" aria-hidden="true">
+      <svg v-if="right" font-size="30" class="icon" aria-hidden="true">
         <use xlink:href="#picxiangji1-copy" />
       </svg>
-      <div class="save">
+      <div v-if="right" class="save">
         <input
           id="uploads"
           type="file"
@@ -39,6 +40,14 @@ export default {
     value: {
       type: String,
       default: ''
+    },
+    left: {
+      type: Boolean,
+      default: true
+    },
+    right: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

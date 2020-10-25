@@ -17,7 +17,7 @@
       <v-list-item class="item" @click="clickItem(props.data.id)">
         <v-card width="100%">
           <v-img
-            :src="props.data.cover || 'https://img.cheerfun.dev/c/540x540_70/img-master/img/2020/10/08/00/00/06/84869501_p0_master1200.jpg'"
+            :src="avatar"
             class="white--text align-end grey lighten-2"
             height="200px"
           >
@@ -39,12 +39,12 @@
       font-size="60"
       class="icon"
       aria-hidden="true"
-      style="position: fixed; z-index: 9999; bottom: 100px; right: 15px;"
+      style="position: fixed; z-index: 9999; bottom: 300px; right: 15px;"
       @click="openCollect"
     >
       <use xlink:href="#pictianjia" />
     </svg>
-    <CollectsList ref="collects" title="我的画集" @clickItem="clickItem" />
+    <CollectsList ref="collects" title="我的画集" @clickItem="clickItem" @comfirm="getList(1)" />
   </List>
 </template>
 
@@ -68,7 +68,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'avatar'])
   },
   methods: {
     infinite($state) {
@@ -95,7 +95,7 @@ export default {
       this.identifier += 1;
     },
     edit(item) {
-      console.log(item);
+      this.$router.push(`/edit/${item.id}`);
     },
     openCollect() {
       this.$refs.collects.show();

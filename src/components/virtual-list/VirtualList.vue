@@ -10,9 +10,10 @@
     >
       <slot />
       <template v-slot:cell="props">
-        <Item :column="props.data" @handleLike="handleLike" />
+        <Item :column="props.data" @handleLike="handleLike" @press="press" />
       </template>
     </VirtualCollection>
+    <CollectsList ref="collects" @clickItem="clickItem" />
   </div>
 </template>
 
@@ -22,6 +23,8 @@ import { mapGetters } from 'vuex';
 import VirtualCollection from '@/components/collect/VirtualCollection';
 import Alert from '@/components/alert';
 import Item from './Item';
+import CollectsList from '@/components/collects-list';
+import Toast from '@/components/toast';
 import { randomColor, replaceBigImg, replaceSmallImg } from '@/util';
 import { getClient } from '@/util/dom';
 const columnWidth = 200; // 屏幕小于200则1列
@@ -29,7 +32,8 @@ const columnWidth = 200; // 屏幕小于200则1列
 export default {
   components: {
     VirtualCollection,
-    Item
+    Item,
+    CollectsList
   },
   props: {
     list: {
@@ -45,13 +49,18 @@ export default {
     showNoResults: {
       type: Boolean,
       default: true
+    },
+    ownpress: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       columnHeight: [],
       column: 0,
-      listMap: new Map()
+      listMap: new Map(),
+      collectid: null
     };
   },
   computed: {
@@ -187,6 +196,26 @@ export default {
         tmp['originalSrc'] = replaceBigImg(tmp.imageUrls[0].original);
         tmp['isad'] = tmp.type === 'ad_image' || tmp.type === 'donate';
       }
+    },
+    press(id) {
+      if (!this.ownpress) {
+        this.collectid = id;
+        this.$refs.collects.show();
+      } else {
+        this.$emit('press', id);
+      }
+    },
+    clickItem(id) {
+      this.$api.collections.illustrations({
+        collectionId: id,
+        data: [this.collectid]
+      })
+        .then(res => {
+          if (res.status === 200) {
+            this.$refs.collects.close();
+          }
+          Toast({ content: res.data.message });
+        });
     }
   }
 };

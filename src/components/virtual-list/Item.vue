@@ -1,6 +1,6 @@
 <template>
-  <div class="item" @click="goDetail">
-    <div class="item-content" :style="column.style">
+  <div class="item" @click="goDetail" @touchstart="longPress" @touchend="removePress">
+    <div v-ripple class="item-content" :style="column.style">
       <img
         :src="column.src"
         :style="{opacity}"
@@ -56,6 +56,15 @@ export default {
         this.$store.dispatch('setDetail', this.column);
         this.$router.push(`/illusts/${this.column.id}`);
       }
+    },
+    longPress() {
+      clearInterval(this.loop);
+      this.loop = setTimeout(() => {
+        this.$emit('press', this.column.id);
+      }, 1000);
+    },
+    removePress() {
+      clearInterval(this.loop);
     }
   }
 };

@@ -32,7 +32,8 @@ const pages = {
   BookMark: () => import('./views/bookmark/BookMark'),
   History: () => import('./views/me/History/'),
   Recommend: () => import('./views/recommend/Recommend'),
-  Illustration: () => import('./views/me/Collects/Illustrations')
+  Illustration: () => import('./views/me/Collects/Illustrations'),
+  Edit: () => import('./views/me/Collects/Edit')
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -272,6 +273,15 @@ const router = new Router({
     props: true,
     meta: {
       title: `illustration`
+    }
+  },
+  {
+    path: '/edit/:id',
+    name: 'Edit',
+    component: pages.Edit,
+    props: true,
+    meta: {
+      title: `画集编辑`
     }
   }
   // {

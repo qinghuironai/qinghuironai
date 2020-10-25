@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       list: [
-        { icon: '#picshoucang-copy-copy-copy', text: '我的画集', val: '/collects' },
+        { icon: '#pictianjia1', text: '我的画集', val: '/collects' },
         { icon: '#picshoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
         { icon: '#picicon-copy', text: '我的关注', val: '/artistCollect' },
         { icon: '#piclishi', text: '浏览历史', val: '/history' },

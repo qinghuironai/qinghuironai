@@ -57,10 +57,58 @@ function getIllustrations(data) {
   });
 }
 
+// 标签补全
+function getTags(params) {
+  return axios({
+    url: `/collections/tags`,
+    method: 'get',
+    params
+  });
+}
+
+// 新建画集
+function createCollects(data) {
+  return axios({
+    url: `/collections`,
+    method: 'post',
+    data
+  });
+}
+
+// 根据id查看画集
+function getCollects(collctionId) {
+  return axios({
+    url: `/collections/${collctionId}`,
+    method: 'get'
+  });
+}
+
+// 更新画集
+function updateCollects(data) {
+  return axios({
+    url: `/collections/${data.id}`,
+    method: 'put',
+    data
+  });
+}
+
+// 删除画集
+function deleteCollects(collectionId) {
+  return axios({
+    url: `/collections/${collectionId}`,
+    method: 'delete'
+  });
+}
+
 export {
   addCollections,
   getCollections,
   collectionsDigest,
   illustrations,
-  getIllustrations
+  getIllustrations,
+  getTags,
+  createCollects,
+  getCollects,
+  updateCollects,
+  deleteCollects
 };

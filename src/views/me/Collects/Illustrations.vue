@@ -1,6 +1,6 @@
 <template>
   <div class="spot">
-    <List :list="pictureList" @infinite="infinite">
+    <List ref="list" :list="pictureList" ownpress @infinite="infinite" @press="press">
       <Header title="画集作品" />
     </List>
   </div>
@@ -9,6 +9,7 @@
 <script>
 import List from '@/components/virtual-list/VirtualList';
 import Header from '@/components/header/Header';
+import Confirm from '@/components/confirm';
 
 export default {
   name: 'Illustrations',
@@ -43,6 +44,23 @@ export default {
             $state.loaded();
           }
         });
+    },
+    async press(id) {
+      const res = await Confirm({
+        title: '确认从该画集删除该画作吗?'
+      });
+      if (res === 'submit') {
+        this.$api.collections.deleteCollects(id)
+          .then(res => {
+            if (res.status === 200) {
+              const index = this.pictureList.findIndex(item => item.id === id);
+              if (index > -1) {
+                this.pictureList.splice(index, 1);
+                this.$refs.list.waterFall();
+              }
+            }
+          });
+      }
     }
   }
 };

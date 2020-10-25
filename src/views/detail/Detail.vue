@@ -192,6 +192,7 @@ import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
 import Comment from './components/Comment';
 import Alert from '@/components/alert';
+import Toast from '@/components/toast';
 import CommentList from './components/List';
 import CollectsList from '@/components/collects-list';
 import { replaceBigImg, replaceSmallImg } from '@/util';
@@ -458,11 +459,8 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.$refs.collects.close();
-          } else {
-            Alert({
-              content: res.data.message
-            });
           }
+          Toast({ content: res.data.message });
         });
     }
   }
