@@ -10,10 +10,14 @@
     >
       <slot />
       <template v-slot:cell="props">
-        <Item :column="props.data" @handleLike="handleLike" @press="press" />
+        <Item
+          :show-delete="showDelete"
+          :column="props.data"
+          @handleLike="handleLike"
+          @handleDelete="handleDelete"
+        />
       </template>
     </VirtualCollection>
-    <CollectsList ref="collects" @clickItem="clickItem" />
   </div>
 </template>
 
@@ -23,8 +27,6 @@ import { mapGetters } from 'vuex';
 import VirtualCollection from '@/components/collect/VirtualCollection';
 import Alert from '@/components/alert';
 import Item from './Item';
-import CollectsList from '@/components/collects-list';
-import Toast from '@/components/toast';
 import { randomColor, replaceBigImg, replaceSmallImg } from '@/util';
 import { getClient } from '@/util/dom';
 const columnWidth = 200; // 屏幕小于200则1列
@@ -32,8 +34,7 @@ const columnWidth = 200; // 屏幕小于200则1列
 export default {
   components: {
     VirtualCollection,
-    Item,
-    CollectsList
+    Item
   },
   props: {
     list: {
@@ -50,7 +51,7 @@ export default {
       type: Boolean,
       default: true
     },
-    ownpress: {
+    showDelete: {
       type: Boolean,
       default: false
     }
@@ -197,25 +198,9 @@ export default {
         tmp['isad'] = tmp.type === 'ad_image' || tmp.type === 'donate';
       }
     },
-    press(id) {
-      if (!this.ownpress) {
-        this.collectid = id;
-        this.$refs.collects.show();
-      } else {
-        this.$emit('press', id);
-      }
-    },
-    clickItem(id) {
-      this.$api.collections.illustrations({
-        collectionId: id,
-        data: [this.collectid]
-      })
-        .then(res => {
-          if (res.status === 200) {
-            this.$refs.collects.close();
-          }
-          Toast({ content: res.data.message });
-        });
+    handleDelete(item) {
+      this.$emit('handleDelete', item);
+      this.waterFall();
     }
   }
 };

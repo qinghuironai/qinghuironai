@@ -1,5 +1,7 @@
 import * as types from './mutation-types';
 import { collectIllust, deleteCollect, followArtist } from '@/api/modules/user';
+import { updateCollects, createCollects, collectionsDigest, deleteCollects } from '@/api/modules/collections';
+import state from './state';
 
 export const setUser = ({
   commit
@@ -97,4 +99,75 @@ export const setDetail = ({
   commit
 }, data) => {
   commit(types.SET_DETAIL, data);
+};
+
+// 更新画集简要列表
+export const setCollectDigest = ({
+  commit
+}) => {
+  collectionsDigest(state.user.id)
+    .then(res => {
+      const data = res.data.data || null;
+      commit(types.SET_COLLECT_DIGEST, data);
+    });
+};
+
+// 更新画集
+export const updateCollect = ({
+  dispatch, commit
+}, data) => {
+  return new Promise((resolve, reject) => {
+    updateCollects(data)
+      .then(res => {
+        if (res.status === 200) {
+          dispatch('setCollectDigest');
+          resolve(res);
+        } else {
+          reject();
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+// 新建画集
+export const createCollect = ({
+  dispatch, commit
+}, data) => {
+  return new Promise((resolve, reject) => {
+    createCollects(data)
+      .then(res => {
+        if (res.status === 200) {
+          dispatch('setCollectDigest');
+          resolve(res);
+        } else {
+          reject();
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+// 删除画集
+export const delCollects = ({
+  dispatch, commit
+}, data) => {
+  return new Promise((resolve, reject) => {
+    deleteCollects(data)
+      .then(res => {
+        if (res.status === 200) {
+          dispatch('setCollectDigest');
+          resolve(res);
+        } else {
+          reject();
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
 };

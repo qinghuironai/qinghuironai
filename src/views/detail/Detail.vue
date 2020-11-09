@@ -181,7 +181,6 @@
       </div>
     </div>
     <Comment ref="comment" :list="commentList" :pid="pid" @reply="reply" />
-    <CollectsList ref="collects" @clickItem="clickItem" />
   </div>
 </template>
 
@@ -192,10 +191,9 @@ import List from '@/components/virtual-list/VirtualList';
 import Like from '@/components/like/Like';
 import Comment from './components/Comment';
 import Alert from '@/components/alert';
-import Toast from '@/components/toast';
 import CommentList from './components/List';
-import CollectsList from '@/components/collects-list';
 import { replaceBigImg, replaceSmallImg } from '@/util';
+import { SET_COLLECT_STATUS } from '@/store/mutation-types';
 
 export default {
   name: 'Detail',
@@ -203,8 +201,7 @@ export default {
     List,
     Like,
     Comment,
-    CommentList,
-    CollectsList
+    CommentList
   },
   props: {
     pid: {
@@ -449,19 +446,11 @@ export default {
       }
     },
     addCollects() {
-      this.$refs.collects.show();
-    },
-    clickItem(id) {
-      this.$api.collections.illustrations({
-        collectionId: id,
-        data: [this.pid]
-      })
-        .then(res => {
-          if (res.status === 200) {
-            this.$refs.collects.close();
-          }
-          Toast({ content: res.data.message });
-        });
+      const data = {
+        show: true,
+        id: this.pid
+      };
+      this.$store.commit(SET_COLLECT_STATUS, data);
     }
   }
 };

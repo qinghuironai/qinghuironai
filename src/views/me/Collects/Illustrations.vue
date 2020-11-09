@@ -1,7 +1,49 @@
 <template>
-  <div class="spot">
-    <List ref="list" :list="pictureList" ownpress @infinite="infinite" @press="press">
-      <Header title="画集作品" />
+  <div>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64" />
+    </v-overlay>
+    <List
+      :list="pictureList"
+      :show-delete="showDelete"
+      @infinite="infinite"
+      @handleDelete="handleDelete"
+    >
+      <Header title="画集作品">
+        <v-btn
+          color="primary"
+          class="ma-2"
+          small
+          rounded
+          @click="edit"
+        >
+          {{ text }}
+        </v-btn>
+      </Header>
+      <div v-if="message" class="content">
+        <div class="content-top">
+          <v-avatar size="36px">
+            <img src="https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1441836571,2166773131&fm=26&gp=0.jpg" alt="avatar">
+          </v-avatar>
+          <span class="text-no-wrap text-truncate font-weight-medium">{{ message.title }}</span>
+        </div>
+        <p class="content-mid">{{ message.caption }}</p>
+        <div class="content-tag">
+          <v-chip
+            v-for="item in message.tagList || []"
+            :key="item.tagName"
+            class="ma-1"
+            small
+            color="#1867c0"
+            outlined
+          >
+            {{ item.tagName }}
+          </v-chip>
+        </div>
+        <!-- <div class="content-select">
+          操作
+        </div> -->
+      </div>
     </List>
   </div>
 </template>
@@ -9,7 +51,6 @@
 <script>
 import List from '@/components/virtual-list/VirtualList';
 import Header from '@/components/header/Header';
-import Confirm from '@/components/confirm';
 
 export default {
   name: 'Illustrations',
@@ -24,10 +65,23 @@ export default {
     }
   },
   data() {
+    const options = {
+      'edit': '编辑',
+      'complete': '完成'
+    };
     return {
       pictureList: [],
-      page: 1
+      page: 1,
+      message: null,
+      showDelete: false,
+      options,
+      text: options.edit,
+      group: [],
+      overlay: false
     };
+  },
+  mounted() {
+    this.getCollects();
   },
   methods: {
     infinite($state) {
@@ -45,26 +99,62 @@ export default {
           }
         });
     },
-    async press(id) {
-      const res = await Confirm({
-        title: '确认从该画集删除该画作吗?'
-      });
-      if (res === 'submit') {
-        this.$api.collections.deleteCollects(id)
+    getCollects() {
+      this.$api.collections
+        .getCollects(this.id)
+        .then(res => {
+          if (res.status === 200) {
+            this.message = res.data.data;
+            console.log(this.message);
+          }
+        });
+    },
+    edit() {
+      const { edit, complete } = this.options;
+      if (this.text === complete) {
+        this.overlay = true;
+        this.$api.collections.delIllustration({
+          collectionId: this.id,
+          data: this.group
+        })
           .then(res => {
+            console.log(res);
             if (res.status === 200) {
-              const index = this.pictureList.findIndex(item => item.id === id);
-              if (index > -1) {
-                this.pictureList.splice(index, 1);
-                this.$refs.list.waterFall();
-              }
+              this.text = edit;
+              this.showDelete = false;
+              console.log(1111);
             }
+          })
+          .finally(() => {
+            this.overlay = false;
           });
+      } else {
+        this.showDelete = true;
+        this.group = [];
+        this.text = complete;
       }
+    },
+    handleDelete(item) {
+      const index = this.pictureList.findIndex(val => val.id === item.id);
+      this.pictureList.splice(index, 1);
+      this.group.push(item.id);
     }
   }
 };
 </script>
 
-<style>
+<style scoped lang="stylus">
+.content
+  padding 5px
+  &-top
+    display flex
+    align-items center
+    padding 5px
+    span
+      margin-left 10px
+      font-size 18px
+  &-mid
+    font-size 14px
+    margin-bottom 2px
 </style>
+

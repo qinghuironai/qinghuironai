@@ -36,28 +36,25 @@
       </v-list-item>
     </template>
     <svg
-      font-size="60"
+      font-size="40"
       class="icon"
       aria-hidden="true"
-      style="position: fixed; z-index: 9999; bottom: 300px; right: 15px;"
+      style="position: fixed; z-index: 9999; bottom: 80px; right: 0; left: 0; margin: auto;"
       @click="openCollect"
     >
-      <use xlink:href="#pictianjia" />
+      <use xlink:href="#pictianjia2" />
     </svg>
-    <CollectsList ref="collects" title="我的画集" @clickItem="clickItem" @comfirm="getList(1)" />
   </List>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import List from '@/components/list/List';
-import CollectsList from '@/components/collects-list';
 
 export default {
   name: 'Collects',
   components: {
-    List,
-    CollectsList
+    List
   },
   data() {
     return {
@@ -98,7 +95,7 @@ export default {
       this.$router.push(`/edit/${item.id}`);
     },
     openCollect() {
-      this.$refs.collects.show();
+      this.$router.push(`/edit/-1`);
     },
     clickItem(id) {
       this.$router.push(`/illustration/${id}`);

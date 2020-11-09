@@ -1,6 +1,6 @@
 <template>
   <div class="edit">
-    <Header title="画集编辑" />
+    <Header :title="isCreate ? '新建画集' : '画集编辑'" />
     <form class="form">
       <v-row>
         <v-col cols="12" sm="6" md="4">
@@ -40,8 +40,8 @@
           </div>
         </v-col>
         <v-col cols="12" sm="6" md="4" class="d-flex justify-center">
-          <v-btn class="mr-5" color="primary" @click="updateCollect">更新画集</v-btn>
-          <v-btn color="error" @click="removeCollect">删除画集</v-btn>
+          <v-btn class="mr-5" color="primary" @click="updateCollect">{{ isCreate ? '新建画集' : '更新画集' }}</v-btn>
+          <v-btn v-if="!isCreate" color="error" @click="removeCollect">删除画集</v-btn>
         </v-col>
       </v-row>
     </form>
@@ -54,6 +54,7 @@ import Header from '@/components/header/Header';
 import SearchBox from '@/views/search/components/search-box';
 import Toast from '@/components/toast';
 import Confirm from '@/components/confirm';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Illustrations',
@@ -81,6 +82,12 @@ export default {
       tags: null
     };
   },
+  computed: {
+    ...mapGetters(['user']),
+    isCreate() {
+      return this.id === '-1';
+    }
+  },
   watch: {
     value() {
       this.getKeyword();
@@ -91,6 +98,7 @@ export default {
   },
   methods: {
     getCollects() {
+      if (this.id === '-1') return;
       this.$api.collections
         .getCollects(this.id)
         .then(res => {
@@ -122,7 +130,6 @@ export default {
     },
     updateCollect() {
       const data = {
-        id: this.id,
         title: this.form.title,
         caption: this.form.caption,
         tagList: this.form.tagList,
@@ -130,26 +137,28 @@ export default {
         forbidComment: Number(this.form.forbidComment),
         pornWarning: Number(this.form.pornWarning)
       };
-      this.$api.collections
-        .updateCollects(data)
-        .then(res => {
-          if (res.status === 200) {
-            this.$router.back();
-          }
-          Toast({ content: res.data.message });
-        });
+      if (this.isCreate) {
+        this.$store.dispatch('createCollect', data)
+          .then(res => {
+            this.$router.push(`/collects`);
+            Toast({ content: res.data.message });
+          });
+      } else {
+        this.$store.dispatch('updateCollect', { ...data, id: this.id })
+          .then(res => {
+            this.$router.push(`/collects`);
+            Toast({ content: res.data.message });
+          });
+      }
     },
     async removeCollect() {
       const res = await Confirm({
         title: '确认删除该画集吗?'
       });
       if (res === 'submit') {
-        this.$api.collections
-          .deleteCollects(this.id)
+        this.$store.dispatch('delCollects', this.id)
           .then(res => {
-            if (res.status === 200) {
-              this.$router.push(`/collects`);
-            }
+            this.$router.push(`/collects`);
             Toast({ content: res.data.message });
           });
       }

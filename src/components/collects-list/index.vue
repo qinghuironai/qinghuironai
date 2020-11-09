@@ -1,6 +1,7 @@
 <template>
-  <v-row justify="center">
-    <v-dialog v-model="dialog" scrollable max-width="80%">
+  <div v-show="collectStatus" class="collect">
+    <div class="overlay" @click.prevent="close" />
+    <div class="popup">
       <v-card>
         <v-card-title>{{ title }}</v-card-title>
         <v-divider />
@@ -17,7 +18,7 @@
               </v-list-item-content>
             </v-list-item>
             <v-list-item
-              v-for="item in list"
+              v-for="item in collectDigest"
               :key="item.id"
               @click="clickItem(item.id)"
             >
@@ -28,9 +29,9 @@
           </v-list>
         </v-card-text>
       </v-card>
-    </v-dialog>
+    </div>
     <v-dialog
-      v-model="dialog2"
+      v-model="dialog"
       max-width="90%"
     >
       <v-card>
@@ -54,96 +55,29 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="blue darken-1" text @click="dialog2 = false">取消</v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false">取消</v-btn>
           <v-btn color="blue darken-1" text @click="createCollects">创建</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- <v-dialog
-      v-model="dialog3"
-      max-width="90%"
-    >
-      <v-card>
-        <v-card-title>
-          <span class="headline">新建画集</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-autocomplete
-              v-model="model"
-              :items="items"
-              :loading="isLoading"
-              :search-input.sync="search"
-              chips
-              clearable
-              hide-details
-              hide-selected
-              multiple
-              item-text="tagName"
-              item-value="tagName"
-              label="Search for a coin..."
-            >
-              <template v-slot:no-data>
-                <v-list-item>
-                  <v-list-item-title>
-                    Search for your favorite
-                    <strong>Cryptocurrency</strong>
-                  </v-list-item-title>
-                </v-list-item>
-              </template>
-              <template v-slot:selection="{ attr, on, item, selected }">
-                <v-chip
-                  v-bind="attr"
-                  :input-value="selected"
-                  close
-                  color="blue-grey"
-                  class="white--text"
-                  v-on="on"
-                  @click:close="remove(item)"
-                >
-                  <v-icon left>mdi-coin</v-icon>
-                  <span v-text="item.tagName" />
-                </v-chip>
-              </template>
-              <template v-slot:item="{ item }">
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.tagName }}</v-list-item-title>
-                </v-list-item-content>
-              </template>
-            </v-autocomplete>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="blue darken-1" text @click="dialog3 = false">取消</v-btn>
-          <v-btn color="blue darken-1" text @click="dialog3 = false">创建</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog> -->
-  </v-row>
+  </div>
 </template>
 
 <script>
 import Toast from '@/components/toast';
 import { mapGetters } from 'vuex';
+import { SET_COLLECT_STATUS } from '@/store/mutation-types';
 
 export default {
   props: {
     title: {
       type: String,
-      default: '收藏到画集'
-    },
-    background: {
-      type: String,
-      default: 'rgba(255, 255, 255, 0.95)'
+      default: '我的画集'
     }
   },
   data() {
     return {
-      dialogm1: '',
       dialog: false,
-      dialog2: false,
-      dialog3: false,
       isLoading: false,
       titles: null,
       caption: null,
@@ -152,12 +86,11 @@ export default {
       pornWarning: 0,
       model: null,
       search: null,
-      items: [],
-      list: []
+      items: []
     };
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'collectStatus', 'collectDigest'])
   },
   watch: {
     search(val) {
@@ -170,49 +103,45 @@ export default {
         .finally(() => (this.isLoading = false));
     }
   },
-  mounted() {
-    this.collectionsDigest();
-  },
   methods: {
     handleClick() {
       this.$router.back();
       this.$emit('handleClick');
     },
-    show() {
-      this.dialog = true;
-    },
     close() {
-      this.dialog = false;
-    },
-    collectionsDigest() {
-      this.$api.collections
-        .collectionsDigest(this.user.id)
-        .then(res => {
-          this.list = res.data.data || [];
-        });
+      this.$store.commit(SET_COLLECT_STATUS, null);
     },
     addCollects() {
-      this.dialog2 = true;
+      this.dialog = true;
     },
     clickItem(id) {
-      this.$emit('clickItem', id);
+      if (!this.collectStatus.id) {
+        this.$router.push(`/illustration/${id}`);
+      } else {
+        this.$api.collections.illustrations({
+          collectionId: id,
+          data: [this.collectStatus.id]
+        })
+          .then(res => {
+            if (res.status === 200) {
+              this.close();
+            }
+            Toast({ content: res.data.message });
+          });
+      }
     },
     createCollects() {
-      this.$api.collections
-        .createCollects({
-          username: this.user.username,
-          title: this.titles,
-          caption: this.caption,
-          isPublic: Number(this.isPublic),
-          forbidComment: Number(this.forbidComment),
-          pornWarning: Number(this.pornWarning)
-        })
+      const data = {
+        username: this.user.username,
+        title: this.titles,
+        caption: this.caption,
+        isPublic: Number(this.isPublic),
+        forbidComment: Number(this.forbidComment),
+        pornWarning: Number(this.pornWarning)
+      };
+      this.$store.dispatch('createCollect', data)
         .then(res => {
-          if (res.status === 200) {
-            this.dialog2 = false;
-            this.collectionsDigest();
-            this.$emit('comfirm');
-          }
+          this.dialog = false;
           Toast({ content: res.data.message });
         });
     }
@@ -221,29 +150,38 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.header
-  position relative
-  z-index 102
-  .header-container
-    position relative
+.collect
+  align-items center
+  display flex
+  height 100%
+  justify-content center
+  left 0
+  position fixed
+  top 0
+  transition .2s cubic-bezier(.25,.8,.25,1),z-index 1ms
+  width 100%
+  outline none
+  z-index 101
+  .popup
+    background #ffffff
+    border-radius 4px
+    margin 24px
+    overflow-y auto
+    pointer-events auto
+    transition .3s cubic-bezier(.25,.8,.25,1)
+    width 80%
+    z-index inherit
+    box-shadow 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12)
+    /deep/ .v-card__text
+      overflow-y auto
+      padding-top 0
+  .overlay
+    opacity 0.46
+    background-color rgb(33, 33, 33)
+    border-color rgb(33, 33, 33)
+    position fixed
     top 0
-    padding 5px 10px
-    height 50px
-    width 100%
-    display flex
-    line-height 40px
-    box-sizing border-box
-    color #333
-    font-size 16px
-    transition top .2s
-    >svg
-      position absolute
-      left 5px
-      top 15px
-      font-size 20px
-      width 20px
-    >h1
-      font-size 18px
-      font-weight 700
-      margin 0 auto
+    left 0
+    right 0
+    bottom 0
 </style>

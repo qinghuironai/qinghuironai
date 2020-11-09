@@ -100,6 +100,16 @@ function deleteCollects(collectionId) {
   });
 }
 
+// 批量删除画作
+function delIllustration(data) {
+  return axios({
+    url: `/collections/${data.collectionId}/illustrations`,
+    method: 'delete',
+    headers: { 'content-type': 'application/json' },
+    data: data.data
+  });
+}
+
 export {
   addCollections,
   getCollections,
@@ -110,5 +120,6 @@ export {
   createCollects,
   getCollects,
   updateCollects,
-  deleteCollects
+  deleteCollects,
+  delIllustration
 };
