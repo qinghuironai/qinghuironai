@@ -5,6 +5,9 @@
         <use xlink:href="#picfanhui1" />
       </svg>
       <h1>{{ title }}</h1>
+      <div class="right">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
@@ -33,7 +36,7 @@ export default {
 <style lang="stylus" scoped>
 .header
   position relative
-  z-index 102
+  // z-index 102
   .header-container
     position relative
     top 0
@@ -41,19 +44,20 @@ export default {
     height 50px
     width 100%
     display flex
+    justify-content space-between
+    align-items center
     line-height 40px
     box-sizing border-box
     color #333
     font-size 16px
     transition top .2s
     >svg
-      position absolute
-      left 5px
-      top 15px
       font-size 20px
       width 20px
     >h1
       font-size 18px
       font-weight 700
       margin 0 auto
+    .right
+      min-width 40px
 </style>

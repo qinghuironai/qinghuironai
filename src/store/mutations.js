@@ -31,6 +31,12 @@ const mutations = {
   },
   [types.SET_OPTION](state, option) {
     state.option = option;
+  },
+  [types.SET_COLLECT_STATUS](state, data) {
+    state.collectStatus = data;
+  },
+  [types.SET_COLLECT_DIGEST](state, data) {
+    state.collectDigest = data;
   }
 };
 

@@ -1,6 +1,6 @@
 <template>
-  <div class="item" @click="goDetail" @touchstart="longPress" @touchend="removePress">
-    <div v-ripple class="item-content" :style="column.style">
+  <div class="item" @click="goDetail">
+    <div class="item-content" :style="column.style">
       <img
         :src="column.src"
         :style="{opacity}"
@@ -10,6 +10,16 @@
       <div v-if="column.pageCount > 1" class="count">
         <img src="@/assets/images/count.svg">
         <span>{{ column.pageCount }}</span>
+      </div>
+      <div class="collect" @click.stop="handleCollect">
+        <svg font-size="40" class="icon" aria-hidden="true">
+          <use xlink:href="#pic174" />
+        </svg>
+      </div>
+      <div v-if="showDelete" class="delete" @click.stop="handleDelete">
+        <svg font-size="40" class="icon" aria-hidden="true">
+          <use xlink:href="#picguanbi" />
+        </svg>
       </div>
       <Like v-if="!column.isad" :like="column.isLiked" @handleLike="handleLike" />
       <div v-if="column.setu" class="setu-filter">
@@ -23,6 +33,7 @@
 
 <script>
 import Like from '@/components/like/Like';
+import { SET_COLLECT_STATUS } from '@/store/mutation-types';
 
 export default {
   name: 'Item',
@@ -33,6 +44,10 @@ export default {
     column: {
       type: Object,
       required: true
+    },
+    showDelete: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -43,6 +58,16 @@ export default {
   methods: {
     handleLike() {
       this.$emit('handleLike', this.column);
+    },
+    handleCollect() {
+      const data = {
+        show: true,
+        id: this.column.id
+      };
+      this.$store.commit(SET_COLLECT_STATUS, data);
+    },
+    handleDelete() {
+      this.$emit('handleDelete', this.column);
     },
     handleLoad() {
       if (!this.column.setu) {
@@ -56,15 +81,6 @@ export default {
         this.$store.dispatch('setDetail', this.column);
         this.$router.push(`/illusts/${this.column.id}`);
       }
-    },
-    longPress() {
-      clearInterval(this.loop);
-      this.loop = setTimeout(() => {
-        this.$emit('press', this.column.id);
-      }, 1000);
-    },
-    removePress() {
-      clearInterval(this.loop);
     }
   }
 };
@@ -128,4 +144,12 @@ export default {
     height 50px
     margin auto
     z-index 2
+  .collect
+    position absolute
+    left 2px
+    bottom 1px
+  .delete
+    position absolute
+    right 0
+    top 0
 </style>

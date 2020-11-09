@@ -23,6 +23,7 @@
         >
       </div>
     </div>
+    <CollectsList />
   </v-app>
 </template>
 
@@ -30,7 +31,12 @@
 import { mapGetters } from 'vuex';
 // import cookie from 'js-cookie';
 import Alert from '@/components/alert';
+import CollectsList from '@/components/collects-list';
+
 export default {
+  components: {
+    CollectsList
+  },
   data() {
     return {
       active: '/dailyRank',
@@ -59,7 +65,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['cachedViews', 'showTab', 'avatar']),
+    ...mapGetters([
+      'cachedViews',
+      'showTab',
+      'avatar'
+    ]),
     key() {
       return this.$route.path;
     }
@@ -73,6 +83,7 @@ export default {
     }
   },
   async mounted() {
+    this.$store.dispatch('setCollectDigest');
     if (!localStorage.getItem('alert')) {
       await Alert({
         content: '请大家关注一下微信公众号和微博，我们会在上面发布最新资讯与更新记录',

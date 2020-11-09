@@ -6,3 +6,5 @@ export const detail = state => state.detail;
 export const showSearchBox = state => state.showSearchBox;
 export const option = state => state.option;
 export const avatar = state => state.user.avatar;
+export const collectStatus = state => state.collectStatus;
+export const collectDigest = state => state.collectDigest;

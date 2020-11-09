@@ -5,7 +5,9 @@ const state = {
   followStatus: null, // 画师关注状态
   detail: null,
   showSearchBox: false,
-  option: {}
+  option: {},
+  collectStatus: null, // 画集弹窗状态信息 show,id
+  collectDigest: [] // 简要画集列表
 };
 
 export default state;
