@@ -51,7 +51,6 @@ export default {
     },
     goDetail() {
       if (this.column.isad) {
-        captureOutboundLink(this.column.link);
         window.open(this.column.link);
       } else {
         this.$store.dispatch('setDetail', this.column);
