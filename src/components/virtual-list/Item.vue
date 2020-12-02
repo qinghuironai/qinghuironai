@@ -40,14 +40,6 @@
 
 </script>
 <script>
-var getOutboundLink = function(url) {
-  gtag('event', 'click', {
-    'event_category': 'outbound',
-    'event_label': url,
-    'transport_type': 'beacon',
-    'event_callback': function(){document.location = url;}
-  });
-}
 import Like from '@/components/like/Like';
 import { SET_COLLECT_STATUS } from '@/store/mutation-types';
 
@@ -92,7 +84,12 @@ export default {
     },
     goDetail() {
       if (this.column.isad) {
-      getOutboundLink(this.column.link);
+      this.$gtag('event', 'click', {
+          'event_category': 'outbound',
+          'event_label': url,
+          'transport_type': 'beacon',
+          'event_callback': function(){document.location = url;}
+        });
         window.open(this.column.link);
 
       } else {
