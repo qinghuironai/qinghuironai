@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueGtag from "vue-gtag";
 import animated from 'animate.css';
 import App from './App.vue';
 import router from './router';
