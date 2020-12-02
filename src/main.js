@@ -43,10 +43,6 @@ Vue.use(VueGtag, {
     }
   }
 });
-
-new Vue({
-  render: h => h(App)
-}).$mount("#app");
 const app = new Vue({
   router,
   store,
@@ -59,3 +55,4 @@ const app = new Vue({
 });
 
 app.$mount('#app');
+
