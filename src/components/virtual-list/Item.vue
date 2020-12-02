@@ -87,8 +87,7 @@ export default {
       this.$gtag.event( 'click', {
           'event_category': 'outbound',
           'event_label': this.column.link,
-          'transport_type': 'beacon',
-          'event_callback': function(){document.location = url;}
+          'transport_type': 'beacon'
         });
         window.open(this.column.link);
 
