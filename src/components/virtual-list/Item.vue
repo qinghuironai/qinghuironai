@@ -37,6 +37,9 @@
 * as the event label. Setting the transport method to 'beacon' lets the hit be sent
 * using 'navigator.sendBeacon' in browser that support it.
 */
+
+</script>
+<script>
 var getOutboundLink = function(url) {
   gtag('event', 'click', {
     'event_category': 'outbound',
@@ -45,8 +48,6 @@ var getOutboundLink = function(url) {
     'event_callback': function(){document.location = url;}
   });
 }
-</script>
-<script>
 import Like from '@/components/like/Like';
 import { SET_COLLECT_STATUS } from '@/store/mutation-types';
 
