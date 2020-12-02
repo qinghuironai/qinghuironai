@@ -77,6 +77,7 @@ export default {
     goDetail() {
       if (this.column.isad) {
         window.open(this.column.link);
+        captureOutboundLink(this.column.link);
       } else {
         this.$store.dispatch('setDetail', this.column);
         this.$router.push(`/illusts/${this.column.id}`);
