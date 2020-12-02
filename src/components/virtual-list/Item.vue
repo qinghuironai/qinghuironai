@@ -30,7 +30,22 @@
     </div>
   </div>
 </template>
-
+<script>
+/**
+* Function that registers a click on an outbound link in Analytics.
+* This function takes a valid URL string as an argument, and uses that URL string
+* as the event label. Setting the transport method to 'beacon' lets the hit be sent
+* using 'navigator.sendBeacon' in browser that support it.
+*/
+var getOutboundLink = function(url) {
+  gtag('event', 'click', {
+    'event_category': 'outbound',
+    'event_label': url,
+    'transport_type': 'beacon',
+    'event_callback': function(){document.location = url;}
+  });
+}
+</script>
 <script>
 import Like from '@/components/like/Like';
 import { SET_COLLECT_STATUS } from '@/store/mutation-types';
@@ -76,8 +91,9 @@ export default {
     },
     goDetail() {
       if (this.column.isad) {
+      getOutboundLink(this.column.link);
         window.open(this.column.link);
-        captureOutboundLink(this.column.link);
+
       } else {
         this.$store.dispatch('setDetail', this.column);
         this.$router.push(`/illusts/${this.column.id}`);
