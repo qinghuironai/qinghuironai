@@ -33,7 +33,7 @@ Vue.filter('dateFormat', val => {
 });
 Vue.filter('replaceBig', val => replaceBigImg(val));
 Vue.filter('replaceSmall', val => replaceSmallImg(val));
-Vue.filter('replaceAvatar', val => `https://static.pixivic.net/avatar/299x299/${val}.jpg?${store.getters.avatar!=''?store.getters.avatar.split('?')[1]:''}`);
+Vue.filter('replaceAvatar', val => `https://static.pixivic.net/avatar/299x299/${val}.jpg?${store.getters.avatar!=null?store.getters.avatar.split('?')[1]:''}`);
 Vue.filter('replaceSquare', val => 'https://img.cheerfun.dev/c/360x360_70/img-master' + val.split('img-master')[1]);
 Vue.use(VueGtag, {
   config: {
