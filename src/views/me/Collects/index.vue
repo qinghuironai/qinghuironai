@@ -15,24 +15,42 @@
     </v-tabs>
     <template v-slot:cell="props">
       <v-list-item class="item" @click="clickItem(props.data.id)">
-        <v-card width="100%">
-          <v-img
-            :src="avatar"
-            class="white--text align-end grey lighten-2"
-            height="200px"
-          >
-            <v-card-title style="font-size: 16px; background: rgba(0,0,0,0.1)" v-text="props.data.title" />
-          </v-img>
-          <v-card-actions>
-            <div
-              style="width: 100%;"
-              class="pa-1 d-flex align-center justify-space-between"
+        <div class="item-card">
+          <div v-if="!props.data.cover" class="card-img">
+            <img
+              :src="require('@/assets/images/default.jpg')"
+              width="100%"
             >
-              <v-chip color="primary" class="text-no-wrap text-truncate" @click.stop="edit(props.data)">编辑</v-chip>
-              <span>{{ props.data.createTime | dateFormat }}</span>
+          </div>
+          <div v-else-if="props.data.cover.length < 3" class="card-img">
+            <img
+              :src="props.data.cover[0].medium | replaceSquare"
+              width="100%"
+            >
+          </div>
+          <div v-else class="card-img multiply">
+            <div class="left">
+              <img
+                :src="props.data.cover[0].medium | replaceSquare"
+                width="100%"
+              >
             </div>
-          </v-card-actions>
-        </v-card>
+            <div class="right">
+              <img
+                :src="props.data.cover[1].medium | replaceSquare"
+                width="100%"
+              >
+              <img
+                :src="props.data.cover[2].medium | replaceSquare"
+                width="100%"
+              >
+            </div>
+          </div>
+          <div class="card-bottom">
+            <span>{{ props.data.title }}</span>
+            <v-chip color="primary" class="text-no-wrap text-truncate" @click.stop="edit(props.data)">编辑</v-chip>
+          </div>
+        </div>
       </v-list-item>
     </template>
     <svg
@@ -109,4 +127,28 @@ export default {
   width 100%
   height 100%
   padding 10px
+  .item-card
+    width 100%
+    .card-img
+      height calc(50vw - 20px)
+      padding 5px
+      img
+        width 100%
+        height 100%
+    .multiply
+      width 100%
+      display flex
+      .left, .right
+        flex 1
+        img
+          object-fit cover
+      .right
+        flex 1
+        display flex
+        flex-direction column
+    .card-bottom
+      display flex
+      justify-content space-between
+      align-items center
+      padding 5px
 </style>

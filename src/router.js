@@ -49,241 +49,241 @@ const router = new Router({
     path: '/',
     redirect: '/dailyRank'
   },
-    {
-      path: '/detail/:pid',
-      name: 'Detail',
-      component: pages.Detail,
-      props: true,
-      meta: {
-        title: `详情`
-      }
-    },
-    {
-      path: '/illusts/:pid',
-      name: 'Illusts',
-      component: pages.Detail,
-      props: true,
-      meta: {
-        title: `详情`
-      }
-    },
-    {
-      path: '/artist/:artistId',
-      name: 'Artist',
-      component: pages.Artist,
-      props: true,
-      meta: {
-        title: `画师`
-      }
-    },
-    {
-      path: '/dailyRank',
-      name: 'DailyRank',
-      component: pages.DailyRank,
-      meta: {
-        title: `Pixiv Illustration Collection`
-      }
-    },
-    {
-      path: '/search',
-      name: 'Search',
-      component: pages.Search,
-      meta: {
-        title: `搜索`
-      },
-      children: [
-        {
-          path: 'illusts',
-          name: 'SearchIllusts',
-          component: pages.Illusts
-        },
-        {
-          path: 'artists',
-          name: 'Artists',
-          component: pages.Artists
-        }
-      ]
-    },
-    {
-      path: '/find',
-      name: 'Find',
-      component: pages.Find,
-      meta: {
-        title: `发现`
-      }
-    },
-    {
-      path: '/spotlight',
-      name: 'SpotLight',
-      component: pages.SpotLight,
-      meta: {
-        title: `spotlight`
-      }
-    },
-    {
-      path: '/spot/:id',
-      name: 'Spot',
-      component: pages.Spot,
-      props: true,
-      meta: {
-        title: `spot`
-      }
-    },
-    {
-      path: '/me',
-      name: 'Me',
-      component: pages.Me,
-      meta: {
-        title: `个人中心`
-      }
-    },
-    {
-      path: '/collect',
-      name: 'Collect',
-      component: pages.Collect,
-      meta: {
-        title: `我的收藏`
-      }
-    },
-    {
-      path: '/collects',
-      name: 'Collects',
-      component: pages.Collects,
-      meta: {
-        title: `我的画集`
-      }
-    },
-    {
-      path: '/artistCollect',
-      name: 'ArtistCollect',
-      component: pages.ArtistCollect,
-      meta: {
-        title: `我的关注`
-      }
-    },
-    {
-      path: '/links',
-      name: 'Links',
-      component: pages.Links,
-      meta: {
-        title: `用户须知`
-      }
-    },
-    {
-      path: '/new',
-      name: 'New',
-      component: pages.New,
-      meta: {
-        title: `画师新作`
-      }
-    },
-    {
-      path: '/setting',
-      name: 'Setting',
-      component: pages.Setting,
-      meta: {
-        title: `个人设置`
-      }
-    },
-    {
-      path: '/avatar',
-      name: 'Avatar',
-      component: pages.Avatar,
-      meta: {
-        title: `更新头像`
-      }
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: pages.Login,
-      meta: {
-        title: `登录`
-      }
-    },
-    {
-      path: '/qqauth',
-      name: 'QQauth',
-      component: pages.QQauth
-    },
-    {
-      path: '/register',
-      name: 'Register',
-      component: pages.Register,
-      meta: {
-        title: `注册`
-      }
-    },
-    {
-      path: '/resetPassword',
-      name: 'ResetPassword',
-      component: pages.ResetPassword,
-      meta: {
-        title: `重置密码`
-      }
-    },
-    {
-      path: '/emailCheck',
-      name: 'EmailCheck',
-      component: pages.EmailCheck,
-      meta: {
-        title: `邮箱认证`
-      }
-    },
-    {
-      path: '/friends',
-      name: 'Friends',
-      component: pages.Friends,
-      meta: {
-        title: `友情链接`
-      }
-    },
-    {
-      path: '/users/:userId',
-      name: 'Users',
-      component: pages.Users,
-      props: true
-    },
-    {
-      path: '/bookmark/:illustId',
-      name: 'BookMark',
-      component: pages.BookMark,
-      props: true
-    },
-    {
-      path: '/history',
-      name: 'History',
-      component: pages.History,
-      meta: {
-        title: `浏览历史`
-      }
-    },
-    {
-      path: '/recommend',
-      name: 'Recommend',
-      component: pages.Recommend,
-      meta: {
-        title: `为你推荐`
-      }
-    },
-    {
-      path: '/illustration/:id',
-      name: 'Illustration',
-      component: pages.Illustration,
-      props: true,
-      meta: {
-        title: `illustration`
-      }
-    },
-    {
-      path: '/edit/:id',
-      name: 'Edit',
-      component: pages.Edit,
-      props: true,
-      meta: {
-        title: `画集编辑`
-      }
+  {
+    path: '/detail/:pid',
+    name: 'Detail',
+    component: pages.Detail,
+    props: true,
+    meta: {
+      title: `详情`
     }
+  },
+  {
+    path: '/illusts/:pid',
+    name: 'Illusts',
+    component: pages.Detail,
+    props: true,
+    meta: {
+      title: `详情`
+    }
+  },
+  {
+    path: '/artist/:artistId',
+    name: 'Artist',
+    component: pages.Artist,
+    props: true,
+    meta: {
+      title: `画师`
+    }
+  },
+  {
+    path: '/dailyRank',
+    name: 'DailyRank',
+    component: pages.DailyRank,
+    meta: {
+      title: `Pixiv Illustration Collection`
+    }
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: pages.Search,
+    meta: {
+      title: `搜索`
+    },
+    children: [
+      {
+        path: 'illusts',
+        name: 'SearchIllusts',
+        component: pages.Illusts
+      },
+      {
+        path: 'artists',
+        name: 'Artists',
+        component: pages.Artists
+      }
+    ]
+  },
+  {
+    path: '/find',
+    name: 'Find',
+    component: pages.Find,
+    meta: {
+      title: `发现`
+    }
+  },
+  {
+    path: '/spotlight',
+    name: 'SpotLight',
+    component: pages.SpotLight,
+    meta: {
+      title: `spotlight`
+    }
+  },
+  {
+    path: '/spot/:id',
+    name: 'Spot',
+    component: pages.Spot,
+    props: true,
+    meta: {
+      title: `spot`
+    }
+  },
+  {
+    path: '/me',
+    name: 'Me',
+    component: pages.Me,
+    meta: {
+      title: `个人中心`
+    }
+  },
+  {
+    path: '/collect',
+    name: 'Collect',
+    component: pages.Collect,
+    meta: {
+      title: `我的收藏`
+    }
+  },
+  {
+    path: '/collects',
+    name: 'Collects',
+    component: pages.Collects,
+    meta: {
+      title: `我的画集`
+    }
+  },
+  {
+    path: '/artistCollect',
+    name: 'ArtistCollect',
+    component: pages.ArtistCollect,
+    meta: {
+      title: `我的关注`
+    }
+  },
+  {
+    path: '/links',
+    name: 'Links',
+    component: pages.Links,
+    meta: {
+      title: `用户须知`
+    }
+  },
+  {
+    path: '/new',
+    name: 'New',
+    component: pages.New,
+    meta: {
+      title: `画师新作`
+    }
+  },
+  {
+    path: '/setting',
+    name: 'Setting',
+    component: pages.Setting,
+    meta: {
+      title: `个人设置`
+    }
+  },
+  {
+    path: '/avatar',
+    name: 'Avatar',
+    component: pages.Avatar,
+    meta: {
+      title: `更新头像`
+    }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: pages.Login,
+    meta: {
+      title: `登录`
+    }
+  },
+  {
+    path: '/qqauth',
+    name: 'QQauth',
+    component: pages.QQauth
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: pages.Register,
+    meta: {
+      title: `注册`
+    }
+  },
+  {
+    path: '/resetPassword',
+    name: 'ResetPassword',
+    component: pages.ResetPassword,
+    meta: {
+      title: `重置密码`
+    }
+  },
+  {
+    path: '/emailCheck',
+    name: 'EmailCheck',
+    component: pages.EmailCheck,
+    meta: {
+      title: `邮箱认证`
+    }
+  },
+  {
+    path: '/friends',
+    name: 'Friends',
+    component: pages.Friends,
+    meta: {
+      title: `友情链接`
+    }
+  },
+  {
+    path: '/users/:userId',
+    name: 'Users',
+    component: pages.Users,
+    props: true
+  },
+  {
+    path: '/bookmark/:illustId',
+    name: 'BookMark',
+    component: pages.BookMark,
+    props: true
+  },
+  {
+    path: '/history',
+    name: 'History',
+    component: pages.History,
+    meta: {
+      title: `浏览历史`
+    }
+  },
+  {
+    path: '/recommend',
+    name: 'Recommend',
+    component: pages.Recommend,
+    meta: {
+      title: `为你推荐`
+    }
+  },
+  {
+    path: '/illustration/:id',
+    name: 'Illustration',
+    component: pages.Illustration,
+    props: true,
+    meta: {
+      title: `illustration`
+    }
+  },
+  {
+    path: '/edit/:id',
+    name: 'Edit',
+    component: pages.Edit,
+    props: true,
+    meta: {
+      title: `画集编辑`
+    }
+  }
     // {
     //   path: '*',
     //   redirect: '/dailyRank'
