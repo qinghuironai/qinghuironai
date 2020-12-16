@@ -135,6 +135,7 @@ export default {
       img
         width 100%
         height 100%
+        object-fit cover
     .multiply
       width 100%
       display flex
@@ -146,6 +147,8 @@ export default {
         flex 1
         display flex
         flex-direction column
+        img
+          height 50%
     .card-bottom
       display flex
       justify-content space-between
