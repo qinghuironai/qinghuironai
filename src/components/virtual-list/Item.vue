@@ -84,11 +84,19 @@ export default {
     },
     goDetail() {
       if (this.column.isad) {
+<<<<<<< HEAD
 gtag('event', 'click', {
     'event_category': 'outbound',
     'event_label': this.column.link,
     'transport_type': 'beacon'
   });
+=======
+              gtag('event', 'click', {
+                  'event_category': 'outbound',
+                  'event_label': this.column.link,
+                  'transport_type': 'beacon'
+                });
+>>>>>>> 644aa3b0cf09850ecb32a5d99d9a55b7c757b930
         window.open(this.column.link);
 
       } else {
