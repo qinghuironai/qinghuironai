@@ -23,7 +23,7 @@
       <div v-if="message" class="content">
         <div class="content-top">
           <v-avatar size="36px">
-            <img src="https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1441836571,2166773131&fm=26&gp=0.jpg" alt="avatar">
+            <img :src="avatar" alt="avatar">
           </v-avatar>
           <span class="text-no-wrap text-truncate font-weight-medium">{{ message.title }}</span>
         </div>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import List from '@/components/virtual-list/VirtualList';
 import Header from '@/components/header/Header';
 
@@ -79,6 +80,11 @@ export default {
       group: [],
       overlay: false
     };
+  },
+  computed: {
+    ...mapGetters([
+      'avatar'
+    ])
   },
   mounted() {
     this.getCollects();
