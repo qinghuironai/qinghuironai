@@ -138,7 +138,7 @@ export default {
         pornWarning: Number(this.form.pornWarning)
       };
       if (this.isCreate) {
-        this.$store.dispatch('createCollect', data)
+        this.$store.dispatch('createCollect', {...data, username: this.user.username})
           .then(res => {
             this.$router.push(`/collects`);
             Toast({ content: res.data.message });
