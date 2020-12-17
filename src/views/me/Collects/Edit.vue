@@ -129,6 +129,10 @@ export default {
       this.form.tagList.splice(index, 1);
     },
     updateCollect() {
+    if(!this.form.title){
+    return Toast({content: "标题不能为空"})
+    }
+
       const data = {
         title: this.form.title,
         caption: this.form.caption,
