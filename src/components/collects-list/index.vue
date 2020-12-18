@@ -131,6 +131,9 @@ export default {
       }
     },
     createCollects() {
+      if(!this.titles){
+        return Toast({content: "标题不能为空"})
+      }
       const data = {
         username: this.user.username,
         title: this.titles,
