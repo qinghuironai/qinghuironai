@@ -2,6 +2,9 @@ import axios from '../base';
 
 // 新建画集
 function addCollections(data) {
+  if(!data.titles){
+    return Toast({content: "标题不能为空"})
+  }
   return axios({
     url: `/collections`,
     method: 'post',
