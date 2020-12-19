@@ -111,7 +111,6 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.message = res.data.data;
-            console.log(this.message);
           }
         });
     },
@@ -124,11 +123,9 @@ export default {
           data: this.group
         })
           .then(res => {
-            console.log(res);
             if (res.status === 200) {
               this.text = edit;
               this.showDelete = false;
-              console.log(1111);
             }
           })
           .finally(() => {

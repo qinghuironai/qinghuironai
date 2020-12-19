@@ -129,9 +129,9 @@ export default {
       this.form.tagList.splice(index, 1);
     },
     updateCollect() {
-    if(!this.form.title){
-    return Toast({content: "标题不能为空"})
-    }
+      if (!this.form.title) {
+        return Toast({ content: '标题不能为空' });
+      }
 
       const data = {
         title: this.form.title,
@@ -142,7 +142,7 @@ export default {
         pornWarning: Number(this.form.pornWarning)
       };
       if (this.isCreate) {
-        this.$store.dispatch('createCollect', {...data, username: this.user.username})
+        this.$store.dispatch('createCollect', { ...data, username: this.user.username })
           .then(res => {
             this.$router.push(`/collects`);
             Toast({ content: res.data.message });

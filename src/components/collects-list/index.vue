@@ -42,10 +42,13 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="titles" label="请输入画集标题" required />
+                <v-text-field v-model="titles" label="画集标题" required />
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="caption" label="请输入画集简介" />
+                <v-text-field v-model="caption" label="画集简介" />
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="tagList" label="画集标签（多个空格隔开）" />
               </v-col>
               <v-switch v-model="isPublic" class="ma-2" label="公开画集" />
               <v-switch v-model="forbidComment" class="ma-2" label="允许评论" />
@@ -81,6 +84,7 @@ export default {
       isLoading: false,
       titles: null,
       caption: null,
+      tagList: null,
       isPublic: 0,
       forbidComment: 0,
       pornWarning: 0,
@@ -131,16 +135,21 @@ export default {
       }
     },
     createCollects() {
-      if(!this.titles){
-        return Toast({content: "标题不能为空"})
+      this.titles = this.titles.trim();
+      this.tagList = this.tagList.trim();
+      if (!this.titles || !this.tagList) {
+        return Toast({ content: '标题或标签不能为空' });
       }
+      console.log(this.tagList);
+      const tagsList = this.tagList.split(/\s+/g).map(item => ({ id: null, tagName: item }));
       const data = {
         username: this.user.username,
         title: this.titles,
         caption: this.caption,
         isPublic: Number(this.isPublic),
         forbidComment: Number(this.forbidComment),
-        pornWarning: Number(this.pornWarning)
+        pornWarning: Number(this.pornWarning),
+        tagsList
       };
       this.$store.dispatch('createCollect', data)
         .then(res => {

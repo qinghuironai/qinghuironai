@@ -42,6 +42,8 @@
 <script>
 import Like from '@/components/like/Like';
 import { SET_COLLECT_STATUS } from '@/store/mutation-types';
+import Toast from '@/components/toast';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Item',
@@ -63,11 +65,17 @@ export default {
       opacity: 0
     };
   },
+  computed: {
+    ...mapGetters(['user'])
+  },
   methods: {
     handleLike() {
       this.$emit('handleLike', this.column);
     },
     handleCollect() {
+      if (!this.user.id) {
+        return Toast({content: "请先登录～"});
+      }
       const data = {
         show: true,
         id: this.column.id
