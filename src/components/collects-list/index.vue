@@ -140,7 +140,6 @@ export default {
       if (!this.titles || !this.tagList) {
         return Toast({ content: '标题或标签不能为空' });
       }
-      console.log(this.tagList);
       const tagsList = this.tagList.split(/\s+/g).map(item => ({ id: null, tagName: item }));
       const data = {
         username: this.user.username,
