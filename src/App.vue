@@ -85,7 +85,11 @@ export default {
     }
   },
   async mounted() {
-    this.$store.dispatch('vipProxyServer');
+    if (this.isVip) {
+      this.$store.dispatch('vipProxyServer');
+    } else if (!this.isVip && localStorage.getItem('serverAddress')) {
+      localStorage.removeItem('serverAddress');
+    }
     this.$store.dispatch('setCollectDigest');
     if (!localStorage.getItem('alert')) {
       await Alert({
