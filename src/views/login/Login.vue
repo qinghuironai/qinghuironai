@@ -157,7 +157,9 @@ export default {
             if (res.status === 200) {
               this.$store.dispatch('setUser', res.data.data);
               const url = this.$route.query.return_to;
+              console.log(url);
               window.location.href = url || `${process.env.VUE_APP_HOME_URL}/me`;
+              console.log(url);
             } else {
               Alert({
                 content: res.data.message

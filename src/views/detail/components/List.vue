@@ -7,7 +7,7 @@
         </v-avatar>
       </a>
       <a>
-        <div class="user-name" :style="{'color': isVip ? 'rgb(251, 114, 153)' : ''}">{{ item.replyFromName }}</div>
+        <div class="user-name">{{ item.replyFromName }}</div>
       </a>
       <div class="comment-text f-caption-s">
         <img v-if="isimg(item.content)" :src="require(`@/assets/${isimg(item.content)}`)">
@@ -36,7 +36,7 @@
             </v-avatar>
           </a>
           <a>
-            <div class="user-name" :style="{'color': isVip ? 'rgb(251, 114, 153)' : ''}">{{ val.replyFromName }}</div>
+            <div class="user-name">{{ val.replyFromName }}</div>
           </a>
           <div class="comment-text f-caption-s">
             <span class="comment-text">@{{ val.replyToName }}:
