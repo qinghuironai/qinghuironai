@@ -126,7 +126,7 @@ export default {
         const result = await this.$api.search.uploadImg(param);
         if (result.status === 200) {
           this.dialog = false;
-          const avatar = `${this.avatar}?t=${Date.now()}`;
+          const avatar = `${this.avatar}`;
           const user = { ...this.user, avatar };
           this.$store.dispatch('setUser', user);
           this.$router.back();

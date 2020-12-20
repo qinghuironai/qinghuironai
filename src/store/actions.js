@@ -7,6 +7,7 @@ import Toast from '@/components/toast';
 export const setUser = ({
   commit
 }, user) => {
+  user.avatar += `?t=${Date.now()}`;
   localStorage.setItem('user', JSON.stringify(user));
   commit(types.SET_USER, user);
 };
