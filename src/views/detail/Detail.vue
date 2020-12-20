@@ -4,7 +4,14 @@
       <List :list="pictureList" @infinite="infinite">
         <div class="detail-top">
           <div class="detail-img animated zoomIn" :style="{height: `${illustDetail.itemHeight}px`}" @click="seePreview">
-            <img :src="illustDetail.originalSrc" width="100%" height="100%" alt="detail" :style="imgStyle">
+            <img
+              :src="illustDetail.originalSrc"
+              width="100%"
+              height="100%"
+              alt="detail"
+              :style="imgStyle"
+              @error="handleError"
+            >
             <Like
               :width="80"
               :like="illustDetail.isLiked"
@@ -225,7 +232,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'likeStatus', 'followStatus', 'detail']),
+    ...mapGetters(['user', 'likeStatus', 'followStatus', 'detail', 'serverAddress']),
     imgStyle() {
       return {
         filter: this.illustDetail.setu ? `blur(25px)` : ''
@@ -451,6 +458,11 @@ export default {
         id: this.pid
       };
       this.$store.commit(SET_COLLECT_STATUS, data);
+    },
+    handleError() {
+      if (this.serverAddress) {
+        this.$store.dispatch('vipProxyServer');
+      }
     }
   }
 };
