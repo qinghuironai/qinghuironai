@@ -4,7 +4,7 @@ import router from '../router';
 
 // 创建axios实例
 const instance = axios.create({
-  baseURL: /m.dev.pixivic.com/.test(window.location.href) ? 'https://pix.ipv4.host' : 'https://dev.api.pixivic.com',
+  baseURL: process.env.VUE_APP_BASE_API,
   timeout: 20000,
   validateStatus(status) {
     return status >= 200 && status < 600;

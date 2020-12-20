@@ -55,7 +55,7 @@
           会员图片加速
         </v-card-title>
         <v-card-text class="text-center">
-          <span v-if="isVip">{{ '当前会员加速中 有效期到' }}{{ permissionLevelExpireDate | dateFormat }}</span>
+          <span v-if="isVip">{{ '当前会员加速中 有效期到' }}{{ user.permissionLevelExpireDate | dateFormat }}</span>
           <span v-else>您当前还不是会员</span>
         </v-card-text>
         <v-card-text class="text-center">
@@ -143,7 +143,7 @@ export default {
       this.$api.user.getUsers(this.user.id)
         .then((res) => {
           const { data } = res.data;
-          this.permissionLevelExpireDate = data.permissionLevelExpireDate;
+          this.$store.dispatch('setUser', data);
         });
     }
   }
