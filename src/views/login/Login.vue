@@ -157,7 +157,7 @@ export default {
             if (res.status === 200) {
               this.$store.dispatch('setUser', res.data.data);
               const url = this.$route.query.return_to;
-              window.location.href = url || `https://m.pixivic.com/me`;
+              window.location.href = url || `${process.env.VUE_APP_HOME_URL}/me`;
             } else {
               Alert({
                 content: res.data.message

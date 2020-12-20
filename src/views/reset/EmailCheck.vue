@@ -20,7 +20,7 @@ export default {
             Alert({
               content: res.data.message
             });
-            window.location.href = 'https://m.pixivic.com';
+            window.location.href = process.env.VUE_APP_HOME_URL;
           } else {
             Alert({
               content: res.data.message

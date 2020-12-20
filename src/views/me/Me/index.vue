@@ -110,7 +110,7 @@ export default {
         if (res === 'submit') {
           Cookie.remove('jwt');
           localStorage.removeItem('user');
-          window.location.href = 'https://m.pixivic.com';
+          window.location.href = process.env.VUE_APP_HOME_URL;
         }
       } else if (val === 'vip') {
         this.dialog = true;

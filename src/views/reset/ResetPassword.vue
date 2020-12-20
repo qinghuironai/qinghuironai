@@ -72,7 +72,7 @@ export default {
             Alert({
               content: '重置成功，点击返回登录页面'
             });
-            window.location.href = 'https://m.pixivic.com/login';
+            window.location.href = `${process.env.VUE_APP_HOME_URL}/login`;
           } else {
             Alert({
               content: res.data.message
