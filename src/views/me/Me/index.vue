@@ -7,7 +7,7 @@
             <use xlink:href="#pichuiyuan" />
           </svg>
           <v-avatar class="user-avatar" size="80" @click="$router.push('/avatar')">
-            <img src="https://avatars1.githubusercontent.com/u/43082053?s=460&u=114132c531e9693ca76e07649d701e9f38818a87&v=4" alt="Avatar">
+            <img :src="avatar" alt="Avatar">
           </v-avatar>
           <div class="user-info">
             <p class="font-weight-bold text-no-wrap text-truncate" :style="{'color': isVip ? 'rgb(251, 114, 153)' : ''}">{{ user.username }}</p>

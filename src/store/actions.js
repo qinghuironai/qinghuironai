@@ -180,15 +180,16 @@ export const vipProxyServer = ({
   return new Promise((resolve, reject) => {
     getvipProxyServer()
       .then(res => {
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.data) {
           const data = res.data.data;
           const url = data[Math.floor((Math.random() * data.length))];
           localStorage.setItem('serverAddress', url.serverAddress);
-          commit(types.SET_SERVER_ADDRESS, url);
-          Toast({ content: '加速成功 正在加速中' });
+          commit(types.SET_SERVER_ADDRESS, url.serverAddress);
+          Toast({ content: '您正在享受原图加速服务' });
           resolve();
         } else {
-          Toast({ content: '加速失败 请刷新重试' });
+          Toast({ content: '原图加速服务暂时失效 请稍后刷新重试' });
+          localStorage.removeItem('serverAddress');
           reject();
         }
       })

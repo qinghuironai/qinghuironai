@@ -85,6 +85,7 @@ export default {
     }
   },
   async mounted() {
+    this.$store.dispatch('vipProxyServer');
     this.$store.dispatch('setCollectDigest');
     if (!localStorage.getItem('alert')) {
       await Alert({
@@ -98,9 +99,6 @@ export default {
         btn: '不再提示'
       });
       localStorage.setItem('alert', true);
-    }
-    if (this.isVip && !this.serverAddress) {
-      this.$store.dispatch('vipProxyServer');
     }
   },
   methods: {
