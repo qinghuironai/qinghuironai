@@ -55,11 +55,11 @@
           会员图片加速
         </v-card-title>
         <v-card-text class="text-center">
-          <span v-if="isVip">{{ '当前会员加速中 有效期到' }}{{ user.permissionLevelExpireDate | dateFormat }}</span>
+          <span v-if="isVip">{{ '当前会员加速中 有效期到' }}{{ permissionLevelExpireDate | dateFormat }}</span>
           <span v-else>您当前还不是会员</span>
         </v-card-text>
         <v-card-text class="text-center">
-          <v-btn class="ma-2" depressed color="primary" target="_blank">使用说明</v-btn>
+          <v-btn class="ma-2" depressed color="primary" @click="$router.push('/handbook')">使用说明</v-btn>
           <v-btn depressed color="success" target="_blank" href="https://mall.pixivic.net/product/">购买链接</v-btn>
         </v-card-text>
         <v-card-text class="text-center">
@@ -91,7 +91,8 @@ export default {
         { icon: '#piclog_out', text: '退出登录', val: 'logout' }
       ],
       dialog: false,
-      code: null
+      code: null,
+      permissionLevelExpireDate: null
     };
   },
   computed: {
@@ -100,6 +101,11 @@ export default {
       'avatar',
       'isVip'
     ])
+  },
+  mounted() {
+    if (this.user.id) {
+      this.getUsersInfo();
+    }
   },
   methods: {
     async clickItem(val) {
@@ -131,6 +137,13 @@ export default {
             this.$store.dispatch('setUser', res.data.data);
             this.$store.dispatch('vipProxyServer');
           }
+        });
+    },
+    getUsersInfo() {
+      this.$api.user.getUsers(this.user.id)
+        .then((res) => {
+          const { data } = res.data;
+          this.permissionLevelExpireDate = data.permissionLevelExpireDate;
         });
     }
   }
@@ -184,6 +197,7 @@ export default {
                 color #5e5e5e
   &-lists
     margin-top 30px
+    padding-bottom 80px
   .btn
     margin-left 50%
     margin-top 50px

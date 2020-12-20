@@ -33,7 +33,8 @@ const pages = {
   History: () => import('./views/me/History/'),
   Recommend: () => import('./views/recommend/Recommend'),
   Illustration: () => import('./views/me/Collects/Illustrations'),
-  Edit: () => import('./views/me/Collects/Edit')
+  Edit: () => import('./views/me/Collects/Edit'),
+  HandBook: () => import('./views/me/Me/HandBook.vue')
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -282,6 +283,14 @@ const router = new Router({
     props: true,
     meta: {
       title: `画集编辑`
+    }
+  },
+  {
+    path: '/handbook',
+    name: 'HandBook',
+    component: pages.HandBook,
+    meta: {
+      title: `加速说明`
     }
   }
     // {
