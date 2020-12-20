@@ -40,9 +40,7 @@ export default {
       this.$api.user.qqLogin({ qqAccessToken })
         .then(res => {
           if (res.status === 200) {
-            const avatar = `https://static.pixivic.net/avatar/299x299/${res.data.data.id}.jpg?t=${Date.now()}`;
-            const user = { ...res.data.data, avatar };
-            this.$store.dispatch('setUser', user);
+            this.$store.dispatch('setUser', res.data.data);
             this.$router.push('/me');
           } else {
             Alert({
