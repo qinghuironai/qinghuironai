@@ -37,6 +37,9 @@ const mutations = {
   },
   [types.SET_COLLECT_DIGEST](state, data) {
     state.collectDigest = data;
+  },
+  [types.SET_SERVER_ADDRESS](state, data) {
+    state.serverAddress = data;
   }
 };
 

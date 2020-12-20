@@ -1,7 +1,8 @@
 import * as types from './mutation-types';
-import { collectIllust, deleteCollect, followArtist } from '@/api/modules/user';
+import { collectIllust, deleteCollect, followArtist, getvipProxyServer } from '@/api/modules/user';
 import { updateCollects, createCollects, collectionsDigest, deleteCollects } from '@/api/modules/collections';
 import state from './state';
+import Toast from '@/components/toast';
 
 export const setUser = ({
   commit
@@ -163,6 +164,31 @@ export const delCollects = ({
           dispatch('setCollectDigest');
           resolve(res);
         } else {
+          reject();
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+// 获取加速服务器
+export const vipProxyServer = ({
+  commit
+}) => {
+  return new Promise((resolve, reject) => {
+    getvipProxyServer()
+      .then(res => {
+        if (res.status === 200) {
+          const data = res.data.data;
+          const url = data[Math.floor((Math.random() * data.length))];
+          localStorage.setItem('serverAddress', url.serverAddress);
+          commit(types.SET_SERVER_ADDRESS, url);
+          Toast({ content: '加速成功 正在加速中' });
+          resolve();
+        } else {
+          Toast({ content: '加速失败 请刷新重试' });
           reject();
         }
       })

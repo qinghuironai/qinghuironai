@@ -3,11 +3,14 @@
     <div class="me-header">
       <v-card class="header-box" width="95%" outlined>
         <div class="link">
+          <svg v-if="isVip" class="icon vip" font-size="25" aria-hidden="true">
+            <use xlink:href="#pichuiyuan" />
+          </svg>
           <v-avatar class="user-avatar" size="80" @click="$router.push('/avatar')">
-            <img :src="avatar" alt="Avatar">
+            <img src="https://avatars1.githubusercontent.com/u/43082053?s=460&u=114132c531e9693ca76e07649d701e9f38818a87&v=4" alt="Avatar">
           </v-avatar>
           <div class="user-info">
-            <p class="font-weight-bold text-no-wrap text-truncate">{{ user.username }}</p>
+            <p class="font-weight-bold text-no-wrap text-truncate" :style="{'color': isVip ? 'rgb(251, 114, 153)' : ''}">{{ user.username }}</p>
             <div class="info-tabs">
               <router-link to="" class="tab">
                 <span>0</span>
@@ -43,6 +46,28 @@
         </v-list-item-icon>
       </v-list-item>
     </v-list>
+    <v-dialog
+      v-model="dialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">
+          会员图片加速
+        </v-card-title>
+        <v-card-text class="text-center">
+          <span v-if="isVip">{{ '当前会员加速中 有效期到' }}{{ user.permissionLevelExpireDate | dateFormat }}</span>
+          <span v-else>您当前还不是会员</span>
+        </v-card-text>
+        <v-card-text class="text-center">
+          <v-btn class="ma-2" depressed color="primary" target="_blank">使用说明</v-btn>
+          <v-btn depressed color="success" target="_blank" href="https://mall.pixivic.net/product/">购买链接</v-btn>
+        </v-card-text>
+        <v-card-text class="text-center">
+          <v-text-field v-model="code" label="输入兑换码（日期可以叠加）" />
+          <v-btn depressed color="success" :disabled="!code" @click="exchange">立即兑换</v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -50,25 +75,30 @@
 import { mapGetters } from 'vuex';
 import Cookie from 'js-cookie';
 import Confirm from '@/components/confirm';
+import Toast from '@/components/toast';
 
 export default {
   name: 'Me',
   data() {
     return {
       list: [
+        { icon: '#picA34', text: '会员加速', val: 'vip' },
         { icon: '#pictianjia1', text: '我的画集', val: '/collects' },
         { icon: '#picshoucang-copy-copy-copy', text: '我的收藏', val: '/collect' },
         { icon: '#picicon-copy', text: '我的关注', val: '/artistCollect' },
         { icon: '#piclishi', text: '浏览历史', val: '/history' },
         { icon: '#picshezhi', text: '用户设置', val: '/setting' },
         { icon: '#piclog_out', text: '退出登录', val: 'logout' }
-      ]
+      ],
+      dialog: false,
+      code: null
     };
   },
   computed: {
     ...mapGetters([
       'user',
-      'avatar'
+      'avatar',
+      'isVip'
     ])
   },
   methods: {
@@ -82,9 +112,26 @@ export default {
           localStorage.removeItem('user');
           window.location.href = 'https://m.pixivic.com';
         }
-        return;
+      } else if (val === 'vip') {
+        this.dialog = true;
+      } else {
+        this.$router.push(val);
       }
-      this.$router.push(val);
+    },
+    exchange() {
+      this.code = this.code.trim();
+      this.$api.user
+        .exchangeVip({
+          userId: this.user.id,
+          exchangeCode: this.code
+        })
+        .then(res => {
+          Toast({ content: res.data.message });
+          if (res.status === 200) {
+            this.$store.dispatch('setUser', res.data.data);
+            this.$store.dispatch('vipProxyServer');
+          }
+        });
     }
   }
 };
@@ -114,6 +161,11 @@ export default {
       .link
         position relative
         height 100%
+        .vip
+          position absolute
+          top 30px
+          left 80px
+          z-index 999
         .user-avatar
           position absolute
           top -30px

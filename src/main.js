@@ -30,6 +30,7 @@ Vue.filter('dateFormat', val => {
   const d = time.getDate();
   return `${y}-${m < 10 ? '0' + m : m}-${d < 10 ? '0' + d : d}`;
 });
+
 Vue.filter('replaceBig', val => replaceBigImg(val));
 Vue.filter('replaceSmall', val => replaceSmallImg(val));
 Vue.filter('replaceAvatar', val => `https://static.pixivic.net/avatar/299x299/${val}.jpg?${store.getters.avatar != null ? store.getters.avatar.split('?')[1] : ''}`);

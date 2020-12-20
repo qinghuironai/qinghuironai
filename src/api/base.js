@@ -4,8 +4,7 @@ import router from '../router';
 
 // 创建axios实例
 const instance = axios.create({
-  baseURL: 'https://dev.api.pixivic.com',
-  // baseURL: process.env.VUE_APP_BASE_API,
+  baseURL: /m.pixivic.com/.test(window.location.href) ? 'https://pix.ipv4.host' : 'https://dev.api.pixivic.com',
   timeout: 20000,
   validateStatus(status) {
     return status >= 200 && status < 600;
@@ -37,6 +36,7 @@ instance.interceptors.response.use(
       // 登录过期
       cookie.remove('jwt');
       localStorage.removeItem('user');
+      localStorage.removeItem('serverAddress');
       router.push('/login');
     }
     return response;

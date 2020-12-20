@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       option: {
-        img: 'https://original.img.pixivic.net/img-original/img/2020/10/05/00/00/16/84808352_p0.png',
+        img: 'https://static.pixivic.net/avatar/299x299/53.jpg',
         size: 0.1,
         autoCrop: true,
         fixed: true

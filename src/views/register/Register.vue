@@ -229,9 +229,7 @@ export default {
         this.$api.user.register(data)
           .then(res => {
             if (res.status === 200) {
-              const avatar = `https://static.pixivic.net/avatar/299x299/${res.data.data.id}.jpg?t=${Date.now()}`;
-              const user = { ...res.data.data, avatar };
-              this.$store.dispatch('setUser', user);
+              this.$store.dispatch('setUser', res.data.data);
               const url = this.$route.query.return_to;
               window.location.href = url || `https://m.pixivic.com/me`;
             } else {

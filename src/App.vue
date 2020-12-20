@@ -68,7 +68,9 @@ export default {
     ...mapGetters([
       'cachedViews',
       'showTab',
-      'avatar'
+      'avatar',
+      'isVip',
+      'serverAddress'
     ]),
     key() {
       return this.$route.path;
@@ -96,6 +98,9 @@ export default {
         btn: '不再提示'
       });
       localStorage.setItem('alert', true);
+    }
+    if (this.isVip && !this.serverAddress) {
+      this.$store.dispatch('vipProxyServer');
     }
   },
   methods: {

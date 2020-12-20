@@ -225,6 +225,25 @@ function getOldHistory(data) {
   });
 }
 
+// 兑换会员码
+function exchangeVip(data) {
+  return axios({
+    url: `/users/${data.userId}/permissionLevel`,
+    method: 'put',
+    params: {
+      exchangeCode: data.exchangeCode
+    }
+  });
+}
+
+// 获取高速服务器 vipProxyServer
+function getvipProxyServer() {
+  return axios({
+    url: `/vipProxyServer`,
+    method: 'get'
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -249,5 +268,7 @@ export {
   getFollowers,
   getArtists,
   getRecentHistory,
-  getOldHistory
+  getOldHistory,
+  exchangeVip,
+  getvipProxyServer
 };

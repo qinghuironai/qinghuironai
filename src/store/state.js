@@ -7,7 +7,8 @@ const state = {
   showSearchBox: false,
   option: {},
   collectStatus: null, // 画集弹窗状态信息 show,id
-  collectDigest: [] // 简要画集列表
+  collectDigest: [], // 简要画集列表
+  serverAddress: localStorage.getItem('serverAddress') || null
 };
 
 export default state;
