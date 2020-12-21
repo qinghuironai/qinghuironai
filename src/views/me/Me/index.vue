@@ -59,8 +59,11 @@
           <span v-else>您当前还不是会员</span>
         </v-card-text>
         <v-card-text class="text-center">
-          <v-btn class="ma-2" depressed color="primary" href="/handbook">使用说明</v-btn>
-          <v-btn depressed color="success" target="_blank" href="https://mall.pixivic.net/product/">购买链接</v-btn>
+          <v-btn class="ma-2" depressed small color="primary" href="/handbook">使用说明</v-btn>
+          <div class="d-flex justify-center">
+            <v-btn class="mr-2" depressed small color="success" target="_blank" href="https://mall.pixivic.net/product/">支付宝购买</v-btn>
+            <v-btn depressed small color="success" target="_blank" href="https://weidian.com/?userid=1676062924">微信购买</v-btn>
+          </div>
         </v-card-text>
         <v-card-text class="text-center">
           <v-text-field v-model="code" label="输入兑换码（日期可以叠加）" />
