@@ -2,7 +2,7 @@
   <div id="write" class="">
     <h4><a name="前言" class="md-header-anchor" /><span>前言</span></h4>
     <p>
-      <span>以下加速方法并不适用于所有用户，不推荐可以容忍原图下载速度的用户购买，对现有加载速度不满意可以尝试购买，网络运营商是中国电信的用户强烈建议尝试购买。</span>
+      <span>以下加速方法并不适用于所有用户，不推荐可以容忍原图下载速度的用户购买，对于图片加载速度不满意的用户可以购买，网络运营商是中国电信的用户强烈建议尝试购买。</span>
     </p>
     <p>
       <span>加速服务指的是购买新的服务器为有需求的用户提供服务，原来的并不受影响，请知悉。</span>
@@ -11,8 +11,11 @@
       <span>购买过程中如果出现问题，请提供订单号和邮箱号，联系QQ：392822872。</span>
     </p>
     <h4><a name="过程" class="md-header-anchor" /><span>过程</span></h4>
-    <h6>
+    <h5>
       <a name="兑换码的获取" class="md-header-anchor" /><span>兑换码的获取</span>
+    </h5>
+    <h6>
+      <a name="支付宝渠道微信渠道见下方⬇️）" class="md-header-anchor" /><span>支付宝渠道（微信渠道见下方⬇️）</span>
     </h6>
     <p>
       <span>高速图片加速需要</span><strong><span>加速码</span></strong><span>来提供加速时间，可前往</span><a
@@ -23,7 +26,7 @@
     </p>
     <p>
       <img
-        src="../../../../public/handbook/step1.jpg"
+        src="../../../assets/images/handbook/step1.jpg"
         referrerpolicy="no-referrer"
         alt="image-20201219193202745"
       >
@@ -33,7 +36,7 @@
     </p>
     <p>
       <img
-        src="../../../../public/handbook/step2.jpg"
+        src="../../../assets/images/handbook/step2.jpg"
         alt="image-20201019142400655"
         style="zoom: 50%"
       >
@@ -41,7 +44,7 @@
     <p><span>跳转到该页面后点击支付宝</span></p>
     <p>
       <img
-        src="../../../../public/handbook/step3.jpg"
+        src="../../../assets/images/handbook/step3.jpg"
         alt="image-20201019142524052"
         style="zoom: 50%"
       >
@@ -49,7 +52,7 @@
     <p><span>点击后将会弹出二维码付款码</span></p>
     <p>
       <img
-        src="../../../../public/handbook/step4.jpg"
+        src="../../../assets/images/handbook/step4.jpg"
         alt="image-20201019142621764"
         style="zoom: 33%"
       >
@@ -59,7 +62,7 @@
     </p>
     <p>
       <img
-        src="../../../../public/handbook/step5.jpg"
+        src="../../../assets/images/handbook/step5.jpg"
         alt="image-20201019142833146"
         style="zoom: 50%"
       >
@@ -67,7 +70,7 @@
     <p><span>点击提取卡密后会出现兑换码</span></p>
     <p>
       <img
-        src="../../../../public/handbook/step6.jpg"
+        src="../../../assets/images/handbook/step6.jpg"
         alt="image-20201019142919632"
         style="zoom: 50%"
       >
@@ -75,20 +78,65 @@
     <p><span>或者前往邮箱</span></p>
     <p>
       <img
-        src="../../../../public/handbook/step7.jpg"
+        src="../../../assets/images/handbook/step7.jpg"
         alt="image-20201019143105912"
         style="zoom: 50%"
       >
     </p>
     <h6>
-      <a name="兑换码的使用" class="md-header-anchor" /><span>兑换码的使用</span>
+      <a name="微信渠道微店）" class="md-header-anchor" /><span>微信渠道（微店）</span>
     </h6>
+    <p>
+      <span>访问官方微店</span><a
+        href="https://weidian.com/?userid=1676062924"
+        target="_blank"
+        class="url"
+      >https://weidian.com/?userid=1676062924</a><span>，选择你想要的时长进行购买</span>
+    </p>
+    <p>
+      <img
+        src="../../../assets/images/handbook/step10.jpg"
+        alt="step10"
+        style="zoom: 33%"
+      >
+    </p>
+    <p><span>下订单的时候记得备注好接收兑换码的手机号</span></p>
+    <p>
+      <img
+        src="../../../assets/images/handbook/step11.jpg"
+        alt="step11"
+        style="zoom: 33%"
+      >
+    </p>
+    <p><span>提交订单完成支付后，短信和微信都会收到兑换码</span></p>
+    <p>
+      <img
+        src="../../../assets/images/handbook/step13.jpg"
+        alt="step13"
+        style="zoom: 33%"
+      ><img
+        src="../../../assets/images/handbook/step12.jpg"
+        referrerpolicy="no-referrer"
+        alt="step12"
+      >
+    </p>
+    <p><span>使用后没有问题记得确认收货与评价哦～</span></p>
+    <p>
+      <img
+        src="../../../assets/images/handbook/step14.jpg"
+        alt="step14"
+        style="zoom: 33%"
+      >
+    </p>
+    <h5>
+      <a name="兑换码的使用" class="md-header-anchor" /><span>兑换码的使用</span>
+    </h5>
     <p>
       <span>将邮件中的密码复制出来，进入网站的个人中心（确保账户处于登录状态），点击会员加速</span>
     </p>
     <p>
       <img
-        src="../../../../public/handbook/step8.jpg"
+        src="../../../assets/images/handbook/step8.jpg"
         alt="image-20201220195808243"
         style="zoom: 33%"
       >
@@ -96,7 +144,7 @@
     <p><span>点击后在输入框内输入兑换码后点击立即兑换</span></p>
     <p>
       <img
-        src="../../../../public/handbook/step9.jpg"
+        src="../../../assets/images/handbook/step9.jpg"
         alt="image-20201220195902650"
         style="zoom: 33%"
       >
@@ -120,37 +168,6 @@ export default {};
 <style scoped>
 .mac-os-11 {
   --title-bar-height: 28px;
-}
-html {
-  font-size: 14px;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-body {
-  margin: 0px;
-  padding: 0px;
-  height: auto;
-  bottom: 0px;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  font-size: 1rem;
-  line-height: 1.42857143;
-  overflow-x: hidden;
-  background-image: inherit;
-  background-size: inherit;
-  background-attachment: inherit;
-  background-origin: inherit;
-  background-clip: inherit;
-  background-color: inherit;
-  tab-size: 4;
-  background-position: inherit inherit;
-  background-repeat: inherit inherit;
-}
-iframe {
-  margin: auto;
 }
 a.url {
   word-break: break-all;
@@ -864,388 +881,5 @@ mark .md-meta {
 }
 .md-require-zoom-fix foreignObject {
   font-size: var(--mermaid-font-zoom);
-}
-
-:root {
-  --side-bar-bg-color: #fafafa;
-  --control-text-color: #777;
-}
-
-@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
-
-/* open-sans-regular - latin-ext_latin */
-/* open-sans-italic - latin-ext_latin */
-/* open-sans-700 - latin-ext_latin */
-/* open-sans-700italic - latin-ext_latin */
-html {
-  font-size: 16px;
-}
-
-body {
-  font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
-  color: rgb(51, 51, 51);
-  line-height: 1.6;
-}
-
-#write {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 30px;
-  padding-bottom: 100px;
-}
-
-@media only screen and (min-width: 1400px) {
-  #write {
-    max-width: 1024px;
-  }
-}
-
-@media only screen and (min-width: 1800px) {
-  #write {
-    max-width: 1200px;
-  }
-}
-
-#write > ul:first-child,
-#write > ol:first-child {
-  margin-top: 30px;
-}
-
-a {
-  color: #4183c4;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  position: relative;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  line-height: 1.4;
-  cursor: text;
-}
-h1:hover a.anchor,
-h2:hover a.anchor,
-h3:hover a.anchor,
-h4:hover a.anchor,
-h5:hover a.anchor,
-h6:hover a.anchor {
-  text-decoration: none;
-}
-h1 tt,
-h1 code {
-  font-size: inherit;
-}
-h2 tt,
-h2 code {
-  font-size: inherit;
-}
-h3 tt,
-h3 code {
-  font-size: inherit;
-}
-h4 tt,
-h4 code {
-  font-size: inherit;
-}
-h5 tt,
-h5 code {
-  font-size: inherit;
-}
-h6 tt,
-h6 code {
-  font-size: inherit;
-}
-h1 {
-  font-size: 2.25em;
-  line-height: 1.2;
-  border-bottom: 1px solid #eee;
-}
-h2 {
-  font-size: 1.75em;
-  line-height: 1.225;
-  border-bottom: 1px solid #eee;
-}
-
-/*@media print {
-    .typora-export h1,
-    .typora-export h2 {
-        border-bottom: none;
-        padding-bottom: initial;
-    }
-
-    .typora-export h1::after,
-    .typora-export h2::after {
-        content: "";
-        display: block;
-        height: 100px;
-        margin-top: -96px;
-        border-top: 1px solid #eee;
-    }
-}*/
-
-h3 {
-  font-size: 1.5em;
-  line-height: 1.43;
-}
-h4 {
-  font-size: 1.25em;
-}
-h5 {
-  font-size: 1em;
-}
-h6 {
-  font-size: 1em;
-  color: #777;
-}
-p,
-blockquote,
-ul,
-ol,
-dl,
-table {
-  margin: 0.8em 0;
-}
-li > ol,
-li > ul {
-  margin: 0 0;
-}
-hr {
-  height: 2px;
-  padding: 0;
-  margin: 16px 0;
-  background-color: #e7e7e7;
-  border: 0 none;
-  overflow: hidden;
-  box-sizing: content-box;
-}
-
-li p.first {
-  display: inline-block;
-}
-ul,
-ol {
-  padding-left: 30px;
-}
-ul:first-child,
-ol:first-child {
-  margin-top: 0;
-}
-ul:last-child,
-ol:last-child {
-  margin-bottom: 0;
-}
-blockquote {
-  border-left: 4px solid #dfe2e5;
-  padding: 0 15px;
-  color: #777777;
-}
-blockquote blockquote {
-  padding-right: 0;
-}
-table {
-  padding: 0;
-  word-break: initial;
-}
-table tr {
-  border-top: 1px solid #dfe2e5;
-  margin: 0;
-  padding: 0;
-}
-table tr:nth-child(2n),
-thead {
-  background-color: #f8f8f8;
-}
-table th {
-  font-weight: bold;
-  border: 1px solid #dfe2e5;
-  border-bottom: 0;
-  margin: 0;
-  padding: 6px 13px;
-}
-table td {
-  border: 1px solid #dfe2e5;
-  margin: 0;
-  padding: 6px 13px;
-}
-table th:first-child,
-table td:first-child {
-  margin-top: 0;
-}
-table th:last-child,
-table td:last-child {
-  margin-bottom: 0;
-}
-
-.CodeMirror-lines {
-  padding-left: 4px;
-}
-
-.code-tooltip {
-  box-shadow: 0 1px 1px 0 rgba(0, 28, 36, 0.3);
-  border-top: 1px solid #eef2f2;
-}
-
-.md-fences,
-code,
-tt {
-  border: 1px solid #e7eaed;
-  background-color: #f8f8f8;
-  border-radius: 3px;
-  padding: 0;
-  padding: 2px 4px 0px 4px;
-  font-size: 0.9em;
-}
-
-code {
-  background-color: #f3f4f4;
-  padding: 0 2px 0 2px;
-}
-
-.md-fences {
-  margin-bottom: 15px;
-  margin-top: 15px;
-  padding-top: 8px;
-  padding-bottom: 6px;
-}
-
-.md-task-list-item > input {
-  margin-left: -1.3em;
-}
-
-@media print {
-  html {
-    font-size: 13px;
-  }
-  table,
-  pre {
-    page-break-inside: avoid;
-  }
-  pre {
-    word-wrap: break-word;
-  }
-}
-
-.md-fences {
-  background-color: #f8f8f8;
-}
-#write pre.md-meta-block {
-  padding: 1rem;
-  font-size: 85%;
-  line-height: 1.45;
-  background-color: #f7f7f7;
-  border: 0;
-  border-radius: 3px;
-  color: #777777;
-  margin-top: 0 !important;
-}
-
-.mathjax-block > .code-tooltip {
-  bottom: 0.375rem;
-}
-
-.md-mathjax-midline {
-  background: #fafafa;
-}
-
-#write > h3.md-focus:before {
-  left: -1.5625rem;
-  top: 0.375rem;
-}
-#write > h4.md-focus:before {
-  left: -1.5625rem;
-  top: 0.285714286rem;
-}
-#write > h5.md-focus:before {
-  left: -1.5625rem;
-  top: 0.285714286rem;
-}
-#write > h6.md-focus:before {
-  left: -1.5625rem;
-  top: 0.285714286rem;
-}
-.md-image > .md-meta {
-  /*border: 1px solid #ddd;*/
-  border-radius: 3px;
-  padding: 2px 0px 0px 4px;
-  font-size: 0.9em;
-  color: inherit;
-}
-
-.md-tag {
-  color: #a7a7a7;
-  opacity: 1;
-}
-
-.md-toc {
-  margin-top: 20px;
-  padding-bottom: 20px;
-}
-
-.sidebar-tabs {
-  border-bottom: none;
-}
-
-#typora-quick-open {
-  border: 1px solid #ddd;
-  background-color: #f8f8f8;
-}
-
-#typora-quick-open-item {
-  background-color: #fafafa;
-  border-color: #fefefe #e5e5e5 #e5e5e5 #eee;
-  border-style: solid;
-  border-width: 1px;
-}
-
-/** focus mode */
-.on-focus-mode blockquote {
-  border-left-color: rgba(85, 85, 85, 0.12);
-}
-
-header,
-.context-menu,
-.megamenu-content,
-footer {
-  font-family: "Segoe UI", "Arial", sans-serif;
-}
-
-.file-node-content:hover .file-node-icon,
-.file-node-content:hover .file-node-open-state {
-  visibility: visible;
-}
-
-.mac-seamless-mode #typora-sidebar {
-  background-color: #fafafa;
-  background-color: var(--side-bar-bg-color);
-}
-
-.md-lang {
-  color: #b4654d;
-}
-
-.html-for-mac .context-menu {
-  --item-hover-bg-color: #e6f0fe;
-}
-
-#md-notification .btn {
-  border: 0;
-}
-
-.dropdown-menu .divider {
-  border-color: #e5e5e5;
-}
-
-.ty-preferences .window-content {
-  background-color: #fafafa;
-}
-
-.ty-preferences .nav-group-item.active {
-  color: white;
-  background: #999;
 }
 </style>

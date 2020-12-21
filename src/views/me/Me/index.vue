@@ -59,7 +59,7 @@
           <span v-else>您当前还不是会员</span>
         </v-card-text>
         <v-card-text class="text-center">
-          <v-btn class="ma-2" depressed color="primary" @click="$router.push('/handbook')">使用说明</v-btn>
+          <v-btn class="ma-2" depressed color="primary" href="/handbook">使用说明</v-btn>
           <v-btn depressed color="success" target="_blank" href="https://mall.pixivic.net/product/">购买链接</v-btn>
         </v-card-text>
         <v-card-text class="text-center">

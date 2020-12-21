@@ -10,7 +10,6 @@
               height="100%"
               alt="detail"
               :style="imgStyle"
-              @error="handleError"
             >
             <Like
               :width="80"
@@ -458,11 +457,6 @@ export default {
         id: this.pid
       };
       this.$store.commit(SET_COLLECT_STATUS, data);
-    },
-    handleError() {
-      if (this.serverAddress) {
-        this.$store.dispatch('vipProxyServer');
-      }
     }
   }
 };

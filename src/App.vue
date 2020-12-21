@@ -91,10 +91,14 @@ export default {
       localStorage.removeItem('serverAddress');
     }
     this.$store.dispatch('setCollectDigest');
-    if (!localStorage.getItem('alert')) {
+    if (!localStorage.getItem('alert8')) {
       await Alert({
         content: '请大家关注一下微信公众号和微博，我们会在上面发布最新资讯与更新记录',
         html: `
+        <div style="margin-bottom: 5px; color: red;">
+           会员图片加速已上线 
+           <a style="color: #0582cd;" href="https://m.pixivic.com/handbook">详情戳我</a>
+        </div>
         <div style="display: flex; justify-content: center;">
           <img src="${require('@/assets/images/wchat.jpg')}" style="width: 50%; height: 50%; margin-right: 5px;" />
           <img src="${require('@/assets/images/wbo.jpg')}" style="width: 50%; height: 50%;" />
@@ -102,7 +106,7 @@ export default {
       `,
         btn: '不再提示'
       });
-      localStorage.setItem('alert', true);
+      localStorage.setItem('alert8', true);
     }
   },
   methods: {

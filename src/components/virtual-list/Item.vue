@@ -11,7 +11,7 @@
         <img src="@/assets/images/count.svg">
         <span>{{ column.pageCount }}</span>
       </div>
-      <div class="collect" @click.stop="handleCollect">
+      <div v-if="!column.isad" class="collect" @click.stop="handleCollect">
         <svg font-size="40" class="icon" aria-hidden="true">
           <use xlink:href="#pic174" />
         </svg>
