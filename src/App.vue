@@ -32,7 +32,7 @@
         <v-card-title class="headline">
           会员试用
         </v-card-title>
-        <v-card-text>恭喜🎉您获得会员试用资格，点击开始试用吧</v-card-text>
+        <v-card-text>恭喜🎉您获得会员试用资格，点击开始试用吧（已经是会员状态将免费增加一天）</v-card-text>
         <v-card-actions>
           <v-spacer />
           <v-btn
@@ -139,7 +139,7 @@ export default {
       });
       localStorage.setItem('alert8', true);
     }
-    if (this.user.id && !this.isVip && !localStorage.getItem('participate')) {
+    if (this.user.id && !localStorage.getItem('participate')) {
       const res = await this.$api.user.canParticipateStatus('try');
       if (res.data.data) {
         this.dialog = true;
@@ -153,13 +153,14 @@ export default {
     begin() {
       this.$api.user.participateStatus('try')
         .then(res => {
+          Toast({ content: res.data.message });
           if (res.status === 200) {
-            Toast({ content: res.data.message });
             this.$store.dispatch('setUser', res.data.data);
             this.$store.dispatch('vipProxyServer');
             this.dialog = false;
-            localStorage.setItem('participate', true);
           }
+        }).finally(() => {
+          localStorage.setItem('participate', true);
         });
     },
     close() {
