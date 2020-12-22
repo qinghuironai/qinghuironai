@@ -24,6 +24,34 @@
       </div>
     </div>
     <CollectsList />
+    <v-dialog
+      v-model="dialog"
+      persistent
+    >
+      <v-card>
+        <v-card-title class="headline">
+          会员试用
+        </v-card-title>
+        <v-card-text>恭喜🎉您获得会员试用资格，点击开始试用吧</v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="red darken-1"
+            text
+            @click="close"
+          >
+            放弃
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="begin"
+          >
+            开始
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -32,6 +60,7 @@ import { mapGetters } from 'vuex';
 // import cookie from 'js-cookie';
 import Alert from '@/components/alert';
 import CollectsList from '@/components/collects-list';
+import Toast from '@/components/toast';
 
 export default {
   components: {
@@ -61,7 +90,8 @@ export default {
           src: require('@/assets/images/new.svg'),
           activeSrc: require('@/assets/images/new-active.svg')
         }
-      ]
+      ],
+      dialog: false
     };
   },
   computed: {
@@ -70,7 +100,8 @@ export default {
       'showTab',
       'avatar',
       'isVip',
-      'serverAddress'
+      'serverAddress',
+      'user'
     ]),
     key() {
       return this.$route.path;
@@ -108,10 +139,32 @@ export default {
       });
       localStorage.setItem('alert8', true);
     }
+    if (this.user.id && !this.isVip && !localStorage.getItem('participate')) {
+      const res = await this.$api.user.canParticipateStatus('try');
+      if (res.data.data) {
+        this.dialog = true;
+      }
+    }
   },
   methods: {
     clickTab(val) {
       this.$router.push(val);
+    },
+    begin() {
+      this.$api.user.participateStatus('try')
+        .then(res => {
+          if (res.status === 200) {
+            Toast({ content: res.data.message });
+            this.$store.dispatch('setUser', res.data.data);
+            this.$store.dispatch('vipProxyServer');
+            this.dialog = false;
+            localStorage.setItem('participate', true);
+          }
+        });
+    },
+    close() {
+      this.dialog = false;
+      localStorage.setItem('participate', true);
     }
   }
 };

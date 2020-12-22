@@ -42,7 +42,7 @@ export default function Confirm(config) {
           <div class="pixivic-confirm-title">{{ title }}</div>
           <div v-if="content" class="pixivic-confirm-content">{{ content }}</div>
           <div class="pixivic-confirm-btns">
-            <div class="pixivic-confirm-btn" @click="close">{{ cancel }}</div>
+            <div class="pixivic-confirm-btn danger" @click="close">{{ cancel }}</div>
             <div class="pixivic-confirm-btn" @click="submit">{{ ok }}</div>
           </div>
         </div>
