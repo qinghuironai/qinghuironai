@@ -92,6 +92,6 @@ export function replaceBigImg(url) {
   }
 }
 
-export function replaceSmallImg(url, opt = 'thumbnail.pixivic.net:23333') {
+export function replaceSmallImg(url, opt = 'img.pixivic.net') {
   return url.replace('i.pximg.net', opt);
 }
