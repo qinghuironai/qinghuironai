@@ -81,7 +81,7 @@ export default {
     const tag = this.$route.query.tag;
     if (tag) {
       this.value = tag;
-      this.$refs.box.onfocus();
+      // this.$refs.box.onfocus();
     }
     this.getHotTag();
   },

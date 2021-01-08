@@ -34,7 +34,9 @@ const pages = {
   Recommend: () => import('./views/recommend/Recommend'),
   Illustration: () => import('./views/me/Collects/Illustrations'),
   Edit: () => import('./views/me/Collects/Edit'),
-  HandBook: () => import('./views/me/Me/HandBook.vue')
+  HandBook: () => import('./views/me/Me/HandBook'),
+  Oauth: () => import('./views/oauth/')
+
   // NotFound: () => import('./views/not-found/NotFound')
 };
 
@@ -292,6 +294,11 @@ const router = new Router({
     meta: {
       title: `加速说明`
     }
+  },
+  {
+    path: '/oauth/authorize',
+    name: 'Oauth',
+    component: pages.Oauth
   }
     // {
     //   path: '*',
