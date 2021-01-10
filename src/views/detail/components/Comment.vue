@@ -1,6 +1,6 @@
 <template>
   <transition enter-active-class="animated slideInUp">
-    <div v-if="showComment" class="comments">
+    <div v-if="show" class="comments">
       <div class="comments-popup">
         <div class="popup-title-container">
           <div class="popup-title">
@@ -20,6 +20,16 @@
             @pulling-up="getCommentsList"
           >
             <div class="popup-content-inside">
+              <div class="d-flex justify-center" @click="$router.push(`/illusts/${id}`)">
+                <v-btn
+                  class="text-align"
+                  outlined
+                  color="#FA5A57"
+                  width="90%"
+                >
+                  进入详情页
+                </v-btn>
+              </div>
               <List :list="commentList" @reply="reply" />
             </div>
           </vue-better-scroll>
@@ -57,7 +67,7 @@
 import VueBetterScroll from 'vue2-better-scroll';
 import Emoji from '@/components/emoji';
 import { mapGetters } from 'vuex';
-import Alert from '@/components/alert';
+import Toast from '@/components/toast';
 import List from './List';
 const INPUT_HEIGHT = 40;
 
@@ -68,18 +78,21 @@ export default {
     Emoji
   },
   props: {
-    list: {
-      type: Array,
-      default: () => []
+    show: {
+      type: Boolean,
+      default: false
     },
     pid: {
       type: String,
-      required: true
+      required: false
+    },
+    cid: {
+      type: Number,
+      required: false
     }
   },
   data() {
     return {
-      showComment: false,
       value: '',
       commentList: [],
       placeholder: '添加评论...',
@@ -94,37 +107,38 @@ export default {
       },
       page: 1,
       pageSize: 10,
-      showemoji: false
+      showemoji: false,
+      id: null
     };
   },
   computed: {
     ...mapGetters(['user'])
   },
+  watch: {
+    show(val) {
+      if (val) {
+        this.pid ? this.getCommentsList() : this.getComment();
+      }
+    }
+  },
   methods: {
-    show() {
-      this.showComment = true;
-      this.getCommentsList();
-    },
     close() {
-      this.showComment = false;
+      this.$emit('update:show', false);
     },
     submitComment() {
+      if (this.cid && !this.id) return;
       if (!this.value) {
-        return Alert({
-          content: '请输入评论内容~'
-        });
+        return Toast({ content: '请输入评论内容~' });
       }
       if (this.issend) {
-        return Alert({
-          content: '评论正在发送中~'
-        });
+        return Toast({ content: '评论正在发送中~' });
       }
       this.issend = true;
       const MobileDetect = require('mobile-detect');
       const md = new MobileDetect(window.navigator.userAgent);
       let data = {
         commentAppType: 'illusts',
-        commentAppId: this.pid,
+        commentAppId: this.pid ? this.pid : this.id,
         parentId: 0, // 父级评论id,顶级就是0
         replyTo: 0, // 回复者，没有就是0
         replyFromName: this.user.username, // 评论者用户名
@@ -136,7 +150,7 @@ export default {
       this.$api.comment.makeComments(data)
         .then(res => {
           if (res.status === 200) {
-            const params = { ...data, createDate: new Date(), replyFrom: this.user.id };
+            const params = { ...data, createDate: new Date(), replyFrom: this.user.id, id: res.data.data };
             if (params.parentId === 0) {
               this.commentList.unshift(params);
             } else {
@@ -148,8 +162,12 @@ export default {
               }
             }
             this.value = '';
-            this.placeholder = '';
-            this.replyParam = {};
+            // this.placeholder = '';
+            // this.replyParam = {};
+            if (!this.cid) {
+              this.placeholder = '请输入评论内容~';
+              this.replyParam = {};
+            }
             this.$emit('reply', this.commentList);
           }
         })
@@ -165,12 +183,14 @@ export default {
       this.replyParam = {
         parentId: id,
         replyTo: val.replyFrom,
-        replyToName: val.replyFromName
+        replyToName: val.replyFromName,
+        replyToCommentId: val.id
       };
       this.placeholder = '回复: ' + val.replyFromName;
       this.$refs.input.focus();
     },
     getCommentsList() {
+      if (this.cid) return;
       this.$api.comment.getComments({
         commentAppType: 'illusts',
         commentAppId: this.pid,
@@ -196,6 +216,26 @@ export default {
       this.value = item;
       this.submitComment();
       this.showemoji = false;
+    },
+    getComment() {
+      this.commentList = [];
+      this.$api.comment.getSingleComment(this.cid)
+        .then(res => {
+          if (res.status === 200) {
+            const item = res.data.data;
+            this.commentList = [item] || [];
+            this.replyParam = {
+              parentId: item.id,
+              replyTo: item.replyFrom,
+              replyToName: item.replyFromName,
+              replyToCommentId: item.id
+            };
+            this.placeholder = '回复: ' + item.replyFromName;
+            this.$refs.input.focus();
+            this.id = item.appId;
+            this.$refs.scroll.forceUpdate(false);
+          }
+        });
     }
   }
 };

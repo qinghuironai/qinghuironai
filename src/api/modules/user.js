@@ -268,6 +268,34 @@ function oauth(query) {
   });
 }
 
+// 获取总未读消息数量
+function getUnreadRemindsCount(userId) {
+  return axios({
+    url: `/users/${userId}/unreadRemindsCount`,
+    method: 'get'
+  });
+}
+
+// 获取各消息分类未读数
+function getRemindSummary(userId) {
+  return axios({
+    url: `/users/${userId}/remindSummary`,
+    method: 'get'
+  });
+}
+
+// 获取某个分类下的消息列表
+function getReminds(data) {
+  return axios({
+    url: `/users/${data.userId}/reminds`,
+    method: 'get',
+    params: {
+      type: data.type,
+      offset: data.offset
+    }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -297,5 +325,8 @@ export {
   getvipProxyServer,
   canParticipateStatus,
   participateStatus,
-  oauth
+  oauth,
+  getUnreadRemindsCount,
+  getRemindSummary,
+  getReminds
 };

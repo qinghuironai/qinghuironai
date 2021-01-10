@@ -12,8 +12,8 @@
           <div class="user-info">
             <p class="font-weight-bold text-no-wrap text-truncate" :style="{'color': isVip ? 'rgb(251, 114, 153)' : ''}">{{ user.username }}</p>
             <div class="info-tabs">
-              <router-link to="" class="tab">
-                <span>0</span>
+              <router-link to="/message" class="tab">
+                <span style="color: #FA5A57">{{ unreadcount }}</span>
                 <p>消息</p>
               </router-link>
               <router-link to="" class="tab">
@@ -103,7 +103,8 @@ export default {
     ...mapGetters([
       'user',
       'avatar',
-      'isVip'
+      'isVip',
+      'unreadcount'
     ])
   },
   mounted() {

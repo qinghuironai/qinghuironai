@@ -43,9 +43,18 @@ function canclelikedComments(param) {
   });
 }
 
+// 拉取单条评论
+function getSingleComment(commentId) {
+  return axios({
+    url: `/comments/${commentId}`,
+    method: 'get'
+  });
+}
+
 export {
   getComments,
   makeComments,
   likedComments,
-  canclelikedComments
+  canclelikedComments,
+  getSingleComment
 };

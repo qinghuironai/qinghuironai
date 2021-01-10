@@ -186,7 +186,7 @@
         </v-btn>
       </div>
     </div>
-    <Comment ref="comment" :list="commentList" :pid="pid" @reply="reply" />
+    <Comment :show.sync="show" :pid="pid" @reply="reply" />
   </div>
 </template>
 
@@ -227,7 +227,8 @@ export default {
       ],
       like: false,
       commentList: [],
-      likeUsers: []
+      likeUsers: [],
+      show: false
     };
   },
   computed: {
@@ -380,7 +381,7 @@ export default {
     },
     openComment() {
       if (this.user.id) {
-        this.$refs.comment.show();
+        this.show = true;
       } else {
         this.$router.push({
           name: 'Login',
@@ -406,7 +407,8 @@ export default {
     getCommentsList() {
       this.$api.comment.getComments({
         commentAppType: 'illusts',
-        commentAppId: this.pid
+        commentAppId: this.pid,
+        pageSize: 5
       })
         .then(res => {
           if (res.status === 200) {

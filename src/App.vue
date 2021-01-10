@@ -17,6 +17,13 @@
         >
       </div>
       <div class="tabs-item" @click="$router.push('/me')">
+        <v-badge
+          v-if="unreadcount"
+          color="#FA5A57"
+          offset-x="-12"
+          offset-y="-5"
+          :content="unreadcount"
+        />
         <img
           :src="avatar ? avatar : require('@/assets/images/me.svg')"
           :style="{transform: $route.name === 'Me' ? 'scale(1.1)' : ''}"
@@ -101,7 +108,8 @@ export default {
       'avatar',
       'isVip',
       'serverAddress',
-      'user'
+      'user',
+      'unreadcount'
     ]),
     key() {
       return this.$route.path;
@@ -145,6 +153,7 @@ export default {
         this.dialog = true;
       }
     }
+    this.$store.dispatch('unreadRemindsCount');
   },
   methods: {
     clickTab(val) {
@@ -159,7 +168,8 @@ export default {
             this.$store.dispatch('vipProxyServer');
             this.dialog = false;
           }
-        }).finally(() => {
+        })
+        .finally(() => {
           localStorage.setItem('participate', true);
         });
     },

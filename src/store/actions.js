@@ -1,5 +1,5 @@
 import * as types from './mutation-types';
-import { collectIllust, deleteCollect, followArtist, getvipProxyServer } from '@/api/modules/user';
+import { collectIllust, deleteCollect, followArtist, getvipProxyServer, getUnreadRemindsCount } from '@/api/modules/user';
 import { updateCollects, createCollects, collectionsDigest, deleteCollects } from '@/api/modules/collections';
 import state from './state';
 import Toast from '@/components/toast';
@@ -191,6 +191,25 @@ export const vipProxyServer = ({
         } else {
           Toast({ content: '原图加速服务暂时失效 请稍后刷新重试' });
           localStorage.removeItem('serverAddress');
+          reject();
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export const unreadRemindsCount = ({
+  commit
+}) => {
+  return new Promise((resolve, reject) => {
+    getUnreadRemindsCount()
+      .then(res => {
+        if (res.status === 200 && res.data.data) {
+          commit(types.SET_UNREAD_COUNT, res.data.data);
+          resolve();
+        } else {
           reject();
         }
       })

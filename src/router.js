@@ -35,7 +35,9 @@ const pages = {
   Illustration: () => import('./views/me/Collects/Illustrations'),
   Edit: () => import('./views/me/Collects/Edit'),
   HandBook: () => import('./views/me/Me/HandBook'),
-  Oauth: () => import('./views/oauth/')
+  Oauth: () => import('./views/oauth/'),
+  Message: () => import('./views/me/Message/'),
+  MessageList: () => import('./views/me/Message/list')
 
   // NotFound: () => import('./views/not-found/NotFound')
 };
@@ -299,6 +301,20 @@ const router = new Router({
     path: '/oauth/authorize',
     name: 'Oauth',
     component: pages.Oauth
+  },
+  {
+    path: '/message',
+    name: 'Message',
+    component: pages.Message,
+    meta: {
+      title: '消息中心'
+    }
+  },
+  {
+    path: '/message/list/:type',
+    name: 'MessageList',
+    component: pages.MessageList,
+    props: true
   }
     // {
     //   path: '*',

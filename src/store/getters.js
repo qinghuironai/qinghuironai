@@ -10,3 +10,4 @@ export const collectStatus = state => state.collectStatus;
 export const collectDigest = state => state.collectDigest;
 export const isVip = state => state.user.permissionLevel === 4 || (state.user.permissionLevel > 2 && new Date(state.user.permissionLevelExpireDate).getTime() > Date.now());
 export const serverAddress = state => state.serverAddress;
+export const unreadcount = state => state.unreadcount;

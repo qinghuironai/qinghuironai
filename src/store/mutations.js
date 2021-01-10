@@ -40,6 +40,9 @@ const mutations = {
   },
   [types.SET_SERVER_ADDRESS](state, data) {
     state.serverAddress = data;
+  },
+  [types.SET_UNREAD_COUNT](state, data) {
+    state.unreadcount = data;
   }
 };
 

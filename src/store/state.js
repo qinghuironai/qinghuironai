@@ -8,7 +8,8 @@ const state = {
   option: {},
   collectStatus: null, // 画集弹窗状态信息 show,id
   collectDigest: [], // 简要画集列表
-  serverAddress: localStorage.getItem('serverAddress') || null
+  serverAddress: localStorage.getItem('serverAddress') || null,
+  unreadcount: 0
 };
 
 export default state;

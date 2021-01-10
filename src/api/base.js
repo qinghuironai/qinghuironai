@@ -5,6 +5,7 @@ import router from '../router';
 // 创建axios实例
 const instance = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
+  // baseURL: 'https://pix.ipv4.host',
   timeout: 20000,
   validateStatus(status) {
     return status >= 200 && status < 600;
