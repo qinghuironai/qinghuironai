@@ -20,7 +20,7 @@
             @pulling-up="getCommentsList"
           >
             <div class="popup-content-inside">
-              <div class="d-flex justify-center" @click="$router.push(`/illusts/${id}`)">
+              <div v-if="cid" class="d-flex justify-center" @click="$router.push(`/illusts/${id}`)">
                 <v-btn
                   class="text-align"
                   outlined
@@ -158,7 +158,7 @@ export default {
               if (item.subCommentList) {
                 item.subCommentList.unshift(params);
               } else {
-                item.subCommentList = [params];
+                this.$set(item, 'subCommentList', [params]);
               }
             }
             this.value = '';
