@@ -204,7 +204,7 @@ export const unreadRemindsCount = ({
   commit
 }) => {
   return new Promise((resolve, reject) => {
-    getUnreadRemindsCount()
+    getUnreadRemindsCount(state.user.id)
       .then(res => {
         if (res.status === 200 && res.data.data) {
           commit(types.SET_UNREAD_COUNT, res.data.data);

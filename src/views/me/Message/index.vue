@@ -48,9 +48,6 @@ export default {
   computed: {
     ...mapGetters(['user'])
   },
-  mounted() {
-    this.getRemind();
-  },
   activated() {
     this.getRemind();
   },
