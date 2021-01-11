@@ -48,18 +48,20 @@ export default {
   computed: {
     ...mapGetters(['user'])
   },
-  async mounted() {
-    const res = await this.$api.user.getRemindSummary(this.user.id);
-    if (res.status === 200) {
-      this.types = res.data.data;
-    }
-    this.$store.dispatch('unreadRemindsCount');
+  mounted() {
+    this.getRemind();
   },
   activated() {
-    this.$store.dispatch('unreadRemindsCount');
+    this.getRemind();
   },
   methods: {
-
+    async getRemind() {
+      const res = await this.$api.user.getRemindSummary(this.user.id);
+      if (res.status === 200) {
+        this.types = res.data.data;
+      }
+      this.$store.dispatch('unreadRemindsCount');
+    }
   }
 };
 </script>
