@@ -156,7 +156,7 @@ export default {
             } else {
               const item = this.commentList.find(item => item.id === params.parentId);
               if (item.subCommentList) {
-                item.subCommentList.unshift(params);
+                item.subCommentList.push(params);
               } else {
                 this.$set(item, 'subCommentList', [params]);
               }
