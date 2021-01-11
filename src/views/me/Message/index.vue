@@ -53,6 +53,10 @@ export default {
     if (res.status === 200) {
       this.types = res.data.data;
     }
+    this.$store.dispatch('unreadRemindsCount');
+  },
+  activated() {
+    this.$store.dispatch('unreadRemindsCount');
   },
   methods: {
 

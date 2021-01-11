@@ -23,6 +23,7 @@
           offset-x="-12"
           offset-y="-5"
           :content="unreadcount"
+          style="z-index: 999;"
         />
         <img
           :src="avatar ? avatar : require('@/assets/images/me.svg')"
