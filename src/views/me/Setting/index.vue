@@ -139,13 +139,6 @@ export default {
         localStorage.setItem('waterfull-column', val);
       }
       this.sheet = false;
-    },
-    changeLock() {
-      if (this.lockShow) {
-        localStorage.setItem('lock_show', true);
-      } else {
-        localStorage.removeItem('lock_show');
-      }
     }
   }
 };
