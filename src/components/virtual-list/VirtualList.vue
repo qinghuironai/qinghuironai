@@ -75,7 +75,7 @@ export default {
         } else {
           let list = val.filter(e => !old.includes(e) && (e.xrestrict !== 1 || this.user.username === 'pixivic'));
           if (this.user.username !== 'pixivic') {
-            list = list.filter(item => item.sanityLevel < 6);
+            list = list.filter(item => item.sanityLevel < 4);
           }
           this.handleList(list);
           for (const item of list) {
