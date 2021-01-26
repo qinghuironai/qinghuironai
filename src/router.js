@@ -49,7 +49,7 @@ const pages = {
 
 const router = new Router({
   mode: 'history',
-  base: process.env.VUE_APP_PREFIX,
+  base: '/',
   routes: [{
     path: '/',
     redirect: '/dailyRank'
