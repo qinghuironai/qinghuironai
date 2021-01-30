@@ -296,6 +296,15 @@ function getReminds(data) {
   });
 }
 
+// 获取手机验证码
+function getPhoneCode(params) {
+  return axios({
+    url: `/messageVerificationCode`,
+    method: 'get',
+    params
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -328,5 +337,6 @@ export {
   oauth,
   getUnreadRemindsCount,
   getRemindSummary,
-  getReminds
+  getReminds,
+  getPhoneCode
 };

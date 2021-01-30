@@ -58,14 +58,15 @@
           </v-col>
           <v-col cols="12" class="code">
             <v-text-field
-              v-model="value"
-              label="验证码"
+              v-model="pvalue"
+              label="短信验证码"
               maxlength="4"
               :error-messages="valueErrors"
               @input="$v.value.$touch()"
               @blur="$v.value.$touch()"
             />
-            <img :src="`data:image/bmp;base64,${imageBase64}`" @click.stop="getCode">
+            <!-- <img :src="`data:image/bmp;base64,${imageBase64}`" @click.stop="getCode"> -->
+            <v-btn class="btn" color="primary" small @click.stop="dialog = true">获取</v-btn>
           </v-col>
           <v-col cols="12">
             <v-btn
@@ -79,6 +80,24 @@
         </v-row>
       </v-container>
     </v-form>
+    <v-dialog
+      v-model="dialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">
+          获取短信验证码
+        </v-card-title>
+        <v-card-text class="text-center">
+          <img :src="`data:image/bmp;base64,${imageBase64}`" width="60" height="30" @click.stop="getCode">
+        </v-card-text>
+        <v-card-text class="text-center">
+          <v-text-field v-model="value" label="验证码（点击图像可改）" />
+          <v-text-field v-model="phone" label="手机号" />
+          <v-btn depressed color="success" :disabled="disabled" @click="getPhoneCode">获取验证码</v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="64" />
     </v-overlay>
@@ -89,7 +108,7 @@
 import { validationMixin } from 'vuelidate';
 import { required, maxLength, minLength, email, sameAs } from 'vuelidate/lib/validators';
 import { debounceAsyncValidator } from '@/util';
-import Alert from '@/components/alert';
+import Toast from '@/components/toast';
 
 export default {
   name: 'Register',
@@ -151,7 +170,10 @@ export default {
       imageBase64: '',
       vid: '',
       value: '',
-      loading: false
+      loading: false,
+      dialog: false,
+      phone: '',
+      pvalue: ''
     };
   },
   computed: {
@@ -191,6 +213,9 @@ export default {
       !this.$v.value.required && errors.push('请输入验证码');
       !this.$v.value.minLength && errors.push('请输入4位验证码');
       return errors;
+    },
+    disabled() {
+      return !this.vid || !this.phone;
     }
   },
   mounted() {
@@ -223,8 +248,8 @@ export default {
             email: this.email,
             password: this.password
           },
-          vid: this.vid,
-          value: this.value
+          vid: this.phone,
+          value: this.pvalue
         };
         this.$api.user.register(data)
           .then(res => {
@@ -233,9 +258,7 @@ export default {
               const url = this.$route.query.return_to;
               window.location.href = url || `${process.env.VUE_APP_HOME_URL}/me`;
             } else {
-              Alert({
-                content: res.data.message
-              });
+              Toast({ content: res.data.message });
               this.loading = false;
               this.getCode();
             }
@@ -246,6 +269,20 @@ export default {
             this.getCode();
           });
       }
+    },
+    getPhoneCode() {
+      this.$api.user.getPhoneCode({
+        vid: this.vid,
+        value: this.value,
+        phone: this.phone
+      })
+        .then(res => {
+          console.log(res);
+          if (res.status === 200) {
+            this.dialog = false;
+          }
+          Toast({ content: res.data.message });
+        });
     }
   }
 };
@@ -265,10 +302,8 @@ export default {
   box-sizing border-box
   .code
     position relative
-    img
+    .btn
       position absolute
       top 20px
       right 10px
-      width 60px
-      height 30px
 </style>

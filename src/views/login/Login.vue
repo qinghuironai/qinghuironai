@@ -16,7 +16,7 @@
             <v-text-field
               v-model="username"
               :rules="nameRules"
-              label="用户名或邮箱"
+              label="用户名或邮箱或手机号"
               required
             />
           </v-col>
