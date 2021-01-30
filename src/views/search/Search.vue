@@ -34,12 +34,12 @@
         <v-btn class="mr-2" @click="translateKeyword">
           翻译并搜索
         </v-btn>
-        <v-btn class="mr-2" @click="searchOne('artist')">
+        <!--  <v-btn class="mr-2" @click="searchOne('artist')">
           id搜画师
         </v-btn>
         <v-btn @click="searchOne('illust')">
           id搜画作
-        </v-btn>
+        </v-btn> -->
       </div>
 
       <HotTag :data="hotTags" @clickTag="enter" />

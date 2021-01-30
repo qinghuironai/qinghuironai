@@ -256,6 +256,7 @@ export default {
   mounted() {
     if (this.detail) {
       this.illustDetail = this.handleData(JSON.parse(JSON.stringify(this.detail)));
+      sessionStorage.setItem('detail', JSON.stringify(this.illustDetail));
     } else {
       this.getIllustDetail();
     }
@@ -265,12 +266,7 @@ export default {
   },
   methods: {
     getIllustDetail() {
-      this.$api.detail
-        .reqIllustDetail(this.pid)
-        .then(res => {
-          const data = res.data.data;
-          this.illustDetail = this.handleData(data);
-        });
+      this.illustDetail = JSON.parse(sessionStorage.getItem('detail'));
     },
     infinite($state) {
       this.$api.detail
