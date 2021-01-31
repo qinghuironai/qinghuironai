@@ -316,7 +316,6 @@ export default {
         phone: this.phone
       })
         .then(res => {
-          console.log(res);
           if (res.status === 200) {
             this.dialog = false;
           }

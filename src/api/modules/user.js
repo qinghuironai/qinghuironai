@@ -305,6 +305,18 @@ function getPhoneCode(params) {
   });
 }
 
+// 绑定手机
+function verifyPhoneCode(data) {
+  return axios({
+    url: `/users/${data.userId}/phone`,
+    method: 'put',
+    params: {
+      vid: data.vid,
+      value: data.value
+    }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -338,5 +350,6 @@ export {
   getUnreadRemindsCount,
   getRemindSummary,
   getReminds,
-  getPhoneCode
+  getPhoneCode,
+  verifyPhoneCode
 };
