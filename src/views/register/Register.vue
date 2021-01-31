@@ -60,10 +60,10 @@
             <v-text-field
               v-model="pvalue"
               label="短信验证码"
-              maxlength="4"
-              :error-messages="valueErrors"
-              @input="$v.value.$touch()"
-              @blur="$v.value.$touch()"
+              maxlength="6"
+              :error-messages="pvalueErrors"
+              @input="$v.pvalue.$touch()"
+              @blur="$v.pvalue.$touch()"
             />
             <!-- <img :src="`data:image/bmp;base64,${imageBase64}`" @click.stop="getCode"> -->
             <v-btn class="btn" color="primary" small @click.stop="dialog = true">获取</v-btn>
@@ -92,8 +92,22 @@
           <img :src="`data:image/bmp;base64,${imageBase64}`" width="60" height="30" @click.stop="getCode">
         </v-card-text>
         <v-card-text class="text-center">
-          <v-text-field v-model="value" label="验证码（点击图像可改）" />
-          <v-text-field v-model="phone" label="手机号" />
+          <v-text-field
+            v-model="value"
+            label="验证码（点击图像可改）"
+            maxlength="4"
+            :error-messages="valueErrors"
+            @input="$v.value.$touch()"
+            @blur="$v.value.$touch()"
+          />
+          <v-text-field
+            v-model="phone"
+            label="手机号"
+            maxlength="11"
+            :error-messages="phoneErrors"
+            @input="$v.phone.$touch()"
+            @blur="$v.phone.$touch()"
+          />
           <v-btn depressed color="success" :disabled="disabled" @click="getPhoneCode">获取验证码</v-btn>
         </v-card-text>
       </v-card>
@@ -156,6 +170,17 @@ export default {
     value: {
       required,
       minLength: minLength(4)
+    },
+    pvalue: {
+      required,
+      minLength: minLength(6)
+    },
+    phone: {
+      required,
+      isValid(value) {
+        const patrn = /^[1]([3-9])[0-9]{9}$/;
+        return patrn.test(value);
+      }
     }
 
   },
@@ -214,8 +239,22 @@ export default {
       !this.$v.value.minLength && errors.push('请输入4位验证码');
       return errors;
     },
+    pvalueErrors() {
+      const errors = [];
+      if (!this.$v.pvalue.$dirty) return errors;
+      !this.$v.pvalue.required && errors.push('请输入验证码');
+      !this.$v.pvalue.minLength && errors.push('请输入6位验证码');
+      return errors;
+    },
+    phoneErrors() {
+      const errors = [];
+      if (!this.$v.phone.$dirty) return errors;
+      !this.$v.phone.required && errors.push('请输入手机号');
+      !this.$v.phone.isValid && errors.push('请输入合法手机号');
+      return errors;
+    },
     disabled() {
-      return !this.vid || !this.phone;
+      return !this.$v.value.minLength || !this.$v.phone.isValid;
     }
   },
   mounted() {
