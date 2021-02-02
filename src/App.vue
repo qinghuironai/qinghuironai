@@ -167,7 +167,7 @@ export default {
     }
   },
   async mounted() {
-    if (!this.user.isCheckPhone) {
+    if (this.user.id && !this.user.isCheckPhone) {
       this.getCode();
       this.dialog2 = true;
     }
