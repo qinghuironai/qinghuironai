@@ -105,7 +105,6 @@
             label="手机号"
             maxlength="11"
             :error-messages="phoneErrors"
-            @input="$v.phone.$touch()"
             @blur="$v.phone.$touch()"
           />
           <v-btn depressed color="success" :disabled="disabled" @click="getPhoneCode">获取验证码</v-btn>
@@ -180,7 +179,16 @@ export default {
       isValid(value) {
         const patrn = /^[1]([3-9])[0-9]{9}$/;
         return patrn.test(value);
-      }
+      },
+      isUnique: debounceAsyncValidator(function(value, debounce) {
+        if (!value) return true;
+        if (!this.$v.phone.required || !this.$v.phone.isValid) return true;
+        return debounce()
+          .then(() => this.$api.user.checkPhone(value))
+          .then(res => {
+            return Boolean(res.status === 200);
+          });
+      }, 500)
     }
 
   },
