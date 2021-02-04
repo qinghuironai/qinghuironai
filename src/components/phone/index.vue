@@ -167,13 +167,15 @@ export default {
         userId: this.user.id
       })
         .then(res => {
-          this.$store.dispatch('setUser', res.data.data);
+          if (res.status === 200) {
+            this.$store.dispatch('setUser', res.data.data);
+            this.close();
+          }
           Toast({ content: res.data.message });
-          this.dialog2 = false;
         });
     },
     close() {
-      this.$store.commit(SET_BIND_PHONE, null);
+      this.$store.commit(SET_BIND_PHONE, false);
     }
   }
 };

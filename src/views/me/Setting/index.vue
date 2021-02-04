@@ -85,6 +85,53 @@
         </v-list>
       </v-sheet>
     </v-bottom-sheet>
+
+    <v-bottom-sheet v-model="sheet2">
+      <v-sheet class="text-center">
+        <v-list>
+          <v-list-item
+            v-for="item in columns2"
+            :key="item.label"
+            @click="selectColumn2(item)"
+          >
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ item.label }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-sheet>
+    </v-bottom-sheet>
+
+    <v-dialog
+      v-model="dialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">
+          请先完成实名认证
+        </v-card-title>
+        <v-card-text class="text-center">
+          <span>实名认证需手续费1元 详情微店<a href="https://weidian.com/?userid=1676062924">https://weidian.com/?userid=1676062924</a></span>
+        </v-card-text>
+        <v-card-text class="text-center">
+          <v-text-field
+            v-model="name"
+            label="姓名"
+          />
+          <v-text-field
+            v-model="exchangeCode"
+            label="认证码"
+          />
+          <v-text-field
+            v-model="idCard"
+            label="身份证"
+          />
+          <v-btn depressed color="success" @click="confirm">立即认证</v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -103,11 +150,26 @@ export default {
   data() {
     return {
       sheet: false,
+      sheet2: false,
       columns: ['自动', 1, 2, 3, 4],
+      columns2: [
+        {
+          value: true,
+          label: '开启'
+        },
+        {
+          value: false,
+          label: '关闭'
+        }
+      ],
       isCheckEmail: false,
       isConnectQQ: false,
       column: 1,
-      isCheckAge: false
+      isCheckAge: false,
+      dialog: false,
+      name: null,
+      exchangeCode: null,
+      idCard: null
     };
   },
   computed: {
@@ -134,9 +196,7 @@ export default {
           if (!this.isCheckEmail) {
             this.$api.user.vertifyEmail(this.user.email)
               .then(res => {
-                Toast({
-                  content: res.data.message
-                });
+                Toast({ content: res.data.message });
               });
           }
           break;
@@ -148,7 +208,10 @@ export default {
         case 'age':
           if (!this.user.phone) {
             this.$store.commit(SET_BIND_PHONE, true);
-            return;
+          } else if (!this.user.ageForVerify) {
+            this.dialog = true;
+          } else {
+            this.sheet2 = true;
           }
           break;
       }
@@ -161,6 +224,29 @@ export default {
         localStorage.setItem('waterfull-column', val);
       }
       this.sheet = false;
+    },
+    selectColumn2(val) {
+      this.isCheckAge = val.value;
+      localStorage.setItem('lock_show', val.value);
+      this.sheet2 = false;
+    },
+    confirm() {
+      if (!this.name || !this.exchangeCode || !this.idCard) {
+        return Toast({ content: '请将信息填写完整' });
+      }
+      this.$api.user.verifiedInfo({
+        userId: this.user.id,
+        name: this.name,
+        exchangeCode: this.exchangeCode,
+        idCard: this.idCard
+      })
+        .then(res => {
+          if (res.status === 200) {
+            this.$store.dispatch('setUser', res.data.data);
+            this.dialog = false;
+          }
+          Toast({ content: res.data.message });
+        });
     }
   }
 };

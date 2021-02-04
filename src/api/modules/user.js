@@ -325,6 +325,19 @@ function checkPhone(phone) {
   });
 }
 
+// 三要素认证
+function verifiedInfo(data) {
+  return axios({
+    url: `/users/${data.userId}/verifiedInfo`,
+    method: 'put',
+    data: {
+      name: data.name,
+      exchangeCode: data.exchangeCode,
+      idCard: data.idCard
+    }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -360,5 +373,6 @@ export {
   getReminds,
   getPhoneCode,
   verifyPhoneCode,
-  checkPhone
+  checkPhone,
+  verifiedInfo
 };
