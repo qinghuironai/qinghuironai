@@ -128,12 +128,12 @@ export default {
           value: '/find',
           src: require('@/assets/images/find.svg'),
           activeSrc: require('@/assets/images/find-active.svg')
-        },
-        {
+        }
+        /* {
           value: '/new',
           src: require('@/assets/images/new.svg'),
           activeSrc: require('@/assets/images/new-active.svg')
-        }
+        } */
       ],
       dialog: false,
       dialog2: false,

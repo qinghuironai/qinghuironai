@@ -72,11 +72,11 @@ export default {
       hotTags: []
     };
   },
-  watch: {
+  /* watch: {
     value() {
       this.getKeyword();
     }
-  },
+  }, */
   mounted() {
     const tag = this.$route.query.tag;
     if (tag) {

@@ -58,7 +58,7 @@ export default {
   mounted() {
     this.tag = this.$route.query.tag;
     this.getTags(this.tag);
-    this.getExclusive(this.tag);
+    // this.getExclusive(this.tag);
   },
   methods: {
     infinite($state) {
@@ -88,17 +88,17 @@ export default {
           this.tags = res.data.data || [];
         });
     },
-    getExclusive(param) {
+    /*  getExclusive(param) {
       this.$api.search
         .getExclusive(param)
         .then(res => {
           this.exclusive = res.data.data || [];
         });
-    },
+    }, */
     clickTag(val) {
       this.tag = val.keyword;
       this.getTags(val.keyword);
-      this.getExclusive(val.keyword);
+      // this.getExclusive(val.keyword);
       this.page = 1;
       this.pictureList = [];
       this.identifier += 1;
