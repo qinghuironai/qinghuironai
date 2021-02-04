@@ -317,6 +317,14 @@ function verifyPhoneCode(data) {
   });
 }
 
+// 校验手机号可用性
+function checkPhone(phone) {
+  return axios({
+    url: `/users/phones/${phone}`,
+    method: 'get'
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -351,5 +359,6 @@ export {
   getRemindSummary,
   getReminds,
   getPhoneCode,
-  verifyPhoneCode
+  verifyPhoneCode,
+  checkPhone
 };

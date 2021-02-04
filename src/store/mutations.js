@@ -43,6 +43,9 @@ const mutations = {
   },
   [types.SET_UNREAD_COUNT](state, data) {
     state.unreadcount = data;
+  },
+  [types.SET_BIND_PHONE](state, data) {
+    state.bindphone = data;
   }
 };
 

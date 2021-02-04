@@ -53,6 +53,19 @@
           </svg>
         </v-list-item-icon>
       </v-list-item>
+      <v-list-item @click="clickItem('age')">
+        <v-list-item-content>
+          <v-list-item-title>
+            16
+            <span style="float: right;">{{ isCheckAge ? '已开启' : '未开启' }}</span>
+          </v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-icon>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#picyoujiantou" />
+          </svg>
+        </v-list-item-icon>
+      </v-list-item>
     </v-list>
 
     <v-bottom-sheet v-model="sheet">
@@ -79,7 +92,8 @@
 import { mapGetters } from 'vuex';
 import Header from '@/components/header/Header';
 import { QQ_LINK } from '@/util/constants';
-import Alert from '@/components/alert';
+import Toast from '@/components/toast';
+import { SET_BIND_PHONE } from '@/store/mutation-types';
 
 export default {
   name: 'Setting',
@@ -92,7 +106,8 @@ export default {
       columns: ['自动', 1, 2, 3, 4],
       isCheckEmail: false,
       isConnectQQ: false,
-      column: 1
+      column: 1,
+      isCheckAge: false
     };
   },
   computed: {
@@ -110,6 +125,7 @@ export default {
 
     const column = parseInt(localStorage.getItem('waterfull-column'));
     this.column = column || '自动';
+    this.isCheckAge = JSON.parse(localStorage.getItem('lock_show') || null);
   },
   methods: {
     clickItem(val) {
@@ -118,7 +134,7 @@ export default {
           if (!this.isCheckEmail) {
             this.$api.user.vertifyEmail(this.user.email)
               .then(res => {
-                Alert({
+                Toast({
                   content: res.data.message
                 });
               });
@@ -127,6 +143,12 @@ export default {
         case 'qq':
           if (!this.isConnectQQ) {
             window.location.href = QQ_LINK;
+          }
+          break;
+        case 'age':
+          if (!this.user.phone) {
+            this.$store.commit(SET_BIND_PHONE, true);
+            return;
           }
           break;
       }
