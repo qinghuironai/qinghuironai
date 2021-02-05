@@ -133,6 +133,9 @@ export default {
       if (this.issend) {
         return Toast({ content: '评论正在发送中~' });
       }
+      if (!this.user.phone) {
+        return Toast({ content: '绑定手机后才能评论哦~' });
+      }
       this.issend = true;
       const MobileDetect = require('mobile-detect');
       const md = new MobileDetect(window.navigator.userAgent);
