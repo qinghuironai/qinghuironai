@@ -86,9 +86,7 @@ export default {
       this.$emit('handleDelete', this.column);
     },
     handleLoad() {
-      if (!this.column.setu) {
-        this.opacity = 1;
-      }
+      this.opacity = 1;
     },
     goDetail() {
       if (this.column.isad) {
