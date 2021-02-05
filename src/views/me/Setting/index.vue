@@ -140,6 +140,7 @@ import { mapGetters } from 'vuex';
 import Header from '@/components/header/Header';
 import { QQ_LINK } from '@/util/constants';
 import Toast from '@/components/toast';
+import Confirm from '@/components/confirm';
 import { SET_BIND_PHONE } from '@/store/mutation-types';
 
 export default {
@@ -227,18 +228,26 @@ export default {
     },
     selectColumn2(val) {
       this.isCheckAge = val.value;
-      localStorage.setItem('lock_show', val.value);
+      if (val.value) {
+        localStorage.setItem('lock_show', val.value);
+      } else {
+        localStorage.removeItem('lock_show');
+      }
       this.sheet2 = false;
     },
-    confirm() {
+    async confirm() {
       if (!this.name || !this.exchangeCode || !this.idCard) {
         return Toast({ content: '请将信息填写完整' });
       }
-      this.$api.user.verifiedInfo({
-        userId: this.user.id,
-        name: this.name,
-        exchangeCode: this.exchangeCode,
-        idCard: this.idCard
+      const res = await Confirm({
+        title: '请确认信息无误哦，错误信息也会消耗认证码，确认无误后按确定即可认证'
+      });
+      if (res === 'submit') {
+        this.$api.user.verifiedInfo({
+          userId: this.user.id,
+          name: this.name,
+          exchangeCode: this.exchangeCode,
+          idCard: this.idCard
       })
         .then(res => {
           if (res.status === 200) {
@@ -247,6 +256,7 @@ export default {
           }
           Toast({ content: res.data.message });
         });
+      }
     }
   }
 };
