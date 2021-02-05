@@ -9,7 +9,6 @@
               width="100%"
               height="100%"
               alt="detail"
-              :style="imgStyle"
             >
             <Like
               :width="80"
@@ -151,7 +150,6 @@
               <img
                 width="100%"
                 :src="item"
-                :style="{filter: illustDetail.setu ? 'blur(20px)' : ''}"
               >
             </v-row>
             <v-btn

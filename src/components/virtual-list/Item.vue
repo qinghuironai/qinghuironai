@@ -22,11 +22,11 @@
         </svg>
       </div>
       <Like v-if="!column.isad" :like="column.isLiked" @handleLike="handleLike" />
-      <div v-if="column.setu" class="setu-filter">
+      <!--  <div v-if="column.setu" class="setu-filter">
         <svg font-size="50" class="icon" aria-hidden="true">
           <use xlink:href="#picsuo2" />
         </svg>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

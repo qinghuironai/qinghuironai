@@ -60,55 +60,23 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- 临时代码 用户绑定手机 -->
-    <v-dialog
-      v-model="dialog2"
-      max-width="290"
-    >
-      <v-card>
-        <v-card-title class="headline">
-          立即绑定手机号码
-        </v-card-title>
-        <v-card-text class="text-center">
-          <img :src="`data:image/bmp;base64,${imageBase64}`" width="60" height="30" @click.stop="getCode">
-        </v-card-text>
-        <v-card-text class="text-center">
-          <span>先输入图形验证码和手机获取短信验证码，然后在输入短信验证码验证</span>
-        </v-card-text>
-        <v-card-text class="text-center">
-          <v-text-field
-            v-model="value"
-            label="图形验证码（点击图像可改）"
-            maxlength="4"
-          />
-          <v-text-field
-            v-model="phone"
-            label="手机号"
-            maxlength="11"
-          />
-          <v-text-field
-            v-model="pvalue"
-            label="短信验证码"
-            maxlength="11"
-          />
-          <v-btn style="margin-right: 3px;" depressed color="success" @click="getPhoneCode">获取短信验证码</v-btn>
-          <v-btn depressed color="success" @click="confirmPhone">立即绑定</v-btn>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <Phone />
   </v-app>
 </template>
 
 <script>
+import { SET_BIND_PHONE } from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 // import cookie from 'js-cookie';
 import Alert from '@/components/alert';
 import CollectsList from '@/components/collects-list';
 import Toast from '@/components/toast';
+import Phone from '@/components/phone';
 
 export default {
   components: {
-    CollectsList
+    CollectsList,
+    Phone
   },
   data() {
     return {
@@ -128,20 +96,14 @@ export default {
           value: '/find',
           src: require('@/assets/images/find.svg'),
           activeSrc: require('@/assets/images/find-active.svg')
-        },
-        {
+        }
+        /* {
           value: '/new',
           src: require('@/assets/images/new.svg'),
           activeSrc: require('@/assets/images/new-active.svg')
-        }
+        } */
       ],
-      dialog: false,
-      dialog2: false,
-      imageBase64: '',
-      value: '',
-      phone: '',
-      pvalue: '',
-      vid: ''
+      dialog: false
     };
   },
   computed: {
@@ -168,8 +130,7 @@ export default {
   },
   async mounted() {
     if (this.user.id && !this.user.isCheckPhone) {
-      this.getCode();
-      this.dialog2 = true;
+      this.$store.commit(SET_BIND_PHONE, true);
     }
     if (this.isVip) {
       this.$store.dispatch('vipProxyServer');
@@ -223,42 +184,6 @@ export default {
     close() {
       this.dialog = false;
       localStorage.setItem('participate', true);
-    },
-    getCode() {
-      this.$api.user.verificationCode()
-        .then(res => {
-          const { data: { data }} = res;
-          this.imageBase64 = data.imageBase64;
-          this.vid = data.vid;
-        });
-    },
-    getPhoneCode() {
-      if (!this.value || !this.phone) {
-        return Toast({ content: '请输入手机号和图形验证码' });
-      }
-      this.$api.user.getPhoneCode({
-        vid: this.vid,
-        value: this.value,
-        phone: this.phone
-      })
-        .then(res => {
-          Toast({ content: res.data.message });
-        });
-    },
-    confirmPhone() {
-      if (!this.phone || !this.pvalue) {
-        return Toast({ content: '请输入手机号和短信验证码' });
-      }
-      this.$api.user.verifyPhoneCode({
-        vid: this.phone,
-        value: this.pvalue,
-        userId: this.user.id
-      })
-        .then(res => {
-          this.$store.dispatch('setUser', res.data.data);
-          Toast({ content: res.data.message });
-          this.dialog2 = false;
-        });
     }
   }
 };

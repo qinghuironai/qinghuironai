@@ -317,6 +317,27 @@ function verifyPhoneCode(data) {
   });
 }
 
+// 校验手机号可用性
+function checkPhone(phone) {
+  return axios({
+    url: `/users/phones/${phone}`,
+    method: 'get'
+  });
+}
+
+// 三要素认证
+function verifiedInfo(data) {
+  return axios({
+    url: `/users/${data.userId}/verifiedInfo`,
+    method: 'put',
+    data: {
+      name: data.name,
+      exchangeCode: data.exchangeCode,
+      idCard: data.idCard
+    }
+  });
+}
+
 export {
   verificationCode,
   register,
@@ -351,5 +372,7 @@ export {
   getRemindSummary,
   getReminds,
   getPhoneCode,
-  verifyPhoneCode
+  verifyPhoneCode,
+  checkPhone,
+  verifiedInfo
 };
