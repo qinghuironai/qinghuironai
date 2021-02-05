@@ -122,7 +122,7 @@
           />
           <v-text-field
             v-model="exchangeCode"
-            label="认证码"
+            label="认证兑换码"
           />
           <v-text-field
             v-model="idCard"
