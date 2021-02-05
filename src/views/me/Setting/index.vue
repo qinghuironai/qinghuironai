@@ -113,7 +113,7 @@
           请先完成实名认证
         </v-card-title>
         <v-card-text class="text-center">
-          <span>实名认证需手续费1元（点击认证之前请确认信息准确，概不退款） <a href="https://mall.pixivic.net/product/8.html">点击购买</a></span>
+          <span>实名认证需认证兑换码（点击认证之前请确认信息准确，概不退款） <a href="https://mall.pixivic.net/product/8.html">点击获取</a></span>
         </v-card-text>
         <v-card-text class="text-center">
           <v-text-field
