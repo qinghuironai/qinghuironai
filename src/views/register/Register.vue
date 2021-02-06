@@ -58,15 +58,26 @@
           </v-col>
           <v-col cols="12" class="code">
             <v-text-field
+              v-model="code"
+              label="注册邀请码"
+              maxlength="16"
+              :error-messages="codeErrors"
+              @input="$v.code.$touch()"
+              @blur="$v.code.$touch()"
+            />
+            <v-btn class="btn" color="primary" small href="https://mall.pixivic.net/product/9.html" target="_blank">获取</v-btn>
+          </v-col>
+          <v-col cols="12" class="code">
+            <v-text-field
               v-model="pvalue"
-              label="短信验证码"
+              label="短信验证码(需上面邀请码)"
               maxlength="6"
               :error-messages="pvalueErrors"
               @input="$v.pvalue.$touch()"
               @blur="$v.pvalue.$touch()"
             />
             <!-- <img :src="`data:image/bmp;base64,${imageBase64}`" @click.stop="getCode"> -->
-            <v-btn class="btn" color="primary" small @click.stop="dialog = true">获取</v-btn>
+            <v-btn class="btn" color="primary" small :disabled="$v.code.$invalid" @click.stop="dialog = true">获取</v-btn>
           </v-col>
           <v-col cols="12">
             <v-btn
@@ -122,6 +133,7 @@ import { validationMixin } from 'vuelidate';
 import { required, maxLength, minLength, email, sameAs } from 'vuelidate/lib/validators';
 import { debounceAsyncValidator } from '@/util';
 import Toast from '@/components/toast';
+import Confirm from '@/components/confirm';
 
 export default {
   name: 'Register',
@@ -189,8 +201,11 @@ export default {
             return Boolean(res.status === 200);
           });
       }, 500)
+    },
+    code: {
+      required,
+      minLength: minLength(16)
     }
-
   },
   data() {
     return {
@@ -206,7 +221,8 @@ export default {
       loading: false,
       dialog: false,
       phone: '',
-      pvalue: ''
+      pvalue: '',
+      code: ''
     };
   },
   computed: {
@@ -262,6 +278,13 @@ export default {
       !this.$v.phone.isUnique && errors.push('该手机号已被绑定');
       return errors;
     },
+    codeErrors() {
+      const errors = [];
+      if (!this.$v.code.$dirty) return errors;
+      !this.$v.code.required && errors.push('请输入邀请码');
+      !this.$v.code.minLength && errors.push('请输入16位邀请码');
+      return errors;
+    },
     disabled() {
       return this.$v.value.$invalid || this.$v.phone.$invalid;
     }
@@ -286,36 +309,45 @@ export default {
           this.vid = data.vid;
         });
     },
-    register() {
+    async register() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.loading = true;
-        const data = {
-          userInfo: {
-            username: this.username.trim(),
-            email: this.email,
-            password: this.password
-          },
-          vid: this.phone,
-          value: this.pvalue
-        };
-        this.$api.user.register(data)
-          .then(res => {
-            if (res.status === 200) {
-              this.$store.dispatch('setUser', res.data.data);
-              const url = this.$route.query.return_to;
-              window.location.href = url || `${process.env.VUE_APP_HOME_URL}/me`;
-            } else {
-              Toast({ content: res.data.message });
-              this.loading = false;
-              this.getCode();
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            this.loading = false;
-            this.getCode();
-          });
+        const res = await Confirm({
+          title: '请仔细确认信息，一个邀请码只能使用一次，信息错误也会消耗邀请码，确认无误后按确定完成注册'
+        });
+        if (res === 'submit') {
+          this.loading = true;
+          const data = {
+            userInfo: {
+              username: this.username.trim(),
+              email: this.email,
+              password: this.password,
+              exchangeCode: this.code
+            },
+            vid: this.phone,
+            value: this.pvalue
+          };
+          const res = await this.$api.user.register(data);
+          if (res.status === 200) {
+            this.$api.user.register(data)
+              .then(res => {
+                if (res.status === 200) {
+                  this.$store.dispatch('setUser', res.data.data);
+                  const url = this.$route.query.return_to;
+                  window.location.href = url || `${process.env.VUE_APP_HOME_URL}/me`;
+                } else {
+                  Toast({ content: res.data.message });
+                  this.loading = false;
+                  this.getCode();
+                }
+              })
+              .catch(err => {
+                console.error(err);
+                this.loading = false;
+                this.getCode();
+              });
+          }
+        }
       }
     },
     getPhoneCode() {
