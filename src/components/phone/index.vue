@@ -144,7 +144,6 @@ export default {
         });
     },
     getPhoneCode() {
-      console.log(this.$v.phone);
       if (this.$v.value.$invalid || this.$v.phone.$invalid) {
         return Toast({ content: '请正确输入手机号和图形验证码' });
       }

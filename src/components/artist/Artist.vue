@@ -13,10 +13,10 @@
       <v-list-item
         v-for="item in artistList"
         :key="item.id"
-        @click="$router.push({name: 'Artist', params: {artistId: item.id}})"
+        @click="$router.push({ name: 'Artist', params: { artistId: item.id }})"
       >
         <v-list-item-avatar>
-          <v-img :src="item.avatar" />
+          <img :src="item.avatar | replaceBig">
         </v-list-item-avatar>
 
         <v-list-item-content>
@@ -34,8 +34,9 @@
 <script>
 import { mapGetters } from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
-import { IMG_PREFIX } from '@/util/constants';
 import Header from '@/components/header/Header';
+import Toast from '@/components/toast';
+
 export default {
   name: 'ArtistCollect',
   components: {
@@ -63,10 +64,7 @@ export default {
     }
   },
   activated() {
-    // console.log(this.$refs.list.scrollTop);
-    // this.$refs.list.scrollTop = this.scrollTop;
     this.$refs.scroll.scrollTop = this.scrollTop;
-    console.log(document.querySelector('#scroll-target').scrollTop);
   },
   methods: {
     infinite($state) {
@@ -84,7 +82,6 @@ export default {
               // item.avatar = IMG_PREFIX + item.avatar;
               const data = {
                 ...item,
-                avatar: IMG_PREFIX + item.avatar,
                 isFollowed: true
               };
               this.artistList.push(data);
@@ -95,10 +92,10 @@ export default {
         });
     },
     follow(val) {
-      console.log('follow');
       const data = {
         artistId: val.id,
-        userId: this.user.id
+        userId: this.user.id,
+        username: this.user.username
       };
       if (val.isFollowed) {
         val.isFollowed = false;
@@ -108,7 +105,7 @@ export default {
           })
           .catch(() => {
             val.isFollowed = true;
-            alert('取消关注失败');
+            Toast({ content: '取消关注失败' });
           });
       } else {
         val.isFollowed = true;
@@ -118,7 +115,7 @@ export default {
           })
           .catch(() => {
             val.isFollowed = false;
-            alert('关注失败');
+            Toast({ content: '关注失败' });
           });
       }
     },
