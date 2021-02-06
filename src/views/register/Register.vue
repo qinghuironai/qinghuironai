@@ -329,23 +329,13 @@ export default {
           };
           const res = await this.$api.user.register(data);
           if (res.status === 200) {
-            this.$api.user.register(data)
-              .then(res => {
-                if (res.status === 200) {
-                  this.$store.dispatch('setUser', res.data.data);
-                  const url = this.$route.query.return_to;
-                  window.location.href = url || `${process.env.VUE_APP_HOME_URL}/me`;
-                } else {
-                  Toast({ content: res.data.message });
-                  this.loading = false;
-                  this.getCode();
-                }
-              })
-              .catch(err => {
-                console.error(err);
-                this.loading = false;
-                this.getCode();
-              });
+            this.$store.dispatch('setUser', res.data.data);
+            const url = this.$route.query.return_to;
+            window.location.href = url || `${process.env.VUE_APP_HOME_URL}/me`;
+          } else {
+            Toast({ content: res.data.message });
+            this.loading = false;
+            this.getCode();
           }
         }
       }
