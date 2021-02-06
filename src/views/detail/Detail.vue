@@ -254,7 +254,6 @@ export default {
   mounted() {
     if (this.detail) {
       this.illustDetail = this.handleData(JSON.parse(JSON.stringify(this.detail)));
-      sessionStorage.setItem('detail', JSON.stringify(this.illustDetail));
     } else {
       this.getIllustDetail();
     }
@@ -264,7 +263,12 @@ export default {
   },
   methods: {
     getIllustDetail() {
-      this.illustDetail = JSON.parse(sessionStorage.getItem('detail'));
+      this.$api.detail
+        .reqIllustDetail(this.pid)
+        .then(res => {
+          const data = res.data.data;
+          this.illustDetail = this.handleData(data);
+        });
     },
     infinite($state) {
       this.$api.detail
@@ -284,7 +288,7 @@ export default {
           console.error(err);
         });
     },
-    clickMenu(id) {
+    /* clickMenu(id) {
       switch (id) {
         case 'pixiv':
           window.open(`https://www.pixiv.net/artworks/${this.pid}`);
@@ -293,7 +297,7 @@ export default {
           window.open(`https://www.pixiv.net/users/${this.illustDetail.artistId}`);
           break;
       }
-    },
+    }, */
     handleLike() {
       if (!this.user.id) {
         this.$router.push({

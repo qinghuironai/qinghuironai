@@ -1,47 +1,53 @@
 <template>
   <div class="artist-container">
     <div v-if="userInfo" class="artists">
-
-      <div class="list-header">
-        <div class="avatar">
-          <v-btn
-            absolute
-            top
-            style="left: 0; top: 0; z-index: 2;"
-            icon
-            @click.stop="$router.back()"
-          >
-            <svg font-size="20" class="icon" aria-hidden="true">
-              <use xlink:href="#picfanhui2" />
-            </svg>
-          </v-btn>
-          <img
-            class="avatar-top"
-            :src="userInfo.id | replaceAvatar"
-            width="100%"
-            height="100%"
-          >
-          <v-avatar :size="80" style="margin-top: -50px;">
-            <img :src="userInfo.id | replaceAvatar" alt>
-          </v-avatar>
+      <List :list="pictureList" :identifier="identifier" :height="56" @infinite="infinite">
+        <div class="list-header">
+          <div class="avatar">
+            <v-btn
+              absolute
+              top
+              style="left: 0; top: 0; z-index: 2;"
+              icon
+              @click.stop="$router.back()"
+            >
+              <svg font-size="20" class="icon" aria-hidden="true">
+                <use xlink:href="#picfanhui2" />
+              </svg>
+            </v-btn>
+            <img
+              class="avatar-top"
+              :src="userInfo.id | replaceAvatar"
+              width="100%"
+              height="100%"
+            >
+            <v-avatar :size="80" style="margin-top: -50px;">
+              <img :src="userInfo.id | replaceAvatar" alt>
+            </v-avatar>
+          </div>
+          <div class="artists-info">
+            <p class="name">{{ userInfo.username }}</p>
+            <v-btn class="follow" text color="primary" @click="goFollower">Ta的关注</v-btn>
+          </div>
+          <v-tabs centered grow>
+            <v-tab @click="getList('illust')">插画</v-tab>
+            <v-tab @click="getList('manga')">漫画</v-tab>
+          </v-tabs>
         </div>
-        <div class="artists-info">
-          <p class="name">{{ userInfo.username }}</p>
-          <v-btn class="follow" text color="primary" @click="goFollower">Ta的关注</v-btn>
-        </div>
-      </div>
-
+      </List>
     </div>
     <Loading v-else />
   </div>
 </template>
 
 <script>
+import List from '@/components/virtual-list/VirtualList';
 import Loading from '@/components/loading/Loading';
 
 export default {
   name: 'Users',
   components: {
+    List,
     Loading
   },
   props: {
@@ -52,7 +58,10 @@ export default {
   },
   data() {
     return {
+      page: 1,
       type: 'illust',
+      identifier: +new Date(),
+      pictureList: [],
       userInfo: null
     };
   },
@@ -67,6 +76,28 @@ export default {
         } = res;
         this.userInfo = data;
       });
+    },
+    infinite($state) {
+      this.$api.user
+        .getCollectList({
+          page: this.page++,
+          type: this.type,
+          userId: this.userId
+        })
+        .then((res) => {
+          if (!res.data.data) {
+            $state.complete();
+          } else {
+            this.pictureList = this.pictureList.concat(res.data.data);
+            $state.loaded();
+          }
+        });
+    },
+    getList(type) {
+      this.type = type;
+      this.page = 1;
+      this.pictureList = [];
+      this.identifier += 1;
     },
     goFollower() {
       this.$router.push({

@@ -1,54 +1,70 @@
 <template>
-  <div
-    id="scroll-target"
-    ref="scroll"
-    class="artist-collect"
+  <List
+    :list="list"
+    :height="height"
+    @infinite="infinite"
+    @resize="resize"
   >
-    <Header title="我的关注" />
-    <v-list
-      v-scroll:#scroll-target="onScroll"
-      subheader
-      class="list"
-    >
-      <v-list-item
-        v-for="item in artistList"
-        :key="item.id"
-        @click="$router.push({ name: 'Artist', params: { artistId: item.id }})"
-      >
-        <v-list-item-avatar>
-          <img :src="item.avatar | replaceBig">
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title v-text="item.name" />
-        </v-list-item-content>
-        <v-btn color="primary" small @click.stop="follow(item)">
-          {{ item.isFollowed ? '关注中' : '+关注' }}
-        </v-btn>
-      </v-list-item>
-      <infinite-loading @infinite="infinite" />
-    </v-list>
-  </div>
+    <v-subheader>{{ title }}</v-subheader>
+    <template v-slot:cell="props">
+      <div class="item-container">
+        <div class="artist-illust">
+          <div
+            v-for="(item, index) in props.data.recentlyIllustrations"
+            :key="index"
+            class="illust-item"
+          >
+            <div class="img-item" @click="goDetail(item)">
+              <img
+                :src="item.imageUrls[0].squareMedium | replaceSquare"
+                width="100%"
+                height="100%"
+              >
+              <div class="mask" />
+            </div>
+          </div>
+        </div>
+        <v-list-item class="user-item" @click="handleClick(props.data.id)">
+          <v-list-item-avatar>
+            <img :src="props.data.avatar | replaceBig">
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-text="props.data.name" />
+          </v-list-item-content>
+          <v-btn color="primary" small @click.stop="follow(props.data)">
+            {{ props.data.isFollowed ? '关注中' : '+关注' }}
+          </v-btn>
+        </v-list-item>
+      </div>
+    </template>
+  </List>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import InfiniteLoading from 'vue-infinite-loading';
-import Header from '@/components/header/Header';
-import Toast from '@/components/toast';
+import { getClient } from '@/util/dom';
+import Alert from '@/components/alert';
+import List from '@/components/list/List';
 
 export default {
   name: 'ArtistCollect',
   components: {
-    InfiniteLoading,
-    Header
+    List
+  },
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+    list: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
-      artistList: [],
       listMap: new Map(),
-      page: 1,
-      scrollTop: 0
+      height: 0
     };
   },
   computed: {
@@ -61,37 +77,25 @@ export default {
       if (item) {
         this.$set(item, 'isFollowed', follow);
       }
+    },
+    list: {
+      handler(val, old) {
+        const list = val.filter(e => !old.includes(e));
+        for (const item of list) {
+          this.listMap.set(item.id, item);
+        }
+      }
     }
   },
-  activated() {
-    this.$refs.scroll.scrollTop = this.scrollTop;
+  created() {
+    this.resize();
   },
   methods: {
     infinite($state) {
-      this.$api.user
-        .getFollowArtist({
-          page: this.page++,
-          userId: this.user.id
-        })
-        .then(res => {
-          const { data: { data }} = res;
-          if (!data) {
-            $state.complete();
-          } else {
-            for (const item of data) {
-              // item.avatar = IMG_PREFIX + item.avatar;
-              const data = {
-                ...item,
-                isFollowed: true
-              };
-              this.artistList.push(data);
-              this.listMap.set(data.id, data);
-            }
-            $state.loaded();
-          }
-        });
+      this.$emit('infinite', $state);
     },
-    follow(val) {
+    follow(item) {
+      const val = this.listMap.get(item.id);
       const data = {
         artistId: val.id,
         userId: this.user.id,
@@ -100,36 +104,69 @@ export default {
       if (val.isFollowed) {
         val.isFollowed = false;
         this.$store.dispatch('handleFollowArtist', { ...data, follow: false })
-          .then(res => {
-            console.log('取消关注成功');
-          })
+          .then(res => {})
           .catch(() => {
             val.isFollowed = true;
-            Toast({ content: '取消关注失败' });
+            Alert({
+              content: '取消关注失败'
+            });
           });
       } else {
         val.isFollowed = true;
         this.$store.dispatch('handleFollowArtist', { ...data, follow: true })
-          .then(res => {
-            console.log('关注成功');
-          })
+          .then(res => {})
           .catch(() => {
             val.isFollowed = false;
-            Toast({ content: '关注失败' });
+            Alert({
+              content: '关注失败'
+            });
           });
       }
     },
-    onScroll(e) {
-      this.scrollTop = e.target.scrollTop;
+    handleClick(id) {
+      this.$router.push(`/artist/${id}`);
+    },
+    resize() {
+      this.height = (getClient().width - 16) / 3 + 100;
+      for (const item of this.list) {
+        item.height = this.height;
+      }
+    },
+    goDetail(data) {
+      this.$store.dispatch('setDetail', data);
+      this.$router.push(`/illusts/${data.id}`);
     }
   }
 };
 </script>
 
 <style lang="stylus" scoped>
-.artist-collect
-  width 100%
-  min-height 100%
-  overflow scroll
-  background #fff
+.item-container
+  box-sizing border-box
+  margin-bottom 20px
+  height 100%
+  .artist-illust
+    width 100%
+    display flex
+    .illust-item
+      position relative
+      width calc((100vw - 16px) / 3)
+      height calc((100vw - 16px) / 3)
+      border 1px solid #fff
+      .img-item
+        width 100%
+        height 100%
+      .mask
+        position absolute
+        top 0
+        right 0
+        bottom 0
+        left 0
+        width 100%
+        height 100%
+        background-image linear-gradient(to right, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02))
+  .user-item
+    padding 0
+    box-sizing border-box
+    margin 8px 16px
 </style>

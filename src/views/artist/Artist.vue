@@ -2,71 +2,87 @@
   <transition enter-active-class="animated zoomIn">
     <div class="artist-container">
       <div v-if="artistDetail" class="artists">
-
-        <div class="list-header">
-          <div class="avatar">
-            <v-btn
-              absolute
-              top
-              style="left: 0; top: 0; z-index: 2;"
-              icon
-              @click.stop="$router.back()"
-            >
-              <svg font-size="20" class="icon" aria-hidden="true">
-                <use xlink:href="#picfanhui2" />
-              </svg>
-            </v-btn>
-            <img class="avatar-top" :src="artistDetail.avatar | replaceBig" width="100%" height="100%">
-            <v-avatar :size="80">
-              <img :src="artistDetail.avatar | replaceBig" width="100%" height="100%" alt="">
-            </v-avatar>
-          </div>
-          <div class="artists-info">
-            <svg v-if="artistDetail.gender" font-size="16" class="icon" aria-hidden="true">
-              <use :xlink:href="artistDetail.gender === 'female' ? '#picnv' : '#picnan'" />
-            </svg>
-            <p class="name">{{ artistDetail.name }}</p>
-            <p class="name">ID: {{ artistDetail.id }}</p>
-            <v-btn
-              class="mb-5"
-              color="primary"
-              rounded
-              width="75%"
-              max-width="300"
-              @click="follow"
-            >
-              {{ artistDetail.isFollowed ? '已关注' : '+加关注' }}
-            </v-btn>
-            <!-- <div class="link">
+        <List
+          :list="pictureList"
+          :identifier="identifier"
+          @infinite="infinite"
+        >
+          <div class="list-header">
+            <div class="avatar">
               <v-btn
-                :href="artistDetail.webPage"
-                text
+                absolute
+                top
+                style="left: 0; top: 0; z-index: 2;"
                 icon
-                color="lighten-2"
+                @click.stop="$router.back()"
               >
                 <svg font-size="20" class="icon" aria-hidden="true">
-                  <use xlink:href="#pichome1" />
+                  <use xlink:href="#picfanhui2" />
                 </svg>
               </v-btn>
-              <v-btn
-                :href="artistDetail.twitterUrl"
-                text
-                icon
-                color="lighten-2"
-              >
-                <svg font-size="20" class="icon" aria-hidden="true">
-                  <use xlink:href="#pictwttier1" />
-                </svg>
-              </v-btn>
-            </div> -->
-            <div class="friends">
-              <span @click="seeFollower">
-                <span>{{ artistDetail.totalFollowUsers }}</span>
-                <span>关注</span>
-              </span>
+              <img class="avatar-top" :src="artistDetail.avatar | replaceBig" width="100%" height="100%">
+              <v-avatar :size="80">
+                <img :src="artistDetail.avatar | replaceBig" width="100%" height="100%" alt="">
+              </v-avatar>
             </div>
+            <div class="artists-info">
+              <svg v-if="artistDetail.gender" font-size="16" class="icon" aria-hidden="true">
+                <use :xlink:href="artistDetail.gender === 'female' ? '#picnv' : '#picnan'" />
+              </svg>
+              <p class="name">{{ artistDetail.name }}</p>
+              <p class="name">ID: {{ artistDetail.id }}</p>
+              <v-btn
+                class="mb-5"
+                color="primary"
+                rounded
+                width="75%"
+                max-width="300"
+                @click="follow"
+              >
+                {{ artistDetail.isFollowed ? '已关注' : '+加关注' }}
+              </v-btn>
+              <!-- <div class="link">
+                <v-btn
+                  :href="artistDetail.webPage"
+                  text
+                  icon
+                  color="lighten-2"
+                >
+                  <svg font-size="20" class="icon" aria-hidden="true">
+                    <use xlink:href="#pichome1" />
+                  </svg>
+                </v-btn>
+                <v-btn
+                  :href="artistDetail.twitterUrl"
+                  text
+                  icon
+                  color="lighten-2"
+                >
+                  <svg font-size="20" class="icon" aria-hidden="true">
+                    <use xlink:href="#pictwttier1" />
+                  </svg>
+                </v-btn>
+              </div> -->
+              <div class="friends">
+                <span @click="seeFollower">
+                  <span>{{ artistDetail.totalFollowUsers }}</span>
+                  <span>关注</span>
+                </span>
+              </div>
+              <!--  <p class="caption">{{ artistDetail.comment }}</p> -->
+            </div>
+            <v-tabs centered grow>
+              <v-tab @click="getList('illust')">
+                插画
+                <span>({{ illustSum }})</span>
+              </v-tab>
+              <v-tab @click="getList('manga')">
+                漫画
+                <span>({{ mangaSum }})</span>
+              </v-tab>
+            </v-tabs>
           </div>
-        </div>
+        </List>
       </div>
       <Loading v-else />
     </div>
@@ -75,12 +91,14 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import List from '@/components/virtual-list/VirtualList';
 import Loading from '@/components/loading/Loading';
 import Alert from '@/components/alert';
 
 export default {
   name: 'Artist',
   components: {
+    List,
     Loading
   },
   props: {
@@ -92,7 +110,12 @@ export default {
   data() {
     return {
       artistDetail: null,
-      type: 'illust'
+      page: 1,
+      type: 'illust',
+      identifier: +new Date(),
+      illustSum: 0,
+      mangaSum: 0,
+      pictureList: []
     };
   },
   computed: {
@@ -107,6 +130,7 @@ export default {
   },
   mounted() {
     this.getArtistInfo();
+    this.getSummary();
   },
   methods: {
     getArtistInfo() {
@@ -128,6 +152,32 @@ export default {
     },
     handleClick() {
       this.$router.back();
+    },
+    infinite($state) {
+      this.$api.detail
+        .reqArtistIllust({
+          page: this.page++,
+          artistId: this.artistId,
+          type: this.type
+        })
+        .then(res => {
+          if (res.data.data) {
+            const { data: { data }} = res;
+            this.pictureList = this.pictureList.concat(data);
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    getList(type) {
+      this.type = type;
+      this.page = 1;
+      this.pictureList = [];
+      this.identifier += 1;
     },
     follow() {
       if (!this.user.id) {
