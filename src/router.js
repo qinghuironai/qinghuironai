@@ -325,7 +325,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const isLogin = !!cookie.get('jwt');
-  const needLogin = to.path === '/me' || to.path === '/new' || to.path === 'recommend';
+  const needLogin = to.path === '/me' || to.path === '/new' || to.path === '/recommend';
   if (to.meta.title) {
     document.title = to.meta.title;
   }

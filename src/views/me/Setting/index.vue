@@ -240,22 +240,20 @@ export default {
         return Toast({ content: '请将信息填写完整' });
       }
       const res = await Confirm({
-        title: '请确认信息无误哦，错误信息也会消耗认证码，确认无误后按确定即可认证'
+        title: '请确认信息无误，错误信息也会消耗认证码，确认无误后按确定即可认证'
       });
       if (res === 'submit') {
-        this.$api.user.verifiedInfo({
+        const res = await this.$api.user.verifiedInfo({
           userId: this.user.id,
           name: this.name,
           exchangeCode: this.exchangeCode,
           idCard: this.idCard
-      })
-        .then(res => {
-          if (res.status === 200) {
-            this.$store.dispatch('setUser', res.data.data);
-            this.dialog = false;
-          }
-          Toast({ content: res.data.message });
         });
+        if (res.status === 200) {
+          this.$store.dispatch('setUser', res.data.data);
+          this.dialog = false;
+        }
+        Toast({ content: res.data.message });
       }
     }
   }

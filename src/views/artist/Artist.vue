@@ -37,7 +37,7 @@
             >
               {{ artistDetail.isFollowed ? '已关注' : '+加关注' }}
             </v-btn>
-            <div class="link">
+            <!-- <div class="link">
               <v-btn
                 :href="artistDetail.webPage"
                 text
@@ -58,7 +58,7 @@
                   <use xlink:href="#pictwttier1" />
                 </svg>
               </v-btn>
-            </div>
+            </div> -->
             <div class="friends">
               <span @click="seeFollower">
                 <span>{{ artistDetail.totalFollowUsers }}</span>

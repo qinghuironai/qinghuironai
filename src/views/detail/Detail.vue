@@ -26,7 +26,7 @@
                 <use xlink:href="#picfanhui" />
               </svg>
             </v-btn>
-            <v-menu>
+            <!-- <v-menu>
               <template v-slot:activator="{ on }">
                 <v-btn
                   icon
@@ -49,7 +49,7 @@
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
               </v-list>
-            </v-menu>
+            </v-menu> -->
           </div>
           <div class="detail-info">
             <div class="info-top">
