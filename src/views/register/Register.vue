@@ -259,6 +259,7 @@ export default {
       if (!this.$v.phone.$dirty) return errors;
       !this.$v.phone.required && errors.push('请输入手机号');
       !this.$v.phone.isValid && errors.push('请输入合法手机号');
+      !this.$v.phone.isUnique && errors.push('该手机号已被绑定');
       return errors;
     },
     disabled() {
