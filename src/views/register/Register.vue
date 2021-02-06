@@ -263,7 +263,7 @@ export default {
       return errors;
     },
     disabled() {
-      return !this.$v.value.minLength || !this.$v.phone.isValid;
+      return this.$v.value.$invalid || this.$v.phone.$invalid;
     }
   },
   mounted() {
