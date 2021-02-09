@@ -130,7 +130,7 @@ export default {
   },
   async mounted() {
     if (this.user.id && !this.user.isCheckPhone) {
-      this.$store.commit(SET_BIND_PHONE, true);
+      //this.$store.commit(SET_BIND_PHONE, true);
     }
     if (this.isVip) {
       this.$store.dispatch('vipProxyServer');
