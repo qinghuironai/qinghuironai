@@ -56,7 +56,7 @@
       <v-list-item @click="clickItem('age')">
         <v-list-item-content>
           <v-list-item-title>
-            16
+            R16与手机验证
             <span style="float: right;">{{ isCheckAge ? '已开启' : '未开启' }}</span>
           </v-list-item-title>
         </v-list-item-content>
