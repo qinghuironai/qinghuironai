@@ -65,7 +65,8 @@
               @input="$v.code.$touch()"
               @blur="$v.code.$touch()"
             />
-            <v-btn class="btn" color="primary" small href="https://mall.pixivic.net/product/9.html" target="_blank">获取</v-btn>
+            <v-btn class="btn" color="primary" small href="https://mall.pixivic.net/product/9.html" target="_blank">支付宝获取</v-btn>
+            <v-btn class="btn" color="primary" small href="https://weidian.com/item.html?itemID=4292993015" target="_blank">微店获取</v-btn>
           </v-col>
           <v-col cols="12" class="code">
             <v-text-field
